@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 public class ErrorFilter extends ZuulFilter {
 
 
-    Logger logger = LoggerFactory.getLogger(TokenFilter.class);
+    Logger logger = LoggerFactory.getLogger(ErrorFilter.class);
 
     @Override
     public String filterType() {

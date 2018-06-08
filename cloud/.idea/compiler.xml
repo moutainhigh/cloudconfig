@@ -16,6 +16,7 @@
         <module name="helloService" />
         <module name="model" />
         <module name="redis" />
+        <module name="utils" />
         <module name="zipkin" />
       </profile>
     </annotationProcessing>
@@ -31,6 +32,7 @@
       <module name="helloService" target="1.6" />
       <module name="model" target="1.6" />
       <module name="redis" target="1.6" />
+      <module name="utils" target="1.6" />
       <module name="zipkin" target="1.6" />
     </bytecodeTargetLevel>
   </component>

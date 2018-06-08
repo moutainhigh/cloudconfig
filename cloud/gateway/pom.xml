@@ -16,8 +16,8 @@
 
         <dependency>
             <groupId>cloud</groupId>
-            <artifactId>model</artifactId>
-            <version>${cloud.model.version}</version>
+            <artifactId>common</artifactId>
+            <version>${cloud.common.version}</version>
         </dependency>
 
 
@@ -30,8 +30,8 @@
 
         <dependency>
             <groupId>cloud</groupId>
-            <artifactId>redis</artifactId>
-            <version>${cloud.redis.version}</version>
+            <artifactId>utils</artifactId>
+            <version>${cloud.utils.version}</version>
         </dependency>
 
         <dependency>
@@ -61,7 +61,25 @@
     </dependencies>
 
 
+    <build>
+        <plugins>
+            <plugin>
 
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.wjh.gateway.Application</mainClass>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 
 </project>

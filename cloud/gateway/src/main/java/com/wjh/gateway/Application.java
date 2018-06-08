@@ -1,4 +1,4 @@
-package com.wjh;
+package com.wjh.gateway;
 
 
 import org.springframework.boot.SpringApplication;

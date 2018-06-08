@@ -11,24 +11,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.List;
 
-
-@RefreshScope
 @Component
-public class TokenFilter extends ZuulFilter {
-
-
+@RefreshScope
+public class AccessTokenFilter  extends ZuulFilter{
     @Value("${gateway.excludedUrls}")
     String excludedUrls;
 
     @Autowired
     RedisCacheUtil redisCacheUtil;
 
-    Logger logger = LoggerFactory.getLogger(TokenFilter.class);
+    Logger logger = LoggerFactory.getLogger(AccessTokenFilter.class);
 
     @Override
     public String filterType() {

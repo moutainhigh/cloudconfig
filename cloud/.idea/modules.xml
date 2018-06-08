@@ -10,7 +10,7 @@
       <module fileurl="file://$PROJECT_DIR$/gateway/gateway.iml" filepath="$PROJECT_DIR$/gateway/gateway.iml" />
       <module fileurl="file://$PROJECT_DIR$/helloController/helloController.iml" filepath="$PROJECT_DIR$/helloController/helloController.iml" />
       <module fileurl="file://$PROJECT_DIR$/helloService/helloService.iml" filepath="$PROJECT_DIR$/helloService/helloService.iml" />
-      <module fileurl="file://$PROJECT_DIR$/utils/redis.iml" filepath="$PROJECT_DIR$/utils/redis.iml" />
+      <module fileurl="file://$PROJECT_DIR$/utils/utils.iml" filepath="$PROJECT_DIR$/utils/utils.iml" />
       <module fileurl="file://$PROJECT_DIR$/zipkin/zipkin.iml" filepath="$PROJECT_DIR$/zipkin/zipkin.iml" />
     </modules>
   </component>
