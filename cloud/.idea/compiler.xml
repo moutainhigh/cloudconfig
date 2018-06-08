@@ -7,20 +7,26 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="config" />
+        <module name="Constant" />
         <module name="eureka" />
         <module name="gateway" />
         <module name="helloController" />
         <module name="helloService" />
+        <module name="model" />
+        <module name="redis" />
         <module name="zipkin" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="cloud" target="1.6" />
       <module name="config" target="1.6" />
+      <module name="Constant" target="1.6" />
       <module name="eureka" target="1.6" />
       <module name="gateway" target="1.6" />
       <module name="helloController" target="1.6" />
       <module name="helloService" target="1.6" />
+      <module name="model" target="1.6" />
+      <module name="redis" target="1.6" />
       <module name="zipkin" target="1.6" />
     </bytecodeTargetLevel>
   </component>

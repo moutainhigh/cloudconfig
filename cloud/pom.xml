@@ -15,7 +15,17 @@
         <module>config</module>
         <module>zipkin</module>
         <module>gateway</module>
+        <module>model</module>
+        <module>redis</module>
     </modules>
+
+
+    <properties>
+        <model.version>1.0-SNAPSHOT</model.version>
+        <redis.version>1.0-SNAPSHOT</redis.version>
+        <fastjson.version>1.1.40</fastjson.version>
+
+    </properties>
 
 
     <repositories>
@@ -27,25 +37,28 @@
     </repositories>
 
 
-
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>1.4.0.RELEASE</version>
-     </parent>
-
-
-
+    </parent>
 
 
     <dependencies>
         <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${fastjson.version}</version>
+        </dependency>
+
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
+
     </dependencies>
-
-
 
 
     <dependencyManagement>
@@ -59,11 +72,6 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
-
-
-
-
 
 
 </project>
