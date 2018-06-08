@@ -9,13 +9,10 @@
         <module name="common" />
         <module name="config" />
         <module name="configuration" />
-        <module name="Constant" />
         <module name="eureka" />
         <module name="gateway" />
         <module name="helloController" />
         <module name="helloService" />
-        <module name="model" />
-        <module name="redis" />
         <module name="utils" />
         <module name="zipkin" />
       </profile>
@@ -25,13 +22,10 @@
       <module name="common" target="1.6" />
       <module name="config" target="1.6" />
       <module name="configuration" target="1.6" />
-      <module name="Constant" target="1.6" />
       <module name="eureka" target="1.6" />
       <module name="gateway" target="1.6" />
       <module name="helloController" target="1.6" />
       <module name="helloService" target="1.6" />
-      <module name="model" target="1.6" />
-      <module name="redis" target="1.6" />
       <module name="utils" target="1.6" />
       <module name="zipkin" target="1.6" />
     </bytecodeTargetLevel>

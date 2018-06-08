@@ -16,8 +16,8 @@
         <module>zipkin</module>
         <module>gateway</module>
         <module>common</module>
-        <module>utils</module>
         <module>configuration</module>
+        <module>utils</module>
     </modules>
 
 
