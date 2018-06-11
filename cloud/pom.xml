@@ -9,9 +9,9 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>helloService</module>
+        <module>helloservice</module>
         <module>eureka</module>
-        <module>helloController</module>
+        <module>hellocontroller</module>
         <module>config</module>
         <module>zipkin</module>
         <module>gateway</module>

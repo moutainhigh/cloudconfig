@@ -1,4 +1,4 @@
-package com.wjh.helloService;
+package com.wjh.helloservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @EnableEurekaClient
 @ComponentScan("com.wjh")
- public class HelloServiceApplication {
+ public class HelloserviceApplication {
 
 
 
 
 
     public static void main(String[] args) {
-        SpringApplication.run(HelloServiceApplication.class,args);
+        SpringApplication.run(HelloserviceApplication.class,args);
     }
 
 }

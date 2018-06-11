@@ -1,4 +1,4 @@
-package com.wjh.helloController;
+package com.wjh.hellocontroller;
 
 
 import org.springframework.boot.SpringApplication;
@@ -11,10 +11,10 @@ import org.springframework.context.annotation.ComponentScan;
 @EnableEurekaClient
 @EnableFeignClients
 @ComponentScan("com.wjh")
-public class HelloControllerApplication {
+public class HellocontrollerApplication {
 
 
     public static void main(String[] args) {
-        SpringApplication.run(HelloControllerApplication.class,args);
+        SpringApplication.run(HellocontrollerApplication.class,args);
     }
 }

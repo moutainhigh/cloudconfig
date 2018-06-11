@@ -1,7 +1,7 @@
-package com.wjh.helloController.controller;
+package com.wjh.hellocontroller.controller;
 
 
-import com.wjh.helloController.serviceInterface.HelloService;
+import com.wjh.hellocontroller.serviceInterface.HelloService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;

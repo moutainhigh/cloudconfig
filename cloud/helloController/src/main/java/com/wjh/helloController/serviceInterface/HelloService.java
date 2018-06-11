@@ -1,4 +1,4 @@
-package com.wjh.helloController.serviceInterface;
+package com.wjh.hellocontroller.serviceInterface;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
