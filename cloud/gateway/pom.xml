@@ -68,7 +68,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.wjh.gateway.Application</mainClass>
+                    <mainClass>com.wjh.gateway.GatewayApplication</mainClass>
                 </configuration>
                 <executions>
                     <execution>

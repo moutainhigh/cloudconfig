@@ -1,20 +1,23 @@
-package com.wjh.helloController;
-
+package com.wjh.helloService;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
-import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
+@RestController
 @EnableEurekaClient
-@EnableFeignClients
 @ComponentScan("com.wjh")
-public class Application {
+ public class HelloServiceApplication {
+
+
+
 
 
     public static void main(String[] args) {
-        SpringApplication.run(Application.class,args);
+        SpringApplication.run(HelloServiceApplication.class,args);
     }
+
 }

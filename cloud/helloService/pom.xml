@@ -68,7 +68,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.wjh.helloService.Application</mainClass>
+                    <mainClass>com.wjh.helloService.HelloServiceApplication</mainClass>
                 </configuration>
                 <executions>
                     <execution>

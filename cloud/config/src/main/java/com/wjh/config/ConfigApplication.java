@@ -1,16 +1,19 @@
-package com.wjh.zipkin;
+package com.wjh.config;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.config.server.EnableConfigServer;
 import org.springframework.context.annotation.ComponentScan;
-import zipkin.server.EnableZipkinServer;
 
-@EnableZipkinServer
+@EnableConfigServer
 @SpringBootApplication
 @ComponentScan("com.wjh")
-public class Application {
-
+public class ConfigApplication {
     public static void main(String[] args) {
-        SpringApplication.run(Application.class,args);
+
+
+
+        SpringApplication.run(ConfigApplication.class,args);
+
     }
 }

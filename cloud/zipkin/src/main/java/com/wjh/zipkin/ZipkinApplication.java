@@ -1,23 +1,16 @@
-package com.wjh.helloService;
+package com.wjh.zipkin;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.web.bind.annotation.RestController;
+import zipkin.server.EnableZipkinServer;
 
+@EnableZipkinServer
 @SpringBootApplication
-@RestController
-@EnableEurekaClient
 @ComponentScan("com.wjh")
- public class Application {
-
-
-
-
+public class ZipkinApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(Application.class,args);
+        SpringApplication.run(ZipkinApplication.class,args);
     }
-
 }

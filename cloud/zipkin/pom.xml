@@ -39,7 +39,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.wjh.zipkin.Application</mainClass>
+                    <mainClass>com.wjh.zipkin.ZipkinApplication</mainClass>
                 </configuration>
                 <executions>
                     <execution>

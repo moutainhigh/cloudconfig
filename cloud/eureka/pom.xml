@@ -39,7 +39,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.wjh.eureka.Application</mainClass>
+                    <mainClass>com.wjh.eureka.EurekaApplication</mainClass>
                 </configuration>
                 <executions>
                     <execution>

@@ -36,7 +36,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.wjh.config.Application</mainClass>
+                    <mainClass>com.wjh.config.ConfigApplication</mainClass>
                 </configuration>
                 <executions>
                     <execution>

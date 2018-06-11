@@ -76,7 +76,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.wjh.helloController.Application</mainClass>
+                    <mainClass>com.wjh.helloController.HelloControllerApplication</mainClass>
                 </configuration>
                 <executions>
                     <execution>
