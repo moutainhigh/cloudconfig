@@ -55,7 +55,7 @@ public class AccessTokenFilter  extends ZuulFilter{
             String[] excludedUrlArray = excludedUrls.split(",");
             List<String> excludedUrlList = Arrays.asList(excludedUrlArray);
             for (int i = 0; i < excludedUrlList.size(); i++) {
-                if (url.toLowerCase().contains(excludedUrlList.get(i).toLowerCase())) {
+                if (url.contains(excludedUrlList.get(i))) {
                     isExcluded = true;
                     break;
                 }
