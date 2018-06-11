@@ -55,7 +55,7 @@ public class AccessTokenFilter  extends ZuulFilter{
             String[] excludedUrlArray = excludedUrls.split(",");
             List<String> excludedUrlList = Arrays.asList(excludedUrlArray);
             for (int i = 0; i < excludedUrlList.size(); i++) {
-                if (url.contains(excludedUrlList.get(i))) {
+                if (url.toLowerCase().contains(excludedUrlList.get(i).toLowerCase())) {
                     isExcluded = true;
                     break;
                 }
@@ -70,7 +70,6 @@ public class AccessTokenFilter  extends ZuulFilter{
             }
             if (StringUtils.isNotBlank(token))
             {
-                redisCacheUtil.setCacheObject("555","1");
                 String userId = (String) redisCacheUtil.getCacheObject(token);
                 if (StringUtils.isNotBlank(userId)) {
                     pass = true;
@@ -78,7 +77,7 @@ public class AccessTokenFilter  extends ZuulFilter{
             }
         }
 
-        if (pass) {
+        if (pass||isExcluded) {
             ctx.setSendZuulResponse(true);// 对该请求进行路由
             ctx.setResponseStatusCode(200);
             ctx.set("isSuccess", true);// 设值，让下一个Filter看到上一个Filter的状态

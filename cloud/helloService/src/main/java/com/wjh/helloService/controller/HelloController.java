@@ -1,25 +1,23 @@
 package com.wjh.helloService.controller;
 
+ import io.swagger.annotations.Api;
+ import io.swagger.annotations.ApiOperation;
+ import io.swagger.annotations.ApiParam;
  import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
  import org.springframework.cloud.client.discovery.DiscoveryClient;
  import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+ import org.springframework.web.bind.annotation.RequestParam;
+ import org.springframework.web.bind.annotation.RestController;
+@Api(description = "hello相关接口")
 @RestController
 @RequestMapping("/hello")
 public class HelloController {
 
-
-    @Autowired
-    private DiscoveryClient discoveryClient;
-
+    @ApiOperation(value = "示例")
     @RequestMapping(value = "/sayHello")
-    public Object hello(){
-        ServiceInstance serviceInstance=discoveryClient.getLocalServiceInstance();
-        System.out.println(serviceInstance.getHost()+"===="+serviceInstance.getServiceId());
-
-        return "哈喽";
+    public Object hello(@ApiParam(value = "姓名",required = true)@RequestParam(required = true) String name){
+        return "你好："+name+"！";
     }
 
 }
