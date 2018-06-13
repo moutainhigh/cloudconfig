@@ -1,0 +1,44 @@
+version: '2'
+services:
+  eureka1:
+    image: "eureka:1.0-SNAPSHOT"
+    hostname: eureka1
+    ports:
+      - "1111:1111"
+    networks:
+       - app_net
+    environment:
+      - server_port=1111
+      - eureka_instance_hostname=eureka1
+      - eureka_client_register-with-eureka=true
+      - eureka_client_fetch-registry=true
+      - eureka_client_service-url_defaultZone=http://eureka1:1111/eureka/,http://eureka2:1112/eureka/
+  eureka2:
+    image: "eureka:1.0-SNAPSHOT"
+    hostname: eureka2
+    ports:
+      - "1112:1112"
+    networks:
+       - app_net
+    environment:
+      - server_port=1112
+      - eureka_instance_hostname=eureka2
+      - eureka_client_register-with-eureka=true
+      - eureka_client_fetch-registry=true
+      - eureka_client_service-url_defaultZone=http://eureka1:1111/eureka/,http://eureka2:1112/eureka/
+  config:
+     image: "config:1.0-SNAPSHOT"
+     hostname: config
+     ports:
+       - "8888:8888"
+     networks:
+       - app_net
+     depends_on:
+       - eureka1
+       - eureka2
+     environment:
+       - server_port=8888
+       - eureka_client_service-url_defaultZone=http://eureka1:1111/eureka/,http://eureka2:1112/eureka/
+networks:
+  app_net:
+    external: true
