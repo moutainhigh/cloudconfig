@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>CRM更新公告</title>
+  <link href="http://www.jq22.com/jquery/bootstrap-3.3.4.css" rel="stylesheet">
+  <script src="http://www.jq22.com/jquery/2.1.1/jquery.min.js"></script>
+  <script src="http://www.jq22.com/jquery/bootstrap-3.3.4.js"></script>
+  <link href="/dbcenter/user/summernote.css" rel="stylesheet">
+  <script src="/dbcenter/user/summernote.js"></script>
+  <style>
+
+    .saveBtm{
+      color: #e4dbdb;
+      margin-right: 40px;
+    }
+    #B{
+      text-align: center;
+      line-height: 400px;
+    }
+
+  </style>
+</head>
+<body>
+<div id="A">
+  <div><input class="title"  style="width: 100%;height: 40px;margin-bottom: 20px;margin-top: 20px;border-color: #454571;"></div>
+  <div id="summernote"></div>
+  <div>
+    <div style="float: left;"><bottom onClick="save()"  class="saveBtm">确定发布</bottom></div>
+    <div><bottom  onClick="yulan()"  >发布前预览</bottom></div>
+  </div>
+</div>
+<div id="B">消息推送中请稍等</div>
+<div id="C" style="margin-top: 50px;">
+    <div id = "biaoti" style="margin-bottom: 20px;margin-top: 20px;"></div>
+    <div id = "neirong"></div>
+</div>
+  <script>
+    $(function(){
+        $("#A").show();
+        $("#B").hide();
+       $('#summernote').summernote();
+    })
+    function yulan(){
+        var title = $(".title").val();
+        var content = $(".panel-body").html();
+        $("#biaoti").html(title);
+        $("#neirong").html(content);
+    }
+    function save(){
+        var title = $(".title").val();
+        var content = $(".panel-body").html();
+        if(title != '' && content != '' ){
+            if(confirm("发布后不可修改，不可撤回。确认发布？")){
+                $(".saveBtm").css("display","none");
+                $("#A").hide();
+                $("#B").show();
+                $.ajax({
+                    type : "post",
+                    url : "/dbcenter/schedule/savePushBanben",
+                    data : {
+                        token:"555",
+                        title : title,
+                        content : content
+                    },
+                    success : function(data) {
+                        $("#B").html(data.repNote);
+                    }
+                });
+            }
+        }
+    }
+  </script>
+</body>
+</html>

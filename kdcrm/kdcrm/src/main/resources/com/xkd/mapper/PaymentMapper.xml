@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.PaymentMapper" >
+  <resultMap id="BaseResultMap" type="Payment" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="companyId" property="companyId" jdbcType="CHAR" />
+    <result column="paymentMoney" property="paymentMoney" jdbcType="CHAR" />
+    <result column="paymentDate" property="paymentDate" jdbcType="CHAR" />
+    <result column="moneySituation" property="moneySituation" jdbcType="CHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="dealPerson" property="dealPerson" jdbcType="VARCHAR" />
+    <result column="createdBy" property="createdBy" jdbcType="CHAR" />
+    <result column="updatedBy" property="updatedBy" jdbcType="CHAR" />
+    <result column="updateDate" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="createDate" property="createDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,companyId,paymentMoney,paymentDate,moneySituation,remark,dealPerson,createdBy,
+    updatedBy,updateDate,createDate
+  </sql>
+ 
+ <select id="selectPaymentById" resultMap="BaseResultMap">
+ 	
+ 	select 
+    <include refid="Base_Column_List" />
+    
+    from dc_payment where id = #{id}
+ 
+ </select>
+ 
+ <select id="selectSumMoneyByCompanyId" resultType="java.lang.String">
+ 
+ 	select SUM(paymentMoney) from dc_payment where companyId = #{companyId}
+ 
+ </select>
+ 
+  <select id="selectPaymentByCompanyId" resultType="com.xkd.model.Payment" >
+		SELECT
+			d.id,
+			d.companyId,
+			d.paymentMoney/10000 as paymentMoney,
+			d.paymentDate,
+			d.moneySituation,
+			d.remark,
+			d.dealPerson,
+			ifnull(d.updateDate,'') AS updateTime
+		FROM
+			dc_payment d
+		WHERE
+			d.companyId  = #{companyId} order by  paymentDate desc, createDate  desc
+  </select>
+  
+  <select id="selectPaymentByCompanyIdOrderByPaymentDate" resultMap="BaseResultMap" >
+  SELECT
+			d.id,
+			d.companyId,
+			d.paymentMoney,
+			d.paymentDate,
+			d.moneySituation,
+			d.remark,
+			d.dealPerson,
+			ifnull(d.updateDate,'') AS updateTime
+		FROM
+			dc_payment d
+		WHERE
+			d.companyId  = #{companyId} order by  d.paymentDate desc, d.paymentDate  desc  
+
+  </select>
+  
+  <select id="selectPaymentByUserId" resultMap="BaseResultMap" >
+  SELECT
+			d.id,
+			d.companyId,
+			d.paymentMoney,
+			d.paymentDate,
+			d.moneySituation,
+			d.remark,
+			d.dealPerson,
+			ifnull(d.updateDate,'') AS updateTime
+		FROM
+			dc_payment d
+		WHERE
+			d.userId  = #{userId} order by  d.paymentDate desc, d.updateDate  desc  
+  </select>
+  
+  <delete id="deleteCompanyById">
+  	delete from  dc_company  where id = #{id}
+  </delete>
+  
+  <update id="updatePaymentBySql">
+  	${sql}
+  </update>
+  
+  <update id="updatePaymentInfoById" parameterType="Payment" >
+    update dc_payment
+    <set>
+      
+      <if test="companyId != null and companyId !='' " >
+        companyId = #{companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentMoney != null and paymentMoney !='' " >
+        paymentMoney = #{paymentMoney,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentDate != null and paymentDate !='' " >
+        paymentDate = #{paymentDate,jdbcType=VARCHAR},
+      </if>
+      <if test="moneySituation != null and moneySituation !='' " >
+        moneySituation = #{moneySituation,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null and remark !='' " >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="dealPerson != null and dealPerson !='' " >
+        dealPerson = #{dealPerson,jdbcType=VARCHAR},
+      </if>
+      
+      <if test="updateDate != null and updateDate !='' " >
+        updateDate = #{updateDate,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedBy != null and updatedBy !='' " >
+        updatedBy = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+
+    </set>
+    where id = #{id}
+  </update>
+  
+  <insert id="insertPayment" parameterType="Payment">
+  	INSERT INTO dc_payment (
+  	id,
+	companyId,
+	paymentMoney,
+	paymentDate,
+	moneySituation,
+	remark,
+	dealPerson,
+	updateDate,
+	createDate,
+	updatedBy,
+	createdBy
+)
+VALUES
+	(
+	    #{id},
+		#{companyId},
+		#{paymentMoney},
+		#{paymentDate},
+		#{moneySituation},
+		#{remark},
+		#{dealPerson},
+		#{updateDate},
+		#{createDate},
+		#{updatedBy},
+		#{createdBy}
+	)
+  </insert>
+  
+  
+  <delete id="deletePaymentById">
+  	delete from dc_payment where id=#{id}
+  </delete>
+  
+  
+  
+  
+</mapper>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.DocumentMapper" >
+  <resultMap id="BaseResultMap" type="Document" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="ttypeId" property="ttypeId" jdbcType="CHAR" />
+    <result column="userId" property="userId" jdbcType="VARCHAR" />
+    <result column="path" property="path" jdbcType="VARCHAR" />
+    <result column="fileName" property="fileName" jdbcType="VARCHAR" />
+    <result column="userName" property="userName" jdbcType="VARCHAR" />
+    <result column="updateDate" property="updateDate" jdbcType="CHAR" />
+    <result column="documentUpdateTime" property="documentUpdateTime" jdbcType="CHAR" />
+    <result column="ttype" property="ttype" jdbcType="TINYINT" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,ttypeId,fileName,path,ttype,status,createdBy,updatedBy,createDate,updateDate,fileSize,pagerFileId,ext,fileByte
+  </sql>
+ 
+  <select id="selectDocumentById" resultType="Document">
+ 
+ 	select 
+    <include refid="Base_Column_List" />
+    from dc_company_document where id = #{id} 
+ 
+  </select>
+ 
+  <select id="selectDocumentsByTtypeId" resultMap="BaseResultMap" >
+    select 
+	    <include refid="Base_Column_List" />
+	    ,updateDate documentUpdateTime,
+	    (select uname from dc_user where id = d.createdBy )userName
+    from dc_company_document d where ttypeId = #{ttypeId} and status = 0 order by updateDate desc 
+  </select>
+  
+  <insert id="saveDocument" parameterType="Document">
+  	insert into dc_company_document(
+  		id,ttypeId,fileName,path,ttype,status,createdBy,updatedBy,createDate,updateDate,fileSize,pagerFileId,ext,fileByte
+  	) values(
+  		#{id},#{ttypeId},#{fileName},#{path},#{ttype},0,#{createdBy},#{createdBy},now(),now(),#{fileSize},#{pagerFileId},#{ext},#{fileByte}
+  	)
+  </insert>
+  
+  <update id="deleteDocumentById">
+  	update dc_company_document set status = 2,updatedBy = #{createdBy}  where id = #{id}  
+  </update>
+  
+  <update id="updateDocumentName">
+  	update dc_company_document set fileName =#{fileName},path=#{path},updatedBy=#{createdBy},updateDate = now(),status = 0  where id = #{id}  
+  </update>
+  
+</mapper>

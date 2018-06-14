@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.StatisticMapper">
+    <select id="selectCustomerCount" resultType="int" >
+            SELECT
+                count(1)
+            FROM
+                dc_company d
+            WHERE
+            d.status=0
+            and (
+                d.companyAdviserId = #{userId}
+            OR d.companyDirectorId = #{userId}
+            OR d.id IN (
+                SELECT
+                    companyId
+                FROM
+                    dc_company_relative_user r
+                WHERE
+                    r.userId = #{userId}
+
+            )
+            )
+
+        <if test="departmentIdList!=null and departmentIdList!=''">
+            and d.departmentId in
+            <foreach collection="departmentIdList"  item="id" index="" separator=","  open="(" close=")" >
+                #{id}
+            </foreach>
+        </if>
+
+    </select>
+    <select id="selectThisMonthCustomerCount" resultType="int" >
+         SELECT
+                count(1)
+                FROM
+                dc_company d
+                WHERE
+                d.status=0
+                and
+                         DATE_FORMAT(d.createDate, "%Y-%m") = DATE_FORMAT(now(), "%Y-%m")
+                            and (
+                d.companyAdviserId = #{userId}
+                OR d.companyDirectorId =  #{userId}
+                OR d.id IN (
+                SELECT
+                companyId
+                FROM
+                dc_company_relative_user r
+                WHERE
+                r.userId = #{userId}
+                )
+        )
+        <if test="departmentIdList!=null and departmentIdList!=''">
+            and d.departmentId in
+            <foreach collection="departmentIdList"  item="id" index="" separator=","  open="(" close=")" >
+                #{id}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="selectUserLevelStatistics" resultType="java.util.Map">
+
+        SELECT
+                sum(t.count) AS count,
+                t.userLevel
+            FROM
+                (
+                    SELECT
+                        count(1) AS count,
+                        CASE
+                    WHEN d.userLevel IS NULL THEN
+                        '其它'
+                    WHEN d.userLevel = '' THEN
+                        '其它'
+                    ELSE
+                        d.userLevel
+                    END AS userLevel
+                    FROM
+                        dc_company d where  d.status=0
+
+                    <if test="departmentIdList!=null and departmentIdList!=''">
+                        and d.departmentId in
+                        <foreach collection="departmentIdList"  item="id" index="" separator=","  open="(" close=")" >
+                            #{id}
+                        </foreach>
+                    </if>
+                         and ( d.companyAdviserId=#{userId} or d.companyDirectorId=#{userId}  or d.id  in (select companyId from dc_company_relative_user u where u.userId=#{userId}))
+                    GROUP BY
+                        d.userLevel
+                ) t
+            GROUP BY
+                t.userLevel
+    </select>
+
+
+    <select id="selectUserTypeStatistic" resultType="java.util.Map">
+ SELECT
+	sum(t.count) AS count,
+	t.usertype
+FROM
+	(
+		SELECT
+			count(1) AS count,
+			CASE
+		WHEN d.userType IS NULL THEN
+			'其它'
+		WHEN d.userType = '' THEN
+			'其它'
+		ELSE
+			d.userType
+		END AS userType
+		FROM
+			dc_company d  where d.status=0
+
+            <if test="departmentIdList!=null and departmentIdList!=''">
+                and d.departmentId in
+                <foreach collection="departmentIdList"  item="id" index="" separator=","  open="(" close=")" >
+                    #{id}
+                </foreach>
+            </if>
+
+			 and (d.companyAdviserId=#{userId} or d.companyDirectorId=#{userId}  or d.id in (select companyId from dc_company_relative_user u where u.userId=#{userId}))
+		GROUP BY
+			d.userType
+	) t
+GROUP BY
+	t.userType
+    </select>
+
+    <select id="selectThisMonthScheduleTimes" resultType="int">
+        SELECT
+            count(1)
+        FROM
+            dc_schedule_user su
+        INNER JOIN dc_schedule s ON su.scheduleId = s.id
+        WHERE
+            su.userId = #{userId} and s.status=0
+        AND SUBSTRING(s.startDate FROM 1 FOR 7) = DATE_FORMAT(now(), "%Y-%m")
+        <if test="pcCompanyId!=null and pcCompanyId!=''">
+            and s.pcCompanyId =#{pcCompanyId}
+        </if>
+    </select>
+    
+    <select id="selectTotalScheduleTimes" resultType="int">
+        SELECT
+            count(1)
+        FROM
+            dc_schedule_user su
+        INNER JOIN dc_schedule s ON su.scheduleId = s.id
+        WHERE
+            su.userId = #{userId} and s.status=0
+        <if test="pcCompanyId!=null and pcCompanyId!=''">
+            and s.pcCompanyId =#{pcCompanyId}
+        </if>
+    </select>
+
+
+
+</mapper>

@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.BusinessOpportunityMapper" >
+    <insert id="insertBusinessOppotunity">
+        INSERT INTO dc_business_opportunity
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null"> id, </if>
+            <if test="opportunityName != null"> opportunityName, </if>
+            <if test="responsibleUserId != null"> responsibleUserId, </if>
+            <if test="contact != null"> contact, </if>
+            <if test="contactMobile != null"> contactMobile, </if>
+            <if test="otherContact != null"> otherContact, </if>
+            <if test="otherContactMobile != null"> otherContactMobile, </if>
+            <if test="otherCompanyName != null"> otherCompanyName, </if>
+            <if test="salesMoney != null"> salesMoney, </if>
+            <if test="phaseId != null"> phaseId, </if>
+            <if test="implementDate != null"> implementDate, </if>
+            <if test="companyId != null"> companyId, </if>
+            <if test="remark != null"> remark, </if>
+            <if test="createdBy != null"> createdBy, </if>
+            <if test="updatedBy != null"> updatedBy, </if>
+            <if test="createDate != null"> createDate, </if>
+            <if test="updateDate != null"> updateDate, </if>
+            <if test="status != null"> status, </if>
+            <if test="departmentId != null"> departmentId, </if>
+            <if test="pcCompanyId != null"> pcCompanyId, </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null"> #{id}, </if>
+            <if test="opportunityName != null"> #{opportunityName}, </if>
+            <if test="responsibleUserId != null"> #{responsibleUserId}, </if>
+            <if test="contact != null"> #{contact}, </if>
+            <if test="contactMobile != null"> #{contactMobile}, </if>
+            <if test="otherContact != null"> #{otherContact}, </if>
+            <if test="otherContactMobile != null"> #{otherContactMobile}, </if>
+            <if test="otherCompanyName != null"> #{otherCompanyName}, </if>
+            <if test="salesMoney != null"> #{salesMoney}, </if>
+            <if test="phaseId != null"> #{phaseId}, </if>
+            <if test="implementDate != null"> #{implementDate}, </if>
+            <if test="companyId != null"> #{companyId}, </if>
+            <if test="remark != null"> #{remark}, </if>
+            <if test="createdBy != null"> #{createdBy}, </if>
+            <if test="updatedBy != null"> #{updatedBy}, </if>
+            <if test="createDate != null"> #{createDate}, </if>
+            <if test="updateDate != null"> #{updateDate}, </if>
+            <if test="status != null"> #{status}, </if>
+            <if test="departmentId != null"> #{departmentId}, </if>
+            <if test="pcCompanyId != null"> #{pcCompanyId}, </if>
+        </trim>
+    </insert>
+
+
+    <update id="updateBusinessOppotunity">
+        UPDATE dc_business_opportunity
+        <set>
+            <if test="id != null"> id = #{id}, </if>
+            <if test="opportunityName != null"> opportunityName = #{opportunityName}, </if>
+            <if test="responsibleUserId != null"> responsibleUserId = #{responsibleUserId}, </if>
+            <if test="contact != null"> contact = #{contact}, </if>
+            <if test="contactMobile != null"> contactMobile = #{contactMobile}, </if>
+            <if test="salesMoney != null"> salesMoney = #{salesMoney}, </if>
+            <if test="phaseId != null"> phaseId = #{phaseId}, </if>
+            <if test="implementDate != null"> implementDate = #{implementDate}, </if>
+            <if test="companyId != null"> companyId = #{companyId}, </if>
+            <if test="otherContact != null"> otherContact = #{otherContact}, </if>
+            <if test="otherContactMobile != null"> otherContactMobile = #{otherContactMobile}, </if>
+            <if test="otherCompanyName != null"> otherCompanyName = #{otherCompanyName}, </if>
+            <if test="remark != null"> remark = #{remark}, </if>
+            <if test="createdBy != null"> createdBy = #{createdBy}, </if>
+            <if test="updatedBy != null"> updatedBy = #{updatedBy}, </if>
+            <if test="createDate != null"> createDate = #{createDate}, </if>
+            <if test="updateDate != null"> updateDate = #{updateDate}, </if>
+            <if test="departmentId != null"> departmentId = #{departmentId}, </if>
+            <if test="status != null"> status = #{status} </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+
+
+<select id="selectBusinessOppotunityById" resultType="java.util.Map">
+
+SELECT
+                    b.id,
+                    b.opportunityName,
+                    b.companyId,
+                    c.companyName,
+                    b.contact,
+                    b.contactMobile,
+                    u.uname AS createdByName,
+                    u2.id as responsibleUserId,
+                    c.companyAdviserId,
+                    c.companyDirectorId,
+                    c.createdBy as  companyCreatedBy,
+                    u2.uname as responsibleUserName,
+                    b.salesMoney,
+                    b.remark,
+                    DATE_FORMAT(
+                    b.implementDate,
+                    '%Y-%m-%d'
+                    ) AS implementDate,
+                    DATE_FORMAT(
+                    b.createDate,
+                    '%Y-%m-%d %H:%i:%S'
+                    ) AS createDate,
+                    d.value as phase,
+                    d.ttypeName as phaseType,
+                    d.parentId as phaseTypeId,
+                    d.id as phaseId,
+                    b.createdBy,
+                    b.otherContact,
+                    b.otherContactMobile,
+                    b.otherCompanyName,
+                    b.departmentId,
+                    (select departmentName from dc_department where id = b.departmentId)departmentName
+        FROM
+        dc_business_opportunity b
+            LEFT JOIN dc_company c ON c.id = b.companyId
+            LEFT JOIN dc_dictionary d ON d.id = b.phaseId
+            LEFT JOIN dc_user u ON u.id = b.createdBy
+            left join dc_user u2 on u2.id=b.responsibleUserId
+        WHERE
+           b.id = #{id}
+</select>
+
+    <select id="selectBusinessOpportunity" resultType="java.util.Map">
+        SELECT
+                    b.id,
+                    b.opportunityName,
+                    b.companyId,
+                    c.companyName,
+                    b.contact,
+                    b.contactMobile,
+                    u.uname AS createdByName,
+                    u2.id as responsibleUserId,
+                    c.companyAdviserId,
+                    c.companyDirectorId,
+                    c.createdBy as  companyCreatedBy,
+                    u2.uname as responsibleUserName,
+                    b.salesMoney,
+                    b.remark,
+                    DATE_FORMAT(
+                    b.implementDate,
+                    '%Y-%m-%d'
+                    ) AS implementDate,
+                    DATE_FORMAT(
+                    b.createDate,
+                    '%Y-%m-%d %H:%i:%S'
+                    ) AS createDate,
+                    d.value as phase,
+                    d.ttypeName as phaseType,
+                    d.parentId as phaseTypeId,
+                    d.id as phaseId,
+                    b.createdBy,
+                    b.otherContact,
+                    b.otherContactMobile,
+                    b.otherCompanyName,
+                    b.departmentId,
+                   (select departmentName from dc_department where id = b.departmentId)departmentName
+        FROM
+        dc_business_opportunity b
+            LEFT JOIN dc_company c ON c.id = b.companyId
+            LEFT JOIN dc_business_template d ON d.id = b.phaseId
+            LEFT JOIN dc_user u ON u.id = b.createdBy
+            left join dc_user u2 on u2.id=b.responsibleUserId
+        WHERE b.status=0
+
+              <if test="flag!=null and flag==1 "> and b.responsibleUserId=#{userId}</if>
+              <if test="flag!=null and flag==2 "> and b.createdBy=#{userId}</if>
+              <if test="companyId!=null and companyId!=''"> and b.companyId=#{companyId}</if>
+              <if test="phaseId!=null and phaseId!='' "> and b.phaseId = #{phaseId}</if>
+              <if test="opportunityName!=null and opportunityName!=''"> AND ( b.opportunityName LIKE '%${opportunityName}%' or u.uname like '%${opportunityName}%' or u2.uname like '%${opportunityName}%'  or b.contact  like '%${opportunityName}%')</if>
+              <if test="departmentId!=null and departmentId!=''">  AND b.departmentId = #{departmentId}</if>
+              <if test="pcCompanyId!=null and pcCompanyId!=''">AND b.pcCompanyId=#{pcCompanyId}</if>
+              <if test="beginDate!=null and beginDate!=''"> <![CDATA[ AND b.createDate > #{beginDate} ]]></if>
+              <if test="endDate!=null and endDate!=''"><![CDATA[  AND b.createDate < #{endDate} ]]></if>
+              <if test="phaseTypeId!=null and phaseTypeId!='' "> and d.parentId = #{phaseTypeId}</if>
+        <if test="departmentIds != null  and departmentIds.size > 0">
+            and (
+            <foreach collection="departmentIds" item="depId" open="(" close=")"  separator="OR">
+                b.departmentId = #{depId}
+            </foreach>
+            )
+        </if>
+             order by b.createDate
+            <if test="orderFlag == null or orderFlag == ''  or orderFlag == 1">
+                DESC
+            </if>
+            <if test="orderFlag != null and  orderFlag == 0">
+                ASC
+            </if>
+
+              limit #{start},#{pageSize}
+    </select>
+    <select id="selectBusinessOpportunityCount" resultType="int">
+        SELECT
+       count(1)
+        FROM
+        dc_business_opportunity b
+                LEFT JOIN dc_company c ON c.id = b.companyId
+                LEFT JOIN dc_dictionary d ON d.id = b.phaseId
+                LEFT JOIN dc_user u ON u.id = b.createdBy
+                left join dc_user u2 on u2.id=b.responsibleUserId
+        WHERE b.status=0
+
+        <if test="flag!=null and flag==1 "> and b.responsibleUserId=#{userId}</if>
+        <if test="flag!=null and flag==2 "> and b.createdBy=#{userId}</if>
+        <if test="companyId!=null and companyId!=''"> and b.companyId=#{companyId}</if>
+        <if test="phaseId!=null and phaseId!='' "> and b.phaseId = #{phaseId}</if>
+        <if test="opportunityName!=null and opportunityName!=''"> AND ( b.opportunityName LIKE '%${opportunityName}%' or u.uname like '%${opportunityName}%' or u2.uname like '%${opportunityName}%'  or b.contact  like '%${opportunityName}%')</if>
+        <if test="departmentId!=null and departmentId!=''">  AND b.departmentId = #{departmentId}</if>
+        <if test="pcCompanyId!=null and pcCompanyId!=''">AND b.pcCompanyId=#{pcCompanyId}</if>
+        <if test="beginDate!=null and beginDate!=''"> <![CDATA[ AND b.createDate > #{beginDate} ]]></if>
+        <if test="endDate!=null and endDate!=''"><![CDATA[  AND b.createDate < #{endDate} ]]></if>
+        <if test="phaseTypeId!=null and phaseTypeId!='' "> and d.parentId = #{phaseTypeId}</if>
+        <if test="departmentIds != null  and departmentIds.size > 0">
+            and (
+            <foreach collection="departmentIds" item="depId" open="(" close=")"  separator="OR">
+                b.departmentId = #{depId}
+            </foreach>
+            )
+        </if>
+    </select>
+
+      <update id="deleteBusinessOpportunities">
+          update dc_business_opportunity  d set d.status=2 where d.id in
+          <foreach item="id" collection="idList" separator="," open="(" close=")" index="">
+              #{id}
+          </foreach>
+
+      </update>
+
+
+    <select id="selectBusinessOpportunityByIds" resultType="java.util.Map">
+                  SELECT
+                    b.id,
+                    b.opportunityName,
+                    b.companyId  from dc_business_opportunity b where b.id in
+        <foreach item="id" collection="idList" separator="," open="(" close=")" index="">
+            #{id}
+        </foreach>
+    </select>
+
+    <select id="getMyTableShow" resultType="java.util.Map">
+        select l.id,l.showName,l.showColumn,l.status from dc_table_list_show l where l.tabType = #{tabType}
+
+        <if test="status != null and status != ''">
+            and l.status = #{status}
+        </if>
+    </select>
+
+    <select id="getZDYTableShow" resultType="java.util.Map">
+        select l.id,l.showName,l.showColumn,'1' status from dc_table_user_show u LEFT JOIN dc_table_list_show l on l.id = u.tableShowId where u.userId = #{userId} and u.tabType = #{tabType}
+    </select>
+    <select id="getOtherTableShow" resultType="java.util.Map">
+        select l.id,l.showName,l.showColumn,'0' status from dc_table_list_show l where id not in
+        <foreach item="my" collection="other" separator="," open="(" close=")">
+            #{my.id}
+        </foreach>
+    </select>
+
+    <select id="getBusinessOpportunityName" resultType="java.util.Map">
+        SELECT
+            b.id,
+            b.opportunityName
+             from dc_business_opportunity b where b.status = '0'
+        <if test="opportunityName != null and opportunityName != ''">
+            and opportunityName like concat('%',#{opportunityName},'%')
+        </if>
+        <if test="pcCompanyId != null and pcCompanyId != ''">
+            and b.pcCompanyId = #{pcCompanyId}
+        </if>
+            <if test="pcCompanyId != null and pcCompanyId != ''">
+                and b.pcCompanyId = #{pcCompanyId}
+            </if>
+            <if test="depList != null and depList !='' and depList.size > 0">
+                and (
+                <foreach collection="depList" item="depId" open="(" close=")"  separator="OR">
+                    b.departmentId = #{depId}
+                </foreach>
+                )
+           </if>
+    </select>
+
+    <insert id="saveTabColumn">
+        INSERT INTO dc_table_user_show(id,tabType,tableShowId,userId,createDate)
+        VALUES
+        <foreach collection="tabColumn" item="id" separator=",">
+            (UUID(),#{tabType},#{id},#{userId},now())
+        </foreach>
+    </insert>
+    <delete id="deleteMyTabColumn">
+      delete from dc_table_user_show where userId = #{userId} and tabType = #{tabType}
+    </delete>
+
+</mapper>

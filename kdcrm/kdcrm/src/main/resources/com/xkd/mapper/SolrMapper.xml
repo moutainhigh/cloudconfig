@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.SolrMapper">
+
+    <select id="selectCompanyIndexInfoByIds" resultType="java.util.HashMap">
+
+        select
+          tt1.*,tt2.relativeUserId,tt2.relativeUserName,tt3.staff,tt4.projectName,tt4.projectDescription from (
+                SELECT
+                d.id AS id,
+                d.companyName AS companyName,
+                d.logo AS logo,
+                d.representative AS representative,
+                d.id AS companyId,
+                dd.manageScope AS manageScope,
+                d.address AS address,
+                CASE WHEN dddi.value IS NULL THEN '其它' WHEN dddi.VALUE = '' THEN '其它' ELSE dddi.VALUE END AS parentIndustryName,
+                ddi.value AS son_industryid,
+                1 AS recordType,
+                case when d.userLevel is null or d.userLevel='' or d.userLevel='null' then '其它' else d.userLevel end AS
+                userlevel,
+                case when d.userType is null or d.userType='' or d.userType='null' then '其它' else d.userType end AS usertype,
+                d.contactPhone AS mobile,
+                d.contactName AS uname,
+                d.province AS province,
+                d.city AS city,
+                d.county AS county,
+                d.channel AS channel,
+                d.updateDate AS dbChangeTime,
+                DATE_FORMAT(d.createDate,'%Y-%m-%d %H:%i')  as createDate,
+                du1.uname AS companyAdviserName,
+                du2.uname AS companyDirectorName,
+                case when d.companyAdviserId is not null and d.companyAdviserId!='' then concat('【',d.companyAdviserId,'】')  else  null  end as companyAdviserId,
+                case when d.companyDirectorId is not null and d.companyDirectorId!='' then CONCAT('【',d.companyDirectorId,'】') else null end  as companyDirectorId,
+                d.createdBy,
+                ddu.uname as createdByName,
+                ifnull(d.attendStatus,'未参会')  as attendStatus,
+                case when d.moneySituation='' or d.moneySituation is null then '未填写'  else d.moneySituation  end as moneySituation,
+                case when d.communicatStatus='' then '未沟通' when d.communicatStatus is null then '未沟通' when
+                d.communicatStatus='已沟通' then '已沟通' else '未沟通' end as communicatStatus,
+                d.infoScore,
+                dd.hasResource,
+                dd.needResource,
+                d.label,
+                d.departmentId,
+                dept.departmentName,
+                d.priority,
+                case when d.latestContactTime is null then  0 else   unix_timestamp(d.latestContactTime) end  as latestContactTime
+                FROM
+                dc_company d
+                LEFT JOIN dc_company_detail dd ON d.id = dd.id
+                 left join dc_user ddu on ddu.id=d.createdBy
+                LEFT JOIN dc_dictionary ddi ON d.parentIndustryId = ddi.id
+                left join dc_dictionary dddi on dddi.id = ddi.parentId
+                LEFT JOIN dc_user du1 ON du1.id = d.companyAdviserId
+                LEFT JOIN dc_user du2 ON du2.id = d.companyDirectorId
+                left join dc_department dept on dept.id=d.departmentId
+                WHERE
+                d. STATUS = 0 and d.companyName is not null and d.companyName!=''
+                and d.id in
+                <foreach item="id" collection="ids" separator="," open="(" close=")" index="">
+                    #{id}
+                </foreach>
+        ) tt1
+
+        left join (
+                    SELECT
+                    u.companyId as companyId,
+                    GROUP_CONCAT(concat('【',u.userId,'】')) as relativeUserId,
+                    GROUP_CONCAT(du.uname) as relativeUserName
+                    FROM
+                    dc_company_relative_user u
+                    left join dc_user du on u.userId=du.id
+        WHERE
+                    u.companyId IN (
+                                SELECT
+                                id
+                                FROM
+                                dc_company d
+                                WHERE
+                                d.companyName != ''
+                                AND d.companyName IS NOT NULL
+                                AND d. STATUS = 0
+                                and d.id in
+                                <foreach item="id" collection="ids" separator="," open="(" close=")" index="">
+                                    #{id}
+                                </foreach>
+                    )
+                    group by u.companyId
+        ) tt2 on tt1.companyId=tt2.companyId
+        left join (
+                    SELECT
+                    c.companyid AS companyId,
+                    GROUP_CONCAT(CONCAT('【',d.uname,'】')) as staff
+                    FROM
+                    dc_user_company c INNER join dc_user d
+                    on c.userId=d.id INNER JOIN dc_company dc on c.companyId=dc.id
+                    where dc.companyName!='' and dc.companyName is not null and dc.status=0
+                    and c.companyId in
+                    <foreach item="id" collection="ids" separator="," open="(" close=")" index="">
+                        #{id}
+                    </foreach>
+                    group by companyId
+        )tt3 on tt1.companyId=tt3.companyId
+        left join (
+                    select
+                    p.companyId,
+                    GROUP_CONCAT(concat('【',p.projectName,'】')) as projectName,
+                    GROUP_CONCAT(concat('【',p.description,'】')) as projectDescription
+                    from dc_project p where p.projectName is not null and p.projectName!=''
+                    and p.companyId in (
+                                SELECT
+                                id
+                                FROM
+                                dc_company d
+                                WHERE
+                                d.companyName != ''
+                                AND d.companyName IS NOT NULL
+                                AND d. STATUS = 0
+                                and d.id in
+                                <foreach item="id" collection="ids" separator="," open="(" close=")" index="">
+                                    #{id}
+                                </foreach>
+                    )
+                    group by p.companyId
+        ) tt4 on tt1.companyId=tt4.companyId
+
+
+    </select>
+
+
+</mapper>

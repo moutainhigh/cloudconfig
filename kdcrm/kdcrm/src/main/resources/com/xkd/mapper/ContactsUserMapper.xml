@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.ContactsUserMapper" >
+
+
+  <select id="getContactsUserList" parameterType="java.lang.Integer" resultType="java.util.Map">
+  
+  	select u.id userId,uc.id,c.id as companyId,c.companyName,u.uname,uc.station,u.email,u.phone,DATE_FORMAT(uc.createDate, '%Y-%m-%d %H:%i:%s') as createDate,dd.userResource,dd.personAnalysis,
+	  c.createdBy,c.companyDirectorId,c.companyAdviserId,cru.userId,uc.createdBy myCreatedBy,dd.birth,(
+  		select uname from dc_user where id = uc.createdBy
+  	)myUname,
+	  case when #{showMobile} = true then u.mobile
+	  	   when c.createdBy =  #{userId}  or c.companyDirectorId =  #{userId}  or c.companyAdviserId =  #{userId}  or uc.createdBy =  #{userId}  or cru.userId =  #{userId} then u.mobile
+	       when  (c.companyDirectorId =  null or c.companyDirectorId = '') and (c.companyAdviserId =  null or c.companyAdviserId =  '')  and cru.userId is null then u.mobile
+	  	   else '***  ' end mobile
+  	from dc_user_company uc
+  		INNER JOIN dc_company c  on c.id = uc.companyId and c.status = '0'
+  		INNER JOIN dc_user u on u.id = uc.userId and u.status = '0'
+	  	LEFT JOIN dc_user_detail dd on dd.id = u.id
+  		LEFT JOIN dc_company_relative_user cru on cru.companyId = c.id and cru.userId = #{userId}
+  	where c.status = '0' and u.status = '0'
+	  <if test="queryName != null and queryName != ''">
+		  and (c.companyName like concat('%',#{queryName},'%') or u.uname like concat('%',#{queryName},'%'))
+	  </if>
+	  <if test="depList != null and depList !='' and depList.size > 0">
+		  and (
+		  <foreach collection="depList" item="depId" open="(" close=")"  separator="OR">
+			  c.departmentId = #{depId}
+		  </foreach>
+		  )
+	  </if>
+	  <if test="queryType != null and queryType == 1">
+		  and uc.createdBy =  #{userId}
+	  </if>
+	  <if test="queryType != null and queryType == 2">
+		  and (
+		  c.createdBy =  #{userId}  or c.companyDirectorId =  #{userId}  or c.companyAdviserId =  #{userId}  or uc.createdBy =  #{userId}  or cru.userId =  #{userId}
+		  )
+	  </if>
+	  ORDER BY uc.createDate desc
+  	limit #{pageNo},#{pageSize}
+  </select>
+
+
+
+
+
+	<select id="getContactsUserListTotal"  resultType="java.lang.Integer">
+
+		select
+			count(*)
+		from dc_user_company uc
+		INNER JOIN dc_company c  on c.id = uc.companyId and c.status = '0'
+		INNER JOIN dc_user u on u.id = uc.userId and u.status = '0'
+		LEFT JOIN dc_company_relative_user cru on cru.companyId = c.id and cru.userId = #{userId}
+		where c.status = '0' and u.status = '0'
+		<if test="queryName != null and queryName != ''">
+			and (c.companyName like concat('%',#{queryName},'%') or u.uname like concat('%',#{queryName},'%'))
+		</if>
+		<if test="depList != null and depList !='' and depList.size > 0">
+			and (
+			<foreach collection="depList" item="depId" open="(" close=")"  separator="OR">
+				c.departmentId = #{depId}
+			</foreach>
+			)
+		</if>
+		<if test="queryType != null and queryType == 1">
+			and uc.createdBy =  #{userId}
+		</if>
+		<if test="queryType != null and queryType == 2">
+			and (
+			c.createdBy =  #{userId}  or c.companyDirectorId =  #{userId}  or c.companyDirectorId =  #{userId}  or uc.createdBy =  #{userId}  or cru.userId =  #{userId} or uc.createdBy =  #{userId}
+			)
+		</if>
+	</select>
+	<select id="getContactsUserByCompanyIdAndUserId" parameterType="java.lang.Integer" resultType="java.util.Map">
+
+		select * from dc_user_company uc INNER JOIN dc_user u on u.mobile = #{mobile} and u.id = uc.userId  where uc.companyId = #{companyId}
+
+	</select>
+
+
+	<select id="getContactsStatistics" parameterType="java.lang.Integer" resultType="java.util.Map">
+
+		select * from (
+			select uc.createdBy id,(
+				select uname from dc_user where id = uc.createdBy
+				)myUname,count(*) userNumber
+			from dc_user_company uc
+				INNER JOIN dc_company c  on c.id = uc.companyId and c.status = '0'
+				INNER JOIN dc_user u on u.id = uc.userId and u.status = '0'
+			where c.status = '0' and u.status = '0'
+				<if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+					and <![CDATA[ uc.createDate >= concat(#{startDate},' 00:00:00') and uc.createDate <= concat(#{endDate},' 59:59:59') ]]>
+				</if>
+				<if test="depList != null and depList !='' and depList.size > 0">
+					and (
+					<foreach collection="depList" item="depId" open="(" close=")"  separator="OR">
+						c.departmentId = #{depId}
+					</foreach>
+					)
+				</if>
+			GROUP BY uc.createdBy
+		)aa ORDER BY userNumber desc
+	</select>
+</mapper>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.UserAnswerMapper" >
+  <resultMap id="BaseResultMap" type="UserAnswer" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="questionId" property="questionId" jdbcType="VARCHAR" />
+    <result column="exerciseId" property="exerciseId" jdbcType="VARCHAR" />
+    <result column="TTYPE" property="ttype" jdbcType="INTEGER" />
+    <result column="ANSWER" property="answer" jdbcType="VARCHAR" />
+    <result column="userExamId" property="userExamId" jdbcType="VARCHAR" />
+    <result column="openId" property="openId" jdbcType="VARCHAR" />
+    <result column="submitDate" property="submitDate" jdbcType="VARCHAR" />
+    <result column="orderNumber" property="orderNumber" jdbcType="INTEGER" />
+      <result column="textContent" property="textContent" jdbcType="INTEGER" />
+
+  </resultMap>
+  <sql id="Base_Column_List" >
+   		ID,exerciseId,questionId,TTYPE,ANSWER,userExamId
+  </sql>
+  <select id="getUserAnswerListByObj" parameterType="UserAnswer" resultMap="BaseResultMap">
+  
+  	select id,exerciseId,questionId,TTYPE,ANSWER,userExamId,textContent from dc_wj_user_answer where 1 =1
+  	<if test="eid != null">
+  		and userExamId = #{eid,jdbcType=VARCHAR} 
+  	</if>
+  	
+  </select>
+  <select id="getDuoXuanAnser" resultMap="BaseResultMap">
+  
+  	select questionId,ANSWER,textContent,orderNumber from dc_wj_user_answer where questionId = #{qid}  and  userExamId = #{examId}
+  	
+  </select>
+  <select id="getUserAnswerByQid" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  
+  	select id,exerciseId,questionId,TTYPE,ANSWER,userExamId,textContent,orderNumber from dc_wj_user_answer where questionId =#{qid}
+  	
+  	
+  </select>
+  <insert id="saveUserAnswer" parameterType="UserAnswer" keyProperty="id" useGeneratedKeys="true">
+    insert into dc_wj_user_answer (id,userExamId,questionId,TTYPE,ANSWER,exerciseId,orderNumber,openId,submitDate,textContent)
+    
+    values (
+    		UUID(),
+    		#{userExamId,jdbcType=VARCHAR},
+    		#{questionId,jdbcType=VARCHAR},
+    		#{ttype,jdbcType=INTEGER},
+    		#{answer,jdbcType=VARCHAR},
+    		#{exerciseId,jdbcType=VARCHAR},
+    		#{orderNumber,jdbcType=VARCHAR},
+    		#{openId},
+    		now(),
+            #{textContent}
+    		
+    )
+  </insert>
+  
+  <select id="getUserListAnswer"  resultType="java.util.HashMap">
+  
+  	select 
+  		e.submitDate end_data,u.id id,e.id eid,u.uname uname,u.mobile mobile,u.weixin 
+  	from dc_wj_user_exam e 
+  		LEFT JOIN dc_user u on u.weixin = e.openId 
+  	where e.exerciseId = #{id} order by e.id desc
+  	
+  </select>
+  
+  <select id="getUserLists" resultType="java.util.HashMap">
+  		
+  		select 
+	  		a.qid,a.ttype,(select name from dc_wj_question where id = a.questionId)name,a.answer,a.textContent,
+	  		(select CONCAT(opt,grade) from dc_wj_question_option where id = a.answer and a.ttype in (1,2,9,10) )answer1
+  		from dc_wj_user_answer a  where a.userExamId = #{id}
+  
+  </select>
+  
+  <select id="getExerciseZhengQueLv" resultType="java.util.HashMap">
+  		
+  		select 
+  			a.*,(select count(*) from dc_wj_user_answer where userExamId = a.userExamId)cnt
+  		from dc_wj_user_answer a 
+  			LEFT JOIN dc_wj_question_option o on o.id = a.answer  
+  		where a.userExamId = #{id}  and ((o.grade = a.orderNumber and a.ttype = 10) or (a.ttype in (1,2,9) and o.answer = 1))
+  
+  </select>
+</mapper>

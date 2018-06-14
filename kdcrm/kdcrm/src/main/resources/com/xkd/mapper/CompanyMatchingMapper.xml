@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.CompanyMatchingMapper">
+	<resultMap id="BaseResultMap" type="CompanyMatching">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<id column="companyId" property="companyId" jdbcType="CHAR" />
+		<id column="matchCompanyId" property="matchCompanyId" jdbcType="CHAR" />
+		<id column="rule" property="rule" jdbcType="VARCHAR" />
+		<id column="dealPersonId" property="dealPersonId" jdbcType="VARCHAR" />
+		<id column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+		<id column="status" property="status" jdbcType="TINYINT" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,companyId,matchCompanyId,rule,dealPersonId,updateTime,status
+	</sql>
+
+	<select id="selectMatchingsByCompanyId" resultType="java.util.HashMap">
+
+		SELECT
+		m.id AS
+		matchId,
+		d.logo,
+		m.rule,
+		m.updatedBy AS dealPersonId,
+		d.id AS companyId,
+		d.companyName as company_name,
+		d.parentIndustryId,
+		dd.VALUE AS
+		parentIndustry,
+		d.sonIndustry AS sonIndustryId,
+		dt.hasResource AS
+		companyResource,
+		dt.needResource AS companyNeed,
+		d.province,
+		d.city,
+		d.country,
+		d.county
+		FROM
+		dc_company_matching m
+		INNER JOIN dc_company d ON
+		d.id = m.matchCompanyId
+		INNER JOIN
+		dc_company_detail dt on dt.id=d.id
+		LEFT JOIN dc_dictionary dd ON d.parentIndustryId = dd.id
+		WHERE
+		m.companyId = #{companyId}
+		AND d. STATUS != 2
+		limit
+		#{currentPageInt},#{pageSizeInt}
+	</select>
+
+
+	<select id="selectTotalMatchingsByCompanyId" resultType="java.lang.Integer">
+
+		SELECT
+		count(1) as count
+		FROM
+		dc_company_matching m
+		INNER JOIN dc_company d ON
+		d.id = m.matchCompanyId
+		INNER JOIN
+		dc_company_detail dt on dt.id=d.id
+		LEFT JOIN dc_dictionary dd ON
+		d.parentIndustryId = dd.id
+		WHERE
+		m.companyId = #{companyId}
+		AND d. STATUS != 2
+
+	</select>
+
+	<select id="selectNotMatchingsByCompanyId" resultType="java.util.HashMap">
+		SELECT
+		d.id AS
+		companyId,
+		d.logo,
+		d.companyName AS company_name,
+		d.parentIndustryId AS
+		parent_industryid,
+		dd.VALUE AS parentIndustry,
+		d.sonIndustry AS
+		son_industryid,
+		dt.hasResource AS companyResource,
+		dt.needResource AS
+		companyNeed,
+		d.userLevel AS userlevel,
+		d.userType AS usertype,
+		d.channel
+		AS channel,
+		d.companyAdviserId AS companyAdviser,
+		u.uname AS
+		adviserName,
+		d.province,
+		d.city,
+		d.country,
+		d.county,
+		dt.hasResource AS
+		companyResource,
+		dt.needResource AS companyNeed,
+		d.enrollDate AS
+		enrollDate
+		FROM
+		 dc_company d 
+		INNER JOIN dc_company_detail dt ON dt.id = d.id
+		LEFT
+		JOIN dc_dictionary dd ON d.parentIndustryId = dd.id
+		LEFT JOIN dc_user u
+		ON u.id = d.companyAdviserId
+		WHERE
+		d.id not in (
+			select matchCompanyId
+			from dc_company_matching where companyId = #{companyId}
+		)
+		<if test="content != null and content !='' ">
+			and (
+			d.companyName LIKE '%${content}%'
+			OR dt.hasResource LIKE
+			'%${content}%'
+			OR dt.needResource LIKE '%${content}%'
+			)
+		</if>
+		<if test="parentIndustryId != null and parentIndustryId !='' ">
+			AND d.parentIndustryId = #{parentIndustryId}
+		</if>
+		<if test="sonIndustry != null and sonIndustry !='' ">
+			AND d.sonIndustry like '%${sonIndustry}%'
+		</if>
+
+		<if test="province != null and province !='' ">
+			AND d.province =#{province}
+		</if>
+		<if test="city != null and city !='' ">
+			AND d.city =#{city}
+		</if>
+		<if test="county != null and county !='' ">
+			AND d.county = #{county}
+		</if>
+		<if test="userType != null and userType !='' ">
+			AND d.userType = #{userType}
+		</if>
+		<if test="userLevel != null and userLevel !='' ">
+			AND d.userLevel = #{userLevel}
+		</if>
+		<if test="companyAdviserId != null and companyAdviserId !='' ">
+			AND d.companyAdviserId =#{companyAdviserId}
+		</if>
+		
+		<if test="channel != null and channel !='' ">
+			AND d.channel =#{channel}
+		</if>
+
+		AND d. STATUS != 2
+		<if test="pcCompanyId!=null">
+       		 and d.pcCompanyId=#{pcCompanyId}
+		</if>
+		limit #{currentPageInt},#{pageSizeInt}
+
+	</select>
+
+
+	<select id="selectTotalNotMatchingsByCompanyId" resultType="java.lang.Integer">
+
+		SELECT
+		count(1)
+		FROM
+		 dc_company d 
+		INNER JOIN dc_company_detail dt ON dt.id = d.id
+		LEFT
+		JOIN dc_dictionary dd ON d.parentIndustryId = dd.id
+		LEFT JOIN dc_user u
+		ON u.id = d.companyAdviserId
+		WHERE
+		d.id not in (
+			select matchCompanyId
+			from dc_company_matching where  companyId = #{companyId}
+		)
+		<if test="content != null and content !='' ">
+			and (
+			d.companyName LIKE '%${content}%'
+			OR dt.hasResource LIKE
+			'%${content}%'
+			OR dt.needResource LIKE '%${content}%'
+			)
+		</if>
+		<if test="parentIndustryId != null and parentIndustryId !='' ">
+			AND d.parentIndustryId = #{parentIndustryId}
+		</if>
+		<if test="sonIndustry != null and sonIndustry !='' ">
+			AND d.sonIndustry like '%${sonIndustry}%'
+		</if>
+
+		<if test="province != null and province !='' ">
+			AND d.province =#{province}
+		</if>
+		<if test="city != null and city !='' ">
+			AND d.city =#{city}
+		</if>
+		<if test="county != null and county !='' ">
+			AND d.county = #{county}
+		</if>
+		<if test="userType != null and userType !='' ">
+			AND d.userType = #{userType}
+		</if>
+		<if test="userLevel != null and userLevel !='' ">
+			AND d.userLevel = #{userLevel}
+		</if>
+		<if test="companyAdviserId != null and companyAdviserId !='' ">
+			AND d.companyAdviserId =#{companyAdviserId}
+		</if>
+		
+		<if test="channel != null and channel !='' ">
+			AND d.channel =#{channel}
+		</if>
+
+		AND d. STATUS != 2
+		<if test="pcCompanyId!=null">
+			and d.pcCompanyId=#{pcCompanyId}
+		</if>
+
+	</select>
+
+	<insert id="saveMatchingCompanys">
+
+		INSERT INTO dc_company_matching (
+			id,
+			companyId,
+			matchCompanyId,
+			rule,
+			createdBy,
+			createDate
+		)
+
+		values(
+			uuid(),
+			#{companyId},
+			#{matchCompanyId},
+			#{rule},
+			#{dealPersonId},
+			NOW()
+		)
+
+	</insert>
+
+	<update id="deleteMatchingCompanys">
+		delete from dc_company_matching where id in  ${idString}
+	</update>
+
+
+</mapper>

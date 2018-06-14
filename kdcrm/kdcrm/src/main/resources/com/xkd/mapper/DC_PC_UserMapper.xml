@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.DC_PC_UserMapper" >
+  <resultMap id="BaseResultMap" type="DC_PC_User" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <id column="roleId" property="roleId" jdbcType="INTEGER" />
+    <id column="roleName" property="roleName" jdbcType="VARCHAR" />
+    <result column="uname" property="uname" jdbcType="VARCHAR" />
+    <result column="weixin" property="weixin" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="userLogo" property="userLogo" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="VARCHAR" />
+    <result column="updateDate" property="updateDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+   		id,roleId,uname,password,weixin,mobile,email,userLogo,sex,createDate,updateDate,updatedBy
+  </sql>
+  
+  <select id="selectPcUsersByContent" resultType="java.util.Map">
+  
+  	select u.id,u.roleId,r.roleName,u.uname as name,u.email,u.sex,u.userLogo,
+  	
+  	u.createDate,u.updateDate,u.createdBy,u.updatedBy 
+  	
+  	from dc_user u left join (select * from dc_sys_role where status = 0) r on u.roleId = r.id where u.status = 0 
+  	 
+  	<if test="content !='' and  content != null">
+		${content}  	 
+  	</if>
+  	
+  	order by  u.createDate desc ,u.updateDate desc
+  	
+  	limit #{currentPage},#{pageSize}
+  
+  </select>
+  
+  <select id="selectPcUserById" resultType="java.util.Map">
+  
+  	select u.id,u.roleId,r.roleName,u.uname as name,u.mobile,u.email,u.sex,u.updateDate,u.userLogo ,u.departmentId
+  	
+  	from dc_user u left join dc_sys_role r on u.roleId = r.id where u.id = #{id} 
+  	
+  </select>
+  
+  <select id="selectPcUsersByContentCount" resultType="java.lang.Integer">
+  
+  	select count(1) 
+  	
+  	from dc_user u left join (select * from dc_sys_role where status = 0) r on u.roleId = r.id where u.status = 0 
+  	 
+  	<if test="content !='' and  content != null">
+		${content}  	 
+  	</if>
+  
+  </select>
+  
+  <select id="selectUserByEmail" resultType="java.util.Map">
+  
+  	select id,roleId,password,weixin,email,userLogo,sex,updateDate,uname 
+  	
+  	from dc_user where email = #{email} 
+  	
+  </select>
+  
+  
+
+  
+  
+  <select id="getUserByTel"  resultMap="BaseResultMap">
+  
+  	select id,uname,password,weixin,mobile,email,userLogo from dc_user where 1 =1 and mobile = #{mobile} 
+  	
+  </select>
+  
+
+ 
+
+ 
+ <select id="getUserById" resultType="DC_PC_USER">
+ 
+ 	select u.id,u.roleId,r.roleName,u.uname,u.weixin,u.mobile,u.email,u.userLogo from dc_user u 
+ 	
+ 	left join dc_sys_role r on u.roleId = r.id where u.id = #{id}
+ 	
+ </select>
+ 
+
+  
+  <select id="selectUserInfo" resultType="java.util.HashMap" >
+  		SELECT id,uname from dc_user where roleId is not null and platform = 1 and status = 0  
+  	    <if test="uname != null and uname !='' ">
+    	  and uname like #{uname}
+   		</if>
+  </select>
+  
+  <update id="updatePcUserMap" parameterType="java.util.Map">
+  
+  	update DC_PC_USER set roleId = #{roleId},uname = #{uname},email = #{email},
+  	
+  	sex = #{sex},updateDate = NOW(),updateBy = #{updateBy} where id = #{id}
+  
+  </update>
+  
+  <update id="deletePcUserByIds">
+  
+  	update DC_PC_USER set status = 2 where ${ids}
+  
+  </update>
+  
+  <update id="repeatPcUserPasswordsByIds">
+  
+  	update DC_PC_USER set password = #{encodeRepeatPassWord},updateBy = #{updateBy},updateDate=NOW() where ${ids}
+  
+  </update>
+  
+  <update id="updateUserPasswordById">
+  
+  	update DC_PC_USER set password = #{password} where id = #{id} 
+  
+  </update>
+  
+  <update id="deletePcUserRolesByRoles">
+  
+  	update DC_PC_USER set roleId = NULL where ${roleIds} 
+  
+  </update>
+  
+  <update id="updatePcUserInfoById" parameterType="java.util.Map">
+  
+  	update DC_PC_USER set uname = #{uname},email = #{email},mobile = #{mobile},userLogo = #{userLogo} where id = #{id}
+  
+  </update>
+  
+    
+  
+  <insert id="savePcUserMap" parameterType="java.util.Map">
+  
+	insert into DC_PC_USER (roleId,uname,password,email,sex,status,createDate,createdBy)
+    
+    values (#{roleId},#{uname},#{password},#{email},#{sex},0,#{createDate},#{createBy})
+    		
+  </insert>
+  
+  
+</mapper>

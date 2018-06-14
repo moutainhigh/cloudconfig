@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.InvitationMapper" >
+  <resultMap id="InvitationMap" type="Invitation" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="nameDes" property="nameDes" jdbcType="VARCHAR" />
+    <result column="codeSize" property="codeSize" jdbcType="VARCHAR" />
+    <result column="bgMusic" property="bgMusic" jdbcType="VARCHAR" />
+    <result column="isTemplet" property="isTemplet" jdbcType="VARCHAR" />
+    <result column="shareTitle" property="shareTitle" jdbcType="VARCHAR" />
+    <result column="shareContent" property="shareContent" jdbcType="VARCHAR" />
+    <result column="shareImgpath" property="shareImgpath" jdbcType="VARCHAR" />
+    <result column="createdBy" property="createdBy" jdbcType="VARCHAR" />
+    <result column="createDate" property="createDate" jdbcType="VARCHAR" />
+    <result column="uname" property="updatedBy" jdbcType="VARCHAR" />
+    <result column="updateDate" property="updateDate" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="PagesMap" type="InvitationPages" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="invitationId" property="invitationId" jdbcType="VARCHAR" />
+    <result column="bgImgSrc" property="bgImgSrc" jdbcType="VARCHAR" />
+    <result column="nodeName" property="nodeName" jdbcType="VARCHAR" />
+    <result column="bgColor" property="bgColor" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="ElementMap" type="InvitationPagesElement" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="invitationId" property="invitationId" jdbcType="VARCHAR" />
+    <result column="pagesId" property="pagesId" jdbcType="VARCHAR" />
+    <result column="ttype" property="type" jdbcType="VARCHAR" />
+    <result column="textAlign" property="textAlign" jdbcType="VARCHAR" />
+    <result column="text" property="text" jdbcType="VARCHAR" />
+    <result column="href" property="href" jdbcType="VARCHAR" />
+    <result column="imgSrc" property="imgSrc" jdbcType="VARCHAR" />
+    <result column="lefts" property="left" jdbcType="VARCHAR" />
+    <result column="top" property="top" jdbcType="VARCHAR" />
+    <result column="width" property="width" jdbcType="VARCHAR" />
+    <result column="height" property="height" jdbcType="VARCHAR" />
+    <result column="delay" property="delay" jdbcType="VARCHAR" />
+    <result column="playing" property="playing" jdbcType="VARCHAR" />
+    <result column="loops" property="loop" jdbcType="VARCHAR" />
+    <result column="opacity" property="opacity" jdbcType="VARCHAR" />
+    <result column="transform" property="transform" jdbcType="VARCHAR" />
+    <result column="fontWeight" property="fontWeight" jdbcType="VARCHAR" />
+    <result column="fontFamily" property="fontFamily" jdbcType="VARCHAR" />
+    <result column="iconKey" property="iconKey" jdbcType="VARCHAR" />
+    <result column="fontSize" property="fontSize" jdbcType="VARCHAR" />
+    <result column="color" property="color" jdbcType="VARCHAR" />
+    <result column="zindex" property="zindex" jdbcType="VARCHAR" />
+    <result column="background" property="background" jdbcType="VARCHAR" />
+    <result column="borderRadius" property="lineHeight" jdbcType="VARCHAR" />
+    <result column="border" property="border" jdbcType="VARCHAR" />
+    <result column="lineHeight" property="lineHeight" jdbcType="VARCHAR" />
+    <result column="animatedName" property="animatedName" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="pagesResult">
+  	p.id,p.invitationId,p.bgImgSrc,p.nodeName,p.bgColor
+  </sql>
+   <sql id="invitationResult">
+  	i.id,i.name,i.nameDes,i.codeSize,i.bgMusic,i.isTemplet,i.shareTitle,i.shareContent,i.shareImgpath,i.status,i.createdBy,i.createDate,i.updatedBy,i.updateDate
+  </sql>
+  <sql id="elementResult">
+  	e.id,e.invitationId,e.pagesId,e.ttype,e.textAlign,e.text,e.href,
+  			e.imgSrc,e.lefts,e.top,e.width,e.height,e.delay,e.playing,e.loops,e.opacity,
+  			e.transform,e.fontWeight,e.fontFamily,e.iconKey,e.fontSize,
+  			e.color,e.zindex,e.border,e.lineHeight,e.borderRadius,e.background,e.animatedName,e.name
+  </sql>
+  <insert id="saveInvitation" parameterType="Invitation">
+  
+  		insert into dc_invitation(
+  			id,name,nameDes,codeSize,bgMusic,isTemplet,
+  			shareTitle,shareContent,shareImgpath
+  			,status,createdBy,createDate,updatedBy,updateDate
+  		)values(
+  			#{id},#{name},#{nameDes},#{codeSize},#{bgMusic},#{isTemplet},
+  			#{shareTitle},#{shareContent},#{shareImgpath}
+  			,0,#{createdBy},now(),#{createdBy},now()
+  		)
+  </insert>
+  <insert id="saveInvitationPages" parameterType="InvitationPages">
+  
+  		insert into dc_invitation_pages(
+  			id,invitationId,bgImgSrc,nodeName,bgColor
+  		)values(
+  			#{id},#{invitationId},#{bgImgSrc},#{nodeName},#{bgColor}
+  		)
+  </insert>
+  <insert id="saveElement" parameterType="InvitationPagesElement">
+  
+  		insert into dc_invitation_pages_element(
+  			id,invitationId,pagesId,ttype,textAlign,text,href,
+  			imgSrc,lefts,top,width,height,delay,playing,loops,opacity,
+  			transform,fontWeight,fontFamily,iconKey,fontSize,
+  			color,zindex,border,lineHeight,borderRadius,background,animatedName,name
+  		)values(
+  			#{id},#{invitationId},#{pagesId},#{type},#{textAlign},#{text},#{href},
+  			#{imgSrc},#{left},#{top},#{width},#{height},#{delay},#{playing},#{loop},#{opacity},
+  			#{transform},#{fontWeight},#{fontFamily},#{iconKey},#{fontSize},
+  			#{color},#{zindex},#{border},#{lineHeight},#{borderRadius},#{background},#{animatedName},#{name}
+  		)
+  </insert>
+  <update id="editElement" parameterType="InvitationPagesElement">
+  	 update dc_invitation_pages_element
+      <trim prefix="set" suffixOverrides=",">
+      		name = #{name},
+	        text = #{text},
+	     <if test="type != null and type !='' " >
+	        ttype = #{type},
+	      </if>
+      	 <if test="textAlign != null" >
+	        textAlign =  #{textAlign},
+      	 </if>
+	     <if test="href != null" >
+	        href = #{href},
+	     </if>
+	     <if test="imgSrc != null" >
+	        imgSrc = #{imgSrc},
+	     </if>
+	     <if test="left != null" >
+	        lefts = #{left},
+	     </if>
+	     <if test="top != null" >
+	        top = #{top},
+	     </if>
+	     <if test="width != null" >
+	        width = #{width},
+	     </if>
+	     <if test="height != null" >
+	        height = #{height},
+	     </if>
+	     <if test="delay != null" >
+	        delay = #{delay},
+	     </if>
+	     <if test="playing != null" >
+	        playing = #{playing},
+	     </if>
+	     <if test="loop != null" >
+	        loops = #{loop},
+	     </if>
+	     <if test="opacity != null" >
+	        opacity = #{opacity},
+	     </if>
+	     <if test="transform != null" >
+	        transform = #{transform},
+	     </if>
+	     <if test="fontWeight != null" >
+	        fontWeight = #{fontWeight},
+	     </if>
+	     <if test="fontFamily != null" >
+	        fontFamily = #{fontFamily},
+	     </if>
+	     <if test="iconKey != null" >
+	        iconKey = #{iconKey},
+	     </if>
+	     <if test="fontSize != null" >
+	        fontSize = #{fontSize},
+	     </if>
+	     <if test="color != null" >
+	        color = #{color},
+	     </if>
+	     <if test="zindex != null" >
+	        zindex = #{zindex},
+	     </if>
+	     <if test="border != null" >
+	        border = #{border},
+	     </if>
+	     <if test="lineHeight != null" >
+	        lineHeight = #{lineHeight},
+	     </if>
+	     <if test="borderRadius != null" >
+	        borderRadius = #{borderRadius},
+	     </if>
+	     <if test="background != null" >
+	        background = #{background},
+	     </if>
+	     
+	 	</trim>
+    where id=#{id}
+  </update>
+  <update id="editInvitationPages" parameterType="InvitationPages">
+  	 update dc_invitation_pages
+      <trim prefix="set" suffixOverrides=",">
+		  
+	        bgImgSrc = #{bgImgSrc},
+	      
+      	 <if test="nodeName != null and nodeName !='' " >
+	        nodeName =  #{nodeName},
+      	 </if>
+      	<if test="bgColor != null and bgColor !='' " >
+	        bgColor = #{bgColor},
+	     </if>
+	 	</trim>
+    where id=#{id}
+  </update>
+  <update id="editInvitation" parameterType="Invitation">
+  	 update dc_invitation
+      <trim prefix="set" suffixOverrides=",">
+      		
+	        name = #{name},
+	      
+      	 <if test="nameDes != null" >
+	        nameDes =  #{nameDes},
+      	 </if>
+      	<if test="codeSize != null" >
+	        codeSize = #{codeSize},
+	      </if>
+      	<if test="bgMusic != null" >
+	        bgMusic = #{bgMusic},
+	     </if>
+	     <if test="isTemplet != null" >
+	        isTemplet = #{isTemplet},
+	     </if>
+	     <if test="shareTitle != null" >
+	        shareTitle = #{shareTitle},
+	     </if>
+	     <if test="shareContent != null" >
+	        shareContent = #{shareContent},
+	     </if>
+	     <if test="shareImgpath != null" >
+	        shareImgpath = #{shareImgpath},
+	     </if>
+	 	</trim>
+    ,updateDate=NOW(),updatedBy=#{createdBy}
+    where id=#{id}
+  </update>
+  
+  <delete id="deletePagesElement">
+  	delete e.*,p.* from dc_invitation_pages p left join dc_invitation_pages_element e on e.pagesId = p.id where p.invitationId = #{id}
+  </delete>
+  
+   <update id="deleteInvitation">
+  	 update dc_invitation set status=2,updateDate=NOW(),updatedBy=#{userId} where id = #{id}
+  </update>
+  
+  <update id="changeInvitationBindMeeting">
+  	 update dc_meeting set invitationId=#{invitationId},updateDate=NOW(),updatedBy=#{userId} where id = #{meetingId}
+  </update>
+  <select id="getPagesListByInvitationId" resultMap="PagesMap">
+  	select <include refid="pagesResult"/>  from dc_invitation_pages p where p.invitationId = #{invitationId} order by nodeName+0 asc
+  </select>
+  
+  <select id="getElementListByInvitationId" resultMap="ElementMap">
+  	select <include refid="elementResult"/>  from dc_invitation_pages_element e where invitationId = #{invitationId}
+  </select>
+  <select id="getInvitationById" resultMap="InvitationMap">
+  	select <include refid="invitationResult"/>,(select uname from dc_user where id =i.updatedBy )uname
+  	  from dc_invitation i where i.id = #{id}
+  </select>
+  
+  <select id="getInvitationList" parameterType="java.util.Map" resultMap="InvitationMap">
+  	select <include refid="invitationResult"/>,(select uname from dc_user where id =i.updatedBy )uname
+  	  from dc_invitation i where i.status = 0 and i.isTemplet is null
+  	<if test="likeName != null and likeName != ''">
+  		and i.name like CONCAT('%',#{likeName},'%')
+  	</if>
+  	order by updateDate desc
+  	limit #{pageNo},#{pageSize}
+  </select>
+  
+  
+  <select id="getPagesTempletList" resultMap="PagesMap">
+  	select <include refid="pagesResult"/>  from dc_invitation i 
+  	INNER JOIN dc_invitation_pages p on p.invitationId = i.id where i.isTemplet = 1 order by nodeName+0 asc
+  </select>
+  
+  <select id="getElementTempletList" resultMap="ElementMap">
+  	select <include refid="elementResult"/>  from dc_invitation i 
+  	INNER JOIN dc_invitation_pages_element e on e.invitationId = i.id where i.isTemplet = 1 
+  </select>
+</mapper>

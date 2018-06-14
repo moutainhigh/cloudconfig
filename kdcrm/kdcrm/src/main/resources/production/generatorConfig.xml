@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>   
+<!DOCTYPE generatorConfiguration   
+  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"   
+  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">   
+<generatorConfiguration>   
+<!-- 数据库驱动 注意：这个 location要指明\mysql-connector-java jar包的绝对路径-->   
+    <classPathEntry  location="F:\eclipseWork\dbcenter\WebContent\WEB-INF\lib\mysql-connector-java-5.1.33.jar"/>   
+    <context id="xkd"  targetRuntime="MyBatis3">   
+        <commentGenerator>   
+            <property name="suppressDate" value="true"/>   
+            <!-- 是否去除自动生成的注释 true：是 ： false:否 -->   
+            <property name="suppressAllComments" value="true"/>   
+        </commentGenerator>   
+        <!--数据库链接URL，用户名、密码（我的数据库密码为空） -->   
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://172.116.100.20:3306/data-center-new" userId="root" password="root">   
+        </jdbcConnection>   
+        <javaTypeResolver>   
+            <property name="forceBigDecimals" value="false"/>   
+        </javaTypeResolver>   
+        <!-- 生成模型的包名和位置 这个targetProject一定不要写错：这里应该是写你的工程名字-->   
+        <javaModelGenerator targetPackage="com.xkd.model" targetProject="dbcenter">   
+            <property name="enableSubPackages" value="true"/>   
+            <property name="trimStrings" value="true"/>   
+        </javaModelGenerator>   
+        <!-- 生成映射文件的包名和位置-->   
+        <sqlMapGenerator targetPackage="com.xkd.mapper" targetProject="dbcenter">   
+            <property name="enableSubPackages" value="true"/>   
+        </sqlMapGenerator>   
+        <!-- 生成DAO的包名和位置-->   
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.xkd.mapper" targetProject="dbcenter">   
+            <property name="enableSubPackages" value="true"/>   
+        </javaClientGenerator>   
+        <!-- 要生成的表 tableName是数据库中的表名或视图名 domainObjectName是实体类名-->   
+<!--         <table tableName="dc_company" domainObjectName="Company" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+<!--         <table tableName="dc_company_detail" domainObjectName="CompanyDetail" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+<!--         <table tableName="dc_company_document" domainObjectName="CompanyDocument" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+<!--         <table tableName="dc_company_holder" domainObjectName="CompanyHolder" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+<!--         <table tableName="dc_company_json" domainObjectName="CompanyJson" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+<!--         <table tableName="dc_company_main_staff" domainObjectName="CompanyMainStaff" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+<!--         <table tableName="dc_company_matching" domainObjectName="CompanyMatching" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+<!--         <table tableName="dc_company_need" domainObjectName="CompanyNeed" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+<!--         <table tableName="dc_company_out_invest" domainObjectName="CompanyOutInvest" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+<!--         <table tableName="dc_company_senior" domainObjectName="CompanySenior" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+<!--         <table tableName="dc_company_trademark" domainObjectName="CompanyTrademark" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+<!--         <table tableName="dc_crawl_token" domainObjectName="CrawlToken" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+<!--         <table tableName="dc_dictionary" domainObjectName="Dictionary" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+<!--         <table tableName="dc_hotel" domainObjectName="Hotel" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+<!--         <table tableName="dc_hotel_setting" domainObjectName="HotelSetting" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+<!--         <table tableName="dc_invitation" domainObjectName="Invitation" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+<!--         <table tableName="dc_invitation_pages" domainObjectName="InvitationPages" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+<!--         <table tableName="dc_invitation_pages_element" domainObjectName="InvitationPagesElement" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+<!--         <table tableName="dc_meeting" domainObjectName="Meeting" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+<!--         <table tableName="dc_meeting_follow" domainObjectName="MeetingFollow" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+<!--         <table tableName="dc_meeting_hotel" domainObjectName="MeetingHotel" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+<!--         <table tableName="dc_meeting_user" domainObjectName="MeetingUser" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+<!--         <table tableName="dc_pagerfile" domainObjectName="Pagerfile" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+<!--         <table tableName="dc_payment" domainObjectName="Payment" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+<!--         <table tableName="dc_project" domainObjectName="Project" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+<!--         <table tableName="dc_schedule" domainObjectName="Schedule" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+<!--         <table tableName="dc_schedule_logger" domainObjectName="ScheduleLogger" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+<!--         <table tableName="dc_schedule_user" domainObjectName="ScheduleUser" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+<!--         <table tableName="dc_solr_failure" domainObjectName="SolrFailure" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+<!--         <table tableName="dc_suggestion" domainObjectName="Suggestion" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+<!--         <table tableName="dc_sys_menu" domainObjectName="SysMenu" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+<!--         <table tableName="dc_sys_pages" domainObjectName="SysPages" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+<!--         <table tableName="dc_sys_properties" domainObjectName="SysProperties" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+<!--         <table tableName="dc_sys_role" domainObjectName="SysRole" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+<!--         <table tableName="dc_sys_role_menu" domainObjectName="SysRoleMenu" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+<!--         <table tableName="dc_user" domainObjectName="User" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+<!--         <table tableName="dc_user_address" domainObjectName="UserAddress" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+<!--         <table tableName="dc_user_company" domainObjectName="UserCompany" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+<!--         <table tableName="dc_user_detail" domainObjectName="UserDetail" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+<!--         <table tableName="dc_user_dynamic" domainObjectName="UserDynamic" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+<!--         <table tableName="dc_user_hotel" domainObjectName="UserHotel" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+<!--         <table tableName="dc_wj_exercise" domainObjectName="WjExercise" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+<!--         <table tableName="dc_wj_exercise_comment" domainObjectName="WjExerciseComment" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+<!--         <table tableName="dc_wj_question" domainObjectName="WjQuestion" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+<!--         <table tableName="dc_wj_question_option" domainObjectName="WjQuestionOption" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+<!--         <table tableName="dc_wj_user_answer" domainObjectName="WjUserAnswer" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+<!--         <table tableName="dc_wj_user_exam" domainObjectName="WjUserExam" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+        <table tableName="test" domainObjectName="Test" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
+    </context>   
+</generatorConfiguration> 

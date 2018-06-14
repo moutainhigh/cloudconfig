@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.CompanyNeedMapper">
+
+
+
+	<insert id="insertCompanyNeed">
+		INSERT INTO dc_company_need
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null"> id, </if>
+			<if test="companyId != null"> companyId, </if>
+			<if test="time != null"> time, </if>
+			<if test="need != null"> need, </if>
+			<if test="needDiagnosis != null"> needDiagnosis, </if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null"> #{id}, </if>
+			<if test="companyId != null"> #{companyId}, </if>
+			<if test="time != null"> #{time}, </if>
+			<if test="need != null"> #{need}, </if>
+			<if test="needDiagnosis != null"> #{needDiagnosis}, </if>
+ 		</trim>
+	</insert>
+
+
+ 
+
+
+
+	<update id="updateCompanyNeed">
+		UPDATE dc_company_need
+		<set>
+			<if test="id != null"> id = #{id}, </if>
+			<if test="companyId != null"> companyId = #{companyId}, </if>
+			<if test="time != null"> time = #{time}, </if>
+			<if test="need != null"> need = #{need}, </if>
+			<if test="needDiagnosis != null"> needDiagnosis = #{needDiagnosis} </if>
+		</set>
+		WHERE id = #{id}
+	</update>
+
+
+
+
+
+	<select id="selectCompanyNeedByCompanyId" resultType="java.util.Map">
+			SELECT
+			id,
+			companyId,
+			time,
+			need,
+			needDiagnosis
+		FROM
+			dc_company_need d
+		WHERE
+			d.companyId = #{companyId}
+	
+	</select>
+
+
+   <delete id="deleteCompanyNeedById">
+   	delete from dc_company_need where id=#{id}
+   </delete>
+   
+   
+   <select id="selectComopanyNeedById" resultType="java.util.Map">
+   	select id,companyId,time,needDiagnosis from dc_company_need where id=#{id} 
+   </select>
+
+</mapper>

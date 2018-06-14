@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.KaquanMapper" >
+
+
+ 
+  <select id="getKqUserInfo" resultType="java.util.Map" >
+  		select * from kq_user  where openId = #{openId}
+  </select>
+  <insert id="saveKaquan">
+  		insert into kq_user(
+  			openId,uname,mobile,position,course,status,createDate,companyName
+  		)values(
+  			#{openId},#{uname},#{mobile},#{position},#{course},'0',now(),#{companyName}
+  		) 
+  </insert>
+  
+   <select id="getKaquanList" resultType="java.util.Map" parameterType="java.util.Map">
+  		select * from kq_user  where 1 = 1
+  		<if test="uname != null and uname != ''">
+  			and uname like CONCAT( #{uname},'%')
+  		</if>
+  		<if test="mobile != null and mobile != ''">
+  			and mobile like CONCAT( #{mobile},'%')
+  		</if>
+  		<if test="position != null and position != ''">
+  			and position like CONCAT( #{position},'%')
+  		</if>
+  		<if test="course != null and course != ''">
+		   and course = #{course}
+	   </if>
+	   <if test="companyName != null and companyName != ''">
+		   and companyName like CONCAT( #{companyName},'%')
+	   </if>
+	   <if test="beginDate != null and beginDate != ''">
+		   and (<![CDATA[ createDate <= #{endDate} and createDate >= #{beginDate} ]]>)
+	   </if>
+  		<if test="pageSizeInt != null and pageSizeInt != ''">
+  			limit #{currentPageInt},#{pageSizeInt}
+  		</if>
+  </select>
+</mapper>

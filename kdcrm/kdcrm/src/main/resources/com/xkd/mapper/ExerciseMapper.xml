@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.ExerciseMapper" >
+  <resultMap id="BaseResultMap" type="Exercise" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="TITLE" property="title" jdbcType="VARCHAR" />
+    <result column="PROMPT" property="prompt" jdbcType="VARCHAR" />
+    <result column="TTYPE" property="ttype" jdbcType="VARCHAR" />
+    <result column="createdBy" property="createdBy" jdbcType="VARCHAR" />
+    <result column="CTIME" property="ctime" jdbcType="VARCHAR" />
+    <result column="CNT" property="cnt" jdbcType="VARCHAR" />
+    <result column="CHILDTITLE" property="childTitle" jdbcType="VARCHAR" />
+    <result column="cssType" property="cssType" jdbcType="VARCHAR" />
+    <result column="meetingName" property="meetingName" jdbcType="VARCHAR" />
+    <!--VARCHAR<result column="meetingId" property="meetingId" jdbcType="VARCHAR" />
+    <result column="meetingType" property="meetingType" jdbcType="VARCHAR" />-->
+    <result column="flag" property="flag" jdbcType="BOOLEAN" />
+	  <result column="questionSum" property="questionSum" jdbcType="INTEGER" />
+
+	  <result column="showPrompt" property="showPrompt" jdbcType="BOOLEAN" />
+	  <result column="showImgpath" property="showImgpath" jdbcType="BOOLEAN" />
+	  <result column="showButtom" property="showButtom" jdbcType="BOOLEAN" />
+	  <result column="showGrade" property="showGrade" jdbcType="BOOLEAN" />
+
+	  <result column="toLinkType " property="toLinkType " jdbcType="VARCHAR" />
+	  <result column="toLinkUrl" property="toLinkUrl" jdbcType="VARCHAR" />
+	  <result column="buttomContent" property="buttomContent" jdbcType="VARCHAR" />
+	  <result column="imgpath" property="imgpath" jdbcType="VARCHAR" />
+	  <result column="tabType" property="tabType" jdbcType="VARCHAR" />
+	  <result column="outLinkUrl" property="outLinkUrl" jdbcType="VARCHAR" />
+	  <result column="departmentId" property="departmentId" jdbcType="VARCHAR" />
+	  <result column="uname" property="uname" jdbcType="VARCHAR" />
+	  <result column="departmentName" property="departmentName" jdbcType="VARCHAR" />
+	  <result column="collect" property="collect" jdbcType="VARCHAR" />
+	  <result column="collectContent" property="collectContent" jdbcType="VARCHAR" />
+	  <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+	  <result column="email" property="email" jdbcType="VARCHAR" />
+	  <result column="profession" property="profession" jdbcType="VARCHAR" />
+	  <result column="companyName" property="companyName" jdbcType="VARCHAR" />
+	  <result column="userId" property="userId" jdbcType="VARCHAR" />
+	  <result column="titleImg" property="titleImg" jdbcType="VARCHAR" />
+
+
+    
+  </resultMap>
+  <select id="getExercise"  parameterType="java.lang.String" resultMap="BaseResultMap">
+  
+  	select 
+  		e.ID,e.TITLE,e.PROMPT,e.createdBy,e.createDate,e.TTYPE,e.childTitle,e.cssType,e.collectContent,e.collect,
+	  e.showPrompt,e.showImgpath,e.showButtom,e.toLinkType,e.toLinkUrl,e.buttomContent,e.imgpath,e.showGrade,e.tabType,e.outLinkUrl,e.departmentId,e.titleImg,
+      u.uname,(select departmentName from dc_department where id = e.departmentId)departmentName,u.id userId,ud.mobile,ud.profession,ud.companyName,ud.email,
+      (
+  			select count(ue.id) from dc_wj_user_exam ue where ue.exerciseId = e.id
+  			<if test="uid !=null and uid != ''"> and ue.openId = #{uid}</if>
+  		) CNT
+	  ,(select COUNT(*) from dc_wj_question  q where q.exerciseId = e.id and q.ttype in(1,2,5,7,9,10,11,12))questionSum
+  
+  	 from DC_WJ_EXERCISE e
+	  	LEFT  JOIN  dc_user u on
+	  <if test="uid !=null and uid != ''">  u.weixin = #{uid}</if>
+	  <if test="uid == null or uid == ''">  u.id = e.createdBy</if>
+
+	    LEFT  JOIN dc_user_detail ud on ud.id = u.id
+	  where  e.id = #{id}
+  </select>
+  
+  <insert id="saveExercise" parameterType="Exercise" keyProperty="id" useGeneratedKeys="true">
+    insert into DC_WJ_EXERCISE (
+	  ID,TITLE,PROMPT,TTYPE,createdBy,createDate,
+	  childTitle,cssType,updatedBy,updateDate,codeTitle,collectContent,collect,
+      showPrompt,showImgpath,showButtom,toLinkType,toLinkUrl,buttomContent,imgpath,
+      showGrade,tabType,outLinkUrl,departmentId,
+      pcCompanyId,titleImg
+	  )values (
+    		#{id},
+    		#{title,jdbcType=VARCHAR},
+    		#{prompt,jdbcType=VARCHAR},
+    		#{ttype,jdbcType=VARCHAR}, 
+    		#{createdBy,jdbcType=VARCHAR},
+    		now(),
+    		#{childTitle,jdbcType=VARCHAR},
+    		#{cssType,jdbcType=VARCHAR},
+    		#{createdBy,jdbcType=VARCHAR}, 
+    		now(),
+	  		#{codeTitle},#{collectContent},#{collect},
+              #{showPrompt},#{showImgpath},#{showImgpath},#{toLinkType},
+              #{toLinkUrl},#{buttomContent},#{imgpath},
+              #{showGrade},#{tabType},#{outLinkUrl},#{departmentId},
+              #{pcCompanyId},#{titleImg}
+    )
+  </insert>
+  
+  
+  <update id="editExercise" parameterType="Exercise">
+   
+	update  DC_WJ_EXERCISE set 
+	
+	 	TITLE=#{title,jdbcType=VARCHAR},
+	 	PROMPT=#{prompt,jdbcType=VARCHAR},
+		TTYPE=#{ttype,jdbcType=VARCHAR},
+		updatedBy=#{createdBy,jdbcType=VARCHAR},
+		childTitle = #{childTitle},
+		cssType = #{cssType},
+		updateDate = now(),
+	  	codeTitle = #{codeTitle},
+      showPrompt = #{showPrompt},
+      showImgpath = #{showImgpath},
+      showButtom = #{showButtom},
+	  showGrade = #{showGrade},
+      toLinkType = #{toLinkType},
+      toLinkUrl = #{toLinkUrl},
+      buttomContent = #{buttomContent},
+      imgpath = #{imgpath},
+	  outLinkUrl = #{outLinkUrl},
+	  tabType = #{tabType},
+	  departmentId = #{departmentId},
+	  collect = #{collect},
+	  collectContent = #{collectContent},
+	  titleImg = #{titleImg}
+	
+	 where id = #{id,jdbcType=INTEGER}
+	
+   </update>
+  
+ <delete id="delExerciseById" parameterType="java.lang.Integer">
+ 		delete o,q,e,ua,ue from dc_wj_exercise e 
+	 		LEFT JOIN dc_wj_question q on q.exerciseId = e.id 
+	 		LEFT JOIN dc_wj_question_option o on o.questionId = q.id 
+	 		LEFT JOIN dc_wj_user_exam ue on ue.exerciseId = e.id 
+	 		LEFT JOIN dc_wj_user_answer ua on  ua.exerciseId = e.id 
+ 		where 
+ 		<foreach collection="list" item="id"  separator="OR">  
+ 			e.id = #{id,jdbcType=INTEGER} 
+		</foreach>
+ </delete>
+  
+  <select id="getUserExercise"  resultMap="BaseResultMap">
+  
+  	select 
+  		e.ID,e.TITLE,e.PROMPT,e.createdBy,e.createDate,e.TTYPE,e.childTitle,e.cssType,e.meetingType,e.meetingId,e.titleImg,
+      e.showPrompt,e.showImgpath,e.showButtom,e.toLinkType,e.toLinkUrl,e.buttomContent,e.imgpath,e.showGrade,e.tabType,
+	  u.uname,(select departmentName from dc_department where id = e.departmentId)departmentName
+  		<if test="isMeeting == null">
+	  		,(
+	  			select 
+	  				 count(*) 
+	  			from dc_wj_user_exam 
+	  			where exerciseId = e.id
+	  		) cnt
+
+  		</if>
+  	from DC_WJ_EXERCISE e
+	  	LEFT  JOIN  dc_user u on u.id = e.createdBy
+  		
+  	where 1 =1 
+  		<if test="isMeeting != null">
+	  		and e.meetingId is null
+  		</if>
+	  	<if test="ttype != null and ttype != ''">
+	  		and
+	  		<foreach collection="ttype" item="ttype_id" open="(" close=")"  separator="OR">  
+ 			e.cssType = #{ttype_id} 
+			</foreach>
+	  	</if>
+	  	<if test="uid != null and uid != ''">
+	  		and e.uid = #{uid,jdbcType=INTEGER} 
+	  	</if>
+	  	<if test="title != null and title != ''">
+	  		and e.title like CONCAT('%',#{title},'%')
+	  	</if>
+	  <if test="depList != null and depList !='' and depList.size > 0">
+		  and (
+		  <foreach collection="depList" item="depId" open="(" close=")"  separator="OR">
+			  e.departmentId = #{depId}
+		  </foreach>
+		  )
+	  </if>
+	  	<if test="isMeeting != null and isMeeting != ''">
+	  		and e.meetingId is null
+  		</if>
+  	order by e.createDate desc limit #{pageNo},#{pageSize}
+  </select>
+  <select id="getUserExerciseTotal"  resultType="java.lang.Integer">
+  
+  	select 
+  		count(*)
+  	from DC_WJ_EXERCISE a
+  		<if test="meetingName != null and meetingName != ''">
+  		LEFT JOIN dc_meeting m on m.id = a.meetingId
+  		</if>
+  	where 1 =1
+  		<if test="isMeeting != null">
+	  		and a.meetingId is null
+  		</if>
+	  	<if test="ttype != null and ttype != ''">
+	  		and
+	  		<foreach collection="ttype" item="ttype_id" open="(" close=")"  separator="OR">  
+ 			a.cssType = #{ttype_id} 
+			</foreach>
+	  	</if>
+	  	<if test="uid != null and uid != ''">
+	  		and a.uid = #{uid,jdbcType=INTEGER} 
+	  	</if>
+	  	<if test="title != null and title != ''">
+	  		and a.title like CONCAT('%',#{title},'%')
+	  	</if>
+	  	<if test="meetingName != null and meetingName != ''">
+	  		and m.meetingname like CONCAT('%',#{meetingName},'%')
+	  	</if>
+	  	<if test="meetingType != null and meetingType != '' and meetingType.size > 0">
+	  		and(
+	  		<foreach collection="meetingType" item="meetingType_id" open="(" close=")"  separator="OR">  
+ 			a.meetingType = #{meetingType_id} 
+			</foreach>
+			)
+	  	</if>
+	  <if test="depList != null and depList !='' and depList.size > 0">
+		  and (
+		  <foreach collection="depList" item="depId" open="(" close=")"  separator="OR">
+			  a.departmentId = #{depId}
+		  </foreach>
+		  )
+	  </if>
+	  	<if test="isMeeting != null and isMeeting != ''">
+	  		and a.meetingId is null
+  		</if>
+  </select>
+  
+  
+   <select id="getExerciseUserAll"   resultType="java.util.HashMap">
+  		
+  		select 
+  			u.id,u.uname,ue.submitDate,(select title from dc_wj_exercise where id = ue.exerciseId)title,ud.mobile,u.weixin openId,ud.email
+	   		,(select COUNT(DISTINCT ua.questionId) from dc_wj_user_answer ua where ua.exerciseId = ue.exerciseId and ua.openId = u.weixin)questionSum
+  		from dc_wj_user_exam ue 
+  			LEFT JOIN dc_user u on u.weixin = ue.openId
+	   		LEFT JOIN dc_user_detail ud on u.id = ud.id
+
+	   where ue.exerciseId = #{id}
+  		
+  		<if test="null != uname and '' != uname">
+  			and u.uname like CONCAT('%',#{uname},'%')
+  		</if>
+	   	order by ue.submitDate desc limit #{pageNo},#{pageSize}
+  </select>
+  
+  <select id="getExerciseUserAllTotal"   resultType="java.lang.Integer">
+  		
+  		select 
+  			count(*) 
+  		from dc_wj_user_exam ue 
+  			LEFT JOIN dc_user u on u.weixin = ue.openId 
+  		
+  		where ue.exerciseId = #{id}
+  		
+  		<if test="null != uname and '' != uname">
+  			and u.uname like CONCAT('%',#{uname},'%')
+  		</if>
+  	
+  </select>
+   <select id="getMeetingExercise"  resultMap="BaseResultMap">
+  
+  	select 
+  		a.ID,a.TITLE,a.PROMPT,a.createdBy,a.createDate,a.TTYPE,a.childTitle,a.cssType,a.meetingType,a.meetingId
+  		<if test="meetingId != null and meetingId != ''">
+	  		,case when a.meetingId = #{meetingId} then true else false end flag
+  		</if>
+  		,m.meetingname meetingName
+  		
+  	from DC_WJ_EXERCISE a
+  		
+  		LEFT JOIN dc_meeting m on m.id = a.meetingId
+  		
+  	where  (a.meetingId is null and (select count(*) from dc_wj_user_exam e where e.exerciseId = a.id) = 0
+	  		<if test="meetingId != null and meetingId != ''">
+	  			 or a.meetingId = #{meetingId}
+	  		</if>
+  		)
+	  	<if test="ttype != null and ttype != ''">
+	  		and
+	  		<foreach collection="ttype" item="ttype_id" open="(" close=")"  separator="OR">  
+ 			a.ttype = #{ttype_id} 
+			</foreach>
+	  	</if>
+	  	
+	  	<if test="title != null and title != ''">
+	  		and a.title like CONCAT('%',#{title},'%')
+	  	</if>
+	  		
+  	order by a.updateDate desc limit #{pageNo},#{pageSize}
+
+  </select>
+  <select id="getMeetingExerciseTotal"  resultType="java.lang.Integer">
+  
+  	select 
+  		count(*)
+  		
+  	from DC_WJ_EXERCISE a
+  		
+  		LEFT JOIN dc_meeting m on m.id = a.meetingId
+  		
+  	where  (a.meetingId is null and (select count(*) from dc_wj_user_exam e where e.exerciseId = a.id) = 0
+	  		<if test="meetingId != null and meetingId != ''">
+	  			 or a.meetingId = #{meetingId}
+	  		</if>
+  		) 
+	  	<if test="ttype != null and ttype != ''">
+	  		and
+	  		<foreach collection="ttype" item="ttype_id" open="(" close=")"  separator="OR">  
+ 			a.ttype = #{ttype_id} 
+			</foreach>
+	  	</if>
+	  	
+	  	<if test="title != null and title != ''">
+	  		and a.title like CONCAT('%',#{title},'%')
+	  	</if>
+	  		
+  </select>
+  
+</mapper>

@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.MeetingSignMapper" >
+  <resultMap id="BaseResultMap" type="Company" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="parentIndustryId" property="parentIndustryId" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    
+  </resultMap>
+  
+  <select id="getCompanyList"  resultType="java.util.HashMap">
+  
+	  select 
+		c.id,c.companyName company_name,c.address company_desc,u.mgroup,c.province city,c.logo,
+		d.manageType manage_type,d.registrationAuthority registration_authority,
+		d.companyType,d.manageScope,d.companyType company_type,
+ 		(select value from dc_dictionary where ttype = 'industry' and id = c.parentIndustryId )industry,
+  		(select count(*) from dc_meeting_follow where mycid = #{uid} and ttype = 'gz' and cid = c.id and mid = u.meetingid) isFollow 
+	from dc_meeting_user u 
+		LEFT JOIN dc_company c on c.id = u.companyId 
+		LEFT JOIN dc_company_detail d on d.id = c.id 
+	where meetingId = #{id}  and c.id = u.companyId
+  	  <if test="province != null">
+  	 	and c.province = #{province} 
+  	  </if>
+  	 
+  	  <if test="sonIndustryid != null">
+  	 	and c.parentIndustryId in(select id from dc_dictionary where ttype = 'industry' and  value = #{sonIndustryid})
+  	  </if>
+  	 	
+  	  GROUP BY c.id order by c.updateDate limit #{pageNo},#{pageSize}
+
+  </select>
+ 
+ <select id="getTotalRows" resultType="java.lang.Integer">
+ 
+		 select 
+			COUNT( DISTINCT c.id)
+		from dc_meeting_user u 
+		LEFT JOIN dc_company c on c.id = u.companyId
+		where meetingId = #{id} 
+	     <if test="province != null">
+	  	 	and c.province = #{province} 
+	  	 </if>
+	  	 <if test="sonIndustryid != null">
+	  	 	and c.parentIndustryId in(select id from dc_dictionary where ttype = 'industry' and  value = #{sonIndustryid})
+	  	 </if>
+  </select>
+  
+  <select id="getMyCompany"  resultType="java.util.HashMap">
+  
+  	 select 
+		c.id,c.companyName company_name,d.companyDesc company_desc,c.label label,d.manageType manage_type,u.userId,
+		c.parentIndustryId,c.address address,d.content content,
+		u.mgroup mgroup,c.logo logo,
+  	 	d.registrationAuthority registration_authority,d.companyType company_type,d.manageScope manageScope,
+  	 	c.province city,d.establishTime establish_time,c.representative,d.website,
+  	 	(select value from dc_dictionary where ttype = 'industry' and id = c.parentIndustryId ) industry,
+  	 	(select count(*) from dc_meeting_follow where myCid = u.userId and ttype = 'gz' and mid = u.meetingid and cid = c.id)isFollow,
+		(select uname from dc_user where id = c.companyAdviserId)companyAdviser,
+		(select uname from dc_user where id = c.companyDirectorId)companyDirector
+  	 <if test="companyId == null">
+  	 			,
+		(select count(DISTINCT companyid) from dc_meeting_user where mgroup = u.mgroup and meetingid = u.meetingid)groupCnt,
+		(select count(DISTINCT u2.companyid) from dc_company_matching m2  INNER JOIN dc_meeting_user u2 on u2.companyId = m2.matchCompanyId    where  m2.companyId= u.companyId and u2.meetingId = u.meetingId)ppCnt,
+		(select count(*) from dc_meeting_follow where mid = u.meetingid and mycid = u.userid)gzCnt,
+		(select usertype userlevel from dc_payment where companyid = c.id ORDER BY updateDate desc limit 1)userlevel
+	 </if>
+	 from dc_meeting_user u 
+			LEFT JOIN dc_company c on c.id = u.companyId
+			LEFT JOIN dc_company_detail d on d.id = c.id
+	 where u.meetingId = #{meetingId} 
+	 
+	 <if test="companyId == null or companyId == ''">
+	 
+	 	and u.userId = #{uid} 
+	  </if>
+	  <if test="companyId != null and companyId != ''">
+	 
+	 	and u.companyId = #{companyId} 
+	  </if>
+	 limit 1
+  </select>
+  
+  
+  
+  <select id="getMeetingFollowById"  resultType="java.util.HashMap">
+  
+  	select 
+  		id,mid,cid,ttype 
+  	from dc_meeting_follow 
+  	where mycid = #{myCid} and cid = #{cid} and ttype = 'gz' and mid = #{mid}
+  	
+  </select>
+  
+  <insert id="insertMeetingFollow" parameterType="java.util.HashMap">
+  
+  		insert into dc_meeting_follow(id,mycid,mid,cid,ttype,createDate)values(UUID(),#{mycid},#{mid},#{cid},#{ttype},now())
+  		
+  </insert>
+  
+  <delete id="delMeetingFollow" parameterType="java.lang.Integer">
+  
+  		delete from dc_meeting_follow where id = #{id}
+  		
+  </delete>
+  
+  <select id="getMyFollowCompany"  resultType="java.util.HashMap">
+		
+		select 
+			c.id,c.companyName company_name,d.companyDesc company_desc,d.manageType manage_type,d.registrationAuthority registration_authority,d.companyType company_type,d.manageScope,c.logo,
+			(select value from dc_dictionary where ttype = 'industry' and id = c.parentIndustryId ) industry,
+  			c.province city,'1' isFollow
+    	from dc_meeting_follow f
+			LEFT JOIN dc_company c on c.id = f.cid 
+			LEFT JOIN dc_company_detail d on d.id = c.id
+		where  f.mid = #{meetingId} and f.mycid = #{uid} and c.id = f.cid
+		
+		
+		 
+	
+  </select>
+   <select id="getMyCompanyPiPei"  resultType="java.util.HashMap">
+	    select 
+			c.id,c.companyName company_name,d.companyDesc company_desc,d.manageType manage_type,d.registrationAuthority registration_authority,d.companyType company_type,d.manageScope,c.logo,
+			(select value from dc_dictionary where ttype = 'industry' and id = c.parentIndustryId ) industry,
+  			c.province city,
+			(select count(*) from dc_meeting_follow where myCid = #{uid} and ttype = 'gz' and mid = m.meetingid and cid = c.id)isFollow
+		from dc_company_matching cm 
+		 	LEFT JOIN dc_meeting_user m on   m.companyid = cm.companyid 
+		 	LEFT JOIN dc_company c on c.id = cm.matchCompanyId 
+			LEFT JOIN dc_company_detail d on d.id = c.id
+	    where m.meetingid =#{meetingId} and m.userId = #{uid} and c.status = 0 and  
+	    	cm.matchCompanyId in (
+	    		select companyid from dc_meeting_user where meetingid = m.meetingid
+	    	)
+  </select>
+  
+  <select id="getMyCompanyGroup"  resultType="java.util.HashMap">
+	 select 
+		c.id,c.companyName company_name,d.companyDesc company_desc,d.manageType manage_type,d.registrationAuthority registration_authority,d.companyType company_type,d.manageScope,c.logo,c.province city,
+		(select value from dc_dictionary where ttype = 'industry' and id = c.parentIndustryId ) industry,
+  	 	(select count(*) from dc_meeting_follow where myCid = #{uid} and ttype = 'gz' and mid = u.meetingid and cid = u.companyid)isFollow
+  	 from dc_meeting_user u  
+  	 	LEFT JOIN dc_company c on c.id = u.companyid 
+			LEFT JOIN dc_company_detail d on d.id = c.id
+  	 where u.meetingId  =#{meetingId} and  c.id = u.companyid  and c.status = 0 and 
+	  	 u.mgroup = (
+	  	 	select m2.mgroup from dc_meeting_user m2 where m2.meetingId = u.meetingId and m2.userId = #{uid}  limit 1
+	  	 )
+	  	 GROUP BY c.id
+  </select>
+  
+ 
+  
+  
+  <select id="meetingExercise"  resultType="java.util.HashMap">
+	  	
+	  	select id,title from dc_wj_exercise where meetingId = #{meetingid} and meetingType = 2
+	  	
+  </select>
+  
+  
+  <update id="updateCompany" parameterType="java.util.HashMap">
+  
+  	 update dc_company
+      
+      <trim prefix="set" suffixOverrides=",">
+		  <if test="companyName != null and companyName !='' " >
+	        company_name = #{companyName},
+	      </if>
+      	 <if test="lable != null and lable !='' " >
+      	 	<if test="lable == 'no'.toString()">
+      	 		label = null,
+      	 	</if>
+      	 	<if test="lable != 'no'.toString()">
+      	 		label =  #{lable},
+      	 	</if>
+      	 </if>
+      	 <if test="representative != null and representative !='' " >
+	        representative =  #{representative},
+      	 </if>
+      	
+      	<if test="address != null and address !='' " >
+	        address = #{address},
+	      </if>
+      	<if test="companyDesc != null and companyDesc !='' " >
+	        companyDesc = #{companyDesc},
+	      </if>
+	      
+      	 
+      	
+	 	</trim>
+    ,updateDate=NOW(),updatedBy=#{userid} 
+    where id=#{id}
+  </update>
+  
+    <update id="updateCompanyDetail" parameterType="java.util.HashMap">
+  
+  	 update dc_company_detail
+      
+      <trim prefix="set" suffixOverrides=",">
+      	<if test="companyDesc != null and companyDesc !='' " >
+	        companyDesc = #{companyDesc},
+	     </if>
+      	 <if test="website != null and website !='' " >
+	        website =  #{website},
+      	</if>
+      	 <if test="establishTime != null and establishTime !='' " >
+	        establishTime =  #{establishTime},
+      	</if>
+      	<if test="content != null and content !='' " >
+	        content =  #{content},
+      	</if>
+      	<if test="manageScope != null and manageScope !='' " >
+	        manageScope =  #{manageScope},
+      	</if>
+      	<if test="website != null and website !='' " >
+	        website =  #{website},
+      	</if>
+      	 <if test="establishTime != null and establishTime !='' " >
+	        establishTime =  #{establishTime},
+      	</if>
+      	<if test="content != null and content !='' " >
+	        content =  #{content},
+      	</if>
+	 	</trim>
+    ,updateDate=NOW(),updatedBy=#{userid}
+    where id=#{id}
+  </update>
+  
+  
+  <select id="getMeetingCompanyIndustry"  resultType="java.util.HashMap">
+  
+  	
+  	select 
+  		c.parentIndustryId id,d.value industry,false isSelected 
+  	from dc_meeting_user mu 
+  		LEFT JOIN dc_company c on c.id = mu.companyid 
+  		LEFT JOIN  dc_dictionary d on d.id = c.parentIndustryId and d.ttype = 'industry'  
+  	where mu.meetingid = #{meetingId}  and c.status = 0 and d.id = c.parentIndustryId   GROUP BY d.value
+  	
+  </select>
+  
+  <select id="getMeetingCompanyCity"  resultType="java.util.HashMap">
+  
+   	
+  	
+  	select 
+  		c.id,c.province city,false isSelected 
+  	from dc_meeting_user mu 
+  		LEFT JOIN dc_company c on c.id = mu.companyid 
+  	where mu.meetingid = #{meetingId}   and c.status = 0  and c.province != '' GROUP BY c.province
+  	
+  </select>
+  
+  <select id="getCompanyAdviser"  resultType="java.util.HashMap">
+  
+  	select 
+  		u.id advisersId,u.uname adviserName,u.userLogo imgpath,c.companyAdviserId,c.companyDirectorId,(select value from dc_dictionary where id = u.titleId)ttype
+  	from dc_company c 
+  		LEFT JOIN dc_user u on u.status = 0 and u.teacherShow = 1 and (u.id = c.companyAdviserId or u.id = c.companyDirectorId  )
+  	where c.id = #{companyId}
+  	
+  </select>
+  
+   <select id="getAdviserList"  resultType="java.util.HashMap">
+   
+  		select 
+  			u.id,u.userLogo imgpath,u.uname adviserName,u.remark test,d.titleId ttype,u.level
+  		from dc_user u 
+  			INNER JOIN  dc_dictionary d on u.titleId = d.id 
+  		where d.ttype = 'title'  and u.status = 0 and u.teacherShow = 1 order by d.level+0
+  		
+  </select>
+  
+  <select id="getSignCompany"  resultType="java.util.HashMap">
+  
+  		select 
+  			c.logo,c.company_name,
+  			(select pic_atta from dc_user where id = m.uid)userImgpath,
+  			(select uname from dc_user where id = m.userid)userInfoName 
+  		from dc_meeting_user m 
+  			LEFT JOIN dc_company c on c.id =m.companyid 
+  		where 
+  			m.meetingid = #{meetingId} and m.ustatus = 0 and m.status = '已签到' and c.status = 0  
+  		<![CDATA[ and m.attendmeeting_time >=#{begin_data} and m.attendmeeting_time <=#{end_date}]]> 
+  		
+  </select>
+  
+  <select id="getCompanyByMeetingIdAndUid"  resultMap="BaseResultMap">
+		select 
+  			mu.need content,(select value from dc_dictionary where id =  c.parentIndustryId) parentIndustryId,c.province 
+  		from dc_meeting_user mu 
+  			LEFT JOIN dc_company c on c.id = mu.companyid  
+  		where mu.userId =#{uid} 
+  			and mu.meetingid = #{meetingId} 
+  			and c.status = 0 limit 1
+  		
+  </select>
+   <select id="getUserFilterHangYe"  resultType="java.util.HashMap">
+  
+	  
+	  select 
+	  		c.id,c.companyName company_name,d.companyDesc company_desc,d.manageType manage_type,u.mgroup,d.registrationAuthority registration_authority,d.companyType company_type,
+	  		d.manageScope,c.companyAdviserId companyAdviser,c.province city,c.logo,
+	  	 	(select count(*) from dc_meeting_follow where mycid = #{uid} and ttype = 'gz' and cid = c.id and mid = u.meetingid) isFollow,
+	  	 	(select value from dc_dictionary where ttype = 'industry' and id = c.parentIndustryId ) industry
+	  from dc_meeting_user u  
+	  	 	LEFT JOIN dc_company c on c.id = u.companyid 
+	  	 	LEFT JOIN dc_company_detail d on d.id = c.id 
+	  where u.meetingid  = #{meetingId} and  c.id = u.companyid and c.status = 0
+	  
+  	  <if test="provinceId != null and provinceId != ''">
+  	 	<!-- and a.province = (select province from dc_user_address aa where aa.userid = (
+  	 		select companyid from dc_meeting_user mmm where mmm.uid = #{uid} and mmm.meetingid = u.meetingid and mmm.ustatus = 0 limit 1) and aa.utype = 1
+  	 	) -->
+  	 	and c.province = #{provinceId}
+  	 		
+  	  </if>
+  	  
+  	  <if test="hangye==null and xuqiu == null and (provinceId == null || provinceId == '')">
+  	 	<!-- and a.province = (select province from dc_user_address aa where aa.userid = (
+  	 		select companyid from dc_meeting_user mmm where mmm.uid = #{uid} and mmm.meetingid = u.meetingid and mmm.ustatus = 0 limit 1) and aa.utype = 1
+  	 	) -->
+  	 	and c.province = '****878***'<!-- 没毛病不要动我的 -->
+  	 		
+  	  </if>
+  	 
+  	  <if test="hangye != null and hangye != ''">
+  	 	and c.parentIndustryId in(
+  	 	
+  	 		select id from dc_dictionary where ttype = 'industry' and  
+  	 		<foreach item="item" index="index" collection="hangye" open="(" separator="or" close=")">
+       			 value like  CONCAT('%',#{item},'%')
+  			</foreach>
+  	 	)
+  	  </if>
+  	  
+  	  <if test="xuqiu != null and xuqiu !='' ">
+  	 	and  
+  	 		<foreach item="item2" index="index" collection="xuqiu" open="(" separator="or" close=")">
+       			u.need  like CONCAT('%',#{item2},'%')
+  			</foreach>
+  	  </if> 
+  	  GROUP BY c.id order by c.updateDate
+  </select>
+</mapper>

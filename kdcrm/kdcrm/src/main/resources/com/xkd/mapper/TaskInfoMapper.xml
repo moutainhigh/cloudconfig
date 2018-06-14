@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.TaskInfoMapper" >
+  <resultMap id="BaseResultMap" type="Task" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="taskName" property="taskName" jdbcType="VARCHAR" />
+    <result column="taskStatus" property="taskStatus" jdbcType="VARCHAR" />
+    <result column="taskLevel" property="taskLevel" jdbcType="VARCHAR" />
+	  <result column="taskDetail" property="taskDetail" jdbcType="VARCHAR" />
+	  <result column="endDate" property="endDate" jdbcType="VARCHAR" />
+	  <result column="startDate" property="startDate" jdbcType="VARCHAR" />
+	  <result column="remind" property="remind" jdbcType="VARCHAR" />
+	  <result column="createdBy" property="createdBy" jdbcType="VARCHAR" />
+	  <result column="updatedBy" property="updatedBy" jdbcType="VARCHAR" />
+	  <result column="createDate" property="createDate" jdbcType="VARCHAR" />
+	  <result column="updateDate" property="updateDate" jdbcType="VARCHAR" />
+	  <result column="departmentId" property="departmentId" jdbcType="VARCHAR" />
+	  <result column="pcCompanyId" property="pcCompanyId" jdbcType="VARCHAR" />
+	  <result column="uname" property="uname" jdbcType="VARCHAR" />
+  </resultMap>
+  <insert id="saveTask" parameterType="Task" keyProperty="id" useGeneratedKeys="true">
+    insert into dc_task (
+	  	id,taskName,taskStatus,taskLevel,remind,taskDetail,startDate,endDate,
+	  	createdBy,createDate,updatedBy,updateDate,departmentId,pcCompanyId,status
+	  )values (
+    	#{id},#{taskName},#{taskStatus},#{taskLevel},#{remind},#{taskDetail},#{startDate},#{endDate},
+    	#{createdBy},now(),#{createdBy},now(),#{departmentId},#{pcCompanyId},'0'
+      )
+  </insert>
+	<insert id="saveTaskUser"  keyProperty="id" useGeneratedKeys="true">
+		insert into dc_task_user (
+			id,taskId,userId
+		)values
+		<foreach collection="taskUser" item="userId"  separator=",">
+				( UUID(),#{taskId},#{userId})
+		</foreach>
+	</insert>
+	<select id="getTaskList"  resultMap="BaseResultMap">
+		select
+			t.id,t.taskName,t.taskStatus,t.taskLevel,t.remind,t.taskDetail,t.startDate,t.endDate,
+			t.createdBy,t.createDate,t.updatedBy,t.updateDate,t.departmentId,t.pcCompanyId,u.uname
+		from dc_task t
+			<if test="queryStatus != null and queryStatus == 2 ">
+				INNER JOIN dc_task_user tu on tu.taskId = t.id and tu.userId = #{userId}
+			</if>
+			LEFT  JOIN  dc_user u on u.id = t.createdBy
+		where t.status  = '0'
+
+		<if test="taskName != null and taskName != ''">
+			and t.taskName like CONCAT('%',#{taskName},'%')
+		</if>
+		<if test="departmentIds != null  and departmentIds.size > 0">
+			and (
+			<foreach collection="departmentIds" item="depId" open="(" close=")"  separator="OR">
+				t.departmentId = #{depId}
+			</foreach>
+			)
+		</if>
+		<if test="pcCompanyId != null and pcCompanyId != ''">
+			and t.pcCompanyId = #{pcCompanyId}
+		</if>
+		<if test="queryStatus != null and queryStatus == 1">
+			and t.createdBy = #{userId}
+		</if>
+
+		order by t.updateDate desc limit #{pageNo},#{pageSize}
+	</select>
+	<select id="getTaskListTotal"  resultType="java.lang.Integer">
+		select
+			count(*)
+		from dc_task t
+			<if test="queryStatus != null and queryStatus == 2">
+				INNER JOIN dc_task_user tu on tu.taskId = t.id and tu.userId = #{userId}
+			</if>
+			LEFT  JOIN  dc_user u on u.id = t.createdBy
+		where t.status  = '0'
+		<if test="taskName != null and taskName != ''">
+			and t.taskName like CONCAT('%',#{taskName},'%')
+		</if>
+		<if test="departmentIds != null  and departmentIds.size > 0">
+			and (
+			<foreach collection="departmentIds" item="depId" open="(" close=")"  separator="OR">
+				t.departmentId = #{depId}
+			</foreach>
+			)
+		</if>
+		<if test="pcCompanyId != null and pcCompanyId != ''">
+			and t.pcCompanyId = #{pcCompanyId}
+		</if>
+		<if test="queryStatus != null and queryStatus == 1 ">
+			and t.createdBy = #{userId}
+		</if>
+	</select>
+	<delete id="deleteTaskUser">
+		delete from dc_task_user where taskId = #{taskId}
+	</delete>
+	<update id="changeTask" parameterType="Task">
+		update dc_task set
+			taskName = #{taskName},taskStatus = #{taskStatus},taskLevel = #{taskLevel},
+			remind = #{remind},taskDetail = #{taskDetail},startDate = #{startDate},endDate = #{endDate},
+			updatedBy = #{updatedBy},updateDate = now()
+	  	where id = #{id}
+	</update>
+	<select id="getTaskById" resultMap="BaseResultMap">
+		select
+			t.id,t.taskName,t.taskStatus,t.taskLevel,t.remind,t.taskDetail,t.startDate,t.endDate,
+			t.createdBy,t.createDate,t.updatedBy,t.updateDate,u.uname
+		from dc_task t
+		  	LEFT JOIN dc_user u on u.id = t.createdBy
+		where t.id = #{taskId}
+	</select>
+
+	<update id="deleteTask">
+		update
+			dc_task
+		set
+			status = '2',updateDate = now(),updatedBy = #{userId}
+	  	where
+			<foreach collection="taskUserList" item="taskId" open="(" close=")"  separator="OR">
+				id = #{taskId}
+			</foreach>
+	</update>
+
+	<select id="getTaskUserList" resultType="java.util.Map">
+		select
+			  u.id,u.uname,tu.taskId
+	  	from dc_task_user tu
+			LEFT  JOIN  dc_user u on u.id = tu.userId
+		where tu.taskId in(
+			<foreach collection="taskUserList" item="task"  separator=",">
+				#{task.id}
+			</foreach>
+		)
+	</select>
+</mapper>

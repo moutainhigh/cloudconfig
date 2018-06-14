@@ -1,0 +1,678 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.UserAttendMeetingMapper" >
+  <resultMap id="BaseResultMap" type="UserAttendMeeting" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="userId" property="userId" jdbcType="CHAR" />
+    <result column="companyId" property="companyId" jdbcType="CHAR" />
+    <result column="attendmeetingTime" property="attendMeetingTime" jdbcType="CHAR" />
+    <result column="enrollTime" property="enrollTime" jdbcType="CHAR" />
+    <result column="meetingId" property="meetingId" jdbcType="CHAR" />
+    <result column="mgroup" property="mgroup" jdbcType="VARCHAR" />
+    <result column="trainingSituation" property="trainingSituation" jdbcType="VARCHAR" />
+    <result column="trainingResultLevel" property="trainingResultLevel" jdbcType="TINYINT" />
+    <result column="trainingImpactSssessment" property="trainingImpactAssessment" jdbcType="VARCHAR" />
+    <result column="need" property="need" jdbcType="VARCHAR" />
+    <result column="needDetail" property="needDetail" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="star" property="star" jdbcType="TINYINT" />
+    <result column="learnStatus" property="learnStatus" jdbcType="TINYINT" />
+    <result column="updateDate" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="createDate" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="createdBy" property="createdBy" jdbcType="CHAR" />
+    <result column="updatedBy" property="updatedBy" jdbcType="CHAR" />
+    <result column="ticketLoginUserId" property="ticketLoginUserId" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,userId,companyId,attendmeetingTime,enrollTime,meetingId,mgroup,trainingSituation,trainingResultLevel,
+    trainingImpactSssessment,status,star,need,needDetail,updateDate,createDate,createdBy,updatedBy,learnStatus
+  </sql>
+ 
+  <select id="selectUserAttendMeetingByCompanyId" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from dc_meeting_user where companyid = #{companyId}
+  </select>
+
+    <select id="selectMeetingUsersByIds" resultType="java.util.Map" >
+        select
+        <include refid="Base_Column_List" />
+        from dc_meeting_user where ${ids}
+    </select>
+
+  <select id="selectMeetingUserById" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from dc_meeting_user where meetingId = #{meetingId} 
+  </select>
+  
+  <select id="selectMeetingUserByUserIdAndMeetingId" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from dc_meeting_user where meetingId = #{meetingId} and userId=#{userId}
+  </select>
+  
+  <select id="selectMeetingUserByIds" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from dc_meeting_user where ${ids}
+  </select>
+  
+  <select id="getTotoalByMeetingId" resultType="java.lang.Integer" >
+  
+   	select count(1) 
+ 	
+ 	from (select * from dc_meeting_user where meetingId = #{meetingId}) mu left join dc_company c  on mu.companyId = c.id 
+ 	
+ 	left join dc_user_hotel h on mu.id = h.meetingUserId left join dc_user u on mu.userId = u.id 
+ 	
+	where c.status = 0 and u.status = 0 
+	
+	<if test="content != null and content != '' ">
+    	${content} 
+    </if>
+    <if test="companyAdviserStr != null and companyAdviserStr != '' ">
+    	${companyAdviserStr} 
+    </if>
+    <if test="companyDirectorStr != null and companyDirectorStr != '' ">
+    	${companyDirectorStr} 
+    </if>
+    <if test="mgroupStr != null and mgroupStr != '' ">
+    	${mgroupStr} 
+    </if>
+    <if test="userTypeStr != null and userTypeStr != '' ">
+    	${userTypeStr} 
+    </if>
+	
+  </select>
+  
+   <select id="getTotoalByMeetingIdAttend" resultType="java.lang.Integer" >
+   
+   	select count(1) 
+ 	
+ 	from (select * from dc_meeting_user where meetingid = #{meetingId} and status = '已参会' ) mu left join dc_company c  on mu.companyid = c.id
+ 	
+ 	left join dc_user_hotel h on mu.id = h.meetingUserId left join dc_user u on mu.userId = u.id 
+ 	
+	where c.status = 0 and u.status = 0 
+	
+	<if test="content != null and content != '' ">
+    	${content} 
+    </if>
+    <if test="companyAdviserStr != null and companyAdviserStr != '' ">
+    	${companyAdviserStr} 
+    </if>
+    <if test="companyDirectorStr != null and companyDirectorStr != '' ">
+    	${companyDirectorStr} 
+    </if>
+    <if test="mgroupStr != null and mgroupStr != '' ">
+    	${mgroupStr} 
+    </if>
+    <if test="userTypeStr != null and userTypeStr != '' ">
+    	${userTypeStr} 
+    </if>
+    
+   
+  </select>
+  <select id="getAttendedByMeetingId" resultType="java.lang.Integer" >
+  
+   select count(1) 
+ 	
+ 	from (select * from dc_meeting_user where meetingId = #{meetingId} and status = '已参会' ) mu left join dc_company c  on mu.companyId = c.id
+ 	
+ 	left join dc_user_hotel h on mu.id = h.meetingUserId left join dc_user u on mu.userId = u.id 
+ 	
+	where c.status = 0 and u.status = 0 
+	
+	<if test="content != null and content != '' ">
+    	${content} 
+    </if>
+  </select>
+  
+  <select id="selectUserInfoByMeetingId" resultMap="BaseResultMap">
+  	 select 
+    <include refid="Base_Column_List" />
+    from dc_meeting_user wheremeetingId = #{meetingId} and EXISTS  
+    (select 1 from  dc_company where dc_meeting_user.meetingId =#{meetingId} and dc_company.Id = dc_meeting_user.companyId )
+    
+    <if test="notGroupStr != null and notGroupStr != ''">
+    	${notGroupStr}
+    </if>
+    
+     limit #{currentPageInt},#{pageSizeInt}
+  </select>
+  
+  <select id="selectAdviserDirectorMaps" resultType="java.util.HashMap">
+  
+  	select c.companyAdviserId,c.companyDirectorId,(select uname from dc_user where id = c.companyAdviserId) as adviserName,
+  	(select uname from dc_user where id = c.companyDirectorId) as directorName
+ 	from (select * from dc_meeting_user where meetingId = #{meetingId}) mu
+ 	left join dc_company c  on mu.companyId = c.id where  c.status = 0 
+  
+  </select>
+
+    <select id="selectProjectAdvisersMeetingId" resultType="java.util.HashMap">
+        select
+        case when p.adviserId is null or p.adviserId = '' then c.companyAdviserId else p.adviserId end adviserId,
+        case when p.directorId is null or p.directorId = '' then c.companyDirectorId else p.directorId end directorId,
+        (select uname from dc_user where id = IF(p.adviserId is null or p.adviserId = '',c.companyAdviserId,p.adviserId) and status = 0) as adviserName,
+        (select uname from dc_user where id = IF(p.directorId is null or p.directorId = '',c.companyDirectorId,p.directorId) and status = 0) as directorName
+        from (select * from dc_meeting_user where meetingId = #{meetingId} GROUP BY companyId) mu
+      LEFT JOIN dc_company c on mu.companyId = c.id LEFT JOIN dc_user u on mu.userId = u.id
+      LEFT JOIN (select * from dc_project where meetingId = #{meetingId} and status = 0 ) p on c.id= p.companyId
+      where  c.status = 0 and u.status = 0
+    </select>
+
+
+  
+  <select id="selectUserInfoMapByMeetingId" parameterType="java.util.HashMap"  resultType="java.util.HashMap">
+  	
+  	select 
+  		mu.id,mu.userId,mu.companyId,mu.attendmeetingTime,DATE_FORMAT(mu.enrollTime, "%Y-%m-%d") as enrollTime,mu.meetingId,mu.mgroup,mu.trainingSituation,mu.trainingResultLevel,
+    	mu.trainingImpactSssessment,mu.status,mu.star,mu.need,mu.needDetail,mu.updateDate,c.companyName,c.parentIndustryId,
+      (select value from dc_dictionary where id = c.parentIndustryId) as parentIndustryName,c.sonIndustry,c.companyAdviserId,
+      (select uname from dc_user where  id = c.companyAdviserId and status = 0) as companyAdviserName,
+      (select uname from dc_user where id = c.companyDirectorId and status = 0) as companyDirectorName ,c.companyDirectorId,case when mu.learnStatus=0 then '新训' else '复训' end learnStatus,
+  		cd.manageScope,cd.companyDesc,cd.annualSalesVolume,cd.annualProfit,cd.companyType,(select value from dc_dictionary where id = cd.companyPropertyId) as companyProperty,cd.companyPropertyId,cd.companySize,
+  		c.province,c.city,c.county,c.address ,c.userLevel,c.userType,c.channel,c.paymentMoney,h.id as hotelId,h.hotelName,h.room,h.bigRoom,
+  		uh.startTime,uh.endTime,u.uname,u.mobile as umobile,u.phone as uphone   
+ 	from (select * from dc_meeting_user where meetingId = #{meetingId} ORDER BY updateDate desc ) mu 
+ 		left join dc_company c  on mu.companyId = c.id 
+ 		left join dc_company_detail cd on c.id = cd.id  
+ 		left join dc_user_hotel uh on mu.id = uh.meetingUserId 
+ 		left join dc_meeting_hotel h on h.id = uh.hotelId 
+ 		left join dc_user u on mu.userId = u.id 
+ 	
+	where  c.status = 0 and u.status = 0 
+  	
+    <if test="content != null and content != '' ">
+    	${content} 
+    </if>
+    <if test="needCheck != null and needCheck != '' ">
+    	${needCheck} 
+    </if>
+    <if test="companyAdviserStr != null and companyAdviserStr != '' ">
+    	${companyAdviserStr} 
+    </if>
+    <if test="companyDirectorStr != null and companyDirectorStr != '' ">
+    	${companyDirectorStr} 
+    </if>
+    <if test="userTypeStr != null and userTypeStr != '' ">
+    	${userTypeStr} 
+    </if>
+    <if test="mgroupStr != null and mgroupStr != '' ">
+    	${mgroupStr} 
+    </if>
+
+    limit #{currentPageInt},#{pageSizeInt}
+    
+  </select>
+  
+	<select id="selectExcluedCompanyUserMapsByMeetingId" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+  	
+ 	select c.id as companyId,c.companyName,c.parentIndustryId,(select value from dc_dictionary where id =  c.parentIndustryId) as parentIndustryName,c.companyAdviserId,c.companyDirectorId,
+    (select uname from dc_user where  id = c.companyAdviserId and status = 0) as companyAdviserName, (select uname from dc_user where id = c.companyDirectorId and status = 0) as companyDirectorName ,c.sonIndustry,c.province,c.city,c.county,
+ 	c.userLevel,c.userType,c.channel,c.paymentMoney,u.id as userId,c.departmentId,
+    (select departmentName from dc_department where id = c.departmentId) as departmentName,
+ 	CASE when (select count(1) from dc_meeting_user where c.id = companyId) = 0 then '新训' ELSE '复训' END learnStatus,
+ 	u.mobile,u.phone,u.uname from  (select * from dc_user  where status=0 order by updateDate desc) u inner join dc_user_company uc on u.id = uc.userId inner join 
+	(select id,companyName,parentIndustryId,companyAdviserId,companyDirectorId,
+	sonIndustry,label,province,city,county,userLevel,userType,channel,paymentMoney,updateDate,departmentId from  dc_company where  companyName !='' and companyName is not null and status = 0 ) c
+	on c.id=uc.companyId   WHERE  u.id not in (select userId from dc_meeting_user where meetingId=#{meetingId})
+
+        and c.departmentId in
+        <foreach collection="departmentIdList"  item="departmentId" index="" separator=","  open="(" close=")" >
+            #{departmentId}
+        </foreach>
+    
+    <if test="content != null and content != '' ">
+    	${content}
+    </if>
+    <if test="parentIndustryStr != null and parentIndustryStr != '' ">
+    	${parentIndustryStr}
+    </if>
+    <if test="sonIndustryStr != null and sonIndustryStr != '' ">
+    	${sonIndustryStr}
+    </if>
+    <if test="provinceStr != null and provinceStr != '' ">
+    	${provinceStr}
+    </if>
+    <if test="cityStr != null and cityStr != '' ">
+    	${cityStr}
+    </if>
+    <if test="countyStr != null and countyStr != '' ">
+    	${countyStr}
+    </if>
+    <if test="userlevelStr != null and userlevelStr != '' ">
+    	${userlevelStr}
+    </if>
+    <if test="userTypeStr != null and userTypeStr != '' ">
+    	${userTypeStr}
+    </if>
+    <if test="channelStr != null and channelStr != '' ">
+    	${channelStr}
+    </if>
+    <if test="adviserStr != null and adviserStr != '' ">
+    	${adviserStr}
+    </if>
+    
+    order by c.updateDate desc 
+    
+    limit #{currentPageInt},#{pageSizeInt}
+  </select>
+  
+  
+  <select id="selectTotalExcluedCompanyUserMapsByMeetingId" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+  	
+ 	select count(1)
+	from  dc_user u inner join dc_user_company uc on u.id = uc.userId inner join dc_company c on c.id=uc.companyId 
+	WHERE u.status=0 and u.id not in (select userid from dc_meeting_user where meetingid=#{meetingId}) 
+ 	and c.companyName !='' and c.companyName is not null and  c.status = 0
+
+      and c.departmentId in
+      <foreach collection="departmentIdList"  item="departmentId" index="" separator=","  open="(" close=")" >
+          #{departmentId}
+      </foreach>
+
+    <if test="content != null and content != '' ">
+    	${content}
+    </if>
+    <if test="parentIndustryStr != null and parentIndustryStr != '' ">
+    	${parentIndustryStr}
+    </if>
+     <if test="sonIndustryStr != null and sonIndustryStr != '' ">
+    	${sonIndustryStr}
+    </if>
+    <if test="provinceStr != null and provinceStr != '' ">
+    	${provinceStr}
+    </if>
+    <if test="cityStr != null and cityStr != '' ">
+    	${cityStr}
+    </if>
+    <if test="countyStr != null and countyStr != '' ">
+    	${countyStr}
+    </if>
+    <if test="userlevelStr != null and userlevelStr != '' ">
+    	${userlevelStr}
+    </if>
+    <if test="userTypeStr != null and userTypeStr != '' ">
+    	${userTypeStr}
+    </if>
+    <if test="channelStr != null and channelStr != '' ">
+    	${channelStr}
+    </if>
+    <if test="adviserStr != null and adviserStr != '' ">
+    	${adviserStr}
+    </if>
+	
+  </select>
+  
+  
+  <select id="selectMeetingProjectsMapsByMeetingId" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+  	
+	select mu.mgroup,mu.meetingid as meetingId,mu.id as meetingUserId,c.id as companyId,c.companyName,p.projectLevelId,
+	(select value  from dc_dictionary where id = p.projectLevelId) as projectLevel,
+    (select uname from dc_user where  id = IF(p.adviserId is null or p.adviserId = '',c.companyAdviserId,p.adviserId)  and status = 0) as companyAdviserName,
+    (select uname from dc_user where id = IF(p.directorId is null or p.directorId = '',c.companyDirectorId,p.directorId) and status = 0) as companyDirectorName,
+    case when p.adviserId is null or p.adviserId = '' then c.companyAdviserId else p.adviserId end adviserId,
+    case when p.directorId is null or p.directorId = '' then c.companyDirectorId else p.directorId end directorId,
+    c.province,c.city,c.county,p.id as projectId,
+	p.projectName,p.description,(select value from dc_dictionary where id = p.parentIndustryId) as parentIndustry, p.parentIndustryId,p.projectLevelId,p.sonIndustry,p.advice,p.initUser,p.scope,p.contactPhone,p.teamSize,
+	p.annualSalesVolume,p.annualProfit,p.thisYearSalesVolume,
+	p.nextYearSalesVolume,p.alreadyInvest,p.expectTotalInvest,p.planFinancing,p.expectReleaseStockRate from
+	(select * from dc_meeting_user where meetingId = #{meetingId} GROUP BY companyId) mu
+      LEFT JOIN dc_company c on mu.companyId = c.id LEFT JOIN dc_user u on mu.userId = u.id
+      LEFT JOIN (select * from dc_project where meetingId = #{meetingId} and status = 0 ) p on c.id= p.companyId
+      where  c.status = 0 and u.status = 0
+
+      <if test="content != null and content != '' ">
+    	${content}
+    </if>
+    <if test="parentIndustryStr != null and parentIndustryStr != '' ">
+    	${parentIndustryStr}
+    </if>
+     <if test="sonIndustryStr != null and sonIndustryStr != '' ">
+    	${sonIndustryStr}
+    </if>
+    <if test="provinceStr != null and provinceStr != '' ">
+    	${provinceStr}
+    </if>
+    <if test="cityStr != null and cityStr != '' ">
+    	${cityStr}
+    </if>
+    <if test="countyStr != null and countyStr != '' ">
+    	${countyStr}
+    </if>
+    <if test="plevelStr != null and plevelStr != '' ">
+    	${plevelStr}
+    </if>
+    <if test="companyAdviserStr != null and companyAdviserStr != '' ">
+    	${companyAdviserStr}
+    </if>
+    <if test="directorStr != null and directorStr != '' ">
+    	${directorStr}
+    </if>
+    <if test="mgroupStr != null and mgroupStr != '' ">
+    	${mgroupStr}
+    </if>
+    
+    order by p.updateDate desc   
+    
+    limit #{currentPageInt},#{pageSizeInt}
+    
+  </select>
+  
+   <select id="selectMeetingUserMapsByCompanyId" resultType="java.util.HashMap">
+  	
+	select u.id as userId,u.uname,u.mobile from dc_meeting_user mu LEFT JOIN dc_user u on mu.userId = u.id 
+	
+	where mu.companyId = #{companyId} and mu.status = 0 and u.status = 0 and meetingId = #{meetingId}
+ 	
+  </select>
+  
+   <select id="selectTotalMeetingProjectsMapsByMeetingId" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+  	
+	select count(1) from (select * from dc_meeting_user where meetingId = #{meetingId} GROUP BY companyId) mu 
+	
+ 	LEFT JOIN dc_company c on mu.companyid = c.id LEFT JOIN dc_user u on mu.userId = u.id 
+ 	
+ 	LEFT JOIN (select * from dc_project where meetingId = #{meetingId} and status = 0 ) p on c.id= p.companyId 
+ 	 
+ 	where  c.status = 0 and u.status = 0 
+ 	
+    <if test="content != null and content != '' ">
+    	${content}
+    </if>
+    <if test="parentIndustryStr != null and parentIndustryStr != '' ">
+    	${parentIndustryStr}
+    </if>
+     <if test="sonIndustryStr != null and sonIndustryStr != '' ">
+    	${sonIndustryStr}
+    </if>
+    <if test="provinceStr != null and provinceStr != '' ">
+    	${provinceStr}
+    </if>
+    <if test="cityStr != null and cityStr != '' ">
+    	${cityStr}
+    </if>
+    <if test="countyStr != null and countyStr != '' ">
+    	${countyStr}
+    </if>
+    <if test="plevelStr != null and plevelStr != '' ">
+    	${plevelStr}
+    </if>
+    <if test="companyAdviserStr != null and companyAdviserStr != '' ">
+    	${companyAdviserStr}
+    </if>
+    <if test="directorStr != null and directorStr != '' ">
+    	${directorStr}
+    </if>
+    <if test="mgroupStr != null and mgroupStr != '' ">
+    	${mgroupStr}
+    </if>
+  </select>
+  
+  <select id="selectUsersHotelByMeetingId" resultType="java.util.HashMap">
+  	
+	 select 
+	  h.id as userHotelId,h.roomNumber,h.bigRoomNumber,u.id as userId,u.uname,u.mobile,h.startTime,h.endTime,h.hotelName,TIMESTAMPDIFF(DAY,h.startTime,h.endTime)dates,
+	  CASE when h.bigRoomNumber >0 and h.roomNumber >0 then CONCAT(CONCAT('普通房 ',h.roomNumber,' 间'),' ',CONCAT('大床房 ',h.bigRoomNumber,' 间')) when h.bigRoomNumber >0 then CONCAT('大床房 ',h.bigRoomNumber,' 间') when h.roomNumber >0 then CONCAT('普通房 ',h.roomNumber,' 间') end room
+	  from  dc_user_hotel  h
+	  LEFT JOIN dc_user u on u.id = h.userId
+	 where h.meetingId = #{meetingId} and u.status = 0 and h.status = 0
+	<if test="content != null and content != ''">
+    	and (u.mobile like CONCAT('%',#{content},'%') or u.uname like CONCAT('%',#{content},'%'))
+    </if>
+	 
+	 limit #{currentPageInt},#{pageSizeInt}
+    
+  </select>
+  
+  <select id="selectTotalUsersHotelByMeetingId" resultType="java.lang.Integer">
+
+      select count(1) from  dc_user_hotel  h LEFT JOIN dc_user u on u.id = h.userId
+      where h.meetingId = #{meetingId} and u.status = 0 and h.status = 0
+      <if test="content != null and content != ''">
+          and (u.mobile like CONCAT('%',#{content},'%') or u.uname like CONCAT('%',#{content},'%'))
+      </if>
+	 
+  </select>
+  
+  <select id="selectCountMapByMeetingId" resultType="java.lang.Integer">
+  	
+ 	select count(1) 
+ 	
+ 	from (select * from dc_meeting_user where meetingId = #{meetingId}) mu left join dc_company c  on mu.companyId = c.id 
+ 	
+ 	left join dc_user_hotel h on mu.id = h.meetingUserId left join dc_user u on mu.userId = u.id 
+	
+  </select>
+  
+  <select id="getNotGroupCount" resultType="java.lang.Integer">
+  	select  count(1) 
+    
+    from dc_meeting_user where meetingId = #{meetingId}
+    
+    <if test="notGroupStr != null and notGroupStr != ''">
+    	${notGroupStr}
+    </if>
+  </select>
+  
+  <select id="selectMeetingUserByParam" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    
+    from dc_meeting_user where  meetingId = #{meetingId} 
+      
+    <if test="companyIds != null and companyIds !='' ">
+    	${companyIds} 
+    </if>
+    
+    limit #{currentPageInt},#{pageSizeInt}
+    
+  </select>
+  
+  
+  <select id="getTotoalByMeetingIdNeedCheck" resultType="java.lang.Integer" >
+   
+   	select count(1) 
+ 	
+ 	from (select * from dc_meeting_user where meetingid = #{meetingId} and status = '未审核' ) mu left join dc_company c  on mu.companyid = c.id 
+ 	
+ 	left join dc_user_hotel h on mu.id = h.meetingUserId left join dc_user u on mu.userId = u.id 
+ 	
+	where c.status = 0 and u.status = 0 
+	
+	<if test="content != null and content != '' ">
+    	${content} 
+    </if>
+    <if test="companyAdviserStr != null and companyAdviserStr != '' ">
+    	${companyAdviserStr} 
+    </if>
+    <if test="companyDirectorStr != null and companyDirectorStr != '' ">
+    	${companyDirectorStr} 
+    </if>
+    <if test="mgroupStr != null and mgroupStr != '' ">
+    	${mgroupStr} 
+    </if>
+    <if test="userTypeStr != null and userTypeStr != '' ">
+    	${userTypeStr} 
+    </if>
+  </select>
+  
+  <update id="updateUserStarsById" parameterType="java.lang.Integer">
+  
+  	 update dc_meeting_user set star = #{star},updateDate = NOW() where id = #{id}
+  	 
+  </update>
+  
+  <delete id="deleteMeetingUserByIds">
+  
+  	 delete from  dc_meeting_user where ${idString}
+  	 
+  </delete>
+  
+  <update id="updateMeetingUserContentById" parameterType="UserAttendMeeting">
+  	 update dc_meeting_user
+    <set>
+      <if test="userId != null and userId !='' " >
+        userId = #{userId},
+      </if>
+      <if test="companyId != null and companyId !='' " >
+        companyId = #{companyId},
+      </if>
+       attendmeetingTime = #{attendMeetingTime},
+       enrollTime = #{enrollTime},
+      
+      <if test="meetingId != null and meetingId !='' " >
+        meetingId = #{meetingId},
+      </if>
+        mgroup = #{mgroup},
+      <if test="trainingSituation != null and trainingSituation !='' " >
+        trainingSituation = #{trainingSituation},
+      </if>
+      <if test="trainingResultLevel != null and trainingResultLevel !='' " >
+        trainingResulLevel = #{trainingResultLevel},
+      </if>
+      <if test="trainingImpactAssessment != null and trainingImpactAssessment !='' " >
+        trainingImpactSssessment = #{trainingImpactAssessment},
+      </if>
+      <if test="status != null and status !='' " >
+        status = #{status},
+      </if>
+      <if test="need != null and need !='' " >
+        need = #{need}, 
+      </if>
+      <if test="needDetail != null and needDetail !='' " >
+        needDetail = #{needDetail}, 
+      </if>
+      <if test="learnStatus != null" >
+        learnStatus = #{learnStatus}, 
+      </if>
+      
+      <if test=" 1 == 1  " >
+        updateDate = NOW() 
+      </if>
+    </set>
+    
+    where id=#{id}
+  </update>
+  
+   <update id="updateMeetingUserStatusById">
+   
+  	 update dc_meeting_user set status =#{status} ,updateDate = NOW() where id=#{id}
+    
+  </update>
+  
+  <update id="updateMeetingUserStatus">
+   
+  	 update dc_meeting_user set status = #{status},updateDate = NOW()  where id=#{id}
+    
+  </update>
+  
+  
+  <delete id="deleteMeetingUserAndStatus">
+   
+  	 delete from  dc_meeting_user   where id=#{id}
+    
+  </delete>
+
+
+  <delete id="deleteMeetingUserByUserId">
+   
+  	 delete from dc_meeting_user where userId=#{userId}
+    
+  </delete>
+  
+  <delete id="deleteMeetingUserByUserIdAndCompanyId">
+   
+  	 delete from dc_meeting_user where userId=#{userId} and companyId=#{companyId}
+    
+  </delete>
+  
+  <update id="updateMeetingUserNeedByIdByInvitation" parameterType="java.util.Map">
+  
+  	update dc_meeting_user set need = #{need},needDetail = #{needDetail},learnStatus=#{learnStatus} where id=#{id}
+  
+  </update>
+  
+  <insert id="saveUserMeeting" parameterType="UserAttendMeeting">
+  	insert into dc_meeting_user(id,userId,companyId,attendmeetingTime,enrollTime,meetingId,mgroup,trainingSituation,trainingResultLevel,
+    trainingImpactSssessment,status,star,need,updateDate,createDate,needDetail,learnStatus,createdBy,updatedBy,ticketLoginUserId) values(uuid(),#{userId},#{companyId},#{attendMeetingTime},#{enrollTime},#{meetingId},#{mgroup},
+    #{trainingSituation},#{trainingResultLevel},#{trainingImpactAssessment},#{status},#{star},#{need},now(),now(),#{needDetail},#{learnStatus},#{createdBy},#{updatedBy},#{ticketLoginUserId})
+  </insert>
+
+    <insert id="updateUserMeeting" parameterType="UserAttendMeeting">
+        update  dc_meeting_user set
+        <if test="userId != null">
+            userId = #{userId},
+        </if>
+        <if test="companyId != null">
+            companyId = #{companyId},
+        </if>
+        <if test="attendMeetingTime != null">
+            attendMeetingTime = #{attendMeetingTime},
+        </if>
+        <if test="enrollTime != null">
+            enrollTime = #{enrollTime},
+        </if>
+        <if test="meetingId != null">
+            meetingId = #{meetingId},
+        </if>
+        <if test="mgroup != null">
+            mgroup = #{mgroup},
+        </if>
+        <if test="trainingSituation != null">
+            trainingSituation = #{trainingSituation},
+        </if>
+        <if test="trainingResultLevel != null">
+            trainingResultLevel = #{trainingResultLevel},
+        </if>
+        <if test="trainingImpactAssessment != null">
+            trainingImpactSssessment = #{trainingImpactAssessment},
+        </if>
+        <if test="status != null">
+            status = #{status},
+        </if>
+        <if test="star != null">
+            star = #{star},
+        </if>
+        <if test="need != null">
+            need = #{need},
+        </if>
+        <if test="createDate != null">
+            createDate = #{createDate},
+        </if>
+        <if test="needDetail != null">
+            needDetail = #{needDetail},
+        </if>
+        <if test="learnStatus != null">
+            learnStatus = #{learnStatus},
+        </if>
+        <if test="createdBy != null">
+            createdBy = #{createdBy},
+        </if>
+        <if test="updatedBy != null">
+            updatedBy = #{updatedBy},
+        </if>
+        <if test="ticketLoginUserId != null">
+            ticketLoginUserId = #{ticketLoginUserId},
+        </if>
+
+        updateDate = #{updateTime}
+        where  id = #{id}
+
+    </insert>
+  
+  <delete id="deleteMeetingUserByUserIds">
+  
+  	delete from dc_meeting_user  
+  	
+  	where 
+	<foreach collection="userIdList" item="userId"  separator="OR">  
+		userId = #{userId,jdbcType=CHAR} 
+	</foreach>
+	
+  </delete>
+  
+</mapper>

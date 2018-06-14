@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.ProjectMapper" >
+  
+   <insert id="insertProject">
+        INSERT INTO dc_project
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null"> id, </if>
+            <if test="projectName != null"> projectName, </if>
+            <if test="companyId != null"> companyId, </if>
+            <if test="meetingId != null"> meetingId, </if>
+            <if test="parentIndustryId != null"> parentIndustryId, </if>
+             <if test="sonIndustry != null"> sonIndustry, </if>
+              <if test="projectLevelId != null"> projectLevelId, </if>
+            <if test="description != null"> description, </if>
+            <if test="advice != null"> advice, </if>
+            <if test="initUser != null"> initUser, </if>
+            <if test="contactPhone != null"> contactPhone, </if>
+            <if test="scope != null"> scope, </if>
+            <if test="teamSize != null"> teamSize, </if>
+            <if test="annualSalesVolume != null"> annualSalesVolume, </if>
+            <if test="annualProfit != null"> annualProfit, </if>
+            <if test="thisYearSalesVolume != null"> thisYearSalesVolume, </if>
+            <if test="nextYearSalesVolume != null"> nextYearSalesVolume, </if>
+            <if test="alreadyInvest != null"> alreadyInvest, </if>
+            <if test="expectTotalInvest != null"> expectTotalInvest, </if>
+            <if test="planFinancing != null"> planFinancing, </if>
+            <if test="expectReleaseStockRate != null"> expectReleaseStockRate, </if>
+            <if test="directorId != null"> directorId, </if>
+            <if test="adviserId != null"> adviserId, </if>
+            <if test="status != null"> status, </if>
+            <if test="createdBy != null"> createdBy, </if>
+            <if test="createDate != null"> createDate, </if>
+            <if test="updatedBy != null"> updatedBy, </if>
+            <if test="updateDate != null"> updateDate, </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null"> #{id}, </if>
+            <if test="projectName != null"> #{projectName}, </if>
+            <if test="companyId != null"> #{companyId}, </if>
+            <if test="meetingId != null"> #{meetingId}, </if>
+            <if test="parentIndustryId != null"> #{parentIndustryId}, </if>
+             <if test="sonIndustry != null"> #{sonIndustry}, </if>
+            <if test="projectLevelId != null"> #{projectLevelId}, </if>             
+            <if test="description != null"> #{description}, </if>
+            <if test="advice != null"> #{advice}, </if>
+            <if test="initUser != null"> #{initUser}, </if>
+            <if test="contactPhone != null"> #{contactPhone}, </if>
+            <if test="scope != null"> #{scope}, </if>
+            <if test="teamSize != null"> #{teamSize}, </if>
+            <if test="annualSalesVolume != null"> #{annualSalesVolume}, </if>
+            <if test="annualProfit != null"> #{annualProfit}, </if>
+            <if test="thisYearSalesVolume != null"> #{thisYearSalesVolume}, </if>
+            <if test="nextYearSalesVolume != null"> #{nextYearSalesVolume}, </if>
+            <if test="alreadyInvest != null"> #{alreadyInvest}, </if>
+            <if test="expectTotalInvest != null"> #{expectTotalInvest}, </if>
+            <if test="planFinancing != null"> #{planFinancing}, </if>
+            <if test="expectReleaseStockRate != null"> #{expectReleaseStockRate}, </if>
+            <if test="directorId != null"> #{directorId}, </if>
+            <if test="adviserId != null"> #{adviserId}, </if>
+            <if test="status != null"> #{status}, </if>
+            <if test="createdBy != null"> #{createdBy}, </if>
+            <if test="createDate != null"> #{createDate}, </if>
+            <if test="updatedBy != null"> #{updatedBy}, </if>
+            <if test="updateDate != null"> #{updateDate}, </if>
+        </trim>
+    </insert>
+    
+    <update id="updateProject">
+        UPDATE dc_project
+        <set>
+            <if test="id != null"> id = #{id}, </if>
+            <if test="projectName != null"> projectName = #{projectName}, </if>
+            <if test="companyId != null"> companyId = #{companyId}, </if>
+            <if test="meetingId != null"> meetingId = #{meetingId}, </if>
+            <if test="parentIndustryId != null"> parentIndustryId = #{parentIndustryId}, </if>
+            <if test="sonIndustry != null"> sonIndustry = #{sonIndustry}, </if>
+            <if test="projectLevelId != null"> projectLevelId = #{projectLevelId}, </if>
+            <if test="description != null"> `description` = #{description}, </if>
+            <if test="advice != null"> advice = #{advice}, </if>
+            <if test="initUser != null"> initUser = #{initUser}, </if>
+            <if test="contactPhone != null"> contactPhone = #{contactPhone}, </if>
+            <if test="scope != null"> scope = #{scope}, </if>
+            <if test="teamSize != null"> teamSize = #{teamSize}, </if>
+            <if test="annualSalesVolume != null"> annualSalesVolume = #{annualSalesVolume}, </if>
+            <if test="annualProfit != null"> annualProfit = #{annualProfit}, </if>
+            <if test="thisYearSalesVolume != null"> thisYearSalesVolume = #{thisYearSalesVolume}, </if>
+            <if test="nextYearSalesVolume != null"> nextYearSalesVolume = #{nextYearSalesVolume}, </if>
+            <if test="alreadyInvest != null"> alreadyInvest = #{alreadyInvest}, </if>
+            <if test="expectTotalInvest != null"> expectTotalInvest = #{expectTotalInvest}, </if>
+            <if test="planFinancing != null"> planFinancing = #{planFinancing}, </if>
+            <if test="expectReleaseStockRate != null"> expectReleaseStockRate = #{expectReleaseStockRate}, </if>
+            <if test="directorId != null"> directorId = #{directorId}, </if>
+            <if test="adviserId != null"> adviserId = #{adviserId}, </if>
+            <if test="status != null"> status = #{status}, </if>
+            <if test="createdBy != null"> createdBy = #{createdBy}, </if>
+            <if test="createDate != null"> createDate = #{createDate}, </if>
+            <if test="updatedBy != null"> updatedBy = #{updatedBy}, </if>
+            <if test="updateDate != null"> updateDate = #{updateDate}, </if>
+        </set>
+         WHERE id = #{id}
+    </update>
+    
+    
+    <select id="selectProjectById" resultType="java.util.Map">
+	    select
+	        d.id,
+	        d.projectName,
+	        d.companyId,
+	        c.companyName,
+	        d.parentIndustryId,
+	        di2.`value` as parentIndustry,
+	        d.projectLevelId,
+			di.`value` as projectLevelName,
+	        d.sonIndustry as sonIndustryId,
+	        d.`description`,
+	        d.advice,
+	        d.initUser,
+	        d.contactPhone,
+	        d.scope,
+	        d.teamSize,
+	        d.annualSalesVolume,
+	        d.annualProfit,
+	        d.thisYearSalesVolume,
+	        d.nextYearSalesVolume,
+	        d.alreadyInvest,
+	        d.expectTotalInvest,
+	        d.planFinancing,
+	        d.expectReleaseStockRate,
+	        d.status,
+	        d.directorId,
+	        d.adviserId,
+			u1.uname as directorName,
+			u2.uname as adviserName,
+	        d.createdBy,
+	        d.updatedBy
+	    from dc_project d   
+	    		left join dc_user u1 on d.directorId=u1.id 
+				left join dc_user u2 on d.adviserId=u2.id
+				left join dc_dictionary di on d.projectLevelId=di.id
+				left join dc_dictionary di2 on di2.id=d.parentIndustryId
+				left join dc_company c on d.companyId = c.id
+				where d.id=#{id}
+    </select>
+    
+    
+    <select id="selectProjectByCompanyId"  resultType="java.util.Map">
+     select
+	        d.id,
+	        d.projectName,
+	        d.companyId,
+	        d.parentIndustryId,
+	        di2.`value` as parentIndustry,
+          	d.projectLevelId,
+			di.`value` as projectLevelName,
+	        d.sonIndustry as sonIndustryId,
+	        d.`description`,
+	        d.advice,
+	        d.initUser,
+	        d.contactPhone,
+	        d.scope,
+	        d.teamSize,
+	        d.annualSalesVolume,
+	        d.annualProfit,
+	        d.thisYearSalesVolume,
+	        d.nextYearSalesVolume,
+	        d.alreadyInvest,
+	        d.expectTotalInvest,
+	        d.planFinancing,
+	        d.expectReleaseStockRate,
+	        d.status,
+	        d.directorId,
+	        d.adviserId,
+			u1.uname as directorName,
+			u2.uname as adviserName,
+	        d.createdBy,
+	        d.updatedBy
+	    from dc_project d   
+	    		left join dc_user u1 on d.directorId=u1.id 
+				left join dc_user u2 on d.adviserId=u2.id
+         		left join dc_dictionary di on d.projectLevelId=di.id
+         		left join dc_dictionary di2 on di2.id=d.parentIndustryId
+ 				where d.companyId=#{companyId} and d.status=0
+    
+    </select>
+    
+    <update id="deleteProjectByCompanyIds">
+    update dc_project d set d.status=2 where d.companyId in ${companyId}
+    </update>
+    
+ 
+    
+  
+  
+</mapper>

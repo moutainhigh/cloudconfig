@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.ExerciseCommentMapper" >
+  <insert id="saveComment" parameterType="java.util.Map" keyProperty="id" useGeneratedKeys="true">
+    insert into dc_wj_exercise_comment (
+    	id,exerciseId,name,nameDes,beginGrade,endGrade
+    )values (
+    	UUID(),
+   		#{eid,jdbcType=VARCHAR},
+   		#{name,jdbcType=VARCHAR},
+   		#{nameDes,jdbcType=VARCHAR},
+   		#{beginGrade,jdbcType=VARCHAR},
+   		#{endGrade,jdbcType=VARCHAR}
+    )
+  </insert>
+  
+  <select id="getCommentListByEid" resultType="java.util.Map">
+  	select id,exerciseId,name,nameDes nameDes,beginGrade beginGrade,endGrade endGrade 
+  	
+  		from dc_wj_exercise_comment e where e.exerciseId = #{eid}  
+  	
+  	 ORDER BY beginGrade asc 
+  </select>
+  
+  <select id="getUserComment" resultType="java.util.Map">
+  
+  	select 
+  		ec.name ,ec.nameDes,cc.grade from dc_wj_exercise_comment ec,(
+  		select 
+  			SUM(qo.grade)grade 
+  		from dc_wj_user_answer ua  
+  			LEFT JOIN dc_wj_question_option qo on qo.id = ua.answer  
+  		where ua.openId = #{uid} and  ua.exerciseId =#{eid}) cc  
+  		
+  	where ec.exerciseId = #{eid} 
+  	
+  	<![CDATA[ and cc.grade >= ec.beginGrade and cc.grade <= ec.endGrade  ]]> 
+  	  
+  	 limit 1
+ 
+</select>
+
+<select id="getCommentByGrade" resultType="java.util.Map">
+  
+  	select 
+  		ec.name,ec.nameDes from dc_wj_exercise_comment ec
+  	where ec.exerciseId = #{exerciseId}
+  	
+  	<![CDATA[ and #{grade} >= ec.beginGrade and #{grade} <= ec.endGrade  ]]> 
+  	  
+  	 limit 1
+</select>
+<select id="getPaixutiGrade"  resultType="java.lang.Integer">
+  
+
+  		select COUNT(*)
+  		from dc_wj_user_answer a 
+  		LEFT JOIN dc_wj_question_option o on o.id = a.answer   
+  		where a.ttype = 10 and a.userExamId = #{userExamId} and a.orderNumber = o.grade
+</select>
+
+<select id="getCommentGrade" resultType="java.util.Map">
+  
+
+  		select 
+  			CAST(SUM(qo.grade) AS CHAR(2)) grade
+  		from dc_wj_user_answer ua  
+  			LEFT JOIN dc_wj_question_option qo on qo.id = ua.answer  
+  		where ua.openId = #{openId} and  ua.exerciseId =#{exerciseId}
+
+ 
+</select>
+<select id="getPaixutiComment" resultType="java.util.Map">
+  
+  	select * from dc_wj_exercise_comment c,(
+  		select COUNT(*)grade
+  		from dc_wj_user_answer a 
+  		LEFT JOIN dc_wj_question_option o on o.id = a.answer   
+  		where a.ttype = 10 and a.userExamId = #{userExamId} and a.orderNumber = o.grade
+  	)aa  where c.exerciseId = #{exerciseId}  <![CDATA[ and  c.beginGrade <= aa.grade and c.endGrade >= aa.grade  ]]>  limit 1
+ 
+</select>
+  
+  <delete id="deleteCommentByEid">
+  	delete from dc_wj_exercise_comment where exerciseId = #{eid}  
+  </delete>
+</mapper>

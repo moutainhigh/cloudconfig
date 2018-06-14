@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.QuestionMapper" >
+  <resultMap id="BaseResultMap" type="Question" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="exerciseId" property="exerciseId" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="TTYPE" property="ttype" jdbcType="INTEGER" />
+    <result column="SIZE" property="size" jdbcType="VARCHAR" />
+    <result column="PLACEHOLDER" property="placeholder" jdbcType="VARCHAR" />
+    <result column="LEVEL" property="level" jdbcType="INTEGER" />
+    <result column="ISCHECK" property="isCheck" jdbcType="INTEGER" />
+    <result column="TABLENAME" property="tableName" jdbcType="INTEGER" />
+    <result column="TABLECOLUM" property="tableColum" jdbcType="INTEGER" />
+    <!-- <result column="STATUS" property="status" jdbcType="TINYINT" /> -->
+    <result column="ISCHECK" property="isCheck" jdbcType="VARCHAR" />
+    <result column="tableAndColumn" property="tableAndColumn" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="CHECKTYPE" property="checkType" jdbcType="VARCHAR" />
+    <result column="LENGTHSIZE" property="lengthSize" jdbcType="INTEGER" />
+    <result column="SCORE" property="score" jdbcType="INTEGER" />
+    <result column="answerType" property="answerType" jdbcType="INTEGER" />
+	  <result column="toQuestion" property="toQuestion" jdbcType="VARCHAR" />
+	  <result column="showOrHide" property="showOrHide" jdbcType="VARCHAR" />
+	  <result column="maxOption" property="maxOption" jdbcType="INTEGER" />
+	  <result column="minOption" property="minOption" jdbcType="INTEGER" />
+
+    
+    
+  </resultMap>
+  <sql id="Base_Column_List" >
+   		ID,exerciseId,NAME,TTYPE,LEVEL,PLACEHOLDER,SIZE,checkType,lengthSize,SCORE,answerType,maxOption,minOption
+  </sql>
+  <select id="getQuerstionList" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  
+  	select ID,exerciseId,NAME,TTYPE,LEVEL,PLACEHOLDER,SIZE,ISCHECK,answerType,SCORE,checkType,lengthSize,TABLENAME,TABLECOLUM,REMARK,maxOption,minOption
+  	 from DC_WJ_QUESTION q where exerciseId = #{eid,jdbcType=INTEGER}  ORDER BY LEVEL ASC
+  	
+  </select>
+	<select id="getShowQuerstionList" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+
+		select ID,exerciseId,NAME,TTYPE,LEVEL,PLACEHOLDER,SIZE,ISCHECK,answerType,SCORE,checkType,lengthSize,TABLENAME,TABLECOLUM,REMARK,maxOption,minOption,
+		case when (SELECT count(*) from dc_wj_question_option o where o.toQuestion = q.id) > 0 then 'hide' else 'show' end showOrHide
+		from DC_WJ_QUESTION q where exerciseId = #{eid,jdbcType=INTEGER}  ORDER BY q.LEVEL ASC
+
+	</select>
+  <select id="getQuerstionListByTranData" parameterType="java.lang.Integer" resultType="java.util.Map">
+  
+  	select * from DC_WJ_QUESTION where exerciseId = #{eid,jdbcType=INTEGER} and tableName is not null and tableColum is not null
+  	
+  </select>
+  
+  <select id="getQuerstionAnswerList"  resultMap="BaseResultMap">
+  
+  	select 
+  		q.ID,q.exerciseId,q.NAME,q.TTYPE,q.LEVEL,q.ISCHECK,q.SCORE,
+  		q.checkType,q.lengthSize,u.ANSWER userAnswer,u.textContent,
+  		q.PLACEHOLDER,q.SIZE,q.REMARK,q.maxOption,q.minOption
+  	from dc_wj_question q   
+  		LEFT JOIN dc_wj_user_answer u on u.questionId = q.id and u.userExamId = #{examId} and q.ttype in(1,5,7,9,11)
+  	where q.exerciseId = #{eid}  ORDER BY q.LEVEL ASC
+  
+  </select>
+ 
+  
+  <insert id="saveQuerstion" parameterType="Question" keyProperty="id" useGeneratedKeys="true">
+    insert into DC_WJ_QUESTION (
+    id,exerciseId,NAME,TTYPE,LEVEL,PLACEHOLDER,SIZE,isCheck,tableColum,tableName,remark,lengthSize,checkType,
+    score,answerType,minOption,maxOption
+    )
+    
+    values (
+    		#{id},
+    		#{exerciseId,jdbcType=VARCHAR},
+    		#{name,jdbcType=VARCHAR},
+    		#{ttype,jdbcType=INTEGER}, 
+    		#{level,jdbcType=INTEGER},
+    		#{placeholder,jdbcType=VARCHAR}, 
+    		#{size,jdbcType=INTEGER},
+    		#{isCheck,jdbcType=VARCHAR},
+    		#{tableColum,jdbcType=VARCHAR},
+    		#{tableName,jdbcType=VARCHAR},
+    		#{remark,jdbcType=VARCHAR},
+    		#{lengthSize,jdbcType=VARCHAR},
+    		#{checkType,jdbcType=VARCHAR},
+    		#{score,jdbcType=INTEGER},
+    		#{answerType,jdbcType=INTEGER}
+    		,#{minOption},#{maxOption}
+    )
+  </insert>
+  <update id="editQuerstion" parameterType="Question">
+   
+	update  DC_WJ_QUESTION set 
+	
+	 	NAME=#{name},
+		TTYPE=#{ttype},
+		LEVEL=#{level},
+		PLACEHOLDER=#{placeholder},
+		isCheck=#{isCheck},
+		size = #{size},
+		tableColum=#{tableColum},
+		tableName=#{tableName},
+		remark=#{remark},
+		lengthSize=#{lengthSize},
+		checkType=#{checkType},
+		score=#{score},
+		answerType=#{answerType},
+		minOption = #{minOption},
+		maxOption = #{maxOption}
+
+
+	
+	 where id = #{id}
+	
+   </update>
+  
+ <delete id="delQuerstionByEid" parameterType="java.lang.Integer">
+ 		delete o,q from  dc_wj_question q  LEFT JOIN dc_wj_question_option o on o.questionId = q.id where q.exerciseId = #{eid,jdbcType=INTEGER} 
+ </delete>
+ 
+ <delete id="delQuerstionOptByQid" parameterType="java.lang.Integer">
+ 		delete o,q from  dc_wj_question q  LEFT JOIN dc_wj_question_option o on o.questionId = q.id where q.id = #{qid,jdbcType=INTEGER} 
+ </delete>
+  
+   <select id="getUserAnswerZhiZhuTu" parameterType="java.lang.Integer" resultType="java.util.HashMap">
+  
+  	<!-- select q.name name,o.grade grade from dc_wj_question q LEFT JOIN dc_wj_user_answer a on a.qid = q.id LEFT JOIN dc_wj_question_option o on o.id = a.answer  where a.eid = #{examId}  and o.id = a.answer -->
+  	select q.name name,a.answer grade from dc_wj_question q LEFT JOIN dc_wj_user_answer a on a.questionId = q.id   where a.userExamId = #{examId} 
+  	
+  </select> 
+</mapper>

@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.DepartmentDao">
+
+
+    <insert id="insert" parameterType="java.util.Map">
+        INSERT INTO dc_department
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null"> id, </if>
+            <if test="departmentName != null"> departmentName, </if>
+            <if test="remark != null"> remark, </if>
+            <if test="principalId != null"> principalId, </if>
+            <if test="parentId != null"> parentId, </if>
+            <if test="status != null"> status, </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null"> #{id}, </if>
+            <if test="departmentName != null"> #{departmentName}, </if>
+            <if test="remark != null"> #{remark}, </if>
+            <if test="principalId != null"> #{principalId}, </if>
+            <if test="parentId != null"> #{parentId}, </if>
+            <if test="status != null"> #{status}, </if>
+
+        </trim>
+    </insert>
+
+    <update id="update"  parameterType="java.util.Map">
+        UPDATE dc_department
+        <set>
+            <if test="id != null"> id = #{id}, </if>
+            <if test="departmentName != null"> departmentName = #{departmentName}, </if>
+            <if test="remark != null"> remark = #{remark}, </if>
+            <if test="principalId != null"> principalId = #{principalId}, </if>
+            <if test="parentId != null"> parentId = #{parentId}, </if>
+            <if test="status != null"> status = #{status} </if>
+
+        </set>
+         WHERE id = #{id}
+    </update>
+    
+     <select id="selectAllDepartment" resultType="java.util.Map">
+		SELECT
+			d.id,
+			d.departmentName,
+			d.remark,
+			d.principalId,
+			d.parentId,
+			u.uname as principal
+		FROM
+			dc_department d left join dc_user u on d.principalId=u.id where d.status=0
+     </select>
+     
+     <delete id="delete">
+     	update  dc_department set status=2 where id=#{id}
+     </delete>
+
+
+     
+     
+     <select id="selectDepartmentByName" resultType="java.util.Map">
+		SELECT
+			d.id,
+			d.departmentName,
+			d.remark,
+			d.principalId,
+			d.parentId,
+			u.uname AS principal
+		FROM
+			dc_department d
+		LEFT JOIN dc_user u ON d.principalId = u.id
+		WHERE
+			d.departmentName = #{departmentName}  and d.status=0
+     </select>
+
+
+    <select id="selectDepartmentById" resultType="java.util.Map">
+        SELECT
+        d.id,
+        d.departmentName,
+        d.remark,
+        d.principalId,
+        d.parentId,
+        u.uname AS principal,
+        (select count(*) from dc_department dd INNER JOIN dc_user u on u.departmentId = dd.id where u.status = '0' and dd.status = '0' and FIND_IN_SET(dd.id,getChildren(d.id)))userNumber
+        FROM
+        dc_department d
+        LEFT JOIN dc_user u ON d.principalId = u.id and  u.status = '0'
+        WHERE d.status = '0' and d.id = #{id}
+    </select>
+
+
+    <select id="getTreeByPid" resultType="java.util.Map">
+        SELECT
+        d.id,
+        d.departmentName,
+        d.remark,
+        d.principalId,
+        d.parentId,
+        (select count(*) from dc_department dd INNER JOIN dc_user u on u.departmentId = dd.id where u.status = '0' and dd.status = '0' and FIND_IN_SET(dd.id,getChildren(d.id)))userNumber
+        FROM
+        dc_department d  where parentId = #{id} and d.status=0
+    </select>
+
+    <select id="getChildTreeUserSum" resultType="java.lang.Integer" >
+        select count(*) from dc_user where status = 0   and platform = '1'
+        <if test="childUserId != null and childUserId.size > 0 ">
+           and (
+            <foreach collection="childUserId" item="id"  separator="or">
+                departmentId  = #{id}
+            </foreach>
+            )
+        </if>
+
+
+    </select>
+
+
+    <select id="selectDepartmentByIds" resultType="java.util.Map">
+         SELECT
+        d.id,
+        d.departmentName,
+        d.remark,
+        d.principalId,
+        d.parentId
+        FROM
+        dc_department d  where d.status = '0' and id in
+        <foreach collection="idList"  item="id" index="" separator=","  open="(" close=")" >
+            #{id}
+        </foreach>
+    </select>
+
+
+
+
+
+    <update id="updateDataDepartmentId">
+      update  ${table} d set d.departmentId=#{newDepartmentId} where d.departmentId
+      in
+        <foreach collection="departmentIdList"  item="id" index="" separator=","  open="(" close=")" >
+            #{id}
+        </foreach>
+    </update>
+
+
+    <select id="selectDataCount" resultType="int">
+        select count(1) from ${table}  where
+        <if test="table != 'dc_wj_exercise' "> status = '0' and </if>
+         departmentId in
+        <foreach collection="departmentIdList"  item="id" index="" separator=","  open="(" close=")" >
+            #{id}
+        </foreach>
+    </select>
+
+
+
+    <select id="selectSuperRoleDepartment" resultType="java.util.Map">
+    SELECT
+            d.id,
+            d.departmentName,
+            d.remark,
+            d.principalId,
+            d.parentId,
+            (select count(*) from dc_department dd INNER JOIN dc_user u on u.departmentId = dd.id where u.status = '0' and dd.status = '0' and FIND_IN_SET(dd.id,getChildren(d.id)))userNumber
+            FROM
+            dc_department d  where id ='1'
+             or parentId='1' and d.status=0
+    </select>
+
+
+</mapper>

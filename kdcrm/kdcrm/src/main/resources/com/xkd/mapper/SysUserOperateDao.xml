@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.SysUserOperateDao">
+
+    <insert id="insertList"  parameterType="java.util.List">
+        INSERT INTO dc_sys_user_operate(
+	        id,
+	        userId,
+	        operateId
+        )VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.id},
+            #{item.userId},
+            #{item.operateId}
+            )
+        </foreach>
+    </insert>
+
+    <delete id="deleteByUserId">
+    	delete from dc_sys_user_operate where userId=#{userId}
+    </delete>
+    <delete id="deleteByOperateId">
+    	delete from dc_sys_user_operate where operateId=#{operateId}
+    </delete>
+    
+    <select id="selectOperateByUserId" resultType="com.xkd.model.Operate">
+		SELECT
+			o.id,
+			o.menuId,
+			o.operateCode,
+			o.operateName,
+			o.url
+		FROM
+			dc_sys_user_operate u
+		INNER JOIN dc_sys_operate o ON u.operateId = o.id
+		WHERE
+			u.userId = #{userId}
+    
+    </select>
+    
+    
+    
+    <select id="selectOperateIdsByUserId" resultType="string">
+     SELECT u.operateId from dc_sys_user_operate u where u.userId=#{userId}
+    </select>
+
+
+    <delete id="deleteByUserIds" >
+        delete from dc_sys_user_operate where userId in
+        <foreach collection="userIdList"  item="id" index="" separator=","  open="(" close=")" >
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

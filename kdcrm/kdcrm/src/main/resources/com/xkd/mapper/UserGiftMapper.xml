@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.UserGiftMapper" >
+
+    <insert id="saveUserGift" >
+        insert into dc_user_gift (
+        id,activityId,companyName,openId,uname,mobile,gift,createDate
+        )values (
+        #{id},
+        #{activityId},
+        #{companyName},
+        #{openId},
+        #{uname},
+        #{mobile},
+        #{gift},
+        now()
+        )
+    </insert>
+
+    <select id="selectUserGiftByMobileOrOpenId" resultType="java.util.Map">
+        select  id,activityId,companyName,openId,uname,mobile,gift,DATE_FORMAT(createDate, '%Y-%m-%d %H:%i:%s') as createDate from dc_user_gift where
+        activityId = #{activityId} and
+        (
+        <if test="mobile != null">
+            mobile = #{mobile}
+        </if>
+        <if test="mobile != null and openId != null">
+            or
+        </if>
+        <if test="openId != null">
+            openId = #{openId}
+        </if>
+        )
+    </select>
+
+    <select id="selectUserGiftsByActivityId" resultType="java.util.Map">
+        select  id,activityId,companyName,openId,uname,mobile,gift,DATE_FORMAT(createDate, '%Y-%m-%d %H:%i:%s') as createDate from dc_user_gift where
+        activityId = #{activityId}
+    </select>
+
+    <update id="updateUserGiftById">
+        update dc_user_gift set gift = #{gift},createDate=now() where id = #{id}
+    </update>
+
+</mapper>
