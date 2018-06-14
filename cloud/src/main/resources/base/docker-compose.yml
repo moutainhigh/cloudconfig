@@ -6,7 +6,7 @@ services:
     ports:
       - "1111:1111"
     networks:
-       - app_net
+       - docker0
     environment:
       - server_port=1111
       - eureka_instance_hostname=eureka1
@@ -19,7 +19,7 @@ services:
     ports:
       - "1112:1112"
     networks:
-       - app_net
+       - docker0
     environment:
       - server_port=1112
       - eureka_instance_hostname=eureka2
@@ -32,7 +32,7 @@ services:
      ports:
        - "8888:8888"
      networks:
-       - app_net
+       - docker0
      depends_on:
        - eureka1
        - eureka2
@@ -44,9 +44,9 @@ services:
        - spring_rabbitmq_username=springcloud
        - spring_rabbitmq_password=springcloud
 networks:
-  app_net:
+  docker0:
     external: true
-#说明： app_net是手动创建的一个公用的外部网络，执行命令：docker network create app_net
+#说明： docker0是手动创建的一个公用的外部网络，执行命令：docker network create docker0
 #       external: true 表示该创建的网络不是由docker-compose up 执行的时候自动创建的，是手动创建的，那么在执行docker-compose down的时候该网络不会被自动删除
 #       不同的docker-compose.yml 创建的容器之间是不能通信的，实际中经常需要通信，为了达到这一目的就需要创建一个公用网络，然后不同docker-compose.yml产生的容
 #       都连上这个公共网络，那么就可以实现它们的通信了。
