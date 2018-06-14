@@ -11,10 +11,8 @@
         <module name="configuration" />
         <module name="eureka" />
         <module name="gateway" />
-        <module name="helloController" />
         <module name="hellocontroller" />
         <module name="helloservice" />
-        <module name="helloService" />
         <module name="utils" />
         <module name="zipkin" />
       </profile>
@@ -27,9 +25,7 @@
       <module name="eureka" target="1.6" />
       <module name="gateway" target="1.6" />
       <module name="hellocontroller" target="1.6" />
-      <module name="helloController" target="1.6" />
       <module name="helloservice" target="1.6" />
-      <module name="helloService" target="1.6" />
       <module name="utils" target="1.6" />
       <module name="zipkin" target="1.6" />
     </bytecodeTargetLevel>
