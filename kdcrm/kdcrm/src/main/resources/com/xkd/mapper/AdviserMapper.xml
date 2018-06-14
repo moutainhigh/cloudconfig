@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.AdviserMapper" >
+  <resultMap id="BaseResultMap" type="Adviser" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <id column="userId" property="userId" jdbcType="INTEGER" />
+    <id column="adviser_name" property="adviserName" jdbcType="VARCHAR" />
+    <id column="imgpath" property="imgpath" jdbcType="VARCHAR" />
+    <id column="test" property="test" jdbcType="VARCHAR" />
+    <id column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <id column="email" property="email" jdbcType="VARCHAR" />
+    <id column="ttype" property="ttype" jdbcType="TINYINT" />
+    <id column="status" property="status" jdbcType="TINYINT" />
+    <id column="level" property="level" jdbcType="TINYINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,adviser_name,imgpath,test,ttype,level,status,mobile,email,userId
+  </sql>
+ 
+ <select id="selectAdvisers" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    
+    from dc_advisers where status = 0 and  level !=0 and level is not null 
+    
+    <if test="ttypeOrder != null and ttypeOrder != '' and ttypeOrder == 'down' ">
+    	order by ttype desc,level desc 
+    </if>
+    <if test="ttypeOrder != null and ttypeOrder != '' and ttypeOrder == 'up' ">
+    	order by ttype asc,level asc 
+    </if>
+    <if test="levelOrder != null and levelOrder != '' and levelOrder == 'down' ">
+    	order by ttype desc,level desc 
+    </if>
+    <if test="levelOrder != null and levelOrder != '' and levelOrder == 'up' ">
+    	order by ttype asc,level asc 
+    </if>
+    <if test="adviserNameOrder != null and adviserNameOrder != '' and adviserNameOrder == 'down' ">
+    	order by adviser_name desc 
+    </if>
+    <if test="adviserNameOrder != null and adviserNameOrder != '' and adviserNameOrder == 'up' ">
+    	order by adviser_name asc 
+    </if>
+    <if test="(adviserNameOrder == null or adviserNameOrder == '') and (ttypeOrder == null or ttypeOrder == '')
+    	and (levelOrder == null or levelOrder == '') ">
+    	
+    	order by ttype asc,level asc  
+    	
+    </if>
+    
+    
+    limit #{currentPageInt},#{pageSizeInt}
+    
+  </select>
+  
+  
+  <select id="selectAdvisersByType" resultMap="BaseResultMap" >
+  
+    select 
+    <include refid="Base_Column_List" />
+    from dc_advisers where status = 0 and ttype = #{ttype} order by level asc limit #{currentPageInt},#{pageSizeInt}
+    
+  </select>
+  
+  <select id="selectAdviserCount" resultType="java.lang.Integer">
+  
+  	select count(1) from dc_advisers where status = 0  
+  
+  </select>
+ 
+  <select id="selectAdviserById" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from dc_advisers where id = #{id}
+  </select>
+  
+  <select id="selectAdviserByType" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from dc_advisers where ttype = #{type} and status = 0 order by level asc 
+  </select>
+  
+  <select id="selectAdviserByName" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from dc_advisers where adviser_name = #{name} and status = 0
+  </select>
+  
+  <select id="selectAdviserByNameMH" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from dc_advisers where 1=1
+    <if test="adviserName != null and adviserName !='' ">
+    	and  ${adviserName}
+    </if>
+        and status = 0
+  </select>
+  
+  
+  <insert id="saveAdviser" parameterType="Adviser">
+  
+  	insert into dc_advisers(adviser_name,imgpath,test,ttype,status,level,mobile,email,userId) values  
+  	
+  	(#{adviserName},#{imgpath},#{test},#{ttype},0,#{level},#{mobile},#{email},#{userId})
+  
+  </insert>
+  
+  <update id="deleteAdviserByIds">
+  
+  	update dc_advisers set status = 2 where id in ${ids} 
+  	
+  </update>
+  
+  <update id="updateAdviserById" parameterType="Adviser">
+  
+  	update dc_advisers set adviser_name = #{adviserName},imgpath=#{imgpath},test=#{test},
+  	
+  	ttype=#{ttype},level=#{level},mobile=#{mobile},email=#{email},userId=#{userId} where id = #{id} 
+  
+  </update>
+  
+</mapper>

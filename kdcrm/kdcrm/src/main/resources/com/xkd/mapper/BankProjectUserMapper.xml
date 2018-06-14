@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xkd.mapper.BankProjectUserMapper">
+  <insert id="insertBankProjectUserList" >
+        INSERT INTO dc_bank_project_user (
+            id,
+            bankProjectId,
+            pointId,
+            userId
+        ) values
+      <foreach collection="list" item="item" index="index" separator=",">
+          (
+              #{item.id},
+              #{item.bankProjectId},
+              #{item.pointId},
+              #{item.userId}
+          )
+      </foreach>
+
+  </insert>
+
+
+
+    <delete id="deleteByBankIdAndProjectId">
+        delete from dc_bank_project_user where bankProjectId=#{bankProjectId} and pointId=#{pointId} and userId=#{userId}
+    </delete>
+
+
+    <select id="selectUserNotUnderProject"  resultType="java.util.Map" >
+        SELECT
+        p.userId as id,
+        u.uname,
+        u.mobile,
+        u.phone,
+        p.station,
+        u.sex,
+        u.age,
+        u.email,
+        dd.birth,
+        dd.idCard,
+        u.qq,
+        u.wechat,
+        u.nickName AS nickName,
+        dd.hobbies,
+        dd.strongpoint,
+        dd.userResource,
+        dd.qualification,
+        dd.graduation,
+        dd.major,
+        dd.profession,
+        dd.personAnalysis,
+        dd.udesc as `desc`,
+        u.status,
+        dd.degree,
+        dd.workAge
+        FROM
+        dc_user_bank_point p
+        INNER JOIN dc_user u ON p.userId = u.id
+        left  join dc_user_detail dd on dd.id=u.id
+        WHERE
+        p.pointId = #{pointId}
+        AND p.userId NOT IN (
+        SELECT
+        uu.userId
+        FROM
+        dc_bank_project_user uu
+        WHERE
+        uu.pointId = #{pointId}
+        and u.status=0
+        AND uu.bankProjectId = #{bankProjectId}
+        )
+        <if test="uname!=null ">and u.uname like '%${uname}%'
+        </if>
+        <if test="sex!=null ">and  u.sex=#{sex}
+        </if>
+        limit #{start},#{pageSize}
+    </select>
+
+
+    <select id="selectUserNotUnderProjectCount"  resultType="int" >
+        SELECT
+         count(1)
+        FROM
+        dc_user_bank_point p
+        INNER JOIN dc_user u ON p.userId = u.id
+        left  join dc_user_detail dd on dd.id=u.id
+        WHERE
+        p.pointId = #{pointId}
+        AND p.userId NOT IN (
+        SELECT
+        uu.userId
+        FROM
+        dc_bank_project_user uu
+        WHERE
+        uu.pointId = #{pointId}
+        and u.status=0
+        AND uu.bankProjectId = #{bankProjectId}
+        )
+        <if test="uname!=null ">and u.uname like '%${uname}%'
+        </if>
+        <if test="sex!=null ">and  u.sex=#{sex}
+        </if>
+    </select>
+
+
+    <select id="selectUserUnderProject"  resultType="java.util.Map" >
+             SELECT
+                pu.id,
+                u.uname,
+                u.mobile,
+                bp.station,
+                u.sex,
+                u.age,
+                u.email,
+                dd.birth,
+                dd.idCard,
+                u.qq,
+                u.wechat,
+                u.nickName AS nickName,
+                dd.hobbies,
+                dd.strongpoint,
+                dd.userResource,
+                dd.qualification,
+                dd.graduation,
+                dd.major,
+                dd.profession,
+                dd.personAnalysis,
+                dd.udesc as `desc`,
+                u.status,
+                dd.degree,
+                dd.workAge
+            FROM
+                dc_user u
+            INNER JOIN dc_bank_project_user pu ON u.id = pu.userId
+            left  join dc_user_detail dd on dd.id=u.id
+            left join dc_user_bank_point  bp on bp.userId=u.id and bp.pointId=pu.pointId
+            WHERE
+                pu.pointId = #{pointId}
+            AND pu.bankProjectId = #{bankProjectId}
+             <if test="uname!=null ">and uname like '%${uname}%'
+             </if>
+            <if test="sex!=null ">and  u.sex=#{sex}
+            </if>
+
+    </select>
+
+
+
+
+    <select id="selectUserUnderProjectCount"  resultType="int" >
+        SELECT
+         count(1)
+        FROM
+        dc_user u
+        INNER JOIN dc_bank_project_user pu ON u.id = pu.userId
+        left  join dc_user_detail dd on dd.id=u.id
+        left join dc_user_bank_point  bp on bp.userId=u.id and bp.pointId=pu.pointId
+        WHERE
+        pu.pointId = #{pointId}
+        AND pu.bankProjectId = #{bankProjectId}
+        <if test="uname!=null ">and uname like '%${uname}%'
+        </if>
+        <if test="sex!=null ">and  u.sex=#{sex}
+        </if>
+
+    </select>
+
+
+
+    <delete id="deleteBankProjectUser">
+        delete from      dc_bank_project_user where id in
+
+                <foreach item="id" collection="ids" separator="," open="(" close=")" index="">
+                #{id}
+                </foreach>
+
+    </delete>
+
+
+
+
+
+
+</mapper>

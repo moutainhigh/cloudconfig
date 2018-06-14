@@ -1,0 +1,1328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xkd.mapper.BankProjectMapper">
+  <sql id="Base_Column_List">
+         id,
+         projectCode,
+         projectName,
+         projectTypeId,
+         courseName,
+         startDate,
+         endDate,
+         trainObject,
+         trainPlace,
+         userName,
+         feel,
+         programId,
+         projectManager,
+         dutyPerson,
+         projecUser,
+         createdBy,
+         createDate,
+         updatedBy,
+         updateDate,
+         status
+  </sql>
+
+  
+  <select id="selectBankProjectById"  resultType="java.util.HashMap">
+SELECT
+	bp.id,
+	bp.status,
+	dc.companyName,
+	dc.id as companyId,
+	dc.companyAdviserId,
+    dc.companyDirectorId,
+    dc.id as companyCreatedBy,
+	bp.projectCode,
+	bp.projectName,
+	bp.projectTypeId,
+	bp.sonProjectTypeId,
+	bp.courseName,
+	bp.startDate,
+	bp.endDate,
+	bp.trainObject,
+	bp.trainPlace,
+	bp.userName,
+	bp.feel,
+	bp.programId,
+	bp.projectManager,
+	bp.dutyPerson,
+	bp.projecUser,
+	dc.departmentId,
+	bp.createdBy,
+	bp.createDate,
+	DATE_FORMAT(
+		bp.createDate,
+		"%Y-%m-%d %H:%i:%s"
+	) AS createDateStr,
+	bp.updatedBy,
+	bp.updateDate,
+	bp. STATUS,
+	bg.programCode,
+	bg.programName,
+	bp.province,
+	bp.city,
+	bp.address,
+	bp.userTypeOneId,
+	bp.userTypeTwoId,
+	bp.userTypeThreeId,
+	bp.userTypeDetail,
+	bp.objectTypeOneId,
+	bp.objectTypeTwoId,
+	bp.departmentTypeId,
+	(
+		SELECT
+
+		value
+
+		FROM
+			dc_dictionary
+		WHERE
+			id = bp.projectTypeId
+	) AS projectType,
+	(
+		SELECT
+
+		value
+
+		FROM
+			dc_dictionary
+		WHERE
+			id = bp.sonProjectTypeId
+	) AS sonProjectType,
+	(
+		SELECT
+
+		value
+
+		FROM
+			dc_dictionary
+		WHERE
+			id = bp.userTypeOneId
+	) AS userTypeOne,
+	(
+		SELECT
+
+		value
+
+		FROM
+			dc_dictionary
+		WHERE
+			id = bp.userTypeTwoId
+	) AS userTypeTwo,
+	(
+		SELECT
+
+		value
+
+		FROM
+			dc_dictionary
+		WHERE
+			id = bp.userTypeThreeId
+	) AS userTypeThree,
+	(
+		SELECT
+
+		value
+
+		FROM
+			dc_dictionary
+		WHERE
+			id = bp.objectTypeOneId
+	) AS objectTypeOne,
+	(
+		SELECT
+
+		value
+
+		FROM
+			dc_dictionary
+		WHERE
+			id = bp.objectTypeTwoId
+	) AS objectTypeTwo,
+	(
+		SELECT
+		value
+		FROM
+			dc_dictionary
+		WHERE
+			id = bp.departmentTypeId
+	) AS departmentType,
+	(
+		SELECT
+			departmentName
+		FROM
+			dc_department
+		WHERE
+			id = dc.departmentId
+	) AS departmentName
+FROM
+	dc_bank_project bp
+	left join dc_company dc on bp.companyId=dc.id
+LEFT JOIN dc_bank_program bg ON bp.programId = bg.id
+WHERE
+	bp.id = #{id,jdbcType=CHAR}
+  </select>
+  
+  
+  <select id="selectBankProjectByCodeAllStatus" resultType="java.util.HashMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from dc_bank_project
+    where projectCode = #{projectCode}
+  </select>
+  
+
+
+  <select id="selectBankProjectByName" resultType="java.util.HashMap">
+    select
+          p.id,
+          p.projectCode,
+          p.projectName,
+          p.projectTypeId,
+          p.courseName,
+          p.startDate,
+          p.endDate,
+          p.trainObject,
+          p.trainPlace,
+          p.userName,
+          p.feel,
+          p.programId,
+          p.projectManager,
+          p.dutyPerson,
+          p.projecUser,
+          p.createdBy,
+          p.createDate,
+          p.updatedBy,
+          p.updateDate,
+          p.status
+    from dc_bank_project p left join dc_company dc on p.companyId=dc.id
+    where p.projectName = #{projectName} and p.status=0
+      and dc.departmentId in
+      <foreach collection="departmentIdList"  item="departmentId" index="" separator=","  open="(" close=")" >
+          #{departmentId}
+      </foreach>
+  </select>
+
+  
+  <select id="selectBankProjectsByContent" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+    select
+              bp.id,
+              dc.companyName,
+              dc.id as companyId,
+              dc.companyAdviserId,
+              dc.companyDirectorId,
+              dc.createdBy as companyCreatedBy,
+              bp.projectCode,
+              bp.projectName,
+              bp.projectTypeId,
+              bp.courseName,
+              concat(startDate, ' 至 ', endDate) AS projectDate,
+              bp.trainObject,
+              bp.trainPlace,
+              bp.userName,
+              bp.feel,
+              bp.programId,
+              bp.projectManager,
+              bp.dutyPerson,
+              bp.projecUser,
+              dc.departmentId,
+              d.departmentName,
+              bp.createdBy,
+              du1.uname as createdByName,
+              DATE_FORMAT(
+              bp.createDate,
+              "%Y-%m-%d %H:%i:%s"
+              ) AS createDate,
+              bp.updatedBy,
+              DATE_FORMAT(
+              bp.updateDate,
+              "%Y-%m-%d %H:%i:%s"
+              ) AS createDate,
+              bp.status,
+              bp.province,
+              bp.city,
+              bp.address,
+              bg.programCode,
+              bp.projectTypeId,
+              bp.sonProjectTypeId,
+              bp.userTypeOneId,
+              bp.userTypeTwoId,
+              bp.userTypeThreeId,
+              bp.userTypeDetail,
+              bp.objectTypeOneId,
+              bp.objectTypeTwoId,
+              bp.departmentTypeId,
+            (select value from dc_dictionary where id = bp.projectTypeId) as projectType,
+            (select value from dc_dictionary where id = bp.sonProjectTypeId) as sonProjectType,
+            (select value from dc_dictionary where id = bp.userTypeOneId) as userTypeOne,
+            (select value from dc_dictionary where id = bp.userTypeTwoId) as userTypeTwo,
+            (select value from dc_dictionary where id = bp.userTypeThreeId) as userTypeThree,
+            (select value from dc_dictionary where id = bp.objectTypeOneId) as objectTypeOne,
+            (select value from dc_dictionary where id = bp.objectTypeTwoId) as objectTypeTwo,
+            (select value from dc_dictionary where id = bp.departmentTypeId) as departmentType
+
+    from dc_bank_project bp
+          left join dc_bank_program bg on bp.programId = bg.id
+          left join dc_company dc on bp.companyId=dc.id
+          left join dc_department d on dc.departmentId = d.id
+          left join dc_user du1 on du1.id=bp.createdBy
+    where bp.status = 0
+      and dc.departmentId in
+      <foreach collection="departmentIdList"  item="departmentId" index="" separator=","  open="(" close=")" >
+          #{departmentId}
+      </foreach>
+    <if test="content != null and content !=''">
+      and (bp.userName like CONCAT('%',#{content},'%') or bp.projectManager like CONCAT('%',#{content},'%')
+      or bp.trainPlace like CONCAT('%',#{content},'%') or bp.dutyPerson like CONCAT('%',#{content},'%'))
+    </if>
+    <if test="projectCode != null and projectCode !=''">
+    	and bp.projectCode = #{projectCode}
+    </if>
+    <if test="startDate != null and startDate !=''">
+    	and bp.startDate &gt;= #{startDate}
+    </if>
+    <if test="endDate != null and endDate !=''">
+    	and bp.startDate &lt;= #{endDate}
+    </if>
+    <if test="projectName != null and projectName !=''">
+      and bp.projectName like CONCAT('%',#{projectName},'%')
+    </if>
+    <if test="province != null and province !=''">
+      and bp.province = #{province}
+    </if>
+    <if test="city != null and city !=''">
+      and bp.city = #{city}
+    </if>
+    <if test="userTypeOneId != null and userTypeOneId !=''">
+      and bp.userTypeOneId = #{userTypeOneId}
+    </if>
+    <if test="userTypeTwoId != null and userTypeTwoId !=''">
+      and bp.userTypeTwoId = #{userTypeTwoId}
+    </if>
+    <if test="userTypeThreeId != null and userTypeThreeId !=''">
+      and bp.userTypeThreeId = #{userTypeThreeId}
+    </if>
+    <if test="projectManager != null and projectManager !=''">
+      and bp.projectManager like CONCAT('%',#{projectManager},'%')
+    </if>
+    <if test="projectTypeId != null and projectTypeId !=''">
+      and bp.projectTypeId = #{projectTypeId}
+    </if>
+      <if test="companyId != null and companyId !=''">
+          and bp.companyId = #{companyId}
+      </if>
+    order by bp.updateDate desc 
+    
+    limit #{currentPage},#{pageSize}
+    
+  </select>
+
+  <select id="selectPointsByProjectId" resultType="java.util.Map">
+SELECT
+          tt1.*,
+          ifnull(tt2.count,0) AS pollCount,
+          ifnull(tt3.count,0) AS userCount,
+          ifnull(tt4.count,0) AS revokedCount,
+          ifnull(tt5.count,0) AS relatedCount
+      FROM
+          (
+              SELECT
+                  p.id,
+                  p.pointName,
+                  p.createdBy,
+                  p.updatedBy,
+                  pp.id AS projectPointId,
+                  DATE_FORMAT(
+                      p.createDate,
+                      "%Y-%m-%d %H:%i:%s"
+                  ) AS createDate,
+                  DATE_FORMAT(
+                      p.updateDate,
+                      "%Y-%m-%d %H:%i:%s"
+                  ) AS updateDate,
+                  (
+                      SELECT
+                          uname
+                      FROM
+                          dc_user
+                      WHERE
+                          id = p.createdBy
+                  ) AS createdByName,
+                  (
+                      SELECT
+                          uname
+                      FROM
+                          dc_user
+                      WHERE
+                          id = p.updatedBy
+                  ) AS updatedByName
+              FROM
+                  (
+                      SELECT
+                          *
+                      FROM
+                          dc_bank_project_point
+                      WHERE
+                          bankProjectId =#{projectId}
+                      AND revokeStatus = '已关联'
+                      ORDER BY
+                          updateDate DESC
+                  ) pp
+              INNER JOIN dc_bank_point p ON pp.pointId = p.id
+          ) tt1
+      LEFT JOIN (
+            SELECT
+                  r.pointId,
+                count(1) as count
+            FROM
+                dc_bank_project_exercise_record r
+            inner JOIN dc_wj_user_exam ex ON r.id = ex.meetingId
+            inner JOIN dc_user u ON ex.openId=u.weixin
+            LEFT JOIN dc_user_detail dd ON dd.id = u.id
+            LEFT JOIN dc_wj_exercise e ON e.id = ex.exerciseId
+            LEFT JOIN dc_user_bank_point up ON up.userId = u.id
+            AND r.pointId = up.pointId
+            where
+                        r.bankProjectId=#{projectId}
+            group by r.pointId
+      ) tt2 ON tt1.id = tt2.pointId
+      LEFT JOIN (
+					SELECT
+						count(1) AS count,
+						u.pointId
+					FROM
+						dc_bank_project_user u
+					WHERE
+						u.pointId IN (
+							SELECT
+								p.pointId
+							FROM
+								dc_bank_project_user p
+							WHERE
+								p.bankProjectId =#{projectId}
+						)
+					GROUP BY
+						u.pointId
+      ) tt3 ON tt3.pointId = tt1.id
+      LEFT JOIN (
+						SELECT
+								count(1) AS count,
+								p.pointId
+						FROM
+								dc_bank_project_point p
+						WHERE
+								 p.pointId in ( select p.pointId from dc_bank_project_point p where p.bankProjectId=#{projectId})
+						and p.revokeStatus='已撤销'
+						group by  p.pointId
+      ) tt4 ON tt4.pointId = tt1.id
+ left join (
+						SELECT
+								count(1) AS count,
+								p.pointId
+						FROM
+								dc_bank_project_point p
+						WHERE
+								 p.pointId in ( select p.pointId from dc_bank_project_point p where p.bankProjectId=#{projectId})
+						    and p.revokeStatus='已关联'
+						group by  p.pointId
+)  tt5 on tt5.pointId=tt1.id
+  </select>
+  
+   <select id="selectTotalBankProjectsByContent" resultType="java.lang.Integer">
+  
+  	select 
+    
+    count(1)
+
+     from dc_bank_project bp
+       left join dc_bank_program bg on bp.programId = bg.id
+       left join dc_company dc on bp.companyId=dc.id
+     where bp.status = 0  and dc.departmentId in
+       <foreach collection="departmentIdList"  item="departmentId" index="" separator=","  open="(" close=")" >
+           #{departmentId}
+       </foreach>
+     <if test="content != null and content !=''">
+       and (bp.userName like CONCAT('%',#{content},'%') or bp.projectManager like CONCAT('%',#{content},'%') or bp.trainPlace like CONCAT('%',#{content},'%'))
+     </if>
+     <if test="projectCode != null and projectCode !=''">
+       and bp.projectCode = #{projectCode}
+     </if>
+     <if test="startDate != null and startDate !=''">
+       and bp.startDate &gt;= #{startDate}
+     </if>
+     <if test="endDate != null and endDate !=''">
+       and bp.startDate &lt;= #{endDate}
+     </if>
+     <if test="projectName != null and projectName !=''">
+       and bp.projectName like CONCAT('%',#{projectName},'%')
+     </if>
+     <if test="province != null and province !=''">
+       and bp.province = #{province}
+     </if>
+     <if test="city != null and city !=''">
+       and bp.city = #{city}
+     </if>
+     <if test="userTypeOneId != null and userTypeOneId !=''">
+       and bp.userTypeOneId = #{userTypeOneId}
+     </if>
+     <if test="userTypeTwoId != null and userTypeTwoId !=''">
+       and bp.userTypeTwoId = #{userTypeTwoId}
+     </if>
+     <if test="userTypeThreeId != null and userTypeThreeId !=''">
+       and bp.userTypeThreeId = #{userTypeThreeId}
+     </if>
+     <if test="projectManager != null and projectManager !=''">
+       and bp.projectManager like CONCAT('%',#{projectManager},'%')
+     </if>
+     <if test="projectTypeId != null and projectTypeId !=''">
+       and bp.projectTypeId = #{projectTypeId}
+     </if>
+       <if test="companyId != null and companyId !=''">
+           and bp.companyId = #{companyId}
+       </if>
+   </select>
+
+  <select id="selectExcludePointsByProjectId" resultType="java.util.Map">
+
+      SELECT
+              p.id,
+              dc.companyName,
+              p.pointName,
+              p.createdBy,
+              p.updatedBy,
+              DATE_FORMAT(
+              p.createDate,
+              "%Y-%m-%d %H:%i:%s"
+              ) AS createDate,
+              DATE_FORMAT(
+              p.updateDate,
+              "%Y-%m-%d %H:%i:%s"
+              ) AS updateDate,
+              (
+                  SELECT
+                    uname
+                  FROM
+                    dc_user
+                  WHERE
+                    id = p.createdBy
+              ) AS createdByName,
+              (
+                  SELECT
+                    uname
+                  FROM
+                    dc_user
+                  WHERE
+                    id = p.updatedBy
+              ) AS updatedByName
+              FROM
+              dc_bank_point p
+              left join dc_company dc on p.companyId=dc.id
+              WHERE   p.status = 0
+     and  p.companyId=#{companyId}
+      and  p.id NOT IN (
+                  SELECT
+                    pointId
+                  FROM
+                    dc_bank_project_point
+                  WHERE
+                  bankProjectId = #{projectId} and revokeStatus='已关联'
+      )
+
+    <if test="content != null and content != ''">
+      and p.pointName like concat("%",#{content},"%")
+    </if>
+
+      <if test="departmentIdList!=null and departmentIdList.size>0">
+          and dc.departmentId in
+          <foreach item="departmentId" collection="departmentIdList" separator="," open="(" close=")" index="">
+              #{departmentId}
+          </foreach>
+      </if>
+
+    order by p.createDate desc
+
+    limit #{currentPageInt},#{pageSizeInt}
+
+  </select>
+
+  <select id="selectExcludePointsTotalByProjectId" resultType="java.lang.Integer">
+
+    select count(1)
+    from dc_bank_point p
+      left join dc_company dc on p.companyId=dc.id
+      where   p.status=0
+     and  p.companyId=#{companyId}
+      and p.id not in
+      (
+        select pointId from dc_bank_project_point where bankProjectId = #{projectId}   and revokeStatus='已关联'
+      )
+
+
+    <if test="content != null and content != ''">
+      and p.pointName like concat("%",#{content},"%")
+    </if>
+
+     <if test="departmentIdList!=null and departmentIdList.size>0">
+         and dc.departmentId in
+         <foreach item="departmentId" collection="departmentIdList" separator="," open="(" close=")" index="">
+             #{departmentId}
+         </foreach>
+     </if>
+
+  </select>
+
+
+  <insert id="insertSelective" parameterType="java.util.HashMap">
+    insert into dc_bank_project
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="projectCode != null">
+        projectCode,
+      </if>
+      <if test="projectName != null">
+        projectName,
+      </if>
+      <if test="projectTypeId != null">
+        projectTypeId,
+      </if>
+      <if test="courseName != null">
+        courseName,
+      </if>
+      <if test="startDate != null">
+        startDate,
+      </if>
+      <if test="endDate != null">
+        endDate,
+      </if>
+      <if test="trainObject != null">
+        trainObject,
+      </if>
+      <if test="trainPlace != null">
+        trainPlace,
+      </if>
+      <if test="userName != null">
+        userName,
+      </if>
+      <if test="feel != null">
+        feel,
+      </if>
+      <if test="programId != null">
+        programId,
+      </if>
+      <if test="projectManager != null">
+        projectManager,
+      </if>
+      <if test="dutyPerson != null">
+        dutyPerson,
+      </if>
+      <if test="projecUser != null">
+        projecUser,
+      </if>
+      <if test="createdBy != null">
+        createdBy,
+      </if>
+      <if test="createDate != null">
+        createDate,
+      </if>
+      <if test="updatedBy != null">
+        updatedBy,
+      </if>
+      <if test="updateDate != null">
+        updateDate,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="sonProjectTypeId != null">
+        sonProjectTypeId,
+      </if>
+      <if test="province != null">
+        province,
+      </if>
+      <if test="city != null">
+        city,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="userTypeOneId != null">
+        userTypeOneId,
+      </if>
+      <if test="userTypeTwoId != null">
+        userTypeTwoId,
+      </if>
+      <if test="userTypeThreeId != null">
+        userTypeThreeId,
+      </if>
+      <if test="userTypeDetail != null">
+        userTypeDetail,
+      </if>
+      <if test="objectTypeOneId != null">
+        objectTypeOneId,
+      </if>
+      <if test="objectTypeTwoId != null">
+        objectTypeTwoId,
+      </if>
+      <if test="departmentTypeId != null">
+        departmentTypeId,
+      </if>
+        <if test="companyId != null">
+            companyId,
+        </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="projectCode != null">
+        #{projectCode,jdbcType=VARCHAR},
+      </if>
+      <if test="projectName != null">
+        #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="projectTypeId != null">
+        #{projectTypeId,jdbcType=CHAR},
+      </if>
+      <if test="courseName != null">
+        #{courseName,jdbcType=VARCHAR},
+      </if>
+      <if test="startDate != null">
+        #{startDate,jdbcType=VARCHAR},
+      </if>
+      <if test="endDate != null">
+        #{endDate,jdbcType=VARCHAR},
+      </if>
+      <if test="trainObject != null">
+        #{trainObject,jdbcType=VARCHAR},
+      </if>
+      <if test="trainPlace != null">
+        #{trainPlace,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="feel != null">
+        #{feel,jdbcType=VARCHAR},
+      </if>
+      <if test="programId != null">
+        #{programId,jdbcType=CHAR},
+      </if>
+      <if test="projectManager != null">
+        #{projectManager,jdbcType=VARCHAR},
+      </if>
+       <if test="dutyPerson != null">
+        #{dutyPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="projecUser != null">
+        #{projecUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null">
+        #{createdBy,jdbcType=CHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        #{updatedBy,jdbcType=CHAR},
+      </if>
+      <if test="updateDate != null">
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="sonProjectTypeId != null">
+        #{sonProjectTypeId,jdbcType=CHAR},
+      </if>
+      <if test="province != null">
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="userTypeOneId != null">
+        #{userTypeOneId,jdbcType=CHAR},
+      </if>
+      <if test="userTypeTwoId != null">
+        #{userTypeTwoId,jdbcType=CHAR},
+      </if>
+      <if test="userTypeThreeId != null">
+        #{userTypeThreeId,jdbcType=CHAR},
+      </if>
+      <if test="userTypeDetail != null">
+        #{userTypeDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="objectTypeOneId != null">
+        #{objectTypeOneId,jdbcType=CHAR},
+      </if>
+      <if test="objectTypeTwoId != null">
+        #{objectTypeTwoId,jdbcType=CHAR},
+      </if>
+      <if test="departmentTypeId != null">
+        #{departmentTypeId,jdbcType=CHAR},
+      </if>
+
+        <if test="companyId != null">
+            #{companyId,jdbcType=CHAR},
+        </if>
+    </trim>
+  </insert>
+
+  <insert id="saveProjectPoints">
+    insert into dc_bank_project_point(id,bankProjectId,pointId,updateDate) values
+
+    <foreach collection="pointIds" item="pointId" separator=","  index="">
+      (uuid(),#{projectId},#{pointId},now())
+    </foreach>
+
+
+  </insert>
+
+  <update id="updateByIdSelective" parameterType="java.util.HashMap">
+    update dc_bank_project
+    <set>
+      <if test="projectCode != null">
+        projectCode = #{projectCode,jdbcType=VARCHAR},
+      </if>
+      <if test="projectName != null">
+        projectName = #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="projectTypeId != null">
+        projectTypeId = #{projectTypeId,jdbcType=CHAR},
+      </if>
+      <if test="courseName != null">
+        courseName = #{courseName,jdbcType=VARCHAR},
+      </if>
+      <if test="startDate != null">
+        startDate = #{startDate,jdbcType=VARCHAR},
+      </if>
+      <if test="endDate != null">
+        endDate = #{endDate,jdbcType=VARCHAR},
+      </if>
+      <if test="trainObject != null">
+        trainObject = #{trainObject,jdbcType=VARCHAR},
+      </if>
+      <if test="trainPlace != null">
+        trainPlace = #{trainPlace,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null">
+        userName = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="feel != null">
+        feel = #{feel,jdbcType=VARCHAR},
+      </if>
+      <if test="programId != null">
+        programId = #{programId,jdbcType=CHAR},
+      </if>
+      <if test="projectManager != null">
+        projectManager = #{projectManager,jdbcType=VARCHAR},
+      </if>
+      <if test="dutyPerson != null">
+        dutyPerson = #{dutyPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="projecUser != null">
+        projecUser = #{projecUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null">
+        createdBy = #{createdBy,jdbcType=CHAR},
+      </if>
+      <if test="createDate != null">
+        createDate = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        updatedBy = #{updatedBy,jdbcType=CHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="sonProjectTypeId != null">
+        sonProjectTypeId = #{sonProjectTypeId,jdbcType=CHAR},
+      </if>
+      <if test="province != null">
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="userTypeOneId != null">
+        userTypeOneId = #{userTypeOneId,jdbcType=CHAR},
+      </if>
+      <if test="userTypeTwoId != null">
+        userTypeTwoId = #{userTypeTwoId,jdbcType=CHAR},
+      </if>
+      <if test="userTypeThreeId != null">
+        userTypeThreeId = #{userTypeThreeId,jdbcType=CHAR},
+      </if>
+      <if test="userTypeDetail != null">
+        userTypeDetail = #{userTypeDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="objectTypeOneId != null">
+        objectTypeOneId = #{objectTypeOneId,jdbcType=CHAR},
+      </if>
+      <if test="objectTypeTwoId != null">
+        objectTypeTwoId = #{objectTypeTwoId,jdbcType=CHAR},
+      </if>
+      <if test="departmentTypeId != null">
+        departmentTypeId = #{departmentTypeId,jdbcType=CHAR},
+      </if>
+        <if test="companyId != null">
+            companyId = #{companyId,jdbcType=CHAR},
+        </if>
+        updateDate = NOW()
+
+    </set>
+    where id = #{id,jdbcType=CHAR}
+  </update>
+  
+  <update id="deleteBankProjectByIds">
+  	update dc_bank_project set status = 2 where ${ids}
+  </update>
+  
+  <delete id="deleteBankProjectRealByName">
+  
+  	delete from dc_bank_project where projectName = #{projectName} and status = 2
+  
+  </delete>
+
+
+
+  <select id="selectQuestionaire" resultType="java.util.Map">
+             SELECT
+              e.id,
+              e.title,
+              CASE
+          WHEN e.ttype = 'wcdt' THEN
+              '问卷类'
+          WHEN e.ttype = 'zzt' THEN
+              '分值类'
+          WHEN e.ttype = 'pxt' THEN
+              '排序题'
+          WHEN e.ttype = 'comment' THEN
+              '测评类'
+          ELSE
+              '其它类'
+          END AS type,
+           DATE_FORMAT(
+              e.createDate,
+              '%Y-%m-%d %H:%i:%S'
+          ) AS createDate
+          FROM
+              dc_wj_exercise e
+          WHERE 1=1
+
+        <if test="ttypeList!=null   and ttypeList.size>0">
+          and e.ttype in
+          <foreach item="ttype" collection="ttypeList" separator="," open="(" close=")" index="">
+            #{ttype}
+          </foreach>
+        </if>
+
+          AND e.title LIKE '%${title}%'
+          and e.id not in (
+              select exerciseId from dc_bank_project_exercise where bankProjectId = #{bankProjectId}
+          )
+         order by e.createDate desc
+          limit  #{start} ,#{pageSize}
+  </select>
+
+
+  <select id="selectQuestionaireCount" resultType="int">
+    SELECT
+     count(1)
+    FROM
+    dc_wj_exercise e
+    WHERE 1=1
+    <if test="ttypeList!=null   and ttypeList.size>0">
+      and e.ttype in
+      <foreach item="ttype" collection="ttypeList" separator="," open="(" close=")" index="">
+        #{ttype}
+      </foreach>
+    </if>
+    AND e.title LIKE '%${title}%'
+    and e.id not in (
+    select exerciseId from dc_bank_project_exercise where bankProjectId = #{bankProjectId}
+    )
+   </select>
+
+
+<select id="selectQuestionaireByProjectId" resultType="java.util.Map">
+          SELECT
+              c.id,
+              e.title,
+              e.id as exerciseId,
+              CASE
+          WHEN e.ttype = 'wcdt' THEN
+              '问卷类'
+          WHEN e.ttype = 'zzt' THEN
+              '分值类'
+          WHEN e.ttype = 'pxt' THEN
+              '排序题'
+          WHEN e.ttype = 'comment' THEN
+              '测评类'
+          ELSE
+              '其它类'
+          END AS type,
+           DATE_FORMAT(
+              e.createDate,
+              '%Y-%m-%d %H:%i:%S'
+          ) AS createDate
+          FROM
+              dc_bank_project_exercise c
+          INNER JOIN dc_wj_exercise e ON c.exerciseId = e.id
+          WHERE
+              c.bankProjectId = #{bankProjectId}
+              order by c.createDate desc
+              limit #{start},#{pageSize}
+</select>
+
+
+
+    <select id="selectQuestionaireCountByProjectId" resultType="int">
+        SELECT
+          count(1)
+        FROM
+        dc_bank_project_exercise c
+        INNER JOIN dc_wj_exercise e ON c.exerciseId = e.id
+        WHERE
+        c.bankProjectId = #{bankProjectId}
+        order by c.createDate desc
+    </select>
+
+
+
+
+
+  <insert id="insertBankProjectExerciseList"  parameterType="java.util.List">
+    INSERT INTO dc_bank_project_exercise(
+      id,
+      bankProjectId,
+      exerciseId
+    ) VALUES
+    <foreach collection="list" item="item" index="index" separator=",">
+      (
+      #{item.id},
+      #{item.bankProjectId},
+      #{item.exerciseId}
+      )
+    </foreach>
+  </insert>
+
+
+  <insert id="deleteBankProjectExerciseList"  parameterType="java.util.List">
+      delete from dc_bank_project_exercise where id in
+    <foreach item="id" collection="ids" separator="," open="(" close=")" index="">
+      #{id}
+    </foreach>
+  </insert>
+
+  <select id="selectWjExamByBankPointId" resultType="java.util.Map">
+      SELECT
+      ex.id,
+      e.id as exerciseId,
+      e.title,
+      r.pointId,
+      u.weixin AS openId,
+      u.id as userId,
+      CASE
+      WHEN e.ttype = 'wcdt' THEN
+      '问卷类'
+      WHEN e.ttype = 'zzt' THEN
+      '分值类'
+      WHEN e.ttype = 'pxt' THEN
+      '排序题'
+      WHEN e.ttype = 'comment' THEN
+      '测评类'
+      ELSE
+      '其它类'
+      END AS type,
+      ex.submitDate,
+      (select station from dc_user_bank_point where pointId=#{pointId} and userId=r.userId) AS station,
+      u.uname,
+      r.bankProjectId
+      FROM
+      dc_bank_project_exercise_record r
+      inner JOIN dc_wj_user_exam ex ON r.id = ex.meetingId
+      inner JOIN dc_user u ON ex.openId=u.weixin
+      LEFT JOIN dc_user_detail dd ON dd.id = u.id
+      LEFT JOIN dc_wj_exercise e ON e.id = ex.exerciseId
+      where
+      r.bankProjectId=#{bankProjectId}
+      and r.pointId=#{pointId}
+    <if test="ttypeList!=null   and ttypeList.size>0">
+      and e.ttype in
+      <foreach item="ttype" collection="ttypeList" separator="," open="(" close=")" index="">
+        #{ttype}
+      </foreach>
+    </if>
+      <if test="uname!=null">
+      and u.uname like '%${uname}%'
+      </if>
+    <if test="endDate!=null">
+    <![CDATA[  and ex.submitDate<=#{endDate} ]]>
+    </if>
+    <if test="startDate!=null">
+      <![CDATA[  and ex.submitDate>#{startDate} ]]>
+    </if>
+
+
+    <if test="title!=null">
+        and e.title like '%${title}%'
+    </if>
+    limit #{start} ,#{pageSize}
+  </select>
+
+  <select id="selectWjExamCountByBankPointId" resultType="int">
+      SELECT
+          count(1)
+      FROM
+      dc_bank_project_exercise_record r
+      inner JOIN dc_wj_user_exam ex ON r.id = ex.meetingId
+      inner JOIN dc_user u ON ex.openId=u.weixin
+      LEFT JOIN dc_user_detail dd ON dd.id = u.id
+      LEFT JOIN dc_wj_exercise e ON e.id = ex.exerciseId
+      where
+      r.bankProjectId=#{bankProjectId}
+      and r.pointId=#{pointId}
+      <if test="ttypeList!=null   and ttypeList.size>0">
+          and e.ttype in
+          <foreach item="ttype" collection="ttypeList" separator="," open="(" close=")" index="">
+              #{ttype}
+          </foreach>
+      </if>
+      <if test="uname!=null">
+          and u.uname like '%${uname}%'
+      </if>
+      <if test="endDate!=null">
+          <![CDATA[  and ex.submitDate<=#{endDate} ]]>
+      </if>
+      <if test="startDate!=null">
+          <![CDATA[  and ex.submitDate>#{startDate} ]]>
+      </if>
+
+
+      <if test="title!=null">
+          and e.title like '%${title}%'
+      </if>
+   </select>
+
+  <select id="selectBankProjectList"  resultType="java.util.Map">
+    SELECT
+        tt1.id,
+        tt1.bankProjectId,
+        tt1.pointId,
+        tt1.projectName,
+        tt1.revokeStatus,
+        ifnull(tt2.count,0) AS pollCount,
+        ifnull(tt3.count,0) AS userCount
+
+    FROM
+        (
+            SELECT
+                p.id,
+                dp.projectName,
+                p.revokeStatus,
+                p.bankProjectId,
+                p.pointId
+            FROM
+                dc_bank_project_point p
+            INNER JOIN dc_bank_point bp ON p.pointId = bp.id
+            INNER JOIN dc_bank_project dp ON p.bankProjectId = dp.id
+            where p.pointId=#{pointId}
+            <if test="projectName!=null and projectName!=''">
+              and    dp.projectName like '%${projectName}%'
+            </if>
+            <if test="revokeStatusList!=null and revokeStatusList.size>0">
+             and  p.revokeStatus in
+                <foreach item="revokeStatus" collection="revokeStatusList" separator="," open="(" close=")" index="">
+                    #{revokeStatus}
+                </foreach>
+            </if>
+
+            limit #{start},#{pageSize}
+        ) tt1
+    LEFT JOIN (
+          SELECT
+          r.bankProjectId,
+          count(1) as count
+          FROM
+          dc_bank_project_exercise_record r
+          inner JOIN dc_wj_user_exam ex ON r.id = ex.meetingId
+          inner JOIN dc_user u ON ex.openId=u.weixin
+          LEFT JOIN dc_user_detail dd ON dd.id = u.id
+          LEFT JOIN dc_wj_exercise e ON e.id = ex.exerciseId
+          where
+          r.pointId=#{pointId}
+          group by r.bankProjectId
+    ) tt2 ON tt1.bankProjectId = tt2.bankProjectId
+    left join (
+          SELECT
+          u.bankProjectId,
+          count(1) as count
+          FROM
+          dc_bank_project_user u
+          WHERE
+          u.pointId = #{pointId}
+          GROUP BY
+          bankProjectId
+
+    )  tt3 on tt3.bankProjectId=tt1.bankProjectId
+
+</select>
+
+
+
+  <select id="selectBankProjectListCount"  resultType="int">
+    SELECT
+         count(1)
+    FROM
+    dc_bank_project_point p
+    INNER JOIN dc_bank_point bp ON p.pointId = bp.id
+    INNER JOIN dc_bank_project dp ON p.bankProjectId = dp.id
+    where p.pointId=#{pointId}
+    <if test="projectName!=null and projectName!=''">
+      and    dp.projectName like '%${projectName}%'
+    </if>
+    <if test="revokeStatusList!=null and revokeStatusList.size>0 ">
+     and  p.revokeStatus in
+        <foreach item="revokeStatus" collection="revokeStatusList" separator="," open="(" close=")" index="">
+            #{revokeStatus}
+        </foreach>
+    </if>
+   </select>
+
+
+
+
+<update id="updateDcBankProjectPointRevokeStatus" >
+     update dc_bank_project_point p
+    set p.revokeStatus=#{revokeStatus} where id=#{id}
+</update>
+
+    <select id="selectBankProjectPointById" resultType="java.util.Map">
+         select p.id,p.pointId,p.bankProjectId from dc_bank_project_point p  where p.id=#{id}
+    </select>
+
+
+
+  <insert id="insertBankProjectWjExcerciseRecord"  >
+    insert into dc_bank_project_exercise_record(
+        id,
+        bankProjectId,
+        exerciseId,
+        pointId,
+        userId,
+        createDate
+    )
+      values(
+          #{id},
+          #{bankProjectId},
+          #{exerciseId},
+          #{pointId},
+          #{userId},
+          #{createDate}
+      )
+  </insert>
+
+
+    <select id="selectBankProjectWjByUserIdProjectIdPointIdExerciseId" resultType="string">
+        select id from dc_bank_project_exercise_record where
+        bankProjectId=#{bankProjectId}
+        and exerciseId=#{exerciseId}
+        and pointId=#{pointId}
+        and userId=#{userId}
+
+    </select>
+
+
+
+<select id="selectBankPosition" resultType="java.util.Map">
+    select id, value from dc_dictionary d where d.ttype='bankPosition'
+
+</select>
+
+  <select id="selectBankPointByProjectId" resultType="java.util.Map">
+    SELECT
+        p.id,
+        p.pointName
+    FROM
+        dc_bank_project_point pp
+    INNER JOIN dc_bank_point p ON pp.pointId = p.id
+    where pp.bankProjectId=#{bankProjectId}   and pp.revokeStatus='已关联'
+    order by pp.updateDate desc
+  </select>
+
+
+
+  <select id="selectProjectPointByProjectIdAndPointId" resultType="java.util.Map">
+
+      select
+            p.id,
+            p.bankProjectId,
+            p.pointId,
+            p.updateDate,
+            p.revokeStatus
+     from dc_bank_project_point p  where p.pointId=#{pointId} and p.bankProjectId=#{bankProjectId}
+
+  </select>
+
+
+
+  <select id="selectBankPointStatistic" resultType="java.util.Map">
+      SELECT
+        ppp.id,
+        ppp.pointName,
+        u.uname,
+        ppp.createdBy,
+        dc.companyName,
+        DATE_FORMAT(ppp.createDate,   '%Y-%m-%d %H:%i:%S')  as createDate,
+        (
+            SELECT
+                count(1)
+            FROM
+                dc_bank_project_point p
+            WHERE
+                p.revokeStatus = '已撤销'
+            AND p.pointId = ppp.id
+        ) AS revokedCount,
+        (
+            SELECT
+                count(1)
+            FROM
+                dc_bank_project_point p
+            WHERE
+                p.revokeStatus = '已关联'
+            AND p.pointId = ppp.id
+        ) AS relatedCount,
+       (select count(1) from dc_user_bank_point up where up.pointId=ppp.id) as totalPersonCount
+    FROM
+        dc_bank_point ppp
+    LEFT JOIN dc_user u ON ppp.createdBy = u.id
+    left join dc_company dc on ppp.companyId=dc.id
+    WHERE
+        ppp.id =#{pointId}
+
+  </select>
+
+  <select id="selectBankProjectRelation" resultType="java.util.Map">
+    SELECT
+        pp.id,
+        p.pointName,
+        bp.projectName
+    FROM
+        dc_bank_project_point pp
+    INNER JOIN dc_bank_point p ON pp.pointId = p.id
+    INNER JOIN dc_bank_project bp ON bp.id = pp.bankProjectId
+    WHERE
+        pp.id = #{id}
+  </select>
+</mapper>

@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.AppointmentMapper">
+
+
+
+
+     <insert id="insertAppointment">
+        INSERT INTO dc_appointment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null"> id, </if>
+            <if test="name != null"> name, </if>
+            <if test="mobile != null"> mobile, </if>
+            <if test="country != null"> country, </if>
+            <if test="province != null"> province, </if>
+            <if test="city != null"> city, </if>
+            <if test="county != null"> county, </if>
+            <if test="channel != null"> channel, </if>
+            <if test="newFlag != null"> newFlag, </if>
+            <if test="adviserId != null"> adviserId, </if>
+            <if test="companyName != null"> companyName, </if>
+            <if test="position != null"> position, </if>
+            <if test="createDate != null ">createDate,</if>
+            <if test="updateDate != null ">updateDate,</if>
+            <if test="createdBy != null ">createdBy,</if>
+            <if test="updatedBy != null ">updatedBy,</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null"> #{id}, </if>
+            <if test="name != null"> #{name}, </if>
+            <if test="mobile != null"> #{mobile}, </if>
+            <if test="country != null"> #{country}, </if>
+            <if test="province != null"> #{province}, </if>
+            <if test="city != null"> #{city}, </if>
+            <if test="county != null"> #{county}, </if>
+            <if test="channel != null"> #{channel}, </if>
+            <if test="newFlag != null"> #{newFlag}, </if>
+            <if test="adviserId != null"> #{adviserId}, </if>
+            <if test="companyName != null"> #{companyName}, </if>
+            <if test="position != null"> #{position}, </if>
+            <if test="createDate != null"> #{createDate}, </if>
+            <if test="updateDate != null"> #{updateDate}, </if>
+            <if test="createdBy != null"> #{createdBy}, </if>
+            <if test="updatedBy != null"> #{updatedBy}, </if>
+        </trim>
+    </insert>
+
+
+
+    <!--auto generated Code-->
+    <update id="updateAppointment">
+        UPDATE dc_appointment
+        <set>
+            <if test="id != null"> id = #{id}, </if>
+            <if test="name != null"> name = #{name}, </if>
+            <if test="mobile != null"> mobile = #{mobile}, </if>
+            <if test="country != null"> country = #{country}, </if>
+            <if test="province != null"> province = #{province}, </if>
+            <if test="city != null"> city = #{city}, </if>
+            <if test="county != null"> county = #{county}, </if>
+            <if test="channel != null"> channel = #{channel}, </if>
+            <if test="newFlag != null"> newFlag = #{newFlag}, </if>
+            <if test="adviserId != null"> adviserId = #{adviserId}, </if>
+            <if test="companyName != null"> companyName = #{companyName}, </if>
+            <if test="position != null"> position = #{position}, </if>
+            <if test="createDate != null"> createDate = #{createDate}, </if>
+            <if test="updateDate != null"> updateDate = #{updateDate}, </if>
+            <if test="createdBy != null"> createdBy = #{createdBy}, </if>
+            <if test="updatedBy != null"> updatedBy = #{updatedBy} </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+
+    <!--auto generated Code-->
+    <delete id="deleteAppointment">
+        DELETE FROM dc_appointment where id = #{id}
+    </delete>
+
+
+    <insert id="insertCourseList">
+        INSERT INTO dc_appointment_course(
+         id,
+        appointmentId,
+        courseId
+        )VALUES
+        <foreach collection="list" item="course" index="index" separator=",">
+            (
+            #{course.id},
+            #{course.appointmentId},
+            #{course.courseId}
+            )
+        </foreach>
+    </insert>
+
+
+    <delete id="deleteCourseByAppointmentId">
+        delete from dc_appointment_course where appointmentId=#{appointmentId}
+    </delete>
+
+
+
+    <delete id="deleteAppointmentCallbackByAppointmentId">
+        delete from dc_appointment_callback where appointmentId=#{appointmentId}
+    </delete>
+
+
+
+    <insert id="insertAppointmentCallbackList">
+        INSERT INTO dc_appointment_callback(
+        id,
+        appointmentId,
+        time,
+        content
+        )VALUES
+        <foreach collection="list" item="callback" index="index" separator=",">
+            (
+            #{callback.id},
+            #{callback.appointmentId},
+            #{callback.time},
+            #{callback.content}
+            )
+        </foreach>
+    </insert>
+
+
+    <select id="selectCourseValuesByAppointmentId"  resultType="java.util.Map">
+        SELECT
+            c.appointmentId,
+            GROUP_CONCAT(d. VALUE) AS courses
+        FROM
+            dc_appointment_course c
+        INNER JOIN dc_dictionary d ON c.courseId = d.id
+        WHERE
+            c.appointmentId
+            IN
+                <foreach item="id" collection="idList" separator="," open="(" close=")" index="">
+                    #{id}
+                </foreach>
+        group by c.appointmentId
+    </select>
+
+    <select id="selectCourseIdByAppointmentId" resultType="string">
+          select c.courseId from dc_appointment_course c where c.appointmentId=#{appointmentId}
+    </select>
+
+
+    <delete id="deleteAppointmentCallback">
+        delete from dc_appointment_callback where id=#{id}
+    </delete>
+
+
+    
+    <select id="selectAppointList" resultType="java.util.Map">
+                select
+                    a.id ,
+                    a.name ,
+                    a.mobile ,
+                    a.country ,
+                    a.province,
+                    a.city ,
+                    a.county ,
+                    a.channel ,
+                    a.newFlag,
+                    a.adviserId,
+                    u.uname as adviser,
+                    a.companyName ,
+                    a.position ,
+                    DATE_FORMAT(a.createDate,   '%Y-%m-%d') as time
+                from dc_appointment  a left join dc_appointment_course c
+                on a.id=c.appointmentId
+                left join dc_user u on a.adviserId=u.id
+                where 1=1
+            <if test="courseId != null ">and  a.id in (select cc.appointmentId from dc_appointment_course cc where cc.courseId=#{courseId})
+            </if>
+            <if test="channel != null">and a.channel=#{channel}
+            </if>
+            <if test="adviserId != null">and a.adviserId=#{adviserId}</if>
+            <if test="time != null">and DATE_FORMAT(a.createDate,   '%Y-%m-%d')=#{time}</if>
+            group by a.id
+            order by a.createDate desc
+            limit  #{start},#{pageSize}
+    </select>
+
+
+
+
+
+    <select id="selectAppointListCount" resultType="int">
+        select count(1) from ( select
+        count(1)
+        from dc_appointment a left join dc_appointment_course c
+        on a.id=c.appointmentId
+        left join dc_user u on a.adviserId=u.id
+        where 1=1
+        <if test="courseId != null ">and a.id in (select cc.appointmentId from dc_appointment_course cc where
+            cc.courseId=#{courseId})
+        </if>
+        <if test="channel != null">and a.channel=#{channel}
+        </if>
+        <if test="adviserId != null">and a.adviserId=#{adviserId}</if>
+        <if test="time != null">and DATE_FORMAT(a.createDate, '%Y-%m-%d')=#{time}</if>
+        group by a.id
+        ) t
+    </select>
+
+
+
+
+
+
+    <select id="selectAppointmentCallbackByAppointmentId" resultType="java.util.Map">
+        select
+            id,
+            appointmentId,
+            DATE_FORMAT(time,   '%Y-%m-%d %H:%i:%S') as time,
+            content
+         from dc_appointment_callback c where c.appointmentId=#{appointmentId}  order by c.time desc
+    </select>
+
+
+    <select id="selectAppointmentById" resultType="java.util.Map">
+        select
+                    a.id ,
+                    a.name ,
+                    a.mobile ,
+                    a.country ,
+                    a.province,
+                    a.city ,
+                    a.county ,
+                    a.channel ,
+                    a.newFlag,
+                    a.adviserId,
+                    u.uname as adviser,
+                    a.companyName ,
+                    a.position ,
+                    DATE_FORMAT(a.createDate,   '%Y-%m-%d') as time
+                from dc_appointment  a left join dc_appointment_course c
+                on a.id=c.appointmentId
+                left join dc_user u on a.adviserId=u.id
+            where a.id=#{id}
+             group by a.id
+    </select>
+
+
+    <select id="selectAdviserIdByMobile" resultType="string">
+         SELECT
+            cm.companyAdviserId
+        FROM
+            dc_user u
+        INNER JOIN dc_user_company c ON u.id = c.userId
+        INNER JOIN dc_company cm ON c.companyId = cm.id
+        inner join dc_user uu on uu.id=cm.companyAdviserId
+        WHERE
+            u.mobile = #{mobile}
+            and uu.platform=1
+            and cm.companyAdviserId!=''
+
+    </select>
+
+
+    <select id="selectAdviserIdByProvince" resultType="string">
+        select adviserId from dc_adviser_area a where a.province =#{province}
+    </select>
+
+
+</mapper>

@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xkd.mapper.BankProgramMapper">
+  <resultMap id="BaseResultMap" type="com.xkd.model.BankProgram">
+    <id column="id" jdbcType="CHAR" property="id" />
+    <result column="programCode" jdbcType="VARCHAR" property="programcode" />
+    <result column="programName" jdbcType="VARCHAR" property="programname" />
+    <result column="programTypeId" jdbcType="CHAR" property="programtypeid" />
+    <result column="writeDate" jdbcType="VARCHAR" property="writedate" />
+    <result column="userName" jdbcType="VARCHAR" property="username" />
+    <result column="managerName" jdbcType="VARCHAR" property="managername" />
+    <result column="programUser" jdbcType="VARCHAR" property="programuser" />
+    <result column="createdBy" jdbcType="CHAR" property="createdby" />
+    <result column="createDate" jdbcType="TIMESTAMP" property="createdate" />
+    <result column="updatedBy" jdbcType="CHAR" property="updatedby" />
+    <result column="updateDate" jdbcType="TIMESTAMP" property="updatedate" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, programCode, programName, programTypeId, writeDate, userName, managerName, programUser, 
+    createdBy, createDate, updatedBy, updateDate, status,programIndustryId
+  </sql>
+  <select id="selectBankProgramById" resultType="java.util.HashMap">
+    select 
+    bg.id, bg.programCode, bg.programName, bg.programTypeId, bg.writeDate, bg.userName, bg.managerName, bg.programUser, 
+    bg.createdBy, bg.createDate, bg.updatedBy, bg.updateDate, bg.status,bg.programIndustryId,bg.departmentId,
+    (select value from dc_dictionary where id = bg.programIndustryId) as programIndustry,
+    (select value from dc_dictionary where id = bg.programTypeId) as programType,
+    (select departmentName from dc_department where id =  bg.departmentId) as departmentName
+    from dc_bank_program bg
+    where bg.id = #{id,jdbcType=CHAR}
+  </select>
+  
+    <select id="selectBankProgramByCodeAllStatus" resultType="java.util.HashMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from dc_bank_program
+    where programCode = #{programCode}
+  </select>
+
+  <select id="getCountBankProgram" resultType="java.lang.String">
+    select max(t.i) from (SELECT SUBSTR(programCode,-13,4) as i,programCode FROM dc_bank_program where programCode like '%FA%') t;
+  </select>
+
+
+  
+  <select id="selectBankProgramByNameAllStatus" resultType="java.util.HashMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from dc_bank_program
+    where programName = #{programName}
+  </select>
+  
+  
+  <select id="selectBankProgramsByContent" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+  
+  	select 
+    
+    bg.id, bg.programCode, bg.programName, bg.programTypeId, bg.writeDate, bg.userName, bg.managerName, bg.programUser,bg.departmentId,dt.departmentName,
+    bg.createdBy, bg.createDate, bg.updatedBy, bg.updateDate, bg.status,d.value as programType
+    
+    from dc_bank_program bg left join dc_dictionary d on bg.programTypeId = d.id left join dc_department dt on bg.departmentId = dt.id
+    where bg.status = 0 and bg.departmentId in
+    <foreach collection="departmentIdList"  item="departmentId" index="" separator=","  open="(" close=")" >
+      #{departmentId}
+    </foreach>
+    
+    <if test="content != null and content !='' ">
+    	and (bg.userName like CONCAT('%',#{content},'%') or bg.programName like CONCAT('%',#{content},'%') 
+    	or bg.programUser like CONCAT('%',#{content},'%') or bg.managerName like CONCAT('%',#{content},'%'))
+    </if>
+    <if test="programCode != null and programCode !='' ">
+    	and bg.programCode = #{programCode}
+    </if>
+    <if test="writeDate != null and writeDate != ''">
+    	and bg.writeDate = #{writeDate}
+    </if>
+    <if test="programTypeId != null and programTypeId != ''">
+    	and bg.programTypeId = #{programTypeId}
+    </if>
+    <if test="pcCompanyId != null and pcCompanyId != ''">
+      and bg.pcCompanyId = #{pcCompanyId}
+    </if>
+    order by bg.updateDate desc 
+    
+    limit #{currentPage},#{pageSize}
+  
+  </select>
+  
+  <select id="selectTotalBankProgramsByContent" resultType="java.lang.Integer">
+  
+  	select 
+    
+    count(1) 
+    
+    from dc_bank_program bg left join dc_dictionary d on bg.programTypeId = d.id
+    where bg.status = 0 and
+    bg.departmentId in
+    <foreach collection="departmentIdList"  item="departmentId" index="" separator=","  open="(" close=")" >
+      #{departmentId}
+    </foreach>
+    
+    <if test="content != null and content !='' ">
+    	and (bg.userName like CONCAT('%',#{content},'%') or bg.programName like CONCAT('%',#{content},'%') 
+    	or bg.programUser like CONCAT('%',#{content},'%') or bg.managerName like CONCAT('%',#{content},'%'))
+    </if>
+    <if test="programCode != null and programCode !='' ">
+    	and bg.programCode = #{programCode}
+    </if>
+    <if test="writeDate != null and writeDate != ''">
+    	and bg.writeDate = #{writeDate}
+    </if>
+    <if test="programTypeId != null and programTypeId != ''">
+    	and bg.programTypeId = #{programTypeId}
+    </if>
+    <if test="pcCompanyId != null and pcCompanyId != ''">
+      and bg.pcCompanyId = #{pcCompanyId}
+    </if>
+  </select>
+  
+  <insert id="insertSelective" parameterType="com.xkd.model.BankProgram">
+    insert into dc_bank_program
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="programCode != null">
+        programCode,
+      </if>
+      <if test="programName != null">
+        programName,
+      </if>
+      <if test="programTypeId != null">
+        programTypeId,
+      </if>
+      <if test="writeDate != null">
+        writeDate,
+      </if>
+      <if test="userName != null">
+        userName,
+      </if>
+      <if test="managerName != null">
+        managerName,
+      </if>
+      <if test="programUser != null">
+        programUser,
+      </if>
+      <if test="createdBy != null">
+        createdBy,
+      </if>
+      <if test="createDate != null">
+        createDate,
+      </if>
+      <if test="updatedBy != null">
+        updatedBy,
+      </if>
+      <if test="updateDate != null">
+        updateDate,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="programIndustryId != null">
+        programIndustryId,
+      </if>
+      <if test="departmentId != null">
+        departmentId,
+      </if>
+      <if test="pcCompanyId != null">
+        pcCompanyId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="programCode != null">
+        #{programCode,jdbcType=VARCHAR},
+      </if>
+      <if test="programName != null">
+        #{programName,jdbcType=VARCHAR},
+      </if>
+      <if test="programTypeId != null">
+        #{programTypeId,jdbcType=CHAR},
+      </if>
+      <if test="writeDate != null">
+        #{writeDate,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="managerName != null">
+        #{managerName,jdbcType=VARCHAR},
+      </if>
+      <if test="programUser != null">
+        #{programUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null">
+        #{createdBy,jdbcType=CHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        #{updatedBy,jdbcType=CHAR},
+      </if>
+      <if test="updateDate != null">
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="programIndustryId != null">
+        #{programIndustryId,jdbcType=CHAR},
+      </if>
+      <if test="departmentId != null">
+        #{departmentId,jdbcType=CHAR},
+      </if>
+      <if test="pcCompanyId != null">
+        #{pcCompanyId,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByIdSelective" parameterType="com.xkd.model.BankProgram">
+    update dc_bank_program
+    <set>
+      <if test="programCode != null">
+        programCode = #{programCode,jdbcType=VARCHAR},
+      </if>
+      <if test="programName != null">
+        programName = #{programName,jdbcType=VARCHAR},
+      </if>
+      <if test="programTypeId != null">
+        programTypeId = #{programTypeId,jdbcType=CHAR},
+      </if>
+      <if test="writeDate != null">
+        writeDate = #{writeDate,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null">
+        userName = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="managerName != null">
+        managerName = #{managerName,jdbcType=VARCHAR},
+      </if>
+      <if test="programUser != null">
+        programUser = #{programUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null">
+        createdBy = #{createdBy,jdbcType=CHAR},
+      </if>
+      <if test="createDate != null">
+        createDate = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        updatedBy = #{updatedBy,jdbcType=CHAR},
+      </if>
+      
+        updateDate = NOW(),
+     
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="programIndustryId != null">
+        programIndustryId = #{programIndustryId,jdbcType=CHAR},
+      </if>
+      <if test="departmentId != null">
+        departmentId = #{departmentId,jdbcType=CHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=CHAR}
+  </update>
+  
+  
+  <update id="deleteBankProgramByIds">
+  	update dc_bank_program set status = 2 where ${ids}
+  </update>
+
+  <update id="clearProjectProgramByIds">
+
+    update dc_bank_project set programId = null where programId in
+
+    <foreach collection="projectProgramIds"  item="programId" index="" separator=","  open="(" close=")" >
+      #{programId}
+    </foreach>
+
+  </update>
+
+  <delete id="deleteBankProgramRealByName">
+  
+  	delete from dc_bank_program where programName = #{programName} and status = 2
+  
+  </delete>
+  
+</mapper>
