@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.OrderMapper" >
+
+
+    <insert id="saveUserOrder">
+        insert into dc_user_order(id,meetingId,userId,orderName,mhtOrderNo,
+        mhtOrderAmt,mhtOrderStartTime,channelOrderNo,payTime,payConsumerId,payStatus,status,orderTime,companyId,payedUserId,payAgain,userSpreadId,spreadSettingId) values
+        (#{id},#{meetingId},#{userId},#{orderName},#{mhtOrderNo},#{mhtOrderAmt},#{mhtOrderStartTime},
+        #{channelOrderNo},#{payTime},#{payConsumerId},#{payStatus},0,#{orderTime},#{companyId},#{payedUserId},0,#{userSpreadId},#{spreadSettingId})
+    </insert>
+
+    <insert id="saveOrderTicket">
+       insert into dc_order_ticket(id,orderId,ticketId,ticketNumber,getTicketNumber) values(#{id},#{orderId},#{ticketId},#{ticketNumber},0)
+    </insert>
+
+    <update id="deleteOrderBymhtOrderNoByPayAgain">
+        update dc_user_order set payAgain = 2 where mhtOrderNo = #{mhtOrderNo}
+    </update>
+
+</mapper>
