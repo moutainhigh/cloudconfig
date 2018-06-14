@@ -1,0 +1,40 @@
+package com.kuangchi.sdd.attendanceConsole.statistic.model;
+
+public class LeaveTime {
+	  Integer id;
+	  String staffNum;
+	  String fromTime;
+	  String toTime;
+	  String leaveCatetory;
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	public String getStaffNum() {
+		return staffNum;
+	}
+	public void setStaffNum(String staffNum) {
+		this.staffNum = staffNum;
+	}
+	public String getFromTime() {
+		return fromTime;
+	}
+	public void setFromTime(String fromTime) {
+		this.fromTime = fromTime;
+	}
+	public String getToTime() {
+		return toTime;
+	}
+	public void setToTime(String toTime) {
+		this.toTime = toTime;
+	}
+	public String getLeaveCatetory() {
+		return leaveCatetory;
+	}
+	public void setLeaveCatetory(String leaveCatetory) {
+		this.leaveCatetory = leaveCatetory;
+	}
+      
+}
