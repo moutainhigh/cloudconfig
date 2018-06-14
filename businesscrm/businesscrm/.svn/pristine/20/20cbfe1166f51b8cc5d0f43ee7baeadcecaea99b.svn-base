@@ -1,0 +1,12 @@
+package com.xkd.service;
+
+import org.springframework.stereotype.Service;
+
+/**
+ * Created by dell on 2018/4/20.
+ */
+@Service
+public class MeetingService {
+
+
+}

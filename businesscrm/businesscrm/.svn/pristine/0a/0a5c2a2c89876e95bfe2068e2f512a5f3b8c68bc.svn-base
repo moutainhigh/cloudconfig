@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.RoleMapper" >
+
+  <select id="selectRoles" resultType="java.util.Map">
+  
+	SELECT
+		r.id,
+		r.roleName,
+		r.content,
+		r.createdBy,
+		DATE_FORMAT(r.createDate,'%Y-%m-%d %H:%i:%s')  as createDateStr,
+		r.updatedBy,
+		DATE_FORMAT(r.updateDate,'%Y-%m-%d %H:%i:%s') as updateDateStr,
+		u.uname AS updateByName,
+	    d.departmentName as pcCompanyName,
+	    r.isAdmin,
+	    (select count(*) from dc_user u where u.roleId = r.id and u.status = '0' )userNumber
+	FROM
+		dc_sys_role r
+	LEFT JOIN dc_user u ON r.updatedBy = u.id
+	left join dc_department d on d.id=r.pcCompanyId
+	  where 1=1
+  	<if test="content != null and content !='' " >
+  	
+        ${content}
+        
+    </if>
+    
+    order by r.orderNo asc,r.createDate desc,r.updateDate desc 
+    
+    limit #{currentPage},#{pageSize}
+  	
+  </select>
+  
+
+  
+  <select id="selectRolesCount" resultType="java.lang.Integer">
+  
+	SELECT
+		count(1)
+	FROM
+		dc_sys_role r
+	  LEFT JOIN dc_user u ON r.updatedBy = u.id
+	  left join dc_department d on d.id=r.pcCompanyId
+	  where 1=1
+	  and r.id!='1'
+  	<if test="content != null and content !='' " >
+  	
+        ${content}
+        
+    </if>
+  
+  </select>
+  
+  <select id="selectRoleById" resultType="java.util.Map">
+  SELECT
+                r.id,
+                r.roleName,
+                r.content,
+                r.isAdmin
+            FROM
+                dc_sys_role r
+            where r.id=#{id}
+  
+  </select>
+
+<select id="selectRolesUnderCompany" resultType="java.util.Map">
+	  SELECT
+                r.id,
+                r.roleName,
+                r.content,
+                r.isAdmin
+            FROM
+                dc_sys_role r
+                where r.pcCompanyId=#{pcCompanyId}
+                <if test="includeSuperAdmin==null or includeSuperAdmin==0">
+					and r.id!='1'
+				</if>
+</select>
+
+	<select id="selectRolesByIds" resultType="java.util.Map">
+		SELECT
+		r.id,
+		r.roleName,
+		r.content,
+		r.isAdmin
+		FROM
+		dc_sys_role r
+		where r.id in
+
+		<foreach collection="idList" index="index" item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+
+	</select>
+
+  
+
+  
+  
+  <insert id="saveRole" parameterType="java.util.Map">
+  
+  	insert into dc_sys_role (id,roleName,content,createdBy,createDate,updatedBy,updateDate,pcCompanyId)
+  	
+  	values
+  	
+  	(#{id},#{roleName},#{content},#{createBy},now(),#{createBy},now(),#{pcCompanyId})
+  	
+  	<selectKey resultType="java.lang.String" keyProperty="id" order="AFTER">
+				SELECT LAST_INSERT_ID()
+	</selectKey>
+  
+  </insert>
+  
+
+  
+  <update id="updateRole">
+  
+  	update dc_sys_role set 
+	  	<if test="roleName !=null and roleName!=''">roleName = #{roleName} ,</if>
+	  	<if test="content!=null ">content = #{content},</if>
+	  	<if test="updateBy!=null and updateBy !=''">updatedBy = #{updateBy},</if>
+	  	updateDate = NOW() 
+  	where id = #{roleId}
+  
+  </update>
+  
+  <update id="deleteRolesByIds">
+  
+  	delete from  dc_sys_role   where  id in
+	  <foreach collection="idList" index="index" item="id" open="(" separator="," close=")">
+		  #{id}
+	  </foreach>
+  
+  </update>
+  
+
+  
+
+  
+  
+  <delete id="deleteRole">
+  	delete from dc_sys_role where id=#{id}
+  </delete>
+  
+
+    <select id="selectRoleByName" resultType="java.util.Map">
+			select r.id,r.roleName,r.content from dc_sys_role r  where r.roleName=#{roleName}
+    </select>
+  
+  
+</mapper>

@@ -1,0 +1,799 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.ScheduleMapper" >
+	<resultMap id="BaseResultMap" type="Schedule" >
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="province" property="province" jdbcType="VARCHAR" />
+		<result column="city" property="city" jdbcType="VARCHAR" />
+		<result column="address" property="address" jdbcType="VARCHAR" />
+		<result column="dayNum" property="dayNum" jdbcType="INTEGER" />
+		<result column="lessonType" property="lessonType" jdbcType="CHAR" />
+		<result column="lessonName" property="lessonName" jdbcType="VARCHAR" />
+		<result column="startDate" property="startDate"  jdbcType="VARCHAR" />
+		<result column="endDate" property="endDate"  jdbcType="VARCHAR" />
+		<result column="scheduleDetail" property="scheduleDetail" jdbcType="VARCHAR" />
+		<result column="createdBy" property="createdBy" jdbcType="INTEGER" />
+		<result column="createDate" property="createDate" jdbcType="VARCHAR" />
+		<result column="updatedBy" property="updatedBy" jdbcType="INTEGER" />
+		<result column="updateDate" property="updateDate" jdbcType="VARCHAR" />
+		<result column="stateName" property="stateName" jdbcType="VARCHAR" />
+		<result column="teacherName" property="teacherName" jdbcType="VARCHAR" />
+		<result column="remove" property="remove" jdbcType="VARCHAR" />
+		<result column="uname" property="uname" jdbcType="VARCHAR" />
+		<result column="remind" property="remind" jdbcType="VARCHAR" />
+		<result column="priority" property="priority" jdbcType="VARCHAR" />
+		<result column="fullDay" property="fullDay" jdbcType="VARCHAR" />
+		<result column="endTime" property="endTime" jdbcType="VARCHAR" />
+		<result column="startTime" property="startTime" jdbcType="VARCHAR" />
+		<result column="my" property="my" jdbcType="VARCHAR" />
+		<result column="isNews" property="isNews" jdbcType="VARCHAR" />
+		<result column="action" property="action" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List" >
+		id,province,city,dayNum,
+		address,lessonType,lessonName,left(startDate,10)startDate,left(endDate,10)endDate,right(startDate,5)startTime,right(endDate,5)endTime,priority,remind,fullDay,
+		createdBy,createDate,updatedBy,updateDate,scheduleDetail
+	</sql>
+
+	<insert id="insertSchedule"  parameterType="Schedule" useGeneratedKeys="true"
+			keyProperty="id">
+		insert into dc_schedule(
+		id,
+		province,city,dayNum,address,
+		lessonType,lessonName,startDate,endDate,remind,priority,fullDay,
+		createdBy,createDate,updatedBy,updateDate,scheduleDetail,status,companyId,pcCompanyId
+		)values(
+		#{id},
+		#{province},#{city},#{dayNum},#{address},
+		#{lessonType},#{lessonName},#{startDate},#{endDate},#{remind},#{priority},#{fullDay},
+		#{createdBy},#{updateDate},#{createdBy},#{updateDate},#{scheduleDetail},0,#{companyId},#{pcCompanyId}
+		)
+	</insert>
+
+
+
+	<select id="selectScheduleById" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List"></include>
+		,(select sl.action from dc_schedule_logger sl where scheduleId = s.id ORDER BY sl.createDate desc limit 1)action
+		,(select uname from dc_user where id = s.updatedBy)uname
+		<if test="userId != null and userId != ''">
+			,case when createdBy = #{userId} then true else false end remove
+		</if>
+		from dc_schedule s where  s.id=#{id}
+	</select>
+
+	<select id="selectScheduleList" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		,(select uname from dc_user where id = s.createdBy)uname
+		,case when status = 2 then '已删除' when <![CDATA[ startDate <= NOW() and endDate >= NOW() ]]>  then '进行中' when <![CDATA[ startDate >=  NOW() ]]>  then '预约' when  <![CDATA[ endDate <= NOW() ]]>  then '已结束' else '异常' end stateName
+
+		from dc_schedule s  where  0 = 0
+
+		<if test="lessonName != null and lessonName !='' ">
+			and lessonName like #{lessonName}
+		</if>
+		<if test="lessonType != null and lessonType !='' ">
+			<!-- and lessonType = #{lessonType} -->
+			and
+			<foreach collection="lessonType" item="id" open="(" close=")" separator="OR">
+				lessonType = #{id}
+			</foreach>
+		</if>
+		<if test="priority != null and priority !='' ">
+			and
+			<foreach collection="priority" item="id" open="(" close=")" separator="OR">
+				priority = #{id}
+			</foreach>
+		</if>
+
+		<if test="teacherId != null">
+
+			and ( s.id in (SELECT sc.scheduleId  from dc_schedule_user sc where sc.scheduleId = s.id
+			and (
+			<foreach collection="teacherId" item="id" open="(" close=")" separator="or">
+				sc.userId  = #{id}
+			</foreach>
+			)
+			))
+		</if>
+		<if test="createUserId != null and createUserId !='' ">
+			and createdBy = #{createUserId}
+		</if>
+		<if test="province != null and province !='' ">
+			and province = #{province}
+		</if>
+		<if test="city != null and city !='' ">
+			and city = #{city}
+		</if>
+		<if test="pcCompanyId != null and pcCompanyId !='' ">
+			and pcCompanyId = #{pcCompanyId}
+		</if>
+		<if test="startDate != null and startDate !=''  ">
+			and  (<![CDATA[ startDate >= #{startDate}   and   endDate <= #{endDate}   or ((
+			startDate <= #{endDate} and #{endDate} <= endDate ) or (startDate <= #{startDate} and #{startDate} <= endDate
+		) )]]> )
+		</if>
+
+		<if test="state != null and state !='' ">
+			and ( <![CDATA[  ${state} ]]>)
+		</if>
+		order by endDate desc
+		<if test="pageNo != null and pageSize != null and pageSize != '' and pageNo != '' ">
+			limit #{pageNo},#{pageSize}
+		</if>
+
+	</select>
+
+
+	<select id="getUserSchedule"  resultMap="BaseResultMap">
+		select   s.startDate,s.endDate,s.lessonName,s.province,s.city
+		from dc_schedule s  where
+		s.status = 0
+		and <![CDATA[ s.startDate >= now() ]]>
+		and ( s.id in (SELECT sc.scheduleId  from dc_schedule_user sc where sc.scheduleId = s.id and sc.userId  = #{id}))
+			order by s.startDate asc
+	</select>
+	<select id="getMapScheduleList" resultType="java.util.HashMap">
+		select
+		<include refid="Base_Column_List" />
+		,(select uname from dc_user where id = s.createdBy)uname
+		,case when status = 2 then '已删除' when <![CDATA[ startDate <= NOW() and endDate >= NOW() ]]>  then '进行中' when <![CDATA[ startDate >=  NOW() ]]>  then '预约' when  <![CDATA[ endDate <= NOW() ]]>  then '已结束' else '异常' end stateName
+
+		from dc_schedule s  where  0 = 0
+
+		<if test="lessonName != null and lessonName !='' ">
+			and lessonName like #{lessonName}
+		</if>
+		<if test="lessonType != null and lessonType !='' ">
+			<!-- and lessonType = #{lessonType} -->
+			and
+			<foreach collection="lessonType" item="id" open="(" close=")" separator="OR">
+				lessonType = #{id}
+			</foreach>
+		</if>
+		<if test="priority != null and priority !='' ">
+			and
+			<foreach collection="priority" item="id" open="(" close=")" separator="OR">
+				priority = #{id}
+			</foreach>
+		</if>
+		<if test="pcCompanyId != null and pcCompanyId !='' ">
+			and pcCompanyId = #{pcCompanyId}
+		</if>
+		<if test="teacherId != null">
+
+			and ( s.id in (SELECT sc.scheduleId  from dc_schedule_user sc where sc.scheduleId = s.id
+			and (
+			<foreach collection="teacherId" item="id" open="(" close=")" separator="or">
+				sc.userId  = #{id}
+			</foreach>
+			)
+			))
+		</if>
+		<if test="createUserId != null and createUserId !='' ">
+			and createdBy = #{createUserId}
+		</if>
+		<if test="province != null and province !='' ">
+			and province = #{province}
+		</if>
+		<if test="city != null and city !='' ">
+			and city = #{city}
+		</if>
+		<if test="startDate != null and startDate !=''  ">
+			and  (<![CDATA[ startDate >= #{startDate}   and   endDate <= #{endDate}   or ((
+			startDate <= #{endDate} and #{endDate} <= endDate ) or (startDate <= #{startDate} and #{startDate} <= endDate
+		) )]]> )
+		</if>
+
+		<if test="state != null and state !='' ">
+			and ( <![CDATA[  ${state} ]]>)
+		</if>
+		order by endDate desc
+		<if test="pageNo != null and pageSize != null and pageSize != '' and pageNo != '' ">
+			limit #{pageNo},#{pageSize}
+		</if>
+
+	</select>
+
+	<select id="getObjScheduleList" resultType="java.util.HashMap">
+		select
+		<include refid="Base_Column_List" />
+		,(select uname from dc_user where id = s.createdBy)uname
+		,case when status = 2 then '已删除' when <![CDATA[ startDate <= NOW() and endDate >= NOW() ]]>  then '进行中' when <![CDATA[ startDate >=  NOW() ]]>  then '预约' when  <![CDATA[ endDate <= NOW() ]]>  then '已结束' else '异常' end stateName
+
+		from dc_schedule s  where  0 = 0
+
+		<if test="lessonName != null and lessonName !='' ">
+			and lessonName like #{lessonName}
+		</if>
+		<if test="lessonType != null and lessonType !='' ">
+			<!-- and lessonType = #{lessonType} -->
+			and
+			<foreach collection="lessonType" item="id" open="(" close=")" separator="OR">
+				lessonType = #{id}
+			</foreach>
+		</if>
+		<if test="priority != null and priority !='' ">
+			and
+			<foreach collection="priority" item="id" open="(" close=")" separator="OR">
+				priority = #{id}
+			</foreach>
+		</if>
+		<if test="pcCompanyId != null and pcCompanyId !='' ">
+			and pcCompanyId = #{pcCompanyId}
+		</if>
+		<if test="teacherId != null">
+
+			and ( s.id in (SELECT sc.scheduleId  from dc_schedule_user sc where sc.scheduleId = s.id
+			and (
+			<foreach collection="teacherId" item="id" open="(" close=")" separator="or">
+				sc.userId  = #{id}
+			</foreach>
+			)
+			))
+		</if>
+		<if test="createUserId != null and createUserId !='' ">
+			and createdBy = #{createUserId}
+		</if>
+		<if test="province != null and province !='' ">
+			and province = #{province}
+		</if>
+		<if test="city != null and city !='' ">
+			and city = #{city}
+		</if>
+		<if test="startDate != null and startDate !=''  ">
+			and  (<![CDATA[ startDate >= #{startDate}   and   endDate <= #{endDate}   or ((
+			startDate <= #{endDate} and #{endDate} <= endDate ) or (startDate <= #{startDate} and #{startDate} <= endDate
+		) )]]> )
+		</if>
+
+		<if test="state != null and state !='' ">
+			and ( <![CDATA[  ${state} ]]>)
+		</if>
+		order by endDate desc  limit #{pageNo},#{pageSize}
+
+	</select>
+
+
+
+	<select id="getTotalSchedule" resultType="java.lang.Integer" >
+		select count(1) from dc_schedule s where 1=1
+
+		<if test="lessonName != null and lessonName !='' ">
+			and lessonName like #{lessonName}
+		</if>
+		<if test="lessonType != null and lessonType !='' ">
+			<!-- and lessonType = #{lessonType} -->
+			and
+			<foreach collection="lessonType" item="id" open="(" close=")" separator="OR">
+				lessonType = #{id}
+			</foreach>
+		</if>
+
+		<if test="priority != null and priority !='' ">
+			and
+			<foreach collection="priority" item="id" open="(" close=")" separator="OR">
+				priority = #{id}
+			</foreach>
+		</if>
+		<if test="teacherId != null">
+
+			and (s.id in (SELECT sc.scheduleId  from dc_schedule_user sc where sc.scheduleId = s.id
+			and (
+			<foreach collection="teacherId" item="id" open="(" close=")" separator="or">
+				sc.userId  = #{id}
+			</foreach>
+			)
+			))
+		</if>
+		<if test="pcCompanyId != null and pcCompanyId !='' ">
+			and pcCompanyId = #{pcCompanyId}
+		</if>
+		<if test="createUserId != null and createUserId !=''">
+			and createdBy = #{createUserId}
+		</if>
+		<if test="province != null and province !='' ">
+			and province = #{province}
+		</if>
+		<if test="city != null and city !='' ">
+			and city = #{city}
+		</if>
+		<if test="startDate != null and startDate !=''  ">
+			and  (<![CDATA[ startDate >= #{startDate}   and   endDate <= #{endDate}   or ((
+			startDate <= #{endDate} and #{endDate} <= endDate ) or (startDate <= #{startDate} and #{startDate} <= endDate
+		) )]]> )
+		</if>
+
+		<if test="state != null and state !='' ">
+
+			and ( <![CDATA[  ${state} ]]>)
+		</if>
+	</select>
+
+	<update id="updateScheduleById" parameterType="Schedule">
+		update dc_schedule
+		<set>
+			<if test="province != null and province !='' " >
+				province = #{province,jdbcType=CHAR},
+			</if>
+			<if test="city != null and city !='' " >
+				city = #{city,jdbcType=CHAR},
+			</if>
+			<if test="dayNum != null and dayNum != ''" >
+				dayNum = #{dayNum,jdbcType=INTEGER},
+			</if>
+			<if test="address != null and address !='' " >
+				address = #{address,jdbcType=VARCHAR},
+			</if>
+			<if test="lessonType != null and lessonType !='' " >
+				lessonType = #{lessonType},
+			</if>
+			<if test="lessonName != null and lessonName !='' " >
+				lessonName = #{lessonName,jdbcType=VARCHAR},
+			</if>
+			<if test="startDate != null and startDate !='' " >
+				startDate = #{startDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="endDate != null and endDate !='' " >
+				endDate = #{endDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="priority != null " >
+				priority = #{priority},
+			</if>
+			<if test="remind != null " >
+				remind = #{remind},
+			</if>
+			<if test="fullDay != null " >
+				fullDay = #{fullDay},
+			</if>
+			<if test="updatedBy != null " >
+				updatedBy = #{updatedBy},
+			</if>
+			<if test="scheduleDetail!=null">
+				ScheduleDetail = #{scheduleDetail,jdbcType=VARCHAR}
+			</if>
+			,companyId = #{companyId}
+			,updateDate = now()
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<update id="deleteScheduleById">
+		update dc_schedule
+		set status = 2,updatedBy = #{userId},updateDate = now()
+		where id = #{scheduleId,jdbcType=INTEGER}
+	</update>
+	<!-- 查询一个月的日程信息 -->
+	<select id="selectScheduleByOneMonth" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		,(select uname from dc_user where id = s.createdBy)uname
+		,case when createdBy = #{userId} then true else false end remove
+		,case  when <![CDATA[ startDate <= NOW() and endDate >= NOW() ]]>  then '进行中' when <![CDATA[ startDate >=  NOW() ]]>  then '预约' when  <![CDATA[ endDate <= NOW() ]]>  then '已结束' else '异常' end stateName
+		from dc_schedule s where status = 0
+
+		<if test="teacherId != null">
+			and ( s.id in (SELECT sc.scheduleId  from dc_schedule_user sc where sc.scheduleId = s.id
+			and (
+			<foreach collection="teacherId" item="id" open="(" close=")" separator="or">
+				sc.userId  = #{id}
+			</foreach>
+			)
+			))
+		</if>
+		<if test="pcCompanyId != null and pcCompanyId !='' ">
+			and pcCompanyId = #{pcCompanyId}
+		</if>
+		<if test="beginDate != null and beginDate !='' ">
+
+			and  (<![CDATA[ startDate >= #{beginDate} and endDate <= #{endDate} or ((
+			startDate <= #{endDate} and #{endDate} <= endDate ) or (startDate <= #{beginDate} and #{beginDate} <= endDate
+		) ) ]]>)
+		</if>
+		<if test="createdBy != null and createdBy != ''">
+			and s.createdBy = #{createdBy}
+		</if>
+		order by startDate asc,dayNum asc
+	</select>
+
+	<select id="getScheduleById" resultMap="BaseResultMap">
+		select
+		id,
+		province,city,dayNum,address,
+		lessonType,lessonName,startDate,endDate,remind,priority,fullDay,
+		createdBy,createDate,updatedBy,updateDate,scheduleDetail,status
+		from dc_schedule
+		where id = #{id}
+	</select>
+
+	<select id="checkUserTongXR"  resultType="java.util.HashMap">
+
+		select s.id,a.uname name,s.lessonName,s.startDate,s.endDate
+
+		from dc_schedule s
+
+		LEFT JOIN dc_schedule_user c on c.scheduleId = s.id
+		LEFT JOIN dc_user a on a.id = c.userId  and a.status = 0
+
+		where (s.status = 0 and s.id != #{scheduleId})  and<![CDATA[  s.startDate <= #{endDate} and  #{startDate} <= s.endDate  ]]>
+
+		<if test="list != null">
+			and (
+			<foreach collection="list" item="id" open="(" close=")" separator="OR">
+				c.userId = #{id}
+			</foreach>  )
+		</if>
+
+		GROUP BY a.id
+	</select>
+
+
+	<select id="getScheduleColleagueListBySid"  resultType="java.util.HashMap">
+
+		select a.id,a.uname name,a.userLogo from dc_schedule_user c LEFT JOIN dc_user a on a.id = c.userId where c.scheduleId = #{id}  and a.status = 0
+	</select>
+
+	<select id="getTeacherAll"  resultType="java.util.HashMap">
+
+		select u.uname adviserName,u.id,u.userLogo from dc_user u where u.status = 0 and u.platform = 1
+		<if test="adviserName != null and adviserName != ''">
+			and u.uname like concat('%',#{adviserName},'%')
+		</if>
+	</select>
+	<insert id="saveScheduleLogger"  parameterType="Schedule" useGeneratedKeys="true"
+			keyProperty="id">
+		insert into dc_schedule_logger(
+		id,scheduleId,province,city,address,
+		lessonType,lessonName,startDate,endDate,remind,priority,fullDay,
+		createdBy,createDate,action,colleagues,scheduleDetail
+		)values(
+		#{loggerId},#{id},#{province},#{city},#{address},
+		#{lessonType},#{lessonName},#{startDate},#{endDate},#{remind},#{priority},#{fullDay},
+		#{updatedBy},now(),#{stateName},#{teacherName},#{scheduleDetail}
+		)
+	</insert>
+
+	<select id="getScheduleLogger"  resultType="java.util.HashMap">
+
+		select id,province,city,address,
+		lessonType,lessonName,startDate,endDate,remind,priority,fullDay,
+		createdBy,createDate,action,colleagues,
+		(select uname from dc_user where id = sl.createdBy)uname
+		from dc_schedule_logger sl where scheduleId = #{scheduleId}
+		order by createDate desc
+
+		limit #{currentPageInt},#{pageSizeInt}
+	</select>
+
+	<select id="getScheduleLoggerTotal"  resultType="java.lang.Integer">
+
+		select count(1) from dc_schedule_logger where scheduleId = #{scheduleId}
+	</select>
+
+	<select id="getCompanyUserLike"  resultType="java.util.HashMap">
+		select
+		u.platform,u.uname,c.companyName,c.userType,c.province,c.city,c.channel,u.id userId,c.id companyId,c.userLevel,c.pcCompanyId
+		FROM dc_user u
+		LEFT  JOIN dc_user_company uc on uc.userId = u.id
+		LEFT JOIN dc_company c on c.id = uc.companyId
+		where u.status = 0
+		and u.uname like CONCAT('%',#{content},'%')
+		<if test="pcCompanyId != null and pcCompanyId !='' ">
+			and u.pcCompanyId = #{pcCompanyId}
+		</if>
+		union
+		select
+		u.platform,u.uname,c.companyName,c.userType,c.province,c.city,c.channel,u.id userId,c.id companyId,c.userLevel,c.pcCompanyId
+		FROM dc_company c
+		LEFT  JOIN dc_user_company uc on uc.companyId = c.id
+		LEFT JOIN dc_user u on u.id = uc.userId
+		where   c.status = 0
+		and c.companyName like CONCAT('%',#{content},'%')
+		<if test="pcCompanyId != null and pcCompanyId !='' ">
+			and c.pcCompanyId = #{pcCompanyId}
+		</if>
+		limit 0,100
+	</select>
+
+	<!-- 查询一个月的日程信息 -->
+	<select id="getScheduleXcx" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		<if test="userId != null and userId != ''">
+			,case  when <![CDATA[ startDate <= NOW() and endDate >= NOW() ]]>  then '进行中' when <![CDATA[ startDate >=  NOW() ]]>  then '预约' when  <![CDATA[ endDate <= NOW() ]]>  then '已结束' else '异常' end stateName
+			,(select count(*) from dc_schedule_user su where su.scheduleId = s.id and su.userId = #{userId})my
+		</if>
+
+		from dc_schedule s where status = 0
+
+		<if test="null != teacherId   and teacherId.size  > 0 ">
+			and ( s.id in (SELECT sc.scheduleId  from dc_schedule_user sc where sc.scheduleId = s.id
+			and (
+			<foreach collection="teacherId" item="id" open="(" close=")" separator="or">
+				sc.userId  = #{id}
+			</foreach>
+			)
+			))
+		</if>
+		<if test="pcCompanyId != null and pcCompanyId !='' ">
+			and pcCompanyId = #{pcCompanyId}
+		</if>
+		<if test="beginDate != null and beginDate !='' ">
+
+			and  (<![CDATA[ startDate >= #{beginDate} and endDate <= #{endDate} or ((
+			startDate <= #{endDate} and #{endDate} <= endDate ) or (startDate <= #{beginDate} and #{beginDate} <= endDate
+		) ) ]]>)
+		</if>
+		<if test="createdBy != null and createdBy != ''">
+			and s.createdBy= #{createdBy}
+		</if>
+		order by startDate asc,dayNum asc
+	</select>
+
+	<select id="getXcxScheduleDynamic"  resultType="java.util.HashMap">
+
+		select
+		*,u.uname,u.mobile
+		from dc_xcx_user_action s
+		left join dc_user u on u.id = s.createdBy
+		where s.actionUserId = #{userId}
+		<if test="ttype != null and ttype != '' ">
+			<if test="ttype == 'showStatus'">
+				and s.readStatus = 0 and s.showStatus = 0
+			</if>
+			<if test="ttype == 'readStatus'">
+				and s.readStatus = 0
+			</if>
+			<if test="ttype != 'readStatus' and ttype != 'showStatus'">
+				and s.actionType = #{ttype}
+			</if>
+		</if>
+		ORDER BY s.readStatus,s.createDate desc
+		limit #{pageNo},#{pageSize}
+	</select>
+
+	<select id="getXcxScheduleDynamicTotal" resultType="java.lang.Integer" >
+		select count(*) from dc_xcx_user_action s
+		where s.actionUserId = #{userId}
+		<if test="ttype != null and ttype != ''">
+			<if test="ttype == 'showStatus'">
+				and s.readStatus = 0 and s.showStatus = 0
+			</if>
+			<if test="ttype == 'readStatus'">
+				and s.readStatus = 0
+			</if>
+			<if test="ttype != 'readStatus' and ttype != 'showStatus'">
+				and s.actionType = #{ttype}
+			</if>
+		</if>
+	</select>
+
+	<select id="getXcxScheduleLoggerById"  resultMap="BaseResultMap">
+
+		select sl.scheduleId id,province,city,address,
+		left(startDate,10)startDate,
+		left(endDate,10)endDate,
+		right(startDate,5)startTime,
+		right(endDate,5)endTime,
+		lessonType,lessonName,remind,priority,fullDay,
+		createdBy,createDate,sl.action,colleagues,scheduleDetail,
+		(select uname from dc_user where id = sl.createdBy)uname,
+		case when ((select count(*) from dc_schedule_logger sl where sl.scheduleId = sl.scheduleId) = 1)  then false
+		when ((select dsl.id from dc_schedule_logger dsl where dsl.scheduleId = sl.scheduleId ORDER BY dsl.createDate desc limit 1) = #{id}) then false
+		else true end isNews
+		from dc_schedule_logger sl where id = #{id}
+		order by createDate desc
+	</select>
+
+
+
+	<select id="getScheduleTypeList"  resultType="java.util.HashMap">
+
+		select SUM(cnt)value,${type} name from (select ${type},dayNum,(
+		select COUNT(*)
+		<if test = "ttype !=null and ttype =='tian'">*dayNum</if>
+		from dc_schedule_user sc where  sc.scheduleId = s.id
+		<if test="null != userList   and userList.size  > 0">
+			and (
+			<foreach collection="userList" item="id"  separator="or">
+				sc.userId  = #{id}
+			</foreach>
+			)
+		</if>
+		)cnt  from dc_schedule s where status = 0
+		<if test="stateDate != null and stateDate!=''">
+			and  (<![CDATA[ startDate >= #{stateDate} and endDate <= #{endDate} or ((
+				startDate <= #{endDate} and #{endDate} <= endDate ) or (startDate <= #{stateDate} and #{stateDate} <= endDate
+				) ) ]]>)
+		</if>
+		<if test="pcCompanyId != null and pcCompanyId !='' ">
+			and pcCompanyId = #{pcCompanyId}
+		</if>
+		)aa where cnt > 0  GROUP BY ${type} ORDER BY ${type} desc
+	</select>
+	<select id="getScheduleComp"  resultType="java.util.HashMap">
+
+		select name,SUM(cnt)value from(
+		select count(*)<if test = "ttype !=null and ttype =='tian'">*dayNum</if> cnt,
+		CASE when ${type} is null or ${type} = '' then '其他'  ELSE ${type} end name
+		from dc_schedule s
+		LEFT JOIN dc_company c on c.id = s.companyId
+		LEFT JOIN dc_schedule_user sc on sc.scheduleId = s.id
+		where s.status = 0 and s.companyId is not null and companyId != ''
+		<if test="stateDate != null and stateDate!=''">
+			and  ((<![CDATA[ startDate >= #{stateDate} and endDate <= #{endDate}) or (startDate <= #{endDate} and #{endDate} <= endDate ) or (startDate <= #{stateDate} and #{stateDate} <= endDate))  ]]>
+		</if>
+		<if test="pcCompanyId != null and pcCompanyId !='' ">
+			and s.pcCompanyId = #{pcCompanyId}
+		</if>
+		<if test="null != userList   and userList.size  > 0 " >
+			and (
+			<foreach collection="userList" item="id"  separator="or">
+				sc.userId  = #{id}
+			</foreach>
+			)
+		</if>
+		GROUP BY s.id
+		)aa where cnt > 0  GROUP BY name ORDER BY name
+		<if test="type != null and type == 'userType'">desc</if>
+	</select>
+
+	<select id="getScheduleTitle"  resultType="java.util.HashMap">
+
+		select ${type} title from  dc_schedule s
+		<if test="null != userList   and userList.size  > 0 " >
+			INNER JOIN dc_schedule_user sc on sc.scheduleId = s.id
+			and (
+			<foreach collection="userList" item="id"  separator="or">
+				sc.userId  = #{id}
+			</foreach>
+			)
+		</if>
+		where s.status = 0
+		<if test="stateDate != null and stateDate!=''">
+			and  ((<![CDATA[ startDate >= #{stateDate} and endDate <= #{endDate}) or (startDate <= #{endDate} and #{endDate} <= endDate ) or (startDate <= #{stateDate} and #{stateDate} <= endDate))  ]]>
+		</if>
+		<if test="pcCompanyId != null and pcCompanyId !='' ">
+			and s.pcCompanyId = #{pcCompanyId}
+		</if>
+		GROUP BY ${type} ORDER BY ${type} desc
+	</select>
+
+	<select id="getScheduleCompTitle"  resultType="java.util.HashMap">
+
+		select
+		CASE when ${type} is null or ${type} = '' then '其他'  ELSE ${type} end title
+		from  dc_schedule s
+		LEFT JOIN dc_company c on c.id = s.companyId
+		<if test="null != userList   and userList.size  > 0 " >
+			INNER JOIN dc_schedule_user sc on sc.scheduleId = s.id
+			and (
+			<foreach collection="userList" item="id"  separator="or">
+				sc.userId  = #{id}
+			</foreach>
+			)
+		</if>
+		where s.companyId is not null and companyId != '' and s.status = 0
+		<if test="stateDate != null and stateDate!=''">
+			and  ((<![CDATA[ startDate >= #{stateDate} and endDate <= #{endDate}) or (startDate <= #{endDate} and #{endDate} <= endDate ) or (startDate <= #{stateDate} and #{stateDate} <= endDate))  ]]>
+		</if>
+		<if test="pcCompanyId != null and pcCompanyId !='' ">
+			and s.pcCompanyId = #{pcCompanyId}
+		</if>
+		GROUP BY ${type} ORDER BY ${type} desc
+	</select>
+
+	<select id="getWriteExcelScheduleTypeList"  resultType="java.util.HashMap">
+
+		select ${type} name,(select uname from dc_user where id = sc.userId)uname,sc.userId
+		<if test = "ttype !=null and ttype =='tian'">,sum(s.dayNum)</if>
+		<if test = "ttype !=null and ttype =='ci'">,COUNT(*)</if>value
+		from dc_schedule s LEFT JOIN dc_schedule_user sc on sc.scheduleId = s.id
+		where status = 0
+		<if test="null != userList   and userList.size  > 0">
+			and (
+			<foreach collection="userList" item="id"  separator="or">
+				sc.userId  = #{id}
+			</foreach>
+			)
+		</if>
+		<if test="stateDate != null and stateDate!=''">
+			and  (<![CDATA[ startDate >= #{stateDate} and endDate <= #{endDate} or ((
+				startDate <= #{endDate} and #{endDate} <= endDate ) or (startDate <= #{stateDate} and #{stateDate} <= endDate
+				) ) ]]>)
+		</if>
+		<if test="pcCompanyId != null and pcCompanyId !='' ">
+			and s.pcCompanyId = #{pcCompanyId}
+		</if>
+		GROUP BY ${type},sc.userId ORDER BY sc.userId,${type} desc
+	</select>
+
+	<select id="getWriteExcelScheduleComp"  resultType="java.util.HashMap">
+		select
+		(select uname from dc_user where id = sc.userId)uname,sc.userId
+		<if test = "ttype !=null and ttype =='tian'">,sum(s.dayNum)</if>
+		<if test = "ttype !=null and ttype =='ci'">,COUNT(*)</if> value,
+		CASE when ${type} is null or ${type} = '' then '其他'  ELSE ${type} end name
+		from dc_schedule s
+		LEFT JOIN dc_company c on c.id = s.companyId
+		LEFT JOIN dc_schedule_user sc on sc.scheduleId = s.id
+		where s.companyId is not null and companyId != '' and s.status = 0
+		<if test="null != userList   and userList.size  > 0">
+			and (
+			<foreach collection="userList" item="id"  separator="or">
+				sc.userId  = #{id}
+			</foreach>
+			)
+		</if>
+		<if test="stateDate != null and stateDate!=''">
+			and  (<![CDATA[ startDate >= #{stateDate} and endDate <= #{endDate} or ((
+					startDate <= #{endDate} and #{endDate} <= endDate ) or (startDate <= #{stateDate} and #{stateDate} <= endDate
+					) ) ]]>)
+		</if>
+		<if test="pcCompanyId != null and pcCompanyId !='' ">
+			and s.pcCompanyId = #{pcCompanyId}
+		</if>
+		GROUP BY sc.userId,${type} ORDER BY sc.userId,${type} desc
+	</select>
+	<select id="getWriteExcelCompTongJi"  resultType="java.util.HashMap">
+		select SUM(cnt)value,userId from (
+		select
+		<if test = "ttype !=null and ttype =='tian'">sum(s.dayNum)</if>
+		<if test = "ttype !=null and ttype =='ci'">count(*)</if>cnt,sc.userId
+		from dc_schedule s
+		LEFT JOIN dc_company c on c.id = s.companyId
+		LEFT JOIN dc_schedule_user sc on sc.scheduleId = s.id
+		where s.companyId is not null and companyId != '' and s.status = 0
+
+		<if test="null != userList   and userList.size  > 0">
+			and (
+			<foreach collection="userList" item="id"  separator="or">
+				sc.userId  = #{id}
+			</foreach>
+			)
+		</if>
+		<if test="stateDate != null and stateDate!=''">
+			and  (<![CDATA[ startDate >= #{stateDate} and endDate <= #{endDate} or ((
+						startDate <= #{endDate} and #{endDate} <= endDate ) or (startDate <= #{stateDate} and #{stateDate} <= endDate
+						) ) ]]>)
+		</if>
+		<if test="pcCompanyId != null and pcCompanyId !='' ">
+			and s.pcCompanyId = #{pcCompanyId}
+		</if>
+		GROUP BY sc.userId,${type}
+		) aa GROUP BY userId
+	</select>
+
+	<select id="getWriteExcelScheduleTongJi"  resultType="java.util.HashMap">
+		select
+		sum(cnt) value,userId
+		from (
+		select sc.userId,
+		<if test = "ttype !=null and ttype =='tian'">sum(s.dayNum)</if>
+		<if test = "ttype !=null and ttype =='ci'">COUNT(*)</if>cnt
+		from dc_schedule s
+		LEFT JOIN dc_schedule_user sc on sc.scheduleId = s.id
+		where status = 0
+		<if test="null != userList   and userList.size  > 0">
+			and (
+			<foreach collection="userList" item="id"  separator="or">
+				sc.userId  = #{id}
+			</foreach>
+			)
+		</if>
+		<if test="stateDate != null and stateDate!=''">
+			and  (<![CDATA[ startDate >= #{stateDate} and endDate <= #{endDate} or ((
+									startDate <= #{endDate} and #{endDate} <= endDate ) or (startDate <= #{stateDate} and #{stateDate} <= endDate
+									) ) ]]>)
+		</if>
+		<if test="pcCompanyId != null and pcCompanyId !='' ">
+			and s.pcCompanyId = #{pcCompanyId}
+		</if>
+		GROUP BY ${type},sc.userId
+		)aa
+		GROUP BY userId
+	</select>
+</mapper>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.MeetingFieldMapper">
+    <insert id="insertMeetingField">
+        INSERT INTO dc_meeting_field
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null"> id, </if>
+            <if test="meetingId != null"> meetingId, </if>
+            <if test="field != null"> field, </if>
+            <if test="fieldName != null"> fieldName, </if>
+            <if test="isRequred != null"> isRequred, </if>
+            <if test="createdBy != null"> createdBy, </if>
+            <if test="createDate != null"> createDate, </if>
+            <if test="updatedBy != null"> updatedBy, </if>
+            <if test="updateDate != null"> updateDate, </if>
+            <if test="status != null"> status, </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null"> #{id}, </if>
+            <if test="meetingId != null"> #{meetingId}, </if>
+            <if test="field != null"> #{field}, </if>
+            <if test="fieldName != null"> #{fieldName}, </if>
+            <if test="isRequred != null"> #{isRequred}, </if>
+            <if test="createdBy != null"> #{createdBy}, </if>
+            <if test="createDate != null"> #{createDate}, </if>
+            <if test="updatedBy != null"> #{updatedBy}, </if>
+            <if test="updateDate != null"> #{updateDate}, </if>
+            <if test="status != null"> #{status}, </if>
+        </trim>
+    </insert>
+
+
+    <update id="updateMeetingField">
+        UPDATE dc_meeting_field
+        <set>
+            <if test="id != null"> id = #{id}, </if>
+            <if test="meetingId != null"> meetingId = #{meetingId}, </if>
+            <if test="field != null"> field = #{field}, </if>
+            <if test="fieldName != null"> fieldName = #{fieldName}, </if>
+            <if test="isRequred != null"> isRequred = #{isRequred}, </if>
+            <if test="createdBy != null"> createdBy = #{createdBy}, </if>
+            <if test="createDate != null"> createDate = #{createDate}, </if>
+            <if test="updatedBy != null"> updatedBy = #{updatedBy}, </if>
+            <if test="updateDate != null"> updateDate = #{updateDate}, </if>
+            <if test="status != null"> status = #{status} </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+</mapper>
+
+
+

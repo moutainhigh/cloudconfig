@@ -1,0 +1,183 @@
+package com.xkd.controller;
+
+import com.xkd.exception.GlobalException;
+import com.xkd.model.Meeting;
+import com.xkd.model.ResponseConstants;
+import com.xkd.model.ResponseDbCenter;
+import com.xkd.model.SpreadSetting;
+import com.xkd.service.SpreadService;
+import com.xkd.utils.DateUtils;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.models.auth.In;
+import org.apache.commons.collections4.map.HashedMap;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+@Api(description = "营销推广接口")
+@Controller
+@RequestMapping("/spread")
+@Transactional
+public class SpreadController extends  BaseController{
+
+    @Autowired
+    private SpreadService spreadService;
+
+
+    @ApiOperation(value = "查询邀请函设置信息")
+    @ResponseBody
+    @RequestMapping(value="/selectSpreadSettings",method = {RequestMethod.POST})
+    public ResponseDbCenter selectSpreadSettings(HttpServletRequest req, HttpServletResponse rsp,
+                                                 @ApiParam(value = "邀请码标题", required = false) @RequestParam(required = false) String inviteTitle,
+                                                 @ApiParam(value = "商品名称", required = false) @RequestParam(required = false) String productionName,
+                                                 @ApiParam(value = "currentPage", required = false) @RequestParam(required = false) String currentPage,
+                                                 @ApiParam(value = "pageSize", required = false) @RequestParam(required = false) String pageSize
+                                                 ) throws  Exception{
+
+        if(StringUtils.isBlank(currentPage) || StringUtils.isBlank(pageSize)){
+            currentPage = "1";
+            pageSize = "10";
+        }
+
+        int currentPageInt = (Integer.parseInt(currentPage)-1)*Integer.parseInt(pageSize);
+        int pageSizeInt = Integer.parseInt(pageSize);
+
+        try{
+
+            Map<String,Object> paramMap = new HashedMap<>();
+            paramMap.put("inviteTitle",inviteTitle);
+            paramMap.put("productionName",productionName);
+            paramMap.put("currentPage",currentPageInt);
+            paramMap.put("pageSize",pageSizeInt);
+
+            List<SpreadSetting> list = spreadService.selectSpreadSettings(paramMap);
+            Integer num = spreadService.selectSpreadSettingsTotal(paramMap);
+
+            ResponseDbCenter responseDbCenter = new ResponseDbCenter();
+            responseDbCenter.setResModel(list);
+            responseDbCenter.setTotalRows(num.intValue()+"");
+            return responseDbCenter;
+
+        }catch (Exception e){
+            log.error("异常栈:",e);
+            throw new GlobalException(ResponseConstants.FUNC_SERVERERROR);
+        }
+
+
+    }
+
+    @ApiOperation(value = "保存邀请函设置信息")
+    @ResponseBody
+    @RequestMapping(value="/saveSpreadSetting",method = {RequestMethod.POST})
+    public ResponseDbCenter saveSpreadSetting(HttpServletRequest req, HttpServletResponse rsp,
+                                                 @ApiParam(value = "token", required = false) @RequestParam(required = false) String token,
+                                                 @ApiParam(value = "邀请码标题", required = false) @RequestParam(required = false) String inviteTitle,
+                                                 @ApiParam(value = "邀请码数量", required = false) @RequestParam(required = false) String initSaving,
+                                                 @ApiParam(value = "有效时间（开始时间）", required = false) @RequestParam(required = false) String startTime,
+                                                 @ApiParam(value = "有效时间（结束时间）", required = false) @RequestParam(required = false) String endTime,
+                                                 @ApiParam(value = "商品类别ID(在数据字典中配)", required = false) @RequestParam(required = false) String productionTypeId,
+                                                 @ApiParam(value = "商品名称", required = false) @RequestParam(required = false) String productionName,
+                                                 @ApiParam(value = "商品价格(元)", required = false) @RequestParam(required = false) String productionPrice,
+                                                 @ApiParam(value = "佣金比例（10%）", required = false) @RequestParam(required = false) String getRate
+                                                 ) throws  Exception{
+
+
+        String userId = req.getSession().getAttribute(token).toString();
+
+        try{
+
+            SpreadSetting spreadSetting = new SpreadSetting();
+            spreadSetting.setId(UUID.randomUUID().toString());
+            spreadSetting.setCreateDate(new Date());
+            spreadSetting.setCreatedBy(userId);
+            spreadSetting.setUpdatedBy(userId);
+            spreadSetting.setUpdateDate(new Date());
+            spreadSetting.setStartTime(startTime);
+            spreadSetting.setEndTime(endTime);
+            spreadSetting.setGetRate(getRate);
+            spreadSetting.setInitSaving(Integer.parseInt(initSaving));
+            spreadSetting.setSaving(Integer.parseInt(initSaving));
+            spreadSetting.setProductionName(productionName);
+            spreadSetting.setInviteTitle(inviteTitle);
+            spreadSetting.setProductionTypeId(productionTypeId);
+            spreadSetting.setProductionPrice(productionPrice);
+            spreadSetting.setStatus(0);
+            spreadSetting.setVflag(0);
+
+            spreadService.insertSpreadSetting(spreadSetting);
+
+        }catch (Exception e){
+            log.error("异常栈:",e);
+            throw new GlobalException(ResponseConstants.FUNC_SERVERERROR);
+        }
+
+        ResponseDbCenter responseDbCenter = new ResponseDbCenter();
+        return responseDbCenter;
+    }
+
+    @ApiOperation(value = "修改邀请函设置信息")
+    @ResponseBody
+    @RequestMapping(value="/updateSpreadSetting",method = {RequestMethod.POST})
+    public ResponseDbCenter updateSpreadSetting(HttpServletRequest req, HttpServletResponse rsp,
+                                                 @ApiParam(value = "token", required = false) @RequestParam(required = false) String token,
+                                                 @ApiParam(value = "id", required = false) @RequestParam(required = false) String id,
+                                                 @ApiParam(value = "邀请码标题", required = false) @RequestParam(required = false) String inviteTitle,
+                                                 @ApiParam(value = "邀请码数量", required = false) @RequestParam(required = false) String initSaving,
+                                                 @ApiParam(value = "有效时间（开始时间）", required = false) @RequestParam(required = false) String startTime,
+                                                 @ApiParam(value = "有效时间（结束时间）", required = false) @RequestParam(required = false) String endTime,
+                                                 @ApiParam(value = "商品类别ID(在数据字典中配)", required = false) @RequestParam(required = false) String productionTypeId,
+                                                 @ApiParam(value = "商品名称", required = false) @RequestParam(required = false) String productionName,
+                                                 @ApiParam(value = "商品价格(元)", required = false) @RequestParam(required = false) String productionPrice,
+                                                 @ApiParam(value = "佣金比例（10%）", required = false) @RequestParam(required = false) String getRate,
+                                                 @ApiParam(value = "启用禁用", required = false) @RequestParam(required = false) String vflag
+
+    ) throws  Exception{
+
+        if(StringUtils.isBlank(id)){
+            return ResponseConstants.MISSING_PARAMTER;
+        }
+
+        String userId = req.getSession().getAttribute(token).toString();
+        try{
+
+            SpreadSetting spreadSetting = new SpreadSetting();
+            spreadSetting.setId(id);
+            spreadSetting.setUpdatedBy(userId);
+            spreadSetting.setUpdateDate(new Date());
+            spreadSetting.setStartTime(startTime);
+            spreadSetting.setEndTime(endTime);
+            spreadSetting.setGetRate(getRate);
+            spreadSetting.setInitSaving(Integer.parseInt(initSaving));
+            spreadSetting.setProductionName(productionName);
+            spreadSetting.setInviteTitle(inviteTitle);
+            spreadSetting.setProductionTypeId(productionTypeId);
+            spreadSetting.setProductionPrice(productionPrice);
+            spreadSetting.setVflag(Integer.parseInt(vflag));
+
+            spreadService.updateSpreadSetting(spreadSetting);
+
+        }catch (Exception e){
+            log.error("异常栈:",e);
+            throw new GlobalException(ResponseConstants.FUNC_SERVERERROR);
+        }
+
+        ResponseDbCenter responseDbCenter = new ResponseDbCenter();
+        return responseDbCenter;
+    }
+
+
+}

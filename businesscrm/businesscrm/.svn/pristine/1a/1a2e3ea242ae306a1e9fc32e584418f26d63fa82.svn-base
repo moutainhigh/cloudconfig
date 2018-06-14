@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.SysRoleOperateDao">
+
+    
+
+     <insert id="insertList"  parameterType="java.util.List">
+        INSERT INTO dc_sys_role_operate(
+	       	id,
+	        roleId,
+	        operateId
+        )VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.id},
+            #{item.roleId},
+            #{item.operateId}
+            )
+        </foreach>
+    </insert>
+
+
+
+
+
+    <delete id="deleteByRoleId">
+        DELETE FROM dc_sys_role_operate where roleId = #{roleId}
+    </delete>
+    
+    <delete id="deleteByOperateId">
+    	delete from dc_sys_role_operate where operateId=#{operateId}
+    </delete>
+    
+    <select id="selectOpereateIdsByRoleId" resultType="string">
+		SELECT
+			o.operateId
+		FROM
+			dc_sys_role_operate o
+		WHERE
+			o.roleId = #{roleId}
+    </select>
+    
+    <select id="selectOperateByRoleId" resultType="com.xkd.model.Operate">
+    		SELECT
+			o.id,
+			o.menuId,
+			o.operateCode,
+			o.operateName,
+			o.url
+		FROM
+			dc_sys_role_operate u
+		INNER JOIN dc_sys_operate o ON u.operateId = o.id
+		WHERE
+			u.roleId = #{roleId}
+    </select>
+    
+    
+    <select id="copyOperatesToNewRole">
+    	insert into dc_sys_role_operate  select UUID(),#{newRoleId},o.operateId from dc_sys_role_operate o where o.roleId=#{fromRoleId}
+    </select>
+    
+    
+</mapper>

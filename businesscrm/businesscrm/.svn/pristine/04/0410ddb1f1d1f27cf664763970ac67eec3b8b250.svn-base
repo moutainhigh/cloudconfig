@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xkd.mapper.ProjectMapper">
+
+  
+  <select id="selectProjectById"  resultType="java.util.Map">
+            select
+                          pr.id,
+                          pr.projectCode,
+                          pr.projectName,
+                          pr.projectTypeId,
+                          pr.startDate,
+                          pr.endDate,
+                          pr.address,
+                          pr.feel,
+                          pr.projectManager,
+                          pr.dutyPerson,
+                          pr.createdBy,
+                          pr.createDate,
+                          pr.updatedBy,
+                          pr.updateDate,
+                          pr.province,
+                          pr.city,
+                          pr.county,
+                          pr.departmentTypeId,
+                          pr.serveObjectTypeId,
+                          pr.customerTypeId,
+                          pr.status,
+                          c.companyName,
+                          di.value as projectType,
+                          di2.value as serveObjectType,
+                          di3.value as departmentType,
+                          di4.value as customerType
+                  from dc_project  pr left join
+                  dc_company c   on pr.companyId=c.id
+                  left join dc_dictionary di on pr.projectTypeId=di.id
+                  left join dc_dictionary di2 on pr.serveObjectTypeId=di2.id
+                  left join dc_dictionary di3 on pr.departmentTypeId=di3.id
+                  left join dc_dictionary di4 on pr.customerTypeId=di4.id
+                  where  pr.status=0
+                         and pr.id=#{id}
+  </select>
+
+    <insert id="insertProject">
+        INSERT INTO dc_project
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null"> id, </if>
+            <if test="pcCompanyId != null"> pcCompanyId, </if>
+            <if test="companyId != null"> companyId, </if>
+            <if test="projectCode != null"> projectCode, </if>
+            <if test="projectName != null"> projectName, </if>
+            <if test="projectTypeId != null"> projectTypeId, </if>
+            <if test="startDate != null"> startDate, </if>
+            <if test="endDate != null"> endDate, </if>
+            <if test="address != null"> address, </if>
+            <if test="feel != null"> feel, </if>
+            <if test="projectManager != null"> projectManager, </if>
+            <if test="dutyPerson != null"> dutyPerson, </if>
+            <if test="createdBy != null"> createdBy, </if>
+            <if test="updatedBy != null"> updatedBy, </if>
+            <if test="province != null"> province, </if>
+            <if test="city != null"> city, </if>
+            <if test="county != null"> county, </if>
+            <if test="departmentTypeId != null"> departmentTypeId, </if>
+            <if test="serveObjectTypeId != null"> serveObjectTypeId, </if>
+            <if test="customerTypeId != null"> customerTypeId, </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null"> #{id}, </if>
+            <if test="pcCompanyId != null"> #{pcCompanyId}, </if>
+            <if test="companyId != null"> #{companyId}, </if>
+            <if test="projectCode != null"> #{projectCode}, </if>
+            <if test="projectName != null"> #{projectName}, </if>
+            <if test="projectTypeId != null"> #{projectTypeId}, </if>
+            <if test="startDate != null"> #{startDate}, </if>
+            <if test="endDate != null"> #{endDate}, </if>
+            <if test="address != null"> #{address}, </if>
+            <if test="feel != null"> #{feel}, </if>
+            <if test="projectManager != null"> #{projectManager}, </if>
+            <if test="dutyPerson != null"> #{dutyPerson}, </if>
+            <if test="createdBy != null"> #{createdBy}, </if>
+            <if test="updatedBy != null"> #{updatedBy}, </if>
+            <if test="province != null"> #{province}, </if>
+            <if test="city != null"> #{city}, </if>
+            <if test="county != null"> #{county}, </if>
+            <if test="departmentTypeId != null"> #{departmentTypeId}, </if>
+            <if test="serveObjectTypeId != null"> #{serveObjectTypeId}, </if>
+            <if test="customerTypeId != null"> #{customerTypeId}, </if>
+        </trim>
+    </insert>
+
+
+    <update id="updateProject">
+        UPDATE dc_project
+        <set>
+            <if test="id != null"> id = #{id}, </if>
+            <if test="pcCompanyId != null"> pcCompanyId = #{pcCompanyId}, </if>
+            <if test="companyId != null"> companyId = #{companyId}, </if>
+            <if test="projectCode != null"> projectCode = #{projectCode}, </if>
+            <if test="projectName != null"> projectName = #{projectName}, </if>
+            <if test="projectTypeId != null"> projectTypeId = #{projectTypeId}, </if>
+            <if test="startDate != null"> startDate = #{startDate}, </if>
+            <if test="endDate != null"> endDate = #{endDate}, </if>
+            <if test="address != null"> address = #{address}, </if>
+            <if test="feel != null"> feel = #{feel}, </if>
+            <if test="projectManager != null"> projectManager = #{projectManager}, </if>
+            <if test="dutyPerson != null"> dutyPerson = #{dutyPerson}, </if>
+            <if test="createdBy != null"> createdBy = #{createdBy}, </if>
+            <if test="updatedBy != null"> updatedBy = #{updatedBy}, </if>
+            <if test="province != null"> province = #{province}, </if>
+            <if test="city != null"> city = #{city}, </if>
+            <if test="county != null"> county = #{county}, </if>
+            <if test="departmentTypeId != null"> departmentTypeId = #{departmentTypeId}, </if>
+            <if test="serveObjectTypeId != null"> serveObjectTypeId = #{serveObjectTypeId}, </if>
+            <if test="customerTypeId != null"> customerTypeId = #{customerTypeId} </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+
+
+  
+      <select id="selectProjectsByContent"  resultType="java.util.Map">
+          select
+                  pr.id,
+                  pr.projectCode,
+                  pr.projectName,
+                  pr.projectTypeId,
+                  pr.startDate,
+                  pr.endDate,
+                  pr.address,
+                  pr.feel,
+                  pr.projectManager,
+                  pr.dutyPerson,
+                  pr.createdBy,
+                  pr.createDate,
+                  pr.updatedBy,
+                  pr.updateDate,
+                  pr.province,
+                  pr.city,
+                  pr.county,
+                  pr.departmentTypeId,
+                  pr.serveObjectTypeId,
+                  pr.customerTypeId,
+                  pr.status,
+                  c.companyName,
+                  di.value as projectType,
+                  di2.value as serveObjectType,
+                  di3.value as departmentType,
+                  di4.value as customerType
+          from dc_project  pr left join
+          dc_company c   on pr.companyId=c.id
+          left join dc_dictionary di on pr.projectTypeId=di.id
+          left join dc_dictionary di2 on pr.serveObjectTypeId=di2.id
+          left join dc_dictionary di3 on pr.departmentTypeId=di3.id
+          left join dc_dictionary di4 on pr.customerTypeId=di4.id
+          where  pr.status=0
+          and c.departmentId in
+          <foreach collection="departmentIdList"  item="departmentId" index="" separator=","  open="(" close=")" >
+              #{departmentId}
+          </foreach>
+        <if test="content != null and content !=''">
+          and ( pr.projectManager like CONCAT('%',#{content},'%')
+                or  pr.projectName like CONCAT('%',#{content},'%')
+                or  pr.projectCode like CONCAT('%',#{content},'%')
+            )
+        </if>
+        <if test="projectCode != null and projectCode !=''">
+            and pr.projectCode = #{projectCode}
+        </if>
+        <if test="startDate != null">
+            and pr.startDate &gt;= #{startDate}
+        </if>
+        <if test="endDate != null">
+            and pr.startDate &lt;= #{endDate}
+        </if>
+        <if test="projectName != null and projectName !=''">
+          and pr.projectName like CONCAT('%',#{projectName},'%')
+        </if>
+          <if test="projectTypeId != null and projectTypeId !=''">
+              and pr.projectTypeId = #{projectTypeId}
+          </if>
+        <if test="province != null and province !=''">
+          and pr.province = #{province}
+        </if>
+        <if test="city != null and city !=''">
+          and pr.city = #{city}
+        </if>
+          <if test="county != null and county !=''">
+              and pr.county = #{county}
+          </if>
+        <if test="customerTypeId != null and customerTypeId !=''">
+          and pr.customerTypeId = #{customerTypeId}
+        </if>
+        <if test="serveObjectTypeId != null and serveObjectTypeId !=''">
+          and pr.serveObjectTypeId = #{serveObjectTypeId}
+        </if>
+        <if test="departmentTypeId != null and departmentTypeId !=''">
+          and pr.departmentTypeId = #{departmentTypeId}
+        </if>
+        <if test="projectManager != null and projectManager !=''">
+          and pr.projectManager like CONCAT('%',#{projectManager},'%')
+        </if>
+
+          <if test="companyId != null and companyId !=''">
+              and pr.companyId = #{companyId}
+          </if>
+        order by pr.updateDate desc
+
+        limit #{start},#{pageSize}
+
+      </select>
+
+
+  
+       <select id="selectTotalProjectsByContent" resultType="java.lang.Integer">
+                   select
+                       count(1)
+                   from dc_project  pr left join
+                   dc_company c   on pr.companyId=c.id
+                   left join dc_dictionary di on pr.projectTypeId=di.id
+                   left join dc_dictionary di2 on pr.serveObjectTypeId=di2.id
+                   left join dc_dictionary di3 on pr.departmentTypeId=di3.id
+                   left join dc_dictionary di4 on pr.customerTypeId=di4.id
+                   where  pr.status=0
+                   and c.departmentId in
+                   <foreach collection="departmentIdList"  item="departmentId" index="" separator=","  open="(" close=")" >
+                       #{departmentId}
+                   </foreach>
+                   <if test="content != null and content !=''">
+                       and ( pr.projectManager like CONCAT('%',#{content},'%')
+                       or  pr.projectName like CONCAT('%',#{content},'%')
+                       or  pr.projectCode like CONCAT('%',#{content},'%')
+                       )
+                   </if>
+                   <if test="projectCode != null and projectCode !=''">
+                       and pr.projectCode = #{projectCode}
+                   </if>
+                   <if test="startDate != null">
+                       and pr.startDate &gt;= #{startDate}
+                   </if>
+                   <if test="endDate != null">
+                       and pr.startDate &lt;= #{endDate}
+                   </if>
+                   <if test="projectName != null and projectName !=''">
+                       and pr.projectName like CONCAT('%',#{projectName},'%')
+                   </if>
+                   <if test="projectTypeId != null and projectTypeId !=''">
+                       and pr.projectTypeId = #{projectTypeId}
+                   </if>
+                   <if test="province != null and province !=''">
+                       and pr.province = #{province}
+                   </if>
+                   <if test="city != null and city !=''">
+                       and pr.city = #{city}
+                   </if>
+                   <if test="county != null and county !=''">
+                       and pr.county = #{county}
+                   </if>
+                   <if test="customerTypeId != null and customerTypeId !=''">
+                       and pr.customerTypeId = #{customerTypeId}
+                   </if>
+                   <if test="serveObjectTypeId != null and serveObjectTypeId !=''">
+                       and pr.serveObjectTypeId = #{serveObjectTypeId}
+                   </if>
+                   <if test="departmentTypeId != null and departmentTypeId !=''">
+                       and pr.departmentTypeId = #{departmentTypeId}
+                   </if>
+                   <if test="projectManager != null and projectManager !=''">
+                       and pr.projectManager like CONCAT('%',#{projectManager},'%')
+                   </if>
+
+                   <if test="companyId != null and companyId !=''">
+                       and pr.companyId = #{companyId}
+                   </if>
+       </select>
+
+      <update id="deleteProjectByIdList">
+        update dc_project set status = 2 where id in
+          <foreach collection="idList" index="index" item="id" open="(" separator="," close=")">
+              #{id}
+          </foreach>
+      </update>
+
+        <select id="selectProjectUnDeleted" resultType="map">
+                select
+                  pr.id,
+                  pr.projectCode,
+                  pr.projectName,
+                  pr.projectTypeId,
+                  pr.startDate,
+                  pr.endDate,
+                  pr.address,
+                  pr.feel,
+                  pr.projectManager,
+                  pr.dutyPerson,
+                  pr.createdBy,
+                  pr.createDate,
+                  pr.updatedBy,
+                  pr.updateDate,
+                  pr.province,
+                  pr.city,
+                  pr.county,
+                  pr.departmentTypeId,
+                  pr.serveObjectTypeId,
+                  pr.customerTypeId,
+                  pr.status
+          from dc_project pr where pr.projectCode=#{projectCode}
+          and pr.status=0
+        </select>
+
+
+</mapper>

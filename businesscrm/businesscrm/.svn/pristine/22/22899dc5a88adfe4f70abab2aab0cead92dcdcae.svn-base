@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.UserInfoMapper" >
+
+ 
+  <select id="selectUserInfoById" resultType="map" >
+   select
+          c.id,
+          c.companyId,
+          dc.companyName,
+          case when c.id=dc.contactUserId then '是' else '否' end  as defaultContactor,
+          c.uname,
+          c.station,
+          c.mobile,
+          c.phone,
+          c.email,
+          c.sex,
+          c.age,
+          c.birth,
+          c.udesc,
+          c.userResource,
+          c.personAnalysis,
+          c.qq,
+          c.weixin,
+          c.hometown,
+          c.createdBy,
+          du1.uname as createdByName,
+          c.updatedBy,
+          du2.uname as updatedByName,
+          DATE_FORMAT(c.createDate,'%Y-%m-%d %H:%i:%s') AS createDate,
+          DATE_FORMAT(c.updateDate,'%Y-%m-%d %H:%i:%s') AS updateDate
+      from dc_user_company c
+						left join dc_company dc on c.companyId=dc.id
+       left join dc_user du1 on c.createdBy=du1.id
+       left join dc_user du2 on c.updatedBy=du2.id
+       where c.id = #{id}
+  </select>
+
+
+
+
+  
+  <select id="selectUserInfoByCompanyId" resultType="java.util.Map" >
+ select
+          c.id,
+          c.companyId,
+          c.uname,
+          c.station,
+          c.mobile,
+          c.phone,
+          c.email,
+          c.sex,
+          c.age,
+          c.birth,
+          c.udesc,
+          c.userResource,
+          c.personAnalysis,
+          c.createdBy,
+          du1.uname as createdByName,
+          c.updatedBy,
+          du2.uname as updatedByName,
+          DATE_FORMAT(c.createDate,'%Y-%m-%d %H:%i:%s') AS createDate,
+          DATE_FORMAT(c.updateDate,'%Y-%m-%d %H:%i:%s') AS updateDate
+      from dc_user_company c
+       left join dc_user du1 on c.createdBy=du1.id
+       left join dc_user du2 on c.updatedBy=du2.id
+ 	  WHERE
+				c.companyId = #{companyId}
+  </select>
+  
+
+  <insert id="insertUserInfo" parameterType="java.util.Map">
+		INSERT INTO dc_user_company (
+      <if test="id != null and id !='' " >
+          id
+      </if>
+      <if test="companyId != null" >
+          ,companyId
+      </if>
+      <if test="uname != null" >
+          ,uname
+      </if>
+      <if test="station != null" >
+          ,station
+      </if>
+      <if test="mobile != null" >
+          ,mobile
+      </if>
+      <if test="phone != null" >
+          ,phone
+      </if>
+      <if test="email != null" >
+          ,email
+      </if>
+      <if test="sex != null" >
+          ,sex
+      </if>
+      <if test="birth != null" >
+          ,birth
+      </if>
+      <if test="udesc != null" >
+          ,udesc
+      </if>
+      <if test="userResource != null" >
+          ,userResource
+      </if>
+      <if test="personAnalysis != null" >
+          ,personAnalysis
+      </if>
+      <if test="createdBy != null" >
+          ,createdBy
+      </if>
+      <if test="createDate != null" >
+          ,createDate
+      </if>
+      <if test="qq != null" >
+          ,qq
+      </if>
+      <if test="weixin != null" >
+          ,weixin
+      </if>
+      <if test="hometown != null" >
+          ,hometown
+      </if>
+		)
+		VALUES
+			(
+      <if test="id != null and id !='' " >
+          #{id}
+      </if>
+      <if test="companyId != null" >
+          ,#{companyId}
+      </if>
+      <if test="uname != null" >
+          ,#{uname}
+      </if>
+      <if test="station != null" >
+          ,#{station}
+      </if>
+      <if test="mobile != null" >
+          ,#{mobile}
+      </if>
+      <if test="phone != null" >
+          ,#{phone}
+      </if>
+      <if test="email != null" >
+          ,#{email}
+      </if>
+      <if test="sex != null" >
+          ,#{sex}
+      </if>
+      <if test="birth != null" >
+          ,#{birth}
+      </if>
+      <if test="udesc != null" >
+          ,#{udesc}
+      </if>
+      <if test="userResource != null" >
+          ,#{userResource}
+      </if>
+      <if test="personAnalysis != null" >
+          ,#{personAnalysis}
+      </if>
+      <if test="createdBy != null" >
+          ,#{createdBy}
+      </if>
+      <if test="createDate != null" >
+          ,#{createDate}
+      </if>
+      <if test="qq != null" >
+          ,#{qq}
+      </if>
+      <if test="weixin != null" >
+          ,#{weixin}
+      </if>
+      <if test="hometown != null" >
+          ,#{hometown}
+      </if>
+			)
+  </insert>
+  
+
+  
+  
+
+  
+  
+  
+  
+  <update id="updateUserInfoById"   >
+    update dc_user_company set
+          <if test="id != null and id !='' " >
+              id=#{id},
+          </if>
+          <if test="companyId != null" >
+              companyId=#{companyId},
+          </if>
+          <if test="uname != null" >
+              uname=#{uname},
+          </if>
+          <if test="station != null" >
+              station=#{station},
+          </if>
+          <if test="mobile != null" >
+              mobile=#{mobile},
+          </if>
+          <if test="phone != null" >
+              phone=#{phone},
+          </if>
+          <if test="email != null" >
+              email=#{email},
+          </if>
+          <if test="sex != null" >
+              sex=#{sex},
+          </if>
+          <if test="age != null" >
+              age=#{age},
+          </if>
+          <if test="birth != null" >
+              birth=#{birth},
+          </if>
+          <if test="udesc != null" >
+              udesc=#{udesc},
+          </if>
+          <if test="userResource != null" >
+              userResource=#{userResource},
+          </if>
+          <if test="personAnalysis != null" >
+              personAnalysis=#{personAnalysis},
+          </if>
+          <if test="createdBy != null" >
+              createdBy=#{createdBy},
+          </if>
+          <if test="createDate != null" >
+              createDate=#{createDate},
+          </if>
+          <if test="updatedBy != null" >
+              updatedBy=#{updatedBy},
+          </if>
+          <if test="qq != null" >
+              qq=#{qq},
+          </if>
+          <if test="weixin != null" >
+              weixin=#{weixin},
+          </if>
+          <if test="hometown != null" >
+              hometown=#{hometown},
+          </if>
+               updateDate=now()
+     where id = #{id}
+  </update>
+  
+
+  
+  <delete id="deleteUserInfo">
+    delete from dc_user_company where id=#{id}
+  </delete>
+  
+
+
+
+
+
+
+    <select id="searchUserInfo" resultType="map">
+            select
+                u.id,
+                u.uname,
+                u.mobile,
+                u.station,
+                case when u.id=c.contactUserId then '是' else '否' end  as defaultContactor,
+                c.companyName,
+                c.id as companyId,
+                DATE_FORMAT(u.createDate,'%Y-%m-%d %H:%i:%s') AS createDate,
+                DATE_FORMAT(u.updateDate,'%Y-%m-%d %H:%i:%s') AS updateDate,
+                u.createdBy,
+                du1.uname as createdByName,
+                u.updatedBy,
+                du2.uname as updatedByName
+             from  dc_user_company u
+            inner join dc_company c on u.companyId=c.id
+            left join dc_user du1 on u.createdBy=du1.id
+            left join dc_user du2 on u.updatedBy=du2.id
+
+            where    1=1
+            <if test="searchValue!=null and searchValue!=''">
+                AND  (u.mobile like '%${searchValue}%' or c.companyName like '%${searchValue}%')
+            </if>
+            <if test="departmentIdList!=null and departmentIdList.size>0">
+                and c.departmentId in
+                <foreach item="departmentId" collection="departmentIdList" separator="," open="(" close=")" index="">
+                    #{departmentId}
+                </foreach>
+            </if>
+            <if test="companyId!=null and companyId!=''">
+                and u.companyId=#{companyId}
+            </if>
+            <if test="publicFlag==1">
+                and c.companyAdviserId=#{loginUserId}
+            </if>
+            <if test="publicFlag==2">
+                and c.id in (select companyId from dc_company_relative_user  u where u.userId=#{loginUserId})
+            </if>
+            <if test="publicFlag==3">
+                and c.companyDirectorId=#{loginUserId}
+            </if>
+            <if test="publicFlag==7">
+                and u.createdBy=#{loginUserId}
+            </if>
+        limit #{start},#{pageSize}
+    </select>
+
+
+    <select id="searchUserInfoCount" resultType="int">
+        select
+        count(1)
+        from  dc_user_company u
+        inner join dc_company c on u.companyId=c.id
+
+        where  1=1
+
+        <if test="searchValue!=null and searchValue!=''">
+            AND  (u.mobile like '%${searchValue}%' or c.companyName like '%${searchValue}%')
+        </if>
+        <if test="departmentIdList!=null and departmentIdList.size>0">
+            and c.departmentId in
+            <foreach item="departmentId" collection="departmentIdList" separator="," open="(" close=")" index="">
+                #{departmentId}
+            </foreach>
+        </if>
+        <if test="companyId!=null and companyId!=''">
+            and u.companyId=#{companyId}
+        </if>
+        <if test="publicFlag==1">
+            and c.companyAdviserId=#{loginUserId}
+        </if>
+        <if test="publicFlag==2">
+            and c.id in (select companyId from dc_company_relative_user  u where u.userId=#{loginUserId})
+        </if>
+        <if test="publicFlag==3">
+            and c.companyDirectorId=#{loginUserId}
+        </if>
+        <if test="publicFlag==7">
+            and u.createdBy=#{loginUserId}
+        </if>
+    </select>
+
+
+    <select id="selectUserInfoByMobileAndCompanyId" resultType="map">
+                    select
+                          id,
+                          companyId,
+                          uname,
+                          station,
+                          mobile,
+                          phone,
+                          email,
+                          sex,
+                          age,
+                          birth,
+                          udesc,
+                          userResource,
+                          personAnalysis,
+                          createdBy,
+                          createDate
+            from dc_user_company d where d.companyId=#{companyId} and d.mobile=#{mobile}
+    </select>
+
+
+
+</mapper>

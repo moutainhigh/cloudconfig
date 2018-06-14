@@ -1,0 +1,19 @@
+package com.xkd.mapper;
+
+import com.xkd.utils.LinkTypeData;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by dell on 2018/4/20.
+ */
+public interface MeetingMapper {
+
+    public int insertMeeting(Map<String,Object> map);
+
+    public int updateMeeting(Map<String,Object> map);
+
+
+    public List<Map<String,Object>> searchMeeting();
+}

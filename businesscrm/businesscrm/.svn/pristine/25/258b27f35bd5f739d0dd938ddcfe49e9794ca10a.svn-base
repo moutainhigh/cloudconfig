@@ -1,0 +1,1607 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.CompanyMapper" >
+ 
+ 
+ <select id="selectCompanyNamesList" resultType="java.lang.String" >
+ 
+    select companyName  from dc_company where status = 0 and companyName is not null and companyName != '' 
+   
+  </select>
+
+
+ 
+  <select id="selectCompanyByName" resultType="com.xkd.model.Company"  >
+	  SELECT
+	  d.id AS id,
+	  d.companyName ,
+	  dt.socialCredit ,
+	  dt.registrationCode,
+	  dt.organizationCode ,
+	  dt.manageType ,
+	  dt.companyPropertyId as companyProperty ,
+	  dt.manageScope ,
+	  dic2.value as parentIndustry,
+	  dic2.id as parentIndustryId,
+	  dic1.value as industry,
+	  dic2.id as industryId,
+	  d.representative AS representative,
+	  dt.registeredMoney ,
+	  dt.establishTime ,
+	  dt.termStart ,
+	  dt.operatingPeriod,
+	  dt.registrationAuthority,
+	  dt.annualSalesVolume ,
+	  dt.annualProfit,
+	  dt.thisYearSalesVolume,
+	  dt.nextYearSalesVolume,
+	  dt.businessScope,
+	  dt.approveDate,
+	  dt.companyType ,
+	  dt.companySize ,
+	  d.investStatus,
+	  d.financeStatus,
+	  d.englishName ,
+	  dt.beforeName ,
+	  dt.companyDesc ,
+	  dt.website AS website,
+	  d.phone AS phone,
+	  dt.email AS email,
+	  dt.wechat AS wechat,
+	  dt.content AS content,
+	  d.province AS province,
+	  DATE_FORMAT(d.updateDate,'%Y-%m-%d %H:%i:%s') AS dbChangeTime,
+	  dt.econKind,
+	  d.label AS label,
+	  d.companyAdviserId as companyAdviser,
+	  du1.uname AS companyAdviserName,
+	  d.companyDirectorId as companyDirector,
+	  du2.uname AS companyDirectorName,
+	  dt.companyOpportunity AS companyOpportunity,
+	  d.following AS following,
+	  dt.companyPosition companyPosition,
+	  d. STATUS AS status,
+	  d.logo AS logo,
+	  d.country as country,
+	  d.province as province,
+	  d.city as city,
+	  d.county as county,
+	  d.address as address,
+	  d.contactUserId,
+	  d.contactName,
+	  d.contactPhone,
+	  d.userTypeId,
+	  dic4.value as userType,
+	  d.userLevelId,
+	  dic3.value as userLevel,
+	  d.channelId,
+	  dic5.value as channel,
+	  d.priorityId,
+	  dic6.value as priority,
+	  d.moneySituation,
+	  d.qccUpdatedDate,
+	  d.companyAdviserId,
+	  d.companyDirectorId,
+	  d.createdBy
+	  FROM
+	  dc_company d
+	  left join dc_dictionary dic1 on d.industryId=dic1.id
+	  left join dc_dictionary dic2 on dic2.id=dic1.parentId
+	  left join dc_dictionary dic3 on d.userLevelId=dic3.id
+	  left join dc_dictionary dic4 on d.userTypeId=dic4.id
+	  left join dc_dictionary dic5 on d.channelId=dic5.id
+	  left join dc_dictionary dic6 on d.priorityId=dic6.id
+	  LEFT JOIN dc_company_detail dt ON d.id = dt.id
+	  LEFT JOIN dc_user du1 ON d.companyAdviserId = du1.id
+	  LEFT JOIN dc_user du2 ON d.companyDirectorId = du2.id
+	WHERE
+		d.companyName = #{companyName} and d.status = 0
+
+	  <if test="pcCompanyId != null and pcCompanyId !='' ">
+		  and  d.pcCompanyId = #{pcCompanyId}
+	  </if>
+
+  </select>
+  
+
+
+
+
+
+
+
+	<select id="selectCompanyByNameUnDeleted" resultType="map"  >
+		SELECT
+		d.id AS id,
+		d.companyName ,
+		dt.socialCredit ,
+	  	dt.registrationCode,
+		dt.organizationCode ,
+		dt.manageType ,
+		dt.companyPropertyId as companyProperty ,
+		dt.manageScope ,
+		dic2.value as parentIndustry,
+		dic2.id as parentIndustryId,
+		dic1.value as industry,
+		dic2.id as industryId,
+		d.representative AS representative,
+		dt.registeredMoney ,
+		dt.establishTime ,
+		dt.termStart ,
+		dt.operatingPeriod,
+		dt.registrationAuthority,
+		dt.annualSalesVolume ,
+		dt.annualProfit,
+		dt.thisYearSalesVolume,
+		dt.nextYearSalesVolume,
+		dt.businessScope,
+		dt.approveDate,
+		dt.companyType ,
+		dt.companySize ,
+		d.investStatus,
+		d.financeStatus,
+		d.englishName ,
+		dt.beforeName ,
+		dt.companyDesc ,
+		dt.website AS website,
+		d.phone AS phone,
+		dt.email AS email,
+		dt.wechat AS wechat,
+		dt.content AS content,
+		d.province AS province,
+		DATE_FORMAT(d.updateDate,'%Y-%m-%d %H:%i:%s') AS dbChangeTime,
+		dt.econKind,
+		d.label AS label,
+	  	d.companyAdviserId as companyAdviser,
+		du1.uname AS companyAdviserName,
+	  	d.companyDirectorId as companyDirector,
+		du2.uname AS companyDirectorName,
+		dt.companyOpportunity AS companyOpportunity,
+		d.following AS following,
+		dt.companyPosition companyPosition,
+		d. STATUS AS status,
+		d.logo AS logo,
+	  	d.country as country,
+	  	d.province as province,
+	  	d.city as city,
+	  	d.county as county,
+	  	d.address as address,
+	  	d.contactUserId,
+	  	d.contactName,
+	  	d.contactPhone,
+	  	d.userTypeId,
+			dic4.value as userType,
+	  	d.userLevelId,
+			dic3.value as userLevel,
+	  	d.channelId,
+			dic5.value as channel,
+      d.priorityId,
+      dic6.value as priority,
+	  	d.moneySituation,
+	  	d.qccUpdatedDate,
+	  	d.companyAdviserId,
+	  	d.companyDirectorId,
+	  	d.createdBy
+	FROM
+		dc_company d
+	left join dc_dictionary dic1 on d.industryId=dic1.id
+    left join dc_dictionary dic2 on dic2.id=dic1.parentId
+	left join dc_dictionary dic3 on d.userLevelId=dic3.id
+	left join dc_dictionary dic4 on d.userTypeId=dic4.id
+	left join dc_dictionary dic5 on d.channelId=dic5.id
+	left join dc_dictionary dic6 on d.priorityId=dic6.id
+	LEFT JOIN dc_company_detail dt ON d.id = dt.id
+	LEFT JOIN dc_user du1 ON d.companyAdviserId = du1.id
+	LEFT JOIN dc_user du2 ON d.companyDirectorId = du2.id
+		WHERE
+		d.companyName = #{companyName}
+		and d.pcCompanyId=#{pcCompanyId}
+		and d.status=0
+
+
+	</select>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <select id="selectAllStatusCompanyByName" resultType="com.xkd.model.Company"  >
+	  SELECT
+	  d.id AS id,
+	  d.companyName ,
+	  dt.socialCredit ,
+	  dt.registrationCode,
+	  dt.organizationCode ,
+	  dt.manageType ,
+	  dt.companyPropertyId as companyProperty ,
+	  dt.manageScope ,
+	  dic2.value as parentIndustry,
+	  dic2.id as parentIndustryId,
+	  dic1.value as industry,
+	  dic2.id as industryId,
+	  d.representative AS representative,
+	  dt.registeredMoney ,
+	  dt.establishTime ,
+	  dt.termStart ,
+	  dt.operatingPeriod,
+	  dt.registrationAuthority,
+	  dt.annualSalesVolume ,
+	  dt.annualProfit,
+	  dt.thisYearSalesVolume,
+	  dt.nextYearSalesVolume,
+	  dt.businessScope,
+	  dt.approveDate,
+	  dt.companyType ,
+	  dt.companySize ,
+	  d.investStatus,
+	  d.financeStatus,
+	  d.englishName ,
+	  dt.beforeName ,
+	  dt.companyDesc ,
+	  dt.website AS website,
+	  d.phone AS phone,
+	  dt.email AS email,
+	  dt.wechat AS wechat,
+	  dt.content AS content,
+	  d.province AS province,
+	  DATE_FORMAT(d.updateDate,'%Y-%m-%d %H:%i:%s') AS dbChangeTime,
+	  dt.econKind,
+	  d.label AS label,
+	  d.companyAdviserId as companyAdviser,
+	  du1.uname AS companyAdviserName,
+	  d.companyDirectorId as companyDirector,
+	  du2.uname AS companyDirectorName,
+	  dt.companyOpportunity AS companyOpportunity,
+	  d.following AS following,
+	  dt.companyPosition companyPosition,
+	  d. STATUS AS status,
+	  d.logo AS logo,
+	  d.country as country,
+	  d.province as province,
+	  d.city as city,
+	  d.county as county,
+	  d.address as address,
+	  d.contactUserId,
+	  d.contactName,
+	  d.contactPhone,
+	  d.userTypeId,
+	  dic4.value as userType,
+	  d.userLevelId,
+	  dic3.value as userLevel,
+	  d.channelId,
+	  dic5.value as channel,
+	  d.priorityId,
+	  dic6.value as priority,
+	  d.moneySituation,
+	  d.qccUpdatedDate,
+	  d.companyAdviserId,
+	  d.companyDirectorId,
+	  d.createdBy
+	  FROM
+	  dc_company d
+	  left join dc_dictionary dic1 on d.industryId=dic1.id
+	  left join dc_dictionary dic2 on dic2.id=dic1.parentId
+	  left join dc_dictionary dic3 on d.userLevelId=dic3.id
+	  left join dc_dictionary dic4 on d.userTypeId=dic4.id
+	  left join dc_dictionary dic5 on d.channelId=dic5.id
+	  left join dc_dictionary dic6 on d.priorityId=dic6.id
+	  LEFT JOIN dc_company_detail dt ON d.id = dt.id
+	  LEFT JOIN dc_user du1 ON d.companyAdviserId = du1.id
+	  LEFT JOIN dc_user du2 ON d.companyDirectorId = du2.id
+	WHERE
+		d.companyName = #{companyName}
+	  <if test="pcCompanyId != null and pcCompanyId !='' ">
+		  and  d.pcCompanyId = #{pcCompanyId}
+	  </if>
+
+  </select>
+  
+  <select id="selectCompanyInfoById" resultType="com.xkd.model.Company" >
+	SELECT
+		d.id AS id,
+		d.companyName ,
+		dt.socialCredit ,
+	  	dt.registrationCode,
+		dt.organizationCode ,
+		dt.manageType ,
+		dt.companyPropertyId as companyProperty ,
+		dt.manageScope ,
+		dic2.value as parentIndustry,
+		dic2.id as parentIndustryId,
+		dic1.value as industry,
+		dic2.id as industryId,
+		d.representative AS representative,
+		dt.registeredMoney ,
+		dt.establishTime ,
+		dt.termStart ,
+		dt.operatingPeriod,
+		dt.registrationAuthority,
+		dt.annualSalesVolume ,
+		dt.annualProfit,
+		dt.thisYearSalesVolume,
+		dt.nextYearSalesVolume,
+		dt.businessScope,
+		dt.approveDate,
+		dt.companyType ,
+		dt.companySize ,
+		d.investStatus,
+		d.financeStatus,
+		d.englishName ,
+		dt.beforeName ,
+		dt.companyDesc ,
+		dt.website AS website,
+		d.phone AS phone,
+		dt.email AS email,
+		dt.wechat AS wechat,
+		dt.content AS content,
+		d.province AS province,
+		DATE_FORMAT(d.updateDate,'%Y-%m-%d %H:%i:%s') AS dbChangeTime,
+		DATE_FORMAT(d.createDate,'%Y-%m-%d') AS createDate,
+		DATE_FORMAT(d.updateDate,'%Y-%m-%d') AS updateDate,
+		dt.econKind,
+		d.label AS label,
+	  	d.companyAdviserId as companyAdviser,
+		du1.uname AS companyAdviserName,
+	  	d.companyDirectorId as companyDirector,
+		du2.uname AS companyDirectorName,
+		dt.companyOpportunity AS companyOpportunity,
+		d.following AS following,
+		dt.companyPosition companyPosition,
+		d. STATUS AS status,
+		d.logo AS logo,
+	  	d.country as country,
+	  	d.province as province,
+	  	d.city as city,
+	  	d.county as county,
+	  	d.address as address,
+	  	d.contactUserId,
+	  	d.contactName,
+	  	d.contactPhone,
+	  	d.userTypeId,
+			dic4.value as userType,
+	  	d.userLevelId,
+			dic3.value as userLevel,
+	  	d.channelId,
+			dic5.value as channel,
+      d.priorityId,
+      dic6.value as priority,
+	  	d.moneySituation,
+	  	d.qccUpdatedDate,
+	  	d.companyAdviserId,
+	  	d.companyDirectorId,
+	  	d.createdBy,
+			du3.uname as createdByName,
+			du4.uname as updatedByName,
+      dep.departmentName
+	FROM
+		dc_company d
+	left join dc_dictionary dic1 on d.industryId=dic1.id
+    left join dc_dictionary dic2 on dic2.id=dic1.parentId
+	left join dc_dictionary dic3 on d.userLevelId=dic3.id
+	left join dc_dictionary dic4 on d.userTypeId=dic4.id
+	left join dc_dictionary dic5 on d.channelId=dic5.id
+	left join dc_dictionary dic6 on d.priorityId=dic6.id
+	LEFT JOIN dc_company_detail dt ON d.id = dt.id
+	LEFT JOIN dc_user du1 ON d.companyAdviserId = du1.id
+	LEFT JOIN dc_user du2 ON d.companyDirectorId = du2.id
+	left join dc_department dep on dep.id=d.departmentId
+	left join dc_user du3 on d.createdBy=du3.id
+	left join dc_user du4 on d.updatedBy=du4.id
+	WHERE
+		d.id = #{companyId}
+  </select>
+
+
+
+
+	<select id="selectCompanyById" resultType="map" >
+		SELECT
+		d.id AS id,
+		d.companyName ,
+		dt.socialCredit ,
+	  	dt.registrationCode,
+		dt.organizationCode ,
+		dt.manageType ,
+		dt.companyPropertyId as companyProperty ,
+		dt.manageScope ,
+		dic2.value as parentIndustry,
+		dic2.id as parentIndustryId,
+		dic1.value as industry,
+		dic2.id as industryId,
+		d.representative AS representative,
+		dt.registeredMoney ,
+		dt.establishTime ,
+		dt.termStart ,
+		dt.operatingPeriod,
+		dt.registrationAuthority,
+		dt.annualSalesVolume ,
+		dt.annualProfit,
+		dt.thisYearSalesVolume,
+		dt.nextYearSalesVolume,
+		dt.businessScope,
+		dt.approveDate,
+		dt.companyType ,
+		dt.companySize ,
+		d.investStatus,
+		d.financeStatus,
+		d.englishName ,
+		dt.beforeName ,
+		dt.companyDesc ,
+		dt.website AS website,
+		d.phone AS phone,
+		dt.email AS email,
+		dt.wechat AS wechat,
+		dt.content AS content,
+		d.province AS province,
+		DATE_FORMAT(d.updateDate,'%Y-%m-%d %H:%i:%s') AS dbChangeTime,
+		DATE_FORMAT(d.createDate,'%Y-%m-%d') AS createDate,
+		DATE_FORMAT(d.updateDate,'%Y-%m-%d') AS updateDate,
+		dt.econKind,
+		d.label AS label,
+	  	d.companyAdviserId as companyAdviser,
+		du1.uname AS companyAdviserName,
+	  	d.companyDirectorId as companyDirector,
+		du2.uname AS companyDirectorName,
+		dt.companyOpportunity AS companyOpportunity,
+		d.following AS following,
+		dt.companyPosition companyPosition,
+		d. STATUS AS status,
+		d.logo AS logo,
+	  	d.country as country,
+	  	d.province as province,
+	  	d.city as city,
+	  	d.county as county,
+	  	d.address as address,
+	  	d.contactUserId,
+	  	d.contactName,
+	  	d.contactPhone,
+	  	d.userTypeId,
+			dic4.value as userType,
+	  	d.userLevelId,
+			dic3.value as userLevel,
+	  	d.channelId,
+			dic5.value as channel,
+      d.priorityId,
+      dic6.value as priority,
+	  	d.moneySituation,
+	  	d.qccUpdatedDate,
+	  	d.companyAdviserId,
+	  	d.companyDirectorId,
+	  	d.createdBy,
+			du3.uname as createdByName,
+			du4.uname as updatedByName,
+      dep.departmentName
+	FROM
+		dc_company d
+	left join dc_dictionary dic1 on d.industryId=dic1.id
+    left join dc_dictionary dic2 on dic2.id=dic1.parentId
+	left join dc_dictionary dic3 on d.userLevelId=dic3.id
+	left join dc_dictionary dic4 on d.userTypeId=dic4.id
+	left join dc_dictionary dic5 on d.channelId=dic5.id
+	left join dc_dictionary dic6 on d.priorityId=dic6.id
+	LEFT JOIN dc_company_detail dt ON d.id = dt.id
+	LEFT JOIN dc_user du1 ON d.companyAdviserId = du1.id
+	LEFT JOIN dc_user du2 ON d.companyDirectorId = du2.id
+	left join dc_department dep on dep.id=d.departmentId
+	left join dc_user du3 on d.createdBy=du3.id
+	left join dc_user du4 on d.updatedBy=du4.id
+		WHERE
+		d.id = #{companyId}
+	</select>
+
+
+
+
+	<select id="selectCompanyInfoByIdList" resultType="map" >
+		SELECT
+		d.id AS id,
+		d.companyName ,
+		dt.socialCredit ,
+		dt.registrationCode,
+		dt.organizationCode ,
+		dt.manageType ,
+		dt.companyPropertyId as companyProperty ,
+		dt.manageScope ,
+		dic2.value as parentIndustry,
+		dic2.id as parentIndustryId,
+		dic1.value as industry,
+		dic2.id as industryId,
+		d.representative AS representative,
+		dt.registeredMoney ,
+		dt.establishTime ,
+		dt.termStart ,
+		dt.operatingPeriod,
+		dt.registrationAuthority,
+		dt.annualSalesVolume ,
+		dt.annualProfit,
+		dt.thisYearSalesVolume,
+		dt.nextYearSalesVolume,
+		dt.businessScope,
+		dt.approveDate,
+		dt.companyType ,
+		dt.companySize ,
+		d.investStatus,
+		d.financeStatus,
+		d.englishName ,
+		dt.beforeName ,
+		dt.companyDesc ,
+		dt.website AS website,
+		d.phone AS phone,
+		dt.email AS email,
+		dt.wechat AS wechat,
+		dt.content AS content,
+		d.province AS province,
+		DATE_FORMAT(d.updateDate,'%Y-%m-%d %H:%i:%s') AS dbChangeTime,
+		DATE_FORMAT(d.createDate,'%Y-%m-%d') AS createDate,
+		DATE_FORMAT(d.updateDate,'%Y-%m-%d') AS updateDate,
+		dt.econKind,
+		d.label AS label,
+		d.companyAdviserId as companyAdviser,
+		du1.uname AS companyAdviserName,
+		d.companyDirectorId as companyDirector,
+		du2.uname AS companyDirectorName,
+		dt.companyOpportunity AS companyOpportunity,
+		d.following AS following,
+		dt.companyPosition companyPosition,
+		d. STATUS AS status,
+		d.logo AS logo,
+		d.country as country,
+		d.province as province,
+		d.city as city,
+		d.county as county,
+		d.address as address,
+		d.contactUserId,
+		d.contactName,
+		d.contactPhone,
+		d.userTypeId,
+		dic4.value as userType,
+		d.userLevelId,
+		dic3.value as userLevel,
+		d.channelId,
+		dic5.value as channel,
+		d.priorityId,
+		dic6.value as priority,
+		d.moneySituation,
+		d.qccUpdatedDate,
+		d.companyAdviserId,
+		d.companyDirectorId,
+		d.createdBy,
+		du3.uname as createdByName,
+		du4.uname as updatedByName,
+		dep.departmentName
+		FROM
+		dc_company d
+		left join dc_dictionary dic1 on d.industryId=dic1.id
+		left join dc_dictionary dic2 on dic2.id=dic1.parentId
+		left join dc_dictionary dic3 on d.userLevelId=dic3.id
+		left join dc_dictionary dic4 on d.userTypeId=dic4.id
+		left join dc_dictionary dic5 on d.channelId=dic5.id
+		left join dc_dictionary dic6 on d.priorityId=dic6.id
+		LEFT JOIN dc_company_detail dt ON d.id = dt.id
+		LEFT JOIN dc_user du1 ON d.companyAdviserId = du1.id
+		LEFT JOIN dc_user du2 ON d.companyDirectorId = du2.id
+		left join dc_department dep on dep.id=d.departmentId
+		left join dc_user du3 on d.createdBy=du3.id
+		left join dc_user du4 on d.updatedBy=du4.id
+		WHERE
+		d.id IN
+		<foreach item="id" collection="idList" separator="," open="(" close=")" index="">
+			#{id}
+		</foreach>
+
+	</select>
+
+  
+
+
+  
+  
+  
+  
+
+ <select id="searchCompanyByName" resultType="java.util.Map">
+	 select id , companyName from dc_company where companyName like '%${companyName}%' and status = 0
+	 <if test="departmentIdList!=null">
+		 and departmentId in
+		 <foreach collection="departmentIdList"  item="id" index="" separator=","  open="(" close=")" >
+			 #{id}
+		 </foreach>
+	 </if>
+	 limit #{start},#{pageSize}
+ </select>
+
+
+
+  
+
+  
+  
+
+
+  
+ 
+  
+  
+  <update id="updateCompanyLabelById">
+  
+  	update dc_company set label = #{label} where id = #{companyId}
+  
+  </update>
+  
+  <update id="updateCompanyInfoById" parameterType="java.util.HashMap" >
+		update dc_company set 
+		<if test="id != null and id !='' " >
+		  id=#{id},
+		  </if>
+		  <if test="companyName != null" >
+		  companyName=#{companyName},
+		  </if>
+		  <if test="englishName != null" >
+		  englishName=#{englishName},
+		  </if>
+		  <if test="label != null" >
+		  label=#{label},
+		  </if>
+		  <if test="representative != null" >
+		  representative=#{representative},
+		  </if>
+		  <if test="industryId != null" >
+			  industryId=#{industryId},
+		  </if>
+		  <if test="investStatus != null" >
+		  investStatus=#{investStatus},
+		  </if>
+		  <if test="financeStatus != null" >
+		  financeStatus=#{financeStatus},
+		  </if>
+		  <if test="phone != null" >
+		  phone=#{phone},
+		  </if>
+		  <if test="companyAdviserId != null" >
+		  companyAdviserId=#{companyAdviserId},
+		  </if>
+		  <if test="companyDirectorId != null" >
+		  companyDirectorId=#{companyDirectorId},
+		  </if>
+		  <if test="logo != null" >
+		  logo=#{logo},
+		  </if>
+		  <if test="following != null" >
+		  following=#{following},
+		  </if>
+		  <if test="userLevelId != null" >
+		  userLevelId=#{userLevelId},
+		  </if>
+		  <if test="userTypeId != null" >
+		  userTypeId=#{userTypeId},
+		  </if>
+		  <if test="channelId != null" >
+		  channelId=#{channelId},
+		  </if>
+		  <if test="moneySituation != null" >
+		  moneySituation=#{moneySituation},
+		  </if>
+		  <if test="paymentMoney != null" >
+		  paymentMoney=#{paymentMoney},
+		  </if>
+		  <if test="enrollDate != null" >
+		  enrollDate=#{enrollDate},
+		  </if>
+		  <if test="contactUserId != null" >
+		  contactUserId=#{contactUserId},
+		  </if>
+		  <if test="contactName != null" >
+		  contactName=#{contactName},
+		  </if>
+		  <if test="contactPhone != null" >
+		  contactPhone=#{contactPhone},
+		  </if>
+		  <if test="country != null" >
+		  country=#{country},
+		  </if>
+		  <if test="province != null" >
+		  province=#{province},
+		  </if>
+		  <if test="city != null" >
+		  city=#{city},
+		  </if>
+		  <if test="county != null" >
+		  county=#{county},
+		  </if>
+		  <if test="address != null" >
+		  address=#{address},
+		  </if>
+		  <if test="qccUpdatedDate != null" >
+		  qccUpdatedDate=#{qccUpdatedDate},
+		  </if>
+		  <if test="status != null" >
+		  status=#{status},
+		  </if>
+		  <if test="createdBy != null" >
+		  createdBy=#{createdBy},
+		  </if>
+		  <if test="createDate != null" >
+		  createDate=#{createDate},
+		  </if>
+		  <if test="updatedBy != null" >
+		  updatedBy=#{updatedBy},
+		  </if>
+		  <if test="crawlFlag != null" >
+		  crawlFlag=#{crawlFlag},
+		  </if>
+		  <if test="ccCrawlFlag != null" >
+		  ccCrawlFlag=#{ccCrawlFlag},
+		  </if>
+		  <if test="fromHby != null" >
+		  fromHby=#{fromHby},
+		  </if>
+	      <if test="infoScore !=null ">
+			  infoScore=#{infoScore},
+		  </if>
+		  <if test="departmentId !=null ">
+			  departmentId=#{departmentId},
+		  </if>
+		  <if test="communicatStatus !=null ">
+			  communicatStatus=#{communicatStatus},
+		  </if>
+		  <if test="pcCompanyId !=null ">
+			  pcCompanyId=#{pcCompanyId},
+		  </if>
+		  <if test="priorityId !=null ">
+			  priorityId=#{priorityId},
+		  </if>
+		  <if test="latestContactTime !=null ">
+			  latestContactTime=#{latestContactTime},
+		  </if>
+		  <if test="attendStatus !=null ">
+			  attendStatus=#{attendStatus},
+		  </if>
+	  	 updateDate=now()
+		where id=#{id}
+  </update>
+  
+  <update id="updateCompanyDetailInfoById" parameterType="java.util.HashMap" >
+		update dc_company_detail set 
+			  <if test="id != null and id !='' " >
+			  id=#{id} ,
+			  </if>
+			  <if test="socialCredit != null" >
+			  socialCredit=#{socialCredit} ,
+			  </if>
+			  <if test="registrationCode != null" >
+			  registrationCode =#{registrationCode},
+			  </if>
+			  <if test="organizationCode != null" >
+			  organizationCode=#{organizationCode} ,
+			  </if>
+			  <if test="manageType != null" >
+			  manageType=#{manageType} ,
+			  </if>
+			  <if test="manageScope != null" >
+			  manageScope=#{manageScope},
+			  </if>
+			  <if test="registeredMoney != null" >
+			  registeredMoney=#{registeredMoney},
+			  </if>
+			  <if test="registrationAuthority != null" >
+			  registrationAuthority=#{registrationAuthority},
+			  </if>
+			  <if test="annualSalesVolume != null" >
+			  annualSalesVolume=#{annualSalesVolume} ,
+			  </if>
+			  <if test="annualProfit != null" >
+			  annualProfit=#{annualProfit},
+			  </if>
+			  <if test="thisYearSalesVolume != null" >
+			  thisYearSalesVolume=#{thisYearSalesVolume},
+			  </if>
+			  <if test="nextYearSalesVolume != null" >
+			  nextYearSalesVolume=#{nextYearSalesVolume},
+			  </if>
+			  <if test="businessScope != null" >
+			  businessScope=#{businessScope},
+			  </if>
+			  <if test="companyType != null" >
+			  companyType=#{companyType} ,
+			  </if>
+			  <if test="companyPropertyId != null" >
+			  companyPropertyId=#{companyPropertyId},
+			  </if>
+			  <if test="companySize != null" >
+			  companySize=#{companySize},
+			  </if>
+			  <if test="beforeName != null" >
+			  beforeName=#{beforeName},
+			  </if>
+			  <if test="companyDesc != null" >
+			  companyDesc=#{companyDesc},
+			  </if>
+			  <if test="website != null" >
+			  website=#{website} ,
+			  </if>
+			  <if test="phone != null" >
+			  phone=#{phone},
+			  </if>
+			  <if test="email != null" >
+			  email=#{email} ,
+			  </if>
+			  <if test="wechat != null" >
+			  wechat=#{wechat},
+			  </if>
+			  <if test="content != null" >
+			  content=#{content},
+			  </if>
+			  <if test="companyPosition != null" >
+			  companyPosition=#{companyPosition},
+			  </if>
+			  <if test="econKind != null" >
+			  econKind=#{econKind},
+			  </if>
+			  <if test="establishTime != null" >
+			  establishTime=#{establishTime},
+			  </if>
+			  <if test="approveDate != null" >
+			  approveDate=#{approveDate},
+			  </if>
+			  <if test="termStart != null" >
+			  termStart=#{termStart} ,
+			  </if>
+			  <if test="operatingPeriod != null" >
+			  operatingPeriod=#{operatingPeriod},
+			  </if>
+			  <if test="companyOpportunity != null" >
+			  companyOpportunity=#{companyOpportunity} ,
+			  </if>
+			  <if test="hasResource != null" >
+			  hasResource=#{hasResource},
+			  </if>
+			  <if test="needResource != null" >
+			  needResource=#{needResource} ,
+			  </if>
+			  <if test="createdBy != null" >
+			  createdBy=#{createdBy} ,
+			  </if>
+			  <if test="createDate != null" >
+			  createDate=#{createDate} ,
+			  </if>
+			  <if test="updatedBy != null" >
+			  updatedBy=#{updatedBy},
+			  </if>
+			  updateDate=now() 
+		
+		where id=#{id}
+  </update>
+  
+  
+  
+  
+  
+  <update id="deleteCompanyById">
+  
+  	update dc_company set status = 2,companyName=concat(companyName,'_',DATE_FORMAT(now(),'%Y-%m-%d %H:%i:%s')) where id in ${ids}
+  
+  </update>
+  
+ 
+  
+
+  
+  
+  <insert id="insertCompanyInfo" parameterType="java.util.HashMap">
+  INSERT INTO dc_company (
+   <if test="id != null and id !='' " >
+	id
+	</if>
+	<if test="companyName != null" >
+	,companyName
+	</if>
+	 <if test="englishName != null" >
+	,englishName
+	</if>
+	 <if test="label != null" >
+	,label
+	</if>
+	 <if test="representative != null" >
+	,representative
+	</if>
+	 <if test="industryId != null" >
+	,industryId
+	</if>
+	 <if test="investStatus != null" >
+	,investStatus
+	</if>
+	 <if test="financeStatus != null" >
+	,financeStatus
+	</if>
+	 <if test="phone != null" >
+	,phone
+	</if>
+	 <if test="companyAdviserId != null" >
+	,companyAdviserId
+	</if>
+	 <if test="companyDirectorId != null" >
+	,companyDirectorId
+	</if>
+	<if test="teacherId != null" >
+	,teacherId
+	</if>
+	 <if test="logo != null" >
+	,logo
+	</if>
+	 <if test="following != null" >
+	,following
+	</if>
+	 <if test="userLevelId != null" >
+	,userLevelId
+	</if>
+	 <if test="userTypeId != null" >
+	,userTypeId
+	</if>
+	 <if test="channelId != null" >
+	,channelId
+	</if>
+	
+	<if test="moneySituation != null" >
+	,moneySituation
+	</if>
+	
+	 <if test="paymentMoney != null" >
+	,paymentMoney
+	</if>
+	 <if test="enrollDate != null" >
+	,enrollDate
+	</if>
+	<if test="contactUserId != null" >
+	,contactUserId
+	</if>
+	 <if test="contactName != null" >
+	,contactName
+	</if>
+	 <if test="contactPhone != null" >
+	,contactPhone
+	</if>
+	 <if test="country != null" >
+	,country
+	</if>
+	 <if test="province != null" >
+	,province
+	</if>
+	 <if test="city != null" >
+	,city
+	</if>
+	 <if test="county != null" >
+	,county
+	</if>
+	 <if test="address != null" >
+	,address
+	</if>
+	 <if test="qccUpdatedDate != null" >
+	,qccUpdatedDate
+	</if>
+	 <if test="status != null" >
+	,status
+	</if>
+	 <if test="createdBy != null" >
+	,createdBy
+	</if>
+	 <if test="createDate != null" >
+	,createDate
+	</if>
+	 <if test="updatedBy != null" >
+	,updatedBy
+	</if>
+	 <if test="updateDate != null" >
+	,updateDate
+	</if>
+	 <if test="crawlFlag != null" >
+	,crawlFlag
+	</if>
+	 <if test="ccCrawlFlag != null" >
+	,ccCrawlFlag
+	</if>
+	 <if test="fromHby != null" >
+	,fromHby
+	</if>
+	  <if test="departmentId != null" >
+		  ,departmentId
+	  </if>
+	  <if test="communicatStatus != null" >
+		  ,communicatStatus
+	  </if>
+	  <if test="priorityId != null" >
+		  ,priorityId
+	  </if>
+	  <if test="attendStatus != null" >
+		  ,attendStatus
+	  </if>
+	  <if test="pcCompanyId != null" >
+		  ,pcCompanyId
+	  </if>
+	 
+)
+VALUES
+	(
+	<if test="id != null and id !='' " >
+	#{id}
+	</if>
+	<if test="companyName != null" >
+	,#{companyName}
+	</if>
+	 <if test="englishName != null" >
+	,#{englishName}
+	</if>
+	 <if test="label != null" >
+	,#{label}
+	</if>
+	 <if test="representative != null" >
+	,#{representative}
+	</if>
+	 <if test="industryId != null" >
+	,#{industryId}
+	</if>
+	 <if test="investStatus != null" >
+	,#{investStatus}
+	</if>
+	 <if test="financeStatus != null" >
+	,#{financeStatus}
+	</if>
+	 <if test="phone != null" >
+	,#{phone}
+	</if>
+	 <if test="companyAdviserId" >
+	,#{companyAdviserId}
+	</if>
+	 <if test="companyDirectorId" >
+	,#{companyDirectorId}
+	</if>
+	<if test="teacherId != null" >
+	,#{teacherId}
+	</if>
+	 <if test="logo != null" >
+	,#{logo}
+	</if>
+	 <if test="following != null" >
+	,#{following}
+	</if>
+	 <if test="userLevelId != null" >
+	,#{userLevelId}
+	</if>
+	 <if test="userTypeId != null" >
+	,#{userTypeId}
+	</if>
+	 <if test="channelId != null" >
+	,#{channelId}
+	</if>
+	<if test="moneySituation != null" >
+	,#{moneySituation}
+	</if>
+	 <if test="paymentMoney != null" >
+	,#{paymentMoney}
+	</if>
+	 <if test="enrollDate != null" >
+	,#{enrollDate}
+	</if>
+	<if test="contactUserId != null" >
+	,#{contactUserId}
+	</if>
+	 <if test="contactName != null" >
+	,#{contactName}
+	</if>
+	 <if test="contactPhone != null" >
+	,#{contactPhone}
+	</if>
+	 <if test="country != null" >
+	,#{country}
+	</if>
+	 <if test="province != null" >
+	,#{province}
+	</if>
+	 <if test="city != null" >
+	,#{city}
+	</if>
+	 <if test="county != null" >
+	,#{county}
+	</if>
+	 <if test="address != null" >
+	,#{address}
+	</if>
+	 <if test="qccUpdatedDate != null" >
+	,#{qccUpdatedDate}
+	</if>
+	 <if test="status != null" >
+	,#{status}
+	</if>
+	 <if test="createdBy != null" >
+	,#{createdBy}
+	</if>
+	 <if test="createDate != null" >
+	,#{createDate}
+	</if>
+	 <if test="updatedBy != null" >
+	,#{updatedBy}
+	</if>
+	 <if test="updateDate != null" >
+	,#{updateDate}
+	</if>
+	 <if test="crawlFlag != null" >
+	,#{crawlFlag}
+	</if>
+	 <if test="ccCrawlFlag != null" >
+	,#{ccCrawlFlag}
+	</if>
+	 <if test="fromHby != null" >
+	,#{fromHby}
+	</if>
+	  <if test="departmentId != null" >
+		  ,#{departmentId}
+	  </if>
+	  <if test="communicatStatus != null" >
+		  ,#{communicatStatus}
+	  </if>
+	  <if test="priorityId != null" >
+		  ,#{priorityId}
+	  </if>
+	  <if test="attendStatus != null" >
+		  ,#{attendStatus}
+	  </if>
+	  <if test="pcCompanyId != null" >
+		  ,#{pcCompanyId}
+	  </if>
+	)
+
+  </insert>
+  
+  
+  <insert id="insertCompanyDetailInfo"  parameterType="java.util.HashMap" >
+			INSERT INTO dc_company_detail (
+				<if test="id != null and id !='' " >
+				id
+				</if>
+				<if test="socialCredit != null" >
+				,socialCredit
+				</if>
+				<if test="registrationCode != null" >
+				,registrationCode
+				</if>
+				<if test="organizationCode != null" >
+				,organizationCode
+				</if>
+				<if test="manageType != null" >
+				,manageType
+				</if>
+				<if test="manageScope != null" >
+				,manageScope
+				</if>
+				<if test="registeredMoney != null" >
+				,registeredMoney
+				</if>
+				<if test="registrationAuthority != null" >
+				,registrationAuthority
+				</if>
+				<if test="annualSalesVolume != null" >
+				,annualSalesVolume
+				</if>
+				<if test="annualProfit != null" >
+				,annualProfit
+				</if>
+				<if test="thisYearSalesVolume != null" >
+				,thisYearSalesVolume
+				</if>
+				<if test="nextYearSalesVolume != null" >
+				,nextYearSalesVolume
+				</if>
+				<if test="businessScope != null" >
+				,businessScope
+				</if>
+				<if test="companyType != null" >
+				,companyType
+				</if>
+				<if test="companyPropertyId != null" >
+				,companyPropertyId
+				</if>
+				<if test="companySize != null" >
+				,companySize
+				</if>
+				<if test="beforeName != null" >
+				,beforeName
+				</if>
+				<if test="companyDesc != null" >
+				,companyDesc
+				</if>
+				<if test="website != null" >
+				,website
+				</if>
+				<if test="phone != null" >
+				,phone
+				</if>
+				<if test="email != null" >
+				,email
+				</if>
+				<if test="wechat != null" >
+				,wechat
+				</if>
+				<if test="content != null" >
+				,content
+				</if>
+				<if test="companyPosition != null" >
+				,companyPosition
+				</if>
+				<if test="econKind != null" >
+				,econKind
+				</if>
+				<if test="establishTime != null" >
+				,establishTime
+				</if>
+				<if test="approveDate != null" >
+				,approveDate
+				</if>
+				<if test="termStart != null" >
+				,termStart
+				</if>
+				<if test="operatingPeriod != null" >
+				,operatingPeriod
+				</if>
+				<if test="companyOpportunity != null" >
+				,companyOpportunity
+				</if>
+				<if test="hasResource != null " >
+				,hasResource
+				</if>
+				<if test="needResource != null" >
+				,needResource
+				</if>
+				<if test="createdBy != null" >
+				,createdBy
+				</if>
+				<if test="createDate != null" >
+				,createDate
+				</if>
+				<if test="updatedBy != null" >
+				,updatedBy
+				</if>
+				<if test="updateDate != null" >
+				,updateDate
+				</if>
+ 			)
+			VALUES
+				(
+				<if test="id != null and id !='' " >
+				#{id}
+				</if>
+				<if test="socialCredit != null" >
+				,#{socialCredit}
+				</if>
+				<if test="registrationCode != null" >
+				,#{registrationCode}
+				</if>
+				<if test="organizationCode != null" >
+				,#{organizationCode}
+				</if>
+				<if test="manageType != null" >
+				,#{manageType}
+				</if>
+				<if test="manageScope != null" >
+				,#{manageScope}
+				</if>
+				<if test="registeredMoney != null" >
+				,#{registeredMoney}
+				</if>
+				<if test="registrationAuthority != null" >
+				,#{registrationAuthority}
+				</if>
+				<if test="annualSalesVolume != null" >
+				,#{annualSalesVolume}
+				</if>
+				<if test="annualProfit != null" >
+				,#{annualProfit}
+				</if>
+				<if test="thisYearSalesVolume != null" >
+				,#{thisYearSalesVolume}
+				</if>
+				<if test="nextYearSalesVolume != null" >
+				,#{nextYearSalesVolume}
+				</if>
+				<if test="businessScope != null" >
+				,#{businessScope}
+				</if>
+				<if test="companyType != null" >
+				,#{companyType}
+				</if>
+				<if test="companyPropertyId != null" >
+				,#{companyPropertyId}
+				</if>
+				<if test="companySize != null" >
+				,#{companySize}
+				</if>
+				<if test="beforeName != null" >
+				,#{beforeName}
+				</if>
+				<if test="companyDesc != null" >
+				,#{companyDesc}
+				</if>
+				<if test="website != null" >
+				,#{website}
+				</if>
+				<if test="phone != null" >
+				,#{phone}
+				</if>
+				<if test="email != null" >
+				,#{email}
+				</if>
+				<if test="wechat != null" >
+				,#{wechat}
+				</if>
+				<if test="content != null" >
+				,#{content}
+				</if>
+				<if test="companyPosition != null" >
+				,#{companyPosition}
+				</if>
+				<if test="econKind != null" >
+				,#{econKind}
+				</if>
+				<if test="establishTime != null" >
+				,#{establishTime}
+				</if>
+				<if test="approveDate != null" >
+				,#{approveDate}
+				</if>
+				<if test="termStart != null" >
+				,#{termStart}
+				</if>
+				<if test="operatingPeriod != null" >
+				,#{operatingPeriod}
+				</if>
+				<if test="companyOpportunity != null" >
+				,#{companyOpportunity}
+				</if>
+				<if test="hasResource != null" >
+				,#{hasResource}
+				</if>
+				<if test="needResource != null" >
+				,#{needResource}
+				</if>
+				<if test="createdBy != null" >
+				,#{createdBy}
+				</if>
+				<if test="createDate != null" >
+				,#{createDate}
+				</if>
+				<if test="updatedBy != null" >
+				,#{updatedBy}
+				</if>
+				<if test="updateDate != null" >
+				,#{updateDate}
+				</if>
+				
+				
+				)
+			  
+  </insert>
+  
+
+
+  
+  
+
+	<update id="updatePagerFileName">
+  
+  	update dc_pagerfile set pagerName = #{companyName} where id = #{id}
+  
+  </update>
+  
+
+  
+  <delete id="deleteByCompanyById">
+  	   	update dc_company set status = 2,companyName=concat(companyName,'_',DATE_FORMAT(now(),'%Y-%m-%d %H:%i:%s')) where id=#{id}
+  </delete>
+  <select id="selecAllCompanyId" resultType="string">
+	  select id from dc_company
+  </select>
+
+
+
+	<select id="selectSolrCompanyIdsByDepartmentIdsAndOperate" resultType="string">
+		select d.id from dc_solr_company d where d.operate=#{operate} and d.departmentId in
+		<foreach collection="departmentIdList"  item="id" index="" separator=","  open="(" close=")" >
+			#{id}
+		</foreach>
+			order by id asc
+		   limit #{start},#{pageSize}
+	</select>
+
+	<delete id="deleteSolrCompanyIds">
+		delete from dc_solr_company where id in
+		<foreach item="id" collection="idList" separator="," open="(" close=")" index="">
+			#{id}
+		</foreach>
+		and operate=#{operate}
+	</delete>
+
+
+	<insert id="insertDcSolrCompany">
+		replace into dc_solr_company(id,departmentId,operate) select d.id,d.departmentId,${operate} from dc_company d where d.departmentId in
+		<foreach collection="departmentIdList"  item="id" index="" separator=","  open="(" close=")" >
+			#{id}
+		</foreach>
+	</insert>
+
+
+	<select id="selectAllCompanyIds" resultType="string">
+		select d.id from dc_company d where d.status=0
+	</select>
+
+
+
+	<select id="searchCompany" resultType="map">
+		SELECT
+					d.id AS id,
+					d.companyName AS companyName,
+					d.logo AS logo,
+					d.representative AS representative,
+					d.id AS companyId,
+					d.address AS address,
+					d.contactPhone,
+					d.contactName,
+					d.province AS province,
+					d.city AS city,
+					d.county AS county,
+					DATE_FORMAT(d.updateDate,'%Y-%m-%d %H:%i')  as updateDate,
+					DATE_FORMAT(d.createDate,'%Y-%m-%d %H:%i')  as createDate,
+					du1.uname AS companyAdviserName,
+					du2.uname AS companyDirectorName,
+					d.companyAdviserId,
+					d.companyDirectorId,
+					d.createdBy,
+					du0.uname as createdByName,
+					d.infoScore,
+					d.label,
+					d.departmentId,
+					dept.departmentName,
+					d.userLevelId,
+					d.userTypeId,
+					d.industryId,
+					d.channelId,
+					d.priorityId
+				FROM
+					dc_company d
+				left join dc_user du0 on du0.id=d.createdBy
+				LEFT JOIN dc_user du1 ON du1.id = d.companyAdviserId
+				LEFT JOIN dc_user du2 ON du2.id = d.companyDirectorId
+				left join dc_department dept on dept.id=d.departmentId
+				WHERE
+				d. STATUS = 0
+				<if test="searchValue!=null and searchValue!='' ">
+        			and (d.companyName like '%${searchValue}%' or du1.uname like  '%${searchValue}%' )
+				</if>
+				<if test="companyName!=null and companyName!=''">
+				and d.companyName=#{companyName}
+				</if>
+				<if test="mobile!=null and mobile!=''">
+				and d.contactPhone=#{mobile}
+				</if>
+				<if test="userLevelId!=null and userLevelId!=''">
+ 				and d.userLevelId=#{userLevelId}
+				</if>
+				<if test="industryId!=null and industryId!=''">
+				and d.industryId=#{industryId}
+				</if>
+				<if test="province!=null and province!=''">
+				and d.province=#{province}
+				</if>
+				<if test="city!=null and city!=''">
+				and d.city=#{city}
+				</if>
+				<if test="county!=null and county!=''">
+				and d.county=#{county}
+				</if>
+				<if test="companyAdviserId!=null and companyAdviserId!=''">
+				and d.companyAdviserId=#{companyAdviserId}
+				</if>
+				<if test="channelId!=null and channelId!=''">
+				and d.channelId=#{channelId}
+				</if>
+				<if test="companyDirectorId!=null and companyDirectorId!=''">
+				and d.companyDirectorId=#{companyDirectorId}
+				</if>
+				<if test="publicFlag==1">
+					and d.companyAdviserId=#{loginUserId}
+				</if>
+				<if test="publicFlag==2">
+					and d.id in (select companyId from dc_company_relative_user  u where u.userId=#{loginUserId})
+				</if>
+				<if test="publicFlag==3">
+					and d.companyDirectorId=#{loginUserId}
+				</if>
+				<if test="publicFlag==4">
+					and d.companyAdviserId is null or d.companyAdviserId=''
+				</if>
+				<if test="departmentIdList!=null and departmentIdList.size!=0">
+					and d.departmentId in
+					<foreach collection="departmentIdList" index="index" item="id" open="(" separator="," close=")">
+						#{id}
+					</foreach>
+				</if>
+  				order by d.updateDate desc
+				limit  #{start},#{pageSize}
+	</select>
+
+
+
+
+	<select id="searchCompanyCount" resultType="int">
+		SELECT
+		  count(1)
+		FROM
+		dc_company d
+		LEFT JOIN dc_user du1 ON du1.id = d.companyAdviserId
+		WHERE
+		d. STATUS = 0
+		<if test="searchValue!=null and searchValue!='' ">
+			and (d.companyName like '%${searchValue}%' or du1.uname like  '%${searchValue}%' )
+		</if>
+		<if test="companyName!=null and companyName!=''">
+			and d.companyName=#{companyName}
+		</if>
+		<if test="mobile!=null and mobile!=''">
+			and d.contactPhone=#{mobile}
+		</if>
+		<if test="userLevelId!=null and userLevelId!=''">
+			and d.userLevelId=#{userLevelId}
+		</if>
+		<if test="industryId!=null and industryId!=''">
+			and d.industryId=#{industryId}
+		</if>
+		<if test="province!=null and province!=''">
+			and d.province=#{province}
+		</if>
+		<if test="city!=null and city!=''">
+			and d.city=#{city}
+		</if>
+		<if test="county!=null and county!=''">
+			and d.county=#{county}
+		</if>
+		<if test="companyAdviserId!=null and companyAdviserId!=''">
+			and d.companyAdviserId=#{companyAdviserId}
+		</if>
+		<if test="channelId!=null and channelId!=''">
+			and d.channelId=#{channelId}
+		</if>
+		<if test="companyDirectorId!=null and companyDirectorId!=''">
+			and d.companyDirectorId=#{companyDirectorId}
+		</if>
+		<if test="publicFlag==1">
+			and d.companyAdviserId=#{loginUserId}
+		</if>
+		<if test="publicFlag==2">
+			and d.id in (select companyId from dc_company_relative_user  u where u.userId=#{loginUserId})
+		</if>
+		<if test="publicFlag==3">
+			and d.companyDirectorId=#{loginUserId}
+		</if>
+		<if test="publicFlag==4">
+			and d.companyAdviserId is null or d.companyAdviserId=''
+		</if>
+		<if test="departmentIdList!=null and departmentIdList.size!=0">
+			and d.departmentId in
+			<foreach collection="departmentIdList" index="index" item="id" open="(" separator="," close=")">
+				#{id}
+			</foreach>
+		</if>
+ 	</select>
+
+
+
+</mapper>

@@ -1,0 +1,543 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.PagerFileMapper" >
+
+	<select id="getDocumentAndPagerFileList" resultType="java.util.Map">
+		select * from (
+		(
+			select
+				d.id,d.updateDate,false isSelected,false isIconCheck,(select uname from dc_user where id = d.createdBy)uname,d.fileName,d.path,d.ext,d.fileSize,d.pagerFileId,p.pagerPath,p.sysFolder, '2' as flag,d.fileByte
+			<if test="departmentId != null and userId != null">
+				,pu.level
+			</if>
+			from dc_pagerfile p
+				<if test="departmentId != null and userId != null">
+					INNER JOIN dc_pagerfile_user pu
+					on (pu.pagerFileId = p.id or (p.pagerPath like CONCAT('%',pu.pagerFileId,'%')))
+					and (
+							<if test="pagerFileStatus == null or pagerFileStatus == ''">
+								(pu.userOrDepartmentId = #{userId}  and (pu.ttype = 1 or pu.ttype = 2) )
+							</if>
+							<if test="pagerFileStatus != null and pagerFileStatus == 'my'">
+								(pu.userOrDepartmentId = #{userId}  and pu.ttype = 1 )
+							</if>
+							<if test="pagerFileStatus != null and pagerFileStatus == 'share'">
+								(pu.userOrDepartmentId = #{userId}  and pu.ttype = 2 )
+							</if>
+
+					)
+				</if>
+				LEFT JOIN dc_company_document d on d.pagerFileId = p.id
+			where d.status = 0 and p.status = 0
+		    <if test="pagerFileId == null or pagerFileId == ''">
+			    and 1 = 2
+		    </if>
+			<if test="(pagerFileId != null and pagerFileId != '' ) and (likeName == null or likeName == '')">
+				<if test="pagerFileId != '00'">
+					and p.id = #{pagerFileId}
+				</if>
+			</if>
+			<if test="likeName != null and likeName != ''">
+				and d.fileName like CONCAT('%',#{likeName},'%')
+				<if test="(pagerFileId != null and pagerFileId != '00' )">
+					and (p.pagerPath like CONCAT(#{pagerFileId},'/%') or d.pagerFileId = #{pagerFileId})
+				</if>
+			</if>
+			<if test="pcCompanyId != null and pcCompanyId != ''">
+				and p.pcCompanyId = #{pcCompanyId}
+			</if>
+			<if test="depList != null and depList !='' and depList.size > 0">
+				and (
+				<foreach collection="depList" item="depId" open="(" close=")"  separator="OR">
+					p.departmentId = #{depId}
+				</foreach>
+				)
+			</if>
+			GROUP BY d.id ORDER BY ${ttype} desc
+		)
+		UNION All
+			(
+				select
+					p.id,p.updateDate,false isSelected,false isIconCheck,p.createdBy uname,'fileName','path','ext','fileSize','pagerFileId','pagerPath','sysFolder', '1' as flag,0 fileByte
+					<if test="departmentId != null and userId != null">
+						,pu.level
+					</if>
+				from dc_pagerfile p
+				<if test="departmentId != null and userId != null">
+					INNER JOIN dc_pagerfile_user pu
+					on (pu.pagerFileId = p.id or (p.pagerPath like CONCAT('%',pu.pagerFileId,'%')))
+					and (
+						<if test="pagerFileStatus == null or pagerFileStatus == ''">
+
+							(pu.userOrDepartmentId = #{userId}  and (pu.ttype = 1 or pu.ttype = 2) )
+						</if>
+						<if test="pagerFileStatus != null and pagerFileStatus == 'my'">
+							(pu.userOrDepartmentId = #{userId}  and pu.ttype = 1 )
+						</if>
+						<if test="pagerFileStatus != null and pagerFileStatus == 'share'">
+
+							(pu.userOrDepartmentId = #{userId}  and pu.ttype = 2 )
+						</if>
+					)
+				</if>
+				where  p.status = 0
+				<if test="pagerFileId == null or pagerFileId == ''">
+					and p.parentPagerFileId is null and id not in ('1','2','0')
+				</if>
+				<if test="(pagerFileId != null and pagerFileId != '00') and (likeName == null or likeName == '')">
+					and p.parentPagerFileId =#{pagerFileId}
+				</if>
+				<if test="likeName != null and likeName != ''">
+					and p.pagerName like CONCAT('%',#{likeName},'%')
+					<if test="(pagerFileId != null and pagerFileId != '00')">
+						and p.pagerPath like CONCAT(#{pagerFileId},'/%')
+					</if>
+				</if>
+
+				<if test="deleteFlag != null and deleteFlag != '' ">
+					<if test = "flag == null or flag == ''">
+						and 0 =  #{deleteFlag}
+					</if>
+					<if test = "flag == 0">
+						and (select count(*) from dc_company where id = p.id and status = 0)+0 = #{deleteFlag}
+					</if>
+					<if test = "flag == 1">
+						and (select count(*) from dc_bank_project where id = p.id and status = 0)+0 = #{deleteFlag}
+					</if>
+					<if test = "flag == 2">
+						and (select count(*) from dc_bank_program where id = p.id and status = 0)+0 = #{deleteFlag}
+					</if>
+					<if test = "flag == 3">
+						and (select count(*) from dc_task where id = p.id and status = 0)+0 = #{deleteFlag}
+					</if>
+				</if>
+				<if test="shareDelete != null and shareDelete != '' ">
+					<if test = "shareDelete == 0 ">
+					  and pu.level in ('1','2')
+					</if>
+					<if test = "shareDelete == 1 ">
+					  and pu.level = '3'
+					</if>
+				</if>
+				<if test="pcCompanyId != null and pcCompanyId != ''">
+					and p.pcCompanyId = #{pcCompanyId}
+				</if>
+			<if test="depList != null and depList !='' and depList.size > 0">
+				and (
+				<foreach collection="depList" item="depId" open="(" close=")"  separator="OR">
+					p.departmentId = #{depId}
+				</foreach>
+				)
+			</if>
+				GROUP BY p.id
+		)
+		)bb
+		order by bb.flag,bb.${ttype} desc
+			limit #{pageNo},#{pageSize}
+	</select>
+
+	<select id="getDocumentListTotal"  resultType="java.lang.Integer">
+		select count(*) from (
+			select
+			d.id
+			from dc_pagerfile p
+			<if test="departmentId != null and userId != null">
+				INNER JOIN dc_pagerfile_user pu
+				on (pu.pagerFileId = p.id or (p.pagerPath like CONCAT('%',pu.pagerFileId,'%')))
+				and (
+					<if test="pagerFileStatus == null or pagerFileStatus == ''">
+
+						(pu.userOrDepartmentId = #{userId}  and (pu.ttype = 1 or pu.ttype = 2) )
+					</if>
+					<if test="pagerFileStatus != null and pagerFileStatus == 'my'">
+						(pu.userOrDepartmentId = #{userId}  and pu.ttype = 1 )
+					</if>
+					<if test="pagerFileStatus != null and pagerFileStatus == 'share'">
+						(pu.userOrDepartmentId = #{userId}  and pu.ttype = 2 )
+					</if>
+				)
+			</if>
+			LEFT JOIN dc_company_document d on d.pagerFileId = p.id
+			where d.status = 0 and p.status = 0
+			<if test="pagerFileId == null or pagerFileId == ''">
+				and 1 = 2
+			</if>
+			<if test="(pagerFileId != null and pagerFileId != '' ) and (likeName == null or likeName == '')">
+				<if test="pagerFileId != '00'">
+					and p.id = #{pagerFileId}
+				</if>
+			</if>
+			<if test="likeName != null and likeName != ''">
+				and d.fileName like CONCAT('%',#{likeName},'%')
+				<if test="(pagerFileId != null and pagerFileId != '00' )">
+					and (p.pagerPath like CONCAT(#{pagerFileId},'/%') or d.pagerFileId = #{pagerFileId})
+				</if>
+			</if>
+			<if test="pcCompanyId != null and pcCompanyId != ''">
+				and p.pcCompanyId = #{pcCompanyId}
+			</if>
+			<if test="depList != null and depList !='' and depList.size > 0">
+				and (
+				<foreach collection="depList" item="depId" open="(" close=")"  separator="OR">
+					p.departmentId = #{depId}
+				</foreach>
+				)
+			</if>
+			GROUP BY d.id
+		)aa
+
+	</select>
+	<select id="getPagerFileListTotal" resultType="java.lang.Integer">
+		select count(*) from (
+			select
+			p.id
+			from dc_pagerfile p
+			<if test="departmentId != null and userId != null">
+				INNER JOIN dc_pagerfile_user pu
+				on (pu.pagerFileId = p.id or (p.pagerPath like CONCAT('%',pu.pagerFileId,'%')))
+				and (
+					<if test="pagerFileStatus == null or pagerFileStatus == ''">
+
+						(pu.userOrDepartmentId = #{userId}  and (pu.ttype = 1 or pu.ttype = 2) )
+					</if>
+					<if test="pagerFileStatus != null and pagerFileStatus == 'my'">
+						(pu.userOrDepartmentId = #{userId}  and pu.ttype = 1 )
+					</if>
+					<if test="pagerFileStatus != null and pagerFileStatus == 'share'">
+
+						(pu.userOrDepartmentId = #{userId}  and pu.ttype = 2 )
+					</if>
+				)
+			</if>
+			where  p.status = 0
+			<if test="pagerFileId == null or pagerFileId == ''">
+				and p.parentPagerFileId is null and id not in ('1','2','0')
+			</if>
+			<if test="(pagerFileId != null and pagerFileId != '00') and (likeName == null or likeName == '')">
+				and p.parentPagerFileId =#{pagerFileId}
+			</if>
+			<if test="likeName != null and likeName != ''">
+				and p.pagerName like CONCAT('%',#{likeName},'%')
+				<if test="(pagerFileId != null and pagerFileId != '00')">
+					and p.pagerPath like CONCAT(#{pagerFileId},'/%')
+				</if>
+			</if>
+
+			<if test="deleteFlag != null and deleteFlag != '' ">
+				<if test = "flag == null or flag == ''">
+					and 0 =  #{deleteFlag}
+				</if>
+				<if test = "flag == 0">
+					and (select count(*) from dc_company where id = p.id and status = 0)+0 = #{deleteFlag}
+				</if>
+				<if test = "flag == 1">
+					and (select count(*) from dc_bank_project where id = p.id and status = 0)+0 = #{deleteFlag}
+				</if>
+				<if test = "flag == 2">
+					and (select count(*) from dc_bank_program where id = p.id and status = 0)+0 = #{deleteFlag}
+				</if>
+				<if test = "flag == 3">
+					and (select count(*) from dc_task where id = p.id and status = 0)+0 = #{deleteFlag}
+				</if>
+			</if>
+			<if test="shareDelete != null and shareDelete != '' ">
+				<if test = "shareDelete == 0 ">
+					and pu.level in ('1','2')
+				</if>
+				<if test = "shareDelete == 1 ">
+					and pu.level = '3'
+				</if>
+			</if>
+			<if test="pcCompanyId != null and pcCompanyId != ''">
+				and p.pcCompanyId = #{pcCompanyId}
+			</if>
+			<if test="depList != null and depList !='' and depList.size > 0">
+				and (
+				<foreach collection="depList" item="depId" open="(" close=")"  separator="OR">
+					p.departmentId = #{depId}
+				</foreach>
+				)
+			</if>
+			GROUP BY p.id
+		)aa
+	</select>
+
+	<select id="getPagerFileListInIds" resultType="java.util.Map">
+		select
+		p.id,p.pagerName,p.updateDate,false isSelected,false isIconCheck,p.parentPagerFileId,p.sysFolder,
+		<if test="departmentId != null and userId != null">
+			pu.level,
+		</if>
+		(select uname from dc_user where id = p.createdBy)uname,p.pagerPath,
+		(select count(*)  from dc_pagerfile where parentPagerFileId = p.id and status = 0) pagerFileNumber,
+		(select count(*) from dc_company_document where pagerFileId = p.id and status = 0) fileNumber,
+		case
+			<if test="departmentId == null and userId == null">
+				when p.parentPagerFileId = '0' then (select count(*) from dc_company where id = p.id and status = 0)+0
+				when p.parentPagerFileId = '1' then (select count(*) from dc_bank_project where id = p.id and status = 0)+0
+				when p.parentPagerFileId = '2' then (select count(*) from dc_bank_program where id = p.id and status = 0)+0
+				when p.parentPagerFileId = '3' then (select count(*) from dc_task where id = p.id and status = 0)+0
+				when p.sysFolder = '1' then 1
+			</if>
+			<if test="departmentId != null and userId != null">
+				when pu.level = '3' then '1'
+			</if>
+			else 0 end deleteFlag
+		<if test="departmentId != null and userId != null">
+			,pu.level
+		</if>
+
+		from dc_pagerfile p
+
+		<if test="departmentId != null and userId != null">
+			INNER JOIN dc_pagerfile_user pu
+			on (pu.pagerFileId = p.id or (p.pagerPath like CONCAT('%',pu.pagerFileId,'%')))
+			and (
+					(pu.userOrDepartmentId = #{userId}  and (pu.ttype = 1 or pu.ttype = 2) )
+			)
+		</if>
+
+		where p.status = 0
+
+		<if test="null != ids   and ids.size  > 0 ">
+			and (
+			<foreach collection="ids" item="id" open="(" close=")" separator="or">
+				p.id  = #{id.id}
+			</foreach>
+			)
+		</if>
+		GROUP BY p.id ORDER BY ${ttype} desc
+	</select>
+
+	<select id="getMyPagerFileList" resultType="java.util.Map">
+		select
+		p.id,p.pagerName,p.updateDate,false isSelected,false isIconCheck,p.parentPagerFileId,p.sysFolder,pu.level,
+		case when pu.level = '3' then 1 else 0 end deleteFlag,
+		(select uname from dc_user where id = p.createdBy)uname,pagerPath,
+		(select count(*)  from dc_pagerfile where parentPagerFileId = p.id and status = 0) pagerFileNumber,
+		(select count(*) from dc_company_document where pagerFileId = p.id and status = 0) fileNumber, 0  deleteFlag
+		from dc_pagerfile p
+			INNER JOIN dc_pagerfile_user pu
+				on pu.pagerFileId = p.id
+				<if test="departmentId != null and userId != null">
+				and (
+					(pu.userOrDepartmentId = #{departmentId} and pu.ttype = 3 ) or
+					(pu.userOrDepartmentId = #{userId} and (pu.ttype = 1 or pu.ttype = 2) )
+				)
+				</if>
+		where  status = 0
+		<if test="status != null and status == 'share'">
+			and parentPagerFileId is not null and pu.ttype != 1
+		</if>
+		<if test="status != null and status == 'tree'">
+			and parentPagerFileId is null and p.id not in ('1','2','0')
+		</if>
+		<if test="shareDelete != null and shareDelete != '' ">
+			<if test = "shareDelete == 0 ">
+				and pu.level in ('1','2')
+			</if>
+			<if test = "shareDelete == 1 ">
+				and pu.level = '3'
+			</if>
+		</if>
+		GROUP BY p.id  ORDER BY p.${ttype} desc
+	</select>
+
+	<select id="getMyPagerFileListTotal" resultType="java.lang.Integer">
+		select count(*) from (
+			select
+				p.id
+			from dc_pagerfile p
+				INNER JOIN dc_pagerfile_user pu
+				on pu.pagerFileId = p.id
+				<if test="departmentId != null and userId != null">
+				and (
+						(pu.userOrDepartmentId = #{departmentId} and pu.ttype = 3 )or
+						(pu.userOrDepartmentId = #{userId} and (pu.ttype = 1 or pu.ttype = 2) )
+					)
+				</if>
+			where  status = 0
+			<if test="status != null and status == 'share'">
+				and parentPagerFileId is not null and pu.ttype != 1
+			</if>
+			<if test="status != null and status == 'tree'">
+				and parentPagerFileId is null and p.id not in ('1','2','0')
+			</if>
+			<if test="shareDelete != null and shareDelete != '' ">
+				<if test = "shareDelete == 0 ">
+					and pu.level in ('1','2')
+				</if>
+				<if test = "shareDelete == 1 ">
+					and pu.level = '3'
+				</if>
+			</if>
+			GROUP BY p.id
+		)aa
+	</select>
+	<insert id="savePagerFile"  keyProperty="id" useGeneratedKeys="true" parameterType="java.util.Map">
+    insert into dc_pagerFile (
+    	id,pagerName,parentPagerFileId,pagerPath,createdBy,updatedBy,createDate,updateDate,status,ttype,sysFolder,pcCompanyId,departmentId
+    )values (
+   		#{id},
+   		#{pagerName,jdbcType=VARCHAR},
+   		#{parentId,jdbcType=VARCHAR},
+   		#{pagerPath},
+   		#{userId,jdbcType=VARCHAR},
+   		#{userId,jdbcType=VARCHAR},
+  		now(),
+   	  <if test="times != null and times !='' " >
+        LEFT(DATE_SUB(NOW(),INTERVAL -#{times} SECOND),19),
+      </if>
+      <if test="times == null or times =='' " >
+  		now(),
+      </if>
+   		0,
+   		#{ttype},
+	  #{sysFolder},
+		#{pcCompanyId},#{departmentId}
+    )
+  </insert>
+	<insert id="savePagerFileUser"  keyProperty="id" useGeneratedKeys="true" parameterType="java.util.Map">
+	replace  into dc_pagerFile_user (
+		id,pagerFileId,userOrDepartmentId,ttype,level,createDate
+	)values (
+		#{id},
+		#{pagerFileId},
+		#{userOrDepartmentId},
+		#{ttype},
+		#{level},
+		now()
+	)
+</insert>
+  <update id="updatePagerFile">
+  		update dc_pagerFile 
+  		<trim prefix="set" suffixOverrides=",">
+		  <if test="pagerName != null and pagerName !='' " >
+	        pagerName = #{pagerName},
+	      </if>
+	      <if test="parentId != null and parentId !='' " >
+	        parentPagerFileId = #{parentPagerFileId},
+	      </if>
+	      <if test="userId != null and userId !='' " >
+	        updatedBy =  #{userId},
+      	  </if>
+      	  <if test="pagerPath != null and pagerPath !='' " >
+	        pagerPath =  #{pagerPath},
+      	  </if>
+	 	</trim>
+    	,updateDate=NOW()
+    	,status = 0 
+    where id=#{id}
+  </update>
+  
+  <select id="getPagerFileByPid" resultType="java.util.Map">
+  	select 
+  		id,pagerName,parentPagerFileId,pagerPath,createdBy,updatedBy,createDate,updateDate,status,sysFolder
+  	from dc_pagerFile p where   parentPagerFileId = #{parentId} and status = 0
+  </select>
+  
+  <select id="getPagerFileById" resultType="java.util.Map">
+  	select 
+  		id,pagerName,parentPagerFileId,pagerPath,createdBy,updatedBy,createDate,updateDate,status,ttype,sysFolder,departmentId
+  	from dc_pagerFile p where   id = #{id} 
+  </select>
+  
+  <update id="deletePagerFileById">
+  update dc_pagerFile  set status = 2  where id = #{id}
+  	
+  </update>
+ 
+  <update id="deleteDocumentByPagerFileId">   
+  update dc_company_document  set 
+	  status = 2,
+	  path = concat(#{pagerPath},#{fileName}),
+	  fileName =#{fileName}   
+  where path like concat('%',#{id},'%')
+  	
+  </update>
+  
+   <select id="getDocumentByPidAndName" resultType="java.util.Map">
+  	select fileName from dc_company_document p where   pagerFileId = #{pagerFileId} and status = 0 and fileName = #{fileName}
+  </select>
+  <select id="getPagerFileAndDocumentLikePath" resultType="java.util.Map">
+  	select 
+  		f.*,d.fileName,d.path 
+  	from dc_pagerFile f 
+  		LEFT JOIN dc_company_document d on d.pagerFileId = f.id and d.status = 0 
+  		where f.pagerPath like concat('%',#{pagerFileId},'%') and f.status = 0  ORDER BY f.updateDate
+  </select>
+  
+  <select id="checkFileName" resultType="java.util.Map">
+  	select d.fileName from  dc_company_document d  
+  		where pagerFileId = #{pagerFileId} 
+  		<if test="folderlist != null">
+			and s
+			<foreach collection="folderlist" item="id" open="(" close=")" separator="OR">  
+   				d.fileName = #{id}  
+  			</foreach>  
+		</if>
+  </select> 
+  <select id="getPagerFileByPidAndName" resultType="java.util.Map">
+  	select 
+  		id,pagerName,parentPagerFileId,pagerPath,createdBy,updatedBy,createDate,updateDate,status,ttype,sysFolder
+  	from dc_pagerfile p where  status = 0
+  	<if test="pagerFileId == null or pagerFileId == ''">
+  		and parentPagerFileId is null
+  	</if>
+  	<if test="pagerFileId != null and pagerFileId != ''">
+  		and parentPagerFileId =#{pagerFileId}
+  	</if>
+  	<if test="pagerFileName != null and pagerFileName != ''">
+  		and pagerName = #{pagerFileName}
+  	</if>
+  	
+  </select>
+  
+  <select id="getPagerFileInId" resultType="java.util.Map">
+  	select
+	  p.id,p.pagerName,p.parentPagerFileId,p.pagerPath,p.createdBy,p.updatedBy,p.createDate,p.updateDate,p.status,p.ttype,p.sysFolder
+  	from dc_pagerfile p
+	  <if test="departmentId != null and userId != null">
+		  INNER JOIN dc_pagerfile_user pu
+		  on (pu.pagerFileId = p.id or (p.pagerPath like CONCAT('%',pu.pagerFileId,'%')))
+		  and ((pu.userOrDepartmentId = #{departmentId} and pu.ttype = 3 ) or (pu.userOrDepartmentId = #{userId} and (pu.ttype = 1 or pu.ttype = 2) ) )
+	  </if>
+  	where   p.id in (${ids}) order by p.updateDate asc
+
+  </select>
+
+
+	<update id="editDepartmentFolder">
+		update dc_pagerfile  set
+		departmentId = #{departmentId},updateDate = now(),updatedBy = #{updatedBy}
+		where
+			<foreach collection="idList" item="id" open="(" close=")" separator="OR">
+				id = #{id}
+			</foreach>
+	</update>
+	<update id="editFolder">
+		update dc_pagerfile  set
+		sysFolder = 0,updateDate = now()
+		where
+		<foreach collection="idList" item="id" open="(" close=")" separator="OR">
+			id = #{id}
+		</foreach>
+	</update>
+	<delete id="deleteSetShare">
+		delete from dc_pagerfile_user where pagerFileId = #{pagerFileId} and ttype != '1'
+		<if test="level != null and level != ''">
+			and level = #{level}
+		</if>
+	</delete>
+	<select id="getUserAndDepartment" resultType="java.util.Map">
+		select
+		pu.userOrDepartmentId id,pu.level,pu.ttype,
+		case
+			when pu.ttype = '2' then (select uname from dc_user where id = pu.userOrDepartmentId)
+			else (select departmentName from dc_department where id = pu.userOrDepartmentId) end uname
+		from dc_pagerfile_user pu  where pu.pagerFileId = #{pagerFileId}
+		<if test="level != null and level != ''">
+			and pu.level = #{level} and ttype != '1'
+		</if>
+	</select>
+</mapper>

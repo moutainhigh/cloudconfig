@@ -1,0 +1,17 @@
+package com.xkd.mapper;
+
+import com.xkd.model.SpreadSetting;
+
+import java.util.List;
+import java.util.Map;
+
+public interface SpreadMapper {
+
+    Integer insertSpreadSetting(SpreadSetting spreadSetting);
+
+    Integer updateSpreadSetting(SpreadSetting spreadSetting);
+
+    List<SpreadSetting> selectSpreadSettings(Map<String, Object> paramMap);
+
+    Integer selectSpreadSettingsTotal(Map<String, Object> paramMap);
+}

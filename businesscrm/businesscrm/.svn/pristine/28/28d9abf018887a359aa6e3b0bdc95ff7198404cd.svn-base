@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.SuggestionMapper" >
+  <resultMap id="BaseResultMap" type="Suggestion" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <id column="pid" property="pid" jdbcType="INTEGER" />
+    <id column="meetingId" property="meetingId" jdbcType="INTEGER" />
+    <id column="companyId" property="companyId" jdbcType="VARCHAR" />
+    <id column="userId" property="userId" jdbcType="VARCHAR" />
+    <id column="content" property="content" jdbcType="VARCHAR" />
+    <id column="createDate" property="updateTime" jdbcType="TIMESTAMP" />
+    <id column="status" property="status" jdbcType="TINYINT" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id,pid,meetingId,companyId,userId,content,createDate,status
+  </sql>
+  
+  <select id="selectSuggestionsByMeetingId" resultType="java.util.HashMap">
+   
+  	select   s.id as questionId,s.userId as questionPersonId,ss.id as answerId,s.meetingId,s.companyId,ss.userId,s.content as questionContent,
+  	
+  	ss.content as answerContent,s.createDate as questionUpdateTime,ss.createDate as answerUpdateTime,c.companyName,c.logo  
+    
+    from (select * from dc_suggestion where meetingId = #{meetingId} and status = 0 and pid = 0 ) s left join (select * from dc_suggestion where status = 0 and pid !=0) ss 
+    
+    on s.id = ss.pid  INNER JOIN dc_company c on s.companyId = c.id 
+    
+    ORDER BY questionUpdateTime desc 
+    
+  </select>
+ 
+  
+  <update id="deleteSuggestionById">
+  
+  	update dc_suggestion set status = 2 where id = #{id} 
+  	
+  </update>
+  
+  <insert id="answerSuggestion">
+  
+  	insert into dc_suggestion(id,pid,meetingId,companyId,userId,content,createDate,status) 
+  	
+  		values
+  	
+  	(UUID(),#{pid},#{meetingId},#{companyId},#{userId},#{content},NOW(),0)
+  
+  </insert>
+  
+
+</mapper>

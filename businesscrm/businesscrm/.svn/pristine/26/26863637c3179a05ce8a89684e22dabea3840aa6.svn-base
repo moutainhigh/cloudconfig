@@ -1,0 +1,121 @@
+package com.xkd.controller;
+
+import com.xkd.model.ResponseDbCenter;
+import com.xkd.model.groups.SaveValidateGroup;
+import com.xkd.model.groups.UpdateValidateGroup;
+import com.xkd.model.vo.MeetingVo;
+import com.xkd.service.MeetingService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import java.security.acl.Group;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Api(description = "会务相关接口")
+@Controller
+@RequestMapping("/meeting")
+@Transactional
+public class MeetingController  {
+
+    @Autowired
+    MeetingService meetingService;
+
+    @ApiOperation(value = "添加会务")
+    @ResponseBody
+    @RequestMapping(value = "/addMeeting",method =  {RequestMethod.POST})
+    public ResponseDbCenter addMeeting(HttpServletRequest req, HttpServletResponse rsp,
+                                            @ApiParam("会务")    @RequestBody(required = true) @Validated(value = {SaveValidateGroup.class}) MeetingVo meetingVo
+
+    ) throws Exception {
+        // 当前登录用户的Id
+        String loginUserId = (String) req.getAttribute("loginUserId");
+
+        meetingService.saveMeeting(meetingVo,loginUserId);
+
+        ResponseDbCenter responseDbCenter = new ResponseDbCenter();
+        return responseDbCenter;
+    }
+
+    @ApiOperation(value = "修改会务")
+    @ResponseBody
+    @RequestMapping(value = "/updateMeeting",method =  {RequestMethod.POST})
+    public ResponseDbCenter updateMeeting(HttpServletRequest req, HttpServletResponse rsp,
+                                                @ApiParam("会务")    @RequestBody(required = true)  @Validated(value = {UpdateValidateGroup.class}) MeetingVo meetingVo
+
+    ) throws Exception {
+        // 当前登录用户的Id
+        String loginUserId = (String) req.getAttribute("loginUserId");
+
+        meetingService.updateMeeting(meetingVo, loginUserId);
+
+        ResponseDbCenter responseDbCenter = new ResponseDbCenter();
+        return responseDbCenter;
+    }
+
+
+
+    @ApiOperation(value = "删除会务")
+    @ResponseBody
+    @RequestMapping(value = "/deleteMeeting",method =  {RequestMethod.POST,RequestMethod.GET})
+    public ResponseDbCenter deleteMeeting(HttpServletRequest req, HttpServletResponse rsp,
+                                          @ApiParam(value = "会务Ids , 多个用逗号分隔",required = true)    @RequestParam(required = true) String ids
+
+    ) throws Exception {
+        // 当前登录用户的Id
+        String loginUserId = (String) req.getAttribute("loginUserId");
+        if (StringUtils.isNotBlank(ids)){
+           String[] idArray=ids.split(",");
+            List<String> idList= Arrays.asList(idArray);
+            meetingService.deleteMeetingByIds(idList);
+        }
+        ResponseDbCenter responseDbCenter = new ResponseDbCenter();
+        return responseDbCenter;
+    }
+
+
+
+    @ApiOperation(value = "搜索会务")
+    @ResponseBody
+    @RequestMapping(value = "/searchMeeting",method =  {RequestMethod.POST,RequestMethod.GET})
+    public ResponseDbCenter searchMeeting(HttpServletRequest req, HttpServletResponse rsp,
+                                          @ApiParam(value = "检索值" ,required = false)    @RequestParam(required = false) String searchName,
+                                          @ApiParam(value = "会务名称" ,required = false)    @RequestParam(required = false) String meetingName,
+                                          @ApiParam(value = "会议状态  0  未开始  1 已开始  2 未开始  3 停止" ,required = false)    @RequestParam(required = false) String flag,
+                                          @ApiParam(value = "创建人" ,required = false)    @RequestParam(required = false) String createdBy,
+                                          @ApiParam(value = "时间起" ,required = false)    @RequestParam(required = false) String startTime,
+                                          @ApiParam(value = "时间止" ,required = false)    @RequestParam(required = false) String endTime
+
+    ) throws Exception {
+        // 当前登录用户的Id
+        String loginUserId = (String) req.getAttribute("loginUserId");
+        Map<String,Object> map=new HashMap<>();
+        map.put("searchName",searchName);
+        map.put("meetingName",meetingName);
+        map.put("flag",flag);
+        map.put("createdBy",createdBy);
+        map.put("startTime",startTime);
+        map.put("endTime",endTime);
+        List<Map<String,Object>> list=meetingService.searchMeeting(map);
+        Integer count=meetingService.searchMeetingCount(map);
+
+
+        ResponseDbCenter responseDbCenter = new ResponseDbCenter();
+        responseDbCenter.setResModel(list);
+        responseDbCenter.setTotalRows(count+"");
+        return responseDbCenter;
+    }
+
+}

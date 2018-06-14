@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.UserPayMapper" >
+
+    <select id="getUserPayByOpenId" resultType="java.util.Map" >
+        select  id,openId,payStatus,mobile,uname,course,adviserName,payTime  from dc_pay_user where openId = #{openId}
+    </select>
+    <insert id="saveUserPay" parameterType="java.util.Map">
+        insert into dc_pay_user
+          (id,uname,nickName,openId,payStatus,createDate)
+        values
+          (#{id},#{nickName},#{nickName},#{openId},'0',now())
+    </insert>
+
+    <insert id="saveUserPayLogger" parameterType="java.util.Map">
+        insert into dc_pay_logger
+        (openId,transactionId,outTradeNo,payTime,payStatus)
+        values
+        (#{openId},#{transaction_id},#{out_trade_no},now(),'1')
+    </insert>
+  <update id="editUserPay" parameterType="java.util.Map">
+        UPDATE dc_pay_user set
+          payStatus = #{payStatus},
+          mobile = #{mobile},
+          uname = #{uname},
+          course = #{course},
+          adviserName = #{adviserName},
+          updateDate = now(),
+          payTime = #{payTime}
+          where id = #{id}
+  </update>
+    <select id="getUserPayAdviser" resultType="java.util.Map" >
+        select  *  from dc_pay_user_adviser where mobile = #{mobile}
+    </select>
+    <select id="getAllAdviser" resultType="java.util.Map" >
+        select  adviserName  from dc_pay_user_adviser GROUP BY adviserName
+    </select>
+    <select id="getPayUserList" resultType="java.util.Map" >
+        select  openId,payTime,uname,mobile,course,adviserName  from dc_pay_user where payStatus = '1'
+          <if test="adviserName != null and adviserName != ''">
+              and adviserName = #{adviserName}
+          </if>
+        ORDER  BY updateDate
+    </select>
+</mapper>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.DC_UserMapper" >
+	<resultMap id="BaseResultMap" type="DC_User" >
+		<id column="ID" property="id" jdbcType="INTEGER" />
+		<result column="uname" property="uname" jdbcType="VARCHAR" />
+		<result column="weixin" property="weixin" jdbcType="VARCHAR" />
+		<result column="mobile" property="mobile" jdbcType="VARCHAR" />
+		<result column="update_Date" property="updateDate" jdbcType="VARCHAR" />
+		<result column="userLogo" property="userLogo" jdbcType="VARCHAR" />
+		<result column="sex" property="sex" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+		<result column="updateDate" property="updateDate" jdbcType="VARCHAR" />
+		<result column="unionId" property="unionId" jdbcType="VARCHAR" />
+		<result column="nickName" property="nickName" jdbcType="VARCHAR" />
+		<result column="platform" property="platform" jdbcType="VARCHAR" />
+
+
+
+	</resultMap>
+	<sql id="Base_Column_List" >
+		ID,uname,weixin,mobile,userLogo
+	</sql>
+	<select id="getUserByObj" parameterType="DC_User" resultMap="BaseResultMap">
+
+		select ID,uname,weixin,mobile,unionId,userLogo,status,nickName,platform,pcCompanyId,roleId from DC_USER where 1 =1
+
+		<if test="ttype == 1">
+			and mobile = #{id,jdbcType=VARCHAR}
+		</if>
+
+		<if test="ttype == 2">
+			and weixin = #{id,jdbcType=VARCHAR}
+		</if>
+
+		<if test="ttype == 3">
+			and unionId = #{id,jdbcType=VARCHAR}
+		</if>
+
+	</select>
+
+	<insert id="saveUser" parameterType="DC_User" keyProperty="id" useGeneratedKeys="true">
+		insert into DC_USER (id,uname,weixin,mobile,sex,userLogo,unionId,updateDate,createdBy,updatedBy,createDate,platform)
+
+		values (
+		#{id},
+		#{uname,jdbcType=VARCHAR},
+		#{weixin,jdbcType=VARCHAR},
+		#{mobile,jdbcType=VARCHAR},
+		#{sex,jdbcType=VARCHAR},
+		#{userLogo,jdbcType=VARCHAR},
+		#{unionId,jdbcType=VARCHAR},
+		now(),
+		#{id},
+		#{id},
+		now(),
+		'0'
+		)
+	</insert>
+	<insert id="saveUserDetail" parameterType="DC_User" keyProperty="id" useGeneratedKeys="true">
+		insert into dc_user_detail (id,updateDate,createdBy,updatedBy,createDate)
+
+		values (
+		#{id},
+		now(),
+		#{id},
+		#{id},
+		now()
+		)
+	</insert>
+
+
+
+
+
+	<update id="editUser" parameterType="DC_User">
+		update DC_USER
+		<trim prefix="set" suffixOverrides=",">
+			<if test="uname!=null">uname = #{uname},</if>
+			<if test="mobile!=null">mobile = #{mobile},</if>
+			<if test="weixin!=null">weixin = #{weixin},</if>
+			<if test="unionId!=null">unionId = #{unionId},</if>
+			<if test="userLogo!=null">userLogo = #{userLogo},</if>
+			<if test="platform!=null">platform = #{platform},</if>
+
+		</trim>
+		where id = #{id}
+	</update>
+
+
+
+
+
+
+
+
+
+	<select id="getUserById"  resultMap="BaseResultMap">
+
+		select ID,uname,weixin,mobile,userLogo,unionId,status,nickName,email from DC_USER where id =#{id}
+
+	</select>
+
+
+
+
+
+
+
+
+</mapper>
