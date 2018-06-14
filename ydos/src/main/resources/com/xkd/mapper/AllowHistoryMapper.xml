@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xkd.mapper.AllowHistoryMapper">
+  <insert id="insert">
+    INSERT INTO dc_yd_allow_history
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null"> id, </if>
+      <if test="allowerId != null"> allowerId, </if>
+      <if test="pcCompanyId != null"> pcCompanyId, </if>
+      <if test="alloweeId != null"> alloweeId, </if>
+      <if test="flag != null"> flag, </if>
+      <if test="acceptStatus != null"> acceptStatus, </if>
+      <if test="createdBy != null"> createdBy, </if>
+      <if test="createDate != null"> createDate, </if>
+    </trim>
+    VALUES
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null"> #{id}, </if>
+      <if test="allowerId != null"> #{allowerId}, </if>
+      <if test="pcCompanyId != null"> #{pcCompanyId}, </if>
+      <if test="alloweeId != null"> #{alloweeId}, </if>
+      <if test="flag != null"> #{flag}, </if>
+      <if test="acceptStatus != null"> #{acceptStatus}, </if>
+      <if test="createdBy != null"> #{createdBy}, </if>
+      <if test="createDate != null"> #{createDate}, </if>
+    </trim>
+  </insert>
+
+
+
+  <update id="update">
+    UPDATE dc_yd_allow_history
+    <set>
+      <if test="id != null"> id = #{id}, </if>
+      <if test="allowerId != null"> allowerId = #{allowerId}, </if>
+      <if test="pcCompanyId != null"> pcCompany_id = #{pcCompanyId}, </if>
+      <if test="alloweeId != null"> alloweeId = #{alloweeId}, </if>
+      <if test="flag != null"> flag = #{flag}, </if>
+      <if test="acceptStatus != null"> acceptStatus = #{acceptStatus} </if>
+    </set>
+    WHERE id = #{id}
+  </update>
+
+
+  <select id="selectById" resultType="java.util.Map">
+    select
+        h.id,
+        h.allowerId,
+        h.pcCompanyId,
+        h.alloweeId,
+        h.flag,
+        h.acceptStatus
+ from dc_yd_allow_history h where h.id=#{id}
+  </select>
+
+</mapper>

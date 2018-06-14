@@ -1,0 +1,481 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.DeviceMapper">
+
+
+    <select id="selectTotalDeviceByCompanyId" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM dc_yd_device d
+        WHERE d.companyId = #{companyId} AND status = 0
+    </select>
+
+    <insert id="insertDevice">
+        INSERT INTO dc_yd_device
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="groupId != null">groupId,</if>
+            <if test="pcCompanyId != null">pcCompanyId,</if>
+            <if test="deviceName != null">deviceName,</if>
+            <if test="deviceNo != null">deviceNo,</if>
+            <if test="deviceType != null">deviceType,</if>
+            <if test="productionDate != null">productionDate,</if>
+            <if test="brand != null">brand,</if>
+            <if test="model != null">model,</if>
+            <if test="boxId != null">boxId,</if>
+            <if test="serialNo != null">serialNo,</if>
+            <if test="createdBy != null">createdBy,</if>
+            <if test="updatedBy != null">updatedBy,</if>
+            <if test="status != null">status,</if>
+            <if test="companyId != null">companyId,</if>
+            <if test="notConfImg != null">notConfImg,</if>
+            <if test="redImg != null">redImg,</if>
+            <if test="yellowImg != null">yellowImg,</if>
+            <if test="greenImg != null">greenImg,</if>
+
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="groupId != null">#{groupId},</if>
+            <if test="pcCompanyId != null">#{pcCompanyId},</if>
+            <if test="deviceName != null">#{deviceName},</if>
+            <if test="deviceNo != null">#{deviceNo},</if>
+            <if test="deviceType != null">#{deviceType},</if>
+            <if test="productionDate != null">#{productionDate},</if>
+            <if test="brand != null">#{brand},</if>
+            <if test="model != null">#{model},</if>
+            <if test="boxId != null">#{boxId},</if>
+            <if test="serialNo != null">#{serialNo},</if>
+            <if test="createdBy != null">#{createdBy},</if>
+            <if test="updatedBy != null">#{updatedBy},</if>
+            <if test="status != null">#{status},</if>
+            <if test="companyId != null">#{companyId},</if>
+            <if test="notConfImg != null">#{notConfImg},</if>
+            <if test="redImg != null">#{redImg},</if>
+            <if test="yellowImg != null">#{yellowImg},</if>
+            <if test="greenImg != null">#{greenImg},</if>
+        </trim>
+    </insert>
+
+    <update id="updateDevice">
+        UPDATE dc_yd_device
+        <set>
+            <if test="id != null">id = #{id},</if>
+            <if test="groupId != null">groupId = #{groupId},</if>
+            <if test="pcCompanyId != null">pcCompanyId = #{pcCompanyId},</if>
+            <if test="deviceName != null">deviceName = #{deviceName},</if>
+            <if test="deviceNo != null">deviceNo = #{deviceNo},</if>
+            <if test="deviceType != null">deviceType = #{deviceType},</if>
+            <if test="productionDate != null">productionDate = #{productionDate},</if>
+            <if test="brand != null">brand = #{brand},</if>
+            <if test="model != null">model = #{model},</if>
+            <if test="boxId != null">boxId = #{boxId},</if>
+            <if test="serialNo != null">serialNo = #{serialNo},</if>
+            <if test="createdBy != null">createdBy = #{createdBy},</if>
+            <if test="updatedBy != null">updatedBy = #{updatedBy},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="companyId != null">companyId = #{companyId},</if>
+            <if test="notConfImg != null">notConfImg = #{notConfImg},</if>
+            <if test="redImg != null">redImg = #{redImg},</if>
+            <if test="yellowImg != null">yellowImg = #{yellowImg},</if>
+            <if test="greenImg != null">greenImg = #{greenImg}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <select id="selectDeviceByGroupIds" resultType="java.util.Map">
+        SELECT
+        d.id,
+        d.groupId,
+        d.pcCompanyId,
+        d.companyId,
+        d.deviceName,
+        d.deviceNo,
+        d.deviceType,
+        d.productionDate,
+        d.brand,
+        d.model,
+        d.boxId,
+        d.serialNo,
+        d.createDate,
+        d.createdBy,
+        d.updateDate,
+        d.updatedBy,
+        d.greenImg,
+        d.status
+        FROM
+        dc_yd_device d
+        WHERE
+        d.status=0
+        <if test="groupIdList!=null and groupIdList.size>0">
+            and d.groupId IN
+            <foreach collection="groupIdList" item="groupId" index="" separator="," open="(" close=")">
+                #{groupId}
+            </foreach>
+        </if>
+        <if test="pcCompanyIdList!=null and pcCompanyIdList!=''">
+            and d.pcCompanyId in
+            <foreach collection="pcCompanyIdList"  item="id" index="" separator=","  open="(" close=")" >
+                #{id}
+            </foreach>
+        </if>
+        <if test="companyIdList!=null and companyIdList.size>0">
+            and d.companyId in
+            <foreach collection="companyIdList"  item="id" index="" separator=","  open="(" close=")" >
+                #{id}
+            </foreach>
+        </if>
+        order by d.deviceName asc
+        limit #{start},#{pageSize}
+    </select>
+
+
+    <select id="selectDeviceCountByGroupIds" resultType="java.lang.Integer">
+        SELECT
+          count(1)
+        FROM
+        dc_yd_device d
+        WHERE
+        d.status=0
+        <if test="groupIdList!=null and groupIdList.size>0">
+            and d.groupId IN
+            <foreach collection="groupIdList" item="groupId" index="" separator="," open="(" close=")">
+                #{groupId}
+            </foreach>
+        </if>
+        <if test="pcCompanyIdList!=null and pcCompanyIdList!=''">
+            and d.pcCompanyId in
+            <foreach collection="pcCompanyIdList"  item="id" index="" separator=","  open="(" close=")" >
+                #{id}
+            </foreach>
+        </if>
+        <if test="companyIdList!=null and companyIdList.size>0">
+            and d.companyId in
+            <foreach collection="companyIdList"  item="id" index="" separator=","  open="(" close=")" >
+                #{id}
+            </foreach>
+        </if>
+
+    </select>
+
+    <select id="selectCompanyUserByDeviceId" resultType="java.lang.String">
+
+        select u.id from (select * from dc_yd_device where status = 0) d INNER JOIN (select * from dc_company where status = 0) c
+        on d.companyId = c.id INNER  JOIN dc_company_contactor cc on c.id = cc.companyId
+        INNER JOIN (select * from dc_user where status = 0) u on cc.userId = u.id where d.id = #{deviceId}
+
+    </select>
+
+
+    <select id="selectDeviceByIds" resultType="java.util.Map">
+        SELECT
+        d.id,
+        d.groupId,
+        d.pcCompanyId,
+        d.companyId,
+        d.deviceName,
+        d.deviceNo,
+        d.deviceType,
+        d.productionDate,
+        d.brand,
+        d.model,
+        d.boxId,
+        d.serialNo,
+        d.createDate,
+        d.createdBy,
+        d.updateDate,
+        d.updatedBy,
+        d.greenImg,
+        d.status
+        FROM
+        dc_yd_device d
+        WHERE
+        d.id in
+        <foreach collection="idList"  item="id" index="" separator=","  open="(" close=")" >
+            #{id}
+        </foreach>
+
+
+    </select>
+
+    <select id="selectRoleUserByDeviceId" resultType="java.lang.String">
+        SELECT u.id FROM (select * from dc_yd_device where id = #{deviceId}) d
+        INNER JOIN (select * from dc_user where status = 0) u on d.pcCompanyId = u.pcCompanyId
+        INNER JOIN (select * from dc_sys_role where id = #{roleId}) sr on u.roleId = sr.id;
+    </select>
+
+    <select id="countByPcCompanyId" resultType="java.lang.Integer">
+        SELECT count(*) FROM dc_yd_device WHERE pcCompanyId=#{pcCompanyId} and status!=2
+    </select>
+
+    <select id="countByCompanyIdAndBoxId" resultType="java.lang.Integer">
+        SELECT count(*) FROM dc_yd_device WHERE companyId=#{companyId} AND boxId IS NOT NULL AND boxId != '' AND status!=2
+    </select>
+
+    <select id="countByCompanyId" resultType="java.lang.Integer">
+        SELECT count(*) FROM dc_yd_device WHERE companyId=#{companyId} and status!=2
+    </select>
+
+    <select id="getDeviceByCompanyId" resultType="java.util.Map">
+        SELECT * FROM dc_yd_device
+        WHERE companyId IN
+        <foreach collection="companyIdList" item="companyId" index="" separator="," open="(" close=")">
+            #{companyId}
+        </foreach>
+        AND status!=2
+    </select>
+
+    <select id="groupByCompanyId" parameterType="list" resultType="java.util.Map">
+        SELECT (SELECT companyName FROM dc_company WHERE companyId=companyId LIMIT 1)
+            AS companyName,
+            count(*),
+            count(boxId!=NULL)
+        FROM dc_yd_device
+        WHERE groupId= IN (<foreach collection="list" item="item" separator=",">#{item}</foreach>) GROUP BY companyId
+    </select>
+
+    <select id="countDeviceByCompanyIdAndGroupId" resultMap="ResultOfInteger">
+        select count(*) AS deviceNum, sum(CASE WHEN d.boxId IS NOT NULL THEN 1 ELSE 0 END ) AS boxNum
+        from dc_yd_device AS  d WHERE companyId=#{companyId} AND groupId=#{groupId} AND status!=2;
+    </select>
+    
+    <resultMap id="ResultOfInteger" type="com.xkd.model.BoxAndDeviceNum">
+        <result column="boxNum" property="boxNum" jdbcType="INTEGER"/>
+        <result column="deviceNum" property="deviceNum" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <select id="filterDeviceForListDevice" resultType="java.util.Map">
+        SELECT d.id, d.deviceName, d.brand, d.model, d.companyId, d.groupId,
+        d.boxId, d.serialNo, d.pcCompanyId,d.deviceNo, d.deviceType, d.productionDate,
+        d.redImg, d.yellowImg, d.greenImg, cp.companyName as companyName
+        FROM dc_yd_device d LEFT JOIN dc_company cp ON cp.id = d.companyId
+        WHERE d.status = 0
+        <if test="pcCompanyId!=null and pcCompanyId!=''">
+            AND d.pcCompanyId=#{pcCompanyId}
+        </if>
+        <if test="companyIdList!=null and companyIdList.size>0">
+            AND d.companyId IN
+            <foreach collection="companyIdList" separator="," open="(" close=")" item="companyId" index="">
+                #{companyId}
+            </foreach>
+        </if>
+        <if test="groupIdList != null and groupIdList.size>0">
+            AND d.groupId IN
+            <foreach collection="groupIdList" separator="," close=")" open="(" item="groupId" index="">
+                #{groupId}
+            </foreach>
+        </if>
+        <if test="deviceType != null and deviceType != ''">
+            AND d.deviceType = #{deviceType}
+        </if>
+        <if test="deviceName!=null and deviceName!=''">
+            AND d.deviceName LIKE concat('%', #{deviceName}, '%')
+        </if>
+        <if test="boxIdList!=null and boxIdList.size()>0">
+            AND d.boxId IN
+            <foreach collection="boxIdList" item="boxId" index="" open="(" close=")" separator=",">
+                #{boxId}
+            </foreach>
+        </if>
+        ORDER BY d.createDate
+        <if test="start != null">
+            LIMIT #{start}, #{pageSize}
+        </if>
+    </select>
+
+
+    <select id="selectDeviceByDeviceId" resultType="java.util.Map">
+        SELECT * FROM dc_yd_device WHERE id=#{deviceId}
+    </select>
+
+    <select id="getCountDownTime" resultType="java.lang.Integer">
+        SELECT datediff(planCompletionDate, now()) FROM dc_yd_inspection_task WHERE planCompletionDate > now() AND inspectionPlanId=#{inspectionId} ORDER BY planCompletionDate DESC LIMIT 1
+    </select>
+
+    <select id="getUserAndParentId" resultType="java.util.Map">
+        SELECT parentId, responsibleUserId FROM dc_yd_device_group WHERE id=#{groupId}
+    </select>
+
+    <select id="checkIfDeviceInRepair" resultType="java.lang.Integer">
+        SELECT count(*) FROM dc_yd_repaire WHERE statusFlag  IN (1,2,3) AND
+            id IN (SELECT repaireId FROM dc_yd_repaire_device WHERE deviceId=#{deviceId})
+    </select>
+
+    <select id="selectFinishedRepairListByDeviceId" resultType="java.util.Map">
+        SELECT
+        r.id,
+        r.dueTime,
+        r.completeDate,
+        (select GROUP_CONCAT(u.uname) from dc_yd_repaire_techinician t left join dc_user u on t.technicianId=u.id where t.repaireId=r.id) as uname,
+        (select GROUP_CONCAT(de.deviceName) from dc_yd_repaire_device d left join dc_yd_device de on d.deviceId=de.id where d.repaireId=r.id group by d.repaireId)  as deviceNames
+        FROM dc_yd_repaire AS r
+        WHERE r.statusFlag IN (4,5) AND
+        <if test="startDate != null and startDate != ''">
+            <if test="endDate != null and endDate != ''">
+                AND date(#{endDate}) >= r.completeDate >= date(#{startDate})
+            </if>
+        </if>
+        r.id IN (SELECT repaireId FROM dc_yd_repaire_device WHERE deviceId = #{deviceId})
+        order by r.dueTime desc
+        LIMIT #{start}, #{pageSize}
+    </select>
+    <select id="filterDeviceForMonitor" resultType="java.util.Map">
+        SELECT d.*, cp.companyName as companyName FROM dc_yd_device d
+            LEFT JOIN dc_company cp ON cp.id = d.companyId
+        WHERE companyId=#{companyId}
+            <if test="status != null">
+                AND boxId is not null
+            </if>
+    </select>
+    <select id="selectDeviceByCompanyIdAndGroupId" resultType="java.util.Map">
+        SELECT d.id, d.boxId, c.companyName FROM dc_yd_device AS d LEFT JOIN dc_company AS c ON c.id = d.companyId WHERE companyId=#{companyId} AND groupId=#{groupId} and d.status=0
+    </select>
+    <select id="selectDeviceByCompanyIdList" resultType="java.util.Map">
+        SELECT d.id, d.deviceName, d.brand, d.model, d.companyId, d.groupId, d.boxId, d.serialNo,
+        d.pcCompanyId,d.deviceNo,deviceType, d.productionDate, cp.companyName
+        from dc_yd_device d LEFT JOIN dc_company cp ON cp.id=d.companyId WHERE d.status!=2
+        <if test="companyIdList != null">
+            AND d.companyId IN
+            <foreach collection="companyIdList" item="companyId" index="" separator=","  open="(" close=")">
+                #{companyId}
+            </foreach>
+        </if>
+        <if test="deviceName!=null and deviceName!=''">
+            AND d.deviceName LIKE concat('%', #{deviceName}, '%')
+        </if>
+        <if test="deviceType!=null">
+            AND d.deviceType=#{deviceType}
+        </if>
+        and d.status!=2
+        LIMIT #{start}, #{pageSize}
+    </select>
+    <select id="countDeviceForMonitor" resultType="java.util.Map">
+        SELECT count(*) AS total,
+            sum(CASE WHEN boxId IS NOT NULL THEN 1
+                     WHEN boxId IS NULL THEN 0
+                END ) as withoutBox,
+            sum(CASE WHEN boxId IS NULL THEN 1
+                     WHEN boxId IS NULL THEN 0
+                END ) AS withBox,
+            sum(CASE WHEN status != 2 THEN 0
+                     WHEN status = 2 THEN  1
+                END ) AS deviceFrozen FROM dc_yd_device
+    </select>
+    <select id="selectWarningDeviceByUserId" resultType="java.util.Map">
+        SELECT mdc.id ,dyd.id as deviceId, dyd.deviceNo, dyd.deviceName, dyd.deviceType,dyd.boxId,
+            mdc.datetime, met.msg_type, met.msg_zh, dy.companyName,
+            dyd.redImg, dyd.greenImg, dyd.yellowImg
+        FROM msg_device_curr mdc
+            LEFT JOIN dc_yd_device dyd ON dyd.boxId = mdc.box_id AND dyd.status=0
+            LEFT JOIN msg_event_text met ON mdc.eventid=met.id
+            LEFT JOIN dc_company dy ON dy.id = dyd.companyId
+        WHERE mdc.userid=#{userId} AND mdc.ignore=0 LIMIT #{start}, #{pageSize}
+    </select>
+    <select id="countWarningDeviceByUserId" resultType="java.lang.Integer">
+        SELECT count(*) FROM msg_device_curr mdc WHERE mdc.userid=#{userId} AND mdc.ignore=0
+    </select>
+    <select id="getDeviceListByPcCompanyId" resultType="java.util.Map">
+        SELECT * FROM dc_yd_device WHERE pcCompanyId=#{pcCompanyId} and status!=2
+    </select>
+    <select id="getDeviceId" resultType="java.util.Map">
+        SELECT id, CASE WHEN boxId IS NOT NULL THEN boxId
+                        WHEN boxId IS NULL THEN 'boxIdisnull'
+            END boxId
+        FROM dc_yd_device;
+    </select>
+
+    <select id="countDeviceForListDevice" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM dc_yd_device d
+        WHERE d.status = 0
+        <if test="pcCompanyId!=null and pcCompanyId!=''">
+            AND d.pcCompanyId=#{pcCompanyId}
+        </if>
+        <if test="companyIdList!=null and companyIdList.size>0">
+            AND d.companyId IN
+            <foreach collection="companyIdList" separator="," open="(" close=")" item="companyId" index="">
+                #{companyId}
+            </foreach>
+        </if>
+        <if test="groupIdList != null and groupIdList.size>0">
+            AND d.groupId IN
+            <foreach collection="groupIdList" separator="," close=")" open="(" item="groupId" index="">
+                #{groupId}
+            </foreach>
+        </if>
+        <if test="deviceType != null and deviceType != ''">
+            AND d.deviceType = #{deviceType}
+        </if>
+        <if test="deviceName!=null and deviceName!=''">
+            AND d.deviceName LIKE concat('%', #{deviceName}, '%')
+        </if>
+        <if test="boxIdList!=null and boxIdList.size()>0">
+            AND d.boxId IN
+            <foreach collection="boxIdList" item="boxId" index="" open="(" close=")" separator=",">
+                #{boxId}
+            </foreach>
+        </if>
+    </select>
+    <select id="countDeviceByCompanyIdList" resultType="java.lang.Integer">
+        SELECT count(*)
+        from dc_yd_device d LEFT JOIN dc_company cp ON cp.id=d.companyId WHERE d.status!=2
+        <if test="companyIdList != null">
+            AND d.companyId IN
+            <foreach collection="companyIdList" item="companyId" index="" separator=","  open="(" close=")">
+                #{companyId}
+            </foreach>
+        </if>
+        <if test="deviceName!=null and deviceName!=''">
+            AND d.deviceName LIKE concat('%', #{deviceName}, '%')
+        </if>
+        <if test="deviceType!=null">
+            AND d.deviceType=#{deviceType}
+        </if>
+        and d.status!=2
+    </select>
+    <select id="countFinishedRepairListByDeviceId" resultType="java.lang.Integer">
+        SELECT count(*) from dc_yd_repaire  r
+        WHERE r.statusFlag IN (4,5) AND
+        <if test="startDate != null and startDate != ''">
+            <if test="endDate != null and endDate != ''">
+                AND date(#{endDate}) >= r.completeDate >= date(#{startDate})
+            </if>
+        </if>
+        r.id IN (SELECT repaireId FROM dc_yd_repaire_device WHERE deviceId = #{deviceId})
+    </select>
+
+    <update id="deleteDeviceByIds">
+        update dc_yd_device d set d.status=2 where d.id in
+        <foreach collection="idList" separator="," close=")" open="(" item="id" index="">
+            #{id}
+        </foreach>
+    </update>
+
+    <select id="selectDeviceByBoxIdUnDeleted" resultType="java.util.Map">
+        SELECT
+        d.id,
+        d.groupId,
+        d.pcCompanyId,
+        d.companyId,
+        d.deviceName,
+        d.deviceNo,
+        d.deviceType,
+        d.productionDate,
+        d.brand,
+        d.model,
+        d.boxId,
+        d.serialNo,
+        d.createDate,
+        d.createdBy,
+        d.updateDate,
+        d.updatedBy,
+        d.greenImg,
+        d.status
+        FROM
+        dc_yd_device d
+        WHERE d.status=0
+        AND d.boxId=#{boxId}
+    </select>
+
+</mapper>

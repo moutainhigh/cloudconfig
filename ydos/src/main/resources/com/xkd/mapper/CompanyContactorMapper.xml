@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.CompanyContactorMapper">
+
+
+    <select id="selectCompanyContactorByCompanyId" resultType="java.util.Map">
+        SELECT
+        c.id,
+        c.companyId,
+        u.uname,
+        u.mobile,
+        u.email,
+        DATE_FORMAT(c.createDate,'%Y-%m-%d %H:%i:%s') AS createDate,
+        c.createdBy,
+        dc.companyName
+        FROM
+        dc_company_contactor c left join dc_user u on c.userId=u.id
+        left join dc_company dc on c.companyId=dc.id
+        where 1=1
+        <if test="companyId!=null">
+            and c.companyId=#{companyId}
+        </if>
+        <if test="pcCompanyId!=null">
+            and c.pcCompanyId=#{pcCompanyId}
+        </if>
+        <if test="uname!=null">
+            and (u.uname like '%${uname}%' or u.mobile like '%${uname}%')
+        </if>
+        order by c.createDate desc
+        limit #{start},#{pageSize}
+
+
+    </select>
+
+
+    <select id="selectCompanyContactorCountByCompanyId" resultType="int">
+        SELECT
+        count(1)
+        FROM
+        dc_company_contactor c left join dc_user u on c.userId=u.id
+        left join dc_company dc on c.companyId=dc.id
+        where 1=1
+        <if test="companyId!=null">
+            and c.companyId=#{companyId}
+        </if>
+        <if test="pcCompanyId!=null">
+            and c.pcCompanyId=#{pcCompanyId}
+        </if>
+        <if test="uname!=null">
+            and (u.uname like '%${uname}%' or u.mobile like '%${uname}%')
+        </if>
+
+
+    </select>
+
+
+    <delete id="deleteById">
+        DELETE FROM dc_company_contactor
+        WHERE id = #{id}
+    </delete>
+
+    <delete id="deleteByIds">
+        delete from dc_company_contactor where id in
+        <foreach collection="idList" item="id" index="" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+
+    </delete>
+
+
+    <select id="selectCompanyContactorById" resultType="java.util.Map">
+        SELECT
+            d.id,
+            d.companyId,
+            d.userId,
+            d.pcCompanyId
+        FROM
+            dc_company_contactor d
+        WHERE
+            d.id = #{id}
+    </select>
+
+
+    <select id="selectCompanyContactorByMutileCondition" resultType="java.util.Map">
+        SELECT
+            d.id,
+            d.companyId,
+            d.userId,
+            d.pcCompanyId
+        FROM
+        dc_company_contactor d
+        WHERE 1=1
+         <if test="companyId!=null" >
+            and d.companyId=#{companyId}
+         </if>
+        <if test="pcCompanyId!=null" >
+            and d.pcCompanyId=#{pcCompanyId}
+        </if>
+        <if test="userId!=null" >
+            and d.userId=#{userId}
+        </if>
+    </select>
+
+
+    <select id="selectCompanyContactorByCompanyIdAndUserIdAndPcCompanyId" resultType="java.util.Map">
+        SELECT
+            d.id,
+            d.companyId,
+            d.userId,
+            d.pcCompanyId
+        FROM
+            dc_company_contactor d
+        WHERE
+            d.companyId = #{companyId}
+            AND d.userId = #{userId}
+            AND d.pcCompanyId = #{pcCompanyId}
+    </select>
+
+
+    <delete id="deleteByCompanyId">
+        DELETE FROM dc_company_contactor
+        WHERE companyId = #{companyId}
+    </delete>
+
+    <insert id="insertCompanyContactorList" parameterType="java.util.List">
+        INSERT INTO dc_company_contactor(
+        id
+        ,userId
+        ,companyId
+        ,pcCompanyId
+        ,createdBy
+        ,createDate
+        )VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.id},
+            #{item.userId},
+            #{item.companyId},
+            #{item.pcCompanyId},
+            #{item.createdBy},
+            #{item.createDate}
+            )
+        </foreach>
+    </insert>
+
+
+    <select id="selectCompanyIdListByContactor" resultType="string">
+                SELECT c.companyId
+        FROM dc_company_contactor c
+        WHERE c.userId in (
+		select #{userId} as sharer
+		 <if test="includingSharer==1">
+             union
+             select  sharer from dc_yd_device_share where sharee=#{userId}
+         </if>
+        )
+    </select>
+
+    <select id="selectPcCompanyIdListByContactor" resultType="string">
+
+				SELECT  c.pcCompanyId
+							FROM dc_company_contactor c
+							WHERE c.userId =#{userId}
+
+    </select>
+
+    <select id="getCompanyIdByUserId" resultType="string">
+        SELECT companyId FROM dc_company_contactor WHERE userId=#{userId}
+    </select>
+
+   <update id="update" >
+       UPDATE
+ dc_company_contactor d
+    SET
+     d.id=d.id
+     <if test="companyId!=null and companyId!=''">
+        , d.companyId = #{companyId}
+     </if>
+       <if test="pcCompanyId!=null and pcCompanyId!=''">
+           , d.pcCompanyId = #{pcCompanyId}
+       </if>
+       <if test="userId!=null and userId!=''">
+           , d.userId = #{userId}
+       </if>
+  where id=#{id}
+   </update>
+
+
+    <select id="selectAllUserIdByPcCompanyIdAndCompanyId" resultType="string">
+        select dc.userId from dc_company_contactor dc
+            where  dc.pcCompanyId=#{pcCompanyId}
+            <if test="companyId!=null and companyId!=''">
+                and dc.companyId=#{companyId}
+            </if>
+    </select>
+
+</mapper>

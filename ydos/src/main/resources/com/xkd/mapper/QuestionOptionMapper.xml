@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.QuestionOptionMapper" >
+  <resultMap id="BaseResultMap" type="QuestionOption" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="questionId" property="questionId" jdbcType="VARCHAR" />
+    <result column="OPT" property="opt" jdbcType="VARCHAR" />
+    <result column="GRADE" property="grade" jdbcType="VARCHAR" />
+    <result column="ANSWER" property="answer" jdbcType="TINYINT" />
+    <result column="CHART" property="chart" jdbcType="DECIMAL" />
+    <result column="LEVEL" property="level" jdbcType="TINYINT" />
+    <result column="cnt" property="cnt" jdbcType="TINYINT" />
+
+      <result column="showInput" property="showInput" jdbcType="BOOLEAN" />
+      <result column="isCheck" property="isCheck" jdbcType="VARCHAR" />
+      <result column="lengthSize" property="lengthSize" jdbcType="VARCHAR" />
+      <result column="checkType" property="checkType" jdbcType="VARCHAR" />
+      <result column="textContent" property="textContent" jdbcType="VARCHAR" />
+      <result column="toQuestion" property="toQuestion" jdbcType="VARCHAR" />
+      <result column="toQuestionName" property="toQuestionName" jdbcType="VARCHAR" />
+
+      
+  </resultMap>
+  
+  
+  <sql id="Base_Column_List" >
+   		ID,questionId,OPT,GRADE,ANSWER,showInput,isCheck,lengthSize,checkType,toQuestion
+  </sql>
+  <select id="getQuerstionOptList" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  
+  	select 
+  		ID,questionId,OPT,GRADE,ANSWER,level,showInput,isCheck,lengthSize,checkType,
+  		showInput,isCheck,lengthSize,checkType,toQuestion
+  		<if test="null != cssType and cssType == 'to'">
+            ,(select name from DC_WJ_QUESTION where id = toQuestion)toQuestionName
+        </if>
+  	 from DC_WJ_QUESTION_OPTION where questionId = #{qid} order by level asc
+  	
+  </select>
+  
+  
+  <select id="getQuerstionOptChart" parameterType="java.util.Map" resultMap="BaseResultMap">
+  
+  	select o.ID,o.questionId,o.OPT,o.ANSWER,(select COUNT(*)/#{cnt} from dc_wj_user_answer a where a.questionId = o.questionId and a.answer = o.id)*100 CHART,o.level from DC_WJ_QUESTION_OPTION o  where o.questionId = #{qid} order by o.level asc
+ 
+  	
+  </select>
+  
+  <select id="getQuerstionOptAnswerList" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  
+  	select 
+  		o.ID,o.questionId,o.OPT,o.GRADE,o.ANSWER,a.answer userAnswer,a.orderNumber orderNumber,a.textContent,o.toQuestion,
+  		o.showInput,o.isCheck,o.lengthSize,o.checkType,o.level as LEVEL
+  from DC_WJ_QUESTION_OPTION o 
+  	LEFT JOIN dc_wj_user_answer a on a.answer = o.id and a.userExamId = #{examId}  
+  where o.questionId = #{qid} order by ${orderBy} asc 
+  
+  </select>
+  
+  <select id="getQuerstionOpt"  resultMap="BaseResultMap">
+  	select ID,questionId,OPT,GRADE,ANSWER,showInput,isCheck,lengthSize,checkType,toQuestion from DC_WJ_QUESTION_OPTION where answer = 1
+  </select>
+  
+  
+  <insert id="saveQuerstionOpt" parameterType="QuestionOption" keyProperty="id" useGeneratedKeys="true">
+    insert into DC_WJ_QUESTION_OPTION (ID,questionId,OPT,GRADE,ANSWER,LEVEL,
+      showInput,isCheck,lengthSize,checkType,toQuestion
+
+      )values (
+    		UUID(),
+    		#{questionId,jdbcType=VARCHAR},
+    		#{opt,jdbcType=VARCHAR},
+    		#{grade,jdbcType=VARCHAR}, 
+    		#{answer,jdbcType=TINYINT},
+    		#{level,jdbcType=TINYINT},
+              #{showInput},
+              #{isCheck},
+              #{lengthSize},
+              #{checkType},
+              #{toQuestion}
+
+    )
+  </insert>
+  <update id="editQuerstionOpt" parameterType="QuestionOption" >
+    update DC_WJ_QUESTION_OPTION set
+    
+	    questionId=#{questionId},
+	    OPT=#{opt},
+	    GRADE=#{grade},
+	    ANSWER=#{answer},
+	    LEVEL=#{level},
+        showInput = #{showInput},
+        isCheck = #{isCheck},
+        lengthSize = #{lengthSize},
+        checkType = #{checkType},
+        toQuestion = #{toQuestion}
+    
+    where id = #{id}
+  </update>
+  
+  <delete id="delOptById" parameterType="java.lang.Integer">
+ 		delete o from  dc_wj_question_option o  where o.id = #{id,jdbcType=INTEGER} 
+ </delete>
+ 
+ <select id="getPaiXTTongJi" resultType="QuestionOption">
+  		
+  		select 
+	  		o.ID,o.questionId,o.OPT,o.ANSWER,o.level
+	  		<if test="cnt > 0">
+		  		,(select COUNT(*) from dc_wj_user_answer where answer = o.id and orderNumber = o.grade )orderNumber
+				,(select COUNT(*)/#{cnt} from dc_wj_user_answer where answer = o.id and orderNumber = o.grade )* 100 CHART
+			</if>
+	  		<if test="cnt == 0">
+	  			,0 orderNumber
+	  			,0 CHART 
+	  		</if>	
+  		from  dc_wj_question_option o
+  			LEFT JOIN dc_wj_user_answer a on o.id = a.answer  
+  		where o.questionId = #{qid} GROUP BY o.id
+  
+  </select>
+  <select id="getDeFTTongJi" resultType="QuestionOption">
+  		
+  		select answer grade,count(*)orderNumber,(COUNT(*)/#{cnt})*100 chart from dc_wj_user_answer where questionId = #{qid} GROUP BY answer
+  </select>
+</mapper>

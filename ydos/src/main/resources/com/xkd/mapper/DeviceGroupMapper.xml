@@ -1,0 +1,527 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.DeviceGroupMapper">
+
+
+
+    <insert id="insertDeviceGroup">
+        INSERT INTO dc_yd_device_group
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null"> id, </if>
+            <if test="parentId != null"> parentId, </if>
+            <if test="companyId != null"> companyId, </if>
+            <if test="pcCompanyId != null"> pcCompanyId, </if>
+            <if test="groupName != null"> groupName, </if>
+            <if test="groupType != null"> groupType, </if>
+            <if test="address != null"> address, </if>
+            <if test="country != null"> country, </if>
+            <if test="province != null"> province, </if>
+            <if test="city != null"> city, </if>
+            <if test="county != null"> county, </if>
+            <if test="longitude != null"> longitude, </if>
+            <if test="latitude != null"> latitude, </if>
+            <if test="responsibleUserId != null"> responsibleUserId, </if>
+            <if test="createdBy != null"> createdBy, </if>
+            <if test="updatedBy != null"> updatedBy, </if>
+            <if test="status != null"> status, </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null"> #{id}, </if>
+            <if test="parentId != null"> #{parentId}, </if>
+            <if test="companyId != null"> #{companyId}, </if>
+            <if test="pcCompanyId != null"> #{pcCompanyId}, </if>
+            <if test="groupName != null"> #{groupName}, </if>
+            <if test="groupType != null"> #{groupType}, </if>
+            <if test="address != null"> #{address}, </if>
+            <if test="country != null"> #{country}, </if>
+            <if test="province != null"> #{province}, </if>
+            <if test="city != null"> #{city}, </if>
+            <if test="county != null"> #{county}, </if>
+            <if test="longitude != null"> #{longitude}, </if>
+            <if test="latitude != null"> #{latitude}, </if>
+            <if test="responsibleUserId != null"> #{responsibleUserId}, </if>
+            <if test="createdBy != null"> #{createdBy}, </if>
+            <if test="updatedBy != null"> #{updatedBy}, </if>
+            <if test="status != null"> #{status}, </if>
+        </trim>
+    </insert>
+
+
+    <update id="updateDeviceGroup">
+        UPDATE dc_yd_device_group
+        <set>
+            <if test="id != null"> id = #{id}, </if>
+            <if test="parentId != null"> parentId = #{parentId}, </if>
+            <if test="companyId != null"> companyId = #{companyId}, </if>
+            <if test="pcCompanyId != null"> pcCompanyId = #{pcCompanyId}, </if>
+            <if test="groupName != null"> groupName = #{groupName}, </if>
+            <if test="groupType != null"> groupType = #{groupType}, </if>
+            <if test="address != null"> address = #{address}, </if>
+            <if test="country != null"> country = #{country}, </if>
+            <if test="province != null"> province = #{province}, </if>
+            <if test="city != null"> city = #{city}, </if>
+            <if test="county != null"> county = #{county}, </if>
+            <if test="longitude != null"> longitude = #{longitude}, </if>
+            <if test="latitude != null"> latitude = #{latitude}, </if>
+            <if test="responsibleUserId != null"> responsibleUserId = #{responsibleUserId}, </if>
+            <if test="createdBy != null"> createdBy = #{createdBy}, </if>
+            <if test="updatedBy != null"> updatedBy = #{updatedBy}, </if>
+            <if test="status != null"> status = #{status} </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <select id="selectDeviceGroupById" resultType="java.util.Map">
+       SELECT
+        g.id,
+        g.parentId,
+        g.companyId,
+        g.pcCompanyId,
+        g.groupName,
+        g.groupType,
+        g.address,
+        g.country,
+        g.province,
+        g.city,
+        g.county,
+        g.longitude,
+        g.latitude,
+        g.responsibleUserId,
+        g.createDate,
+        g.createdBy,
+        g.updateDate,
+        g.updatedBy,
+		u.uname as responsibleUser,
+		u.mobile as responsibleUserMobile
+        FROM
+        dc_yd_device_group g left join dc_user u on g.responsibleUserId=u.id
+        WHERE
+        g.id = #{id}
+    </select>
+
+    <select id="selectDeviceGroupByCompanyIds" resultType="java.util.Map">
+        SELECT
+        g.id,
+        <if test="flag==0">
+            case when  g.parentId is null or g.parentId='' then g.companyId else  g.parentId end as parentId,
+        </if>
+        <if test="flag==1">
+            case when  g.parentId is null or g.parentId='' then g.pcCompanyId else  g.parentId end as parentId,
+        </if>
+        <if test="flag!=1 and flag !=2">
+            g.parentId,
+        </if>
+        g.companyId,
+        g.pcCompanyId,
+        g.groupName,
+        g.groupType,
+        g.address,
+        g.country,
+        g.province,
+        g.city,
+        g.county,
+        g.longitude,
+        g.latitude,
+        g.responsibleUserId,
+        g.createDate,
+        g.createdBy,
+        g.updateDate,
+        g.updatedBy,
+        u.uname as responsibleUserName,
+        u.mobile as responsibleUserMobile
+        FROM
+        dc_yd_device_group g left join dc_user u on g.responsibleUserId=u.id
+        where
+        g.status=0
+        and g.companyId in
+        <foreach collection="companyIdList"  item="companyId" index="" separator=","  open="(" close=")" >
+            #{companyId}
+        </foreach>
+
+    </select>
+
+
+
+    <select id="selectDeviceGroupByPcCompanyIds" resultType="java.util.Map">
+        SELECT
+        g.id,
+        <if test="flag==0">
+            case when  g.parentId is null or g.parentId='' then g.companyId else  g.parentId end as parentId,
+        </if>
+        <if test="flag==1">
+            case when  g.parentId is null or g.parentId='' then g.pcCompanyId else  g.parentId end as parentId,
+        </if>
+        <if test="flag!=1 and flag !=2">
+            g.parentId,
+        </if>
+        g.companyId,
+        g.pcCompanyId,
+        g.groupName,
+        g.groupType,
+        g.address,
+        g.country,
+        g.province,
+        g.city,
+        g.county,
+        g.longitude,
+        g.latitude,
+        g.responsibleUserId,
+        g.createDate,
+        g.createdBy,
+        g.updateDate,
+        g.updatedBy
+        FROM
+        dc_yd_device_group g
+        where
+        g.status=0
+        and g.pcCompanyId in
+        <foreach collection="pcCompanyIdList"  item="pcCompanyId" index="" separator=","  open="(" close=")" >
+            #{pcCompanyId}
+        </foreach>
+
+    </select>
+
+
+    <select id="selectFirstLevelDeviceGroupIdsByPcCompanyIds" resultType="string">
+        SELECT
+        id
+        FROM
+        dc_yd_device_group g
+        where
+        g.status=0
+        and g.parentId is null or g.parentId=''
+        and g.pcCompanyId in
+        <foreach collection="pcCompanyIdList"  item="pcCompanyId" index="" separator=","  open="(" close=")" >
+            #{pcCompanyId}
+        </foreach>
+
+    </select>
+
+
+    <select id="searchCompanyIdByPcCompanyId" resultType="string">
+        select   d.id from dc_company d where d.status=0
+        <if test="pcCompanyId!=null and pcCompanyId!=''">
+            and  d.pcCompanyId=#{pcCompanyId}
+        </if>
+           limit  #{start}  ,#{pageSize}
+    </select>
+    <select id="searchCompanyIdCountByPcCompanyId" resultType="int">
+        select count(1) from dc_company d where d.status=0
+        <if test="pcCompanyId!=null and pcCompanyId!=''">
+        and  d.pcCompanyId=#{pcCompanyId}
+        </if>
+    </select>
+
+
+    <select id="searchCompanyIdByDevice" resultType="string">
+        select distinct t.companyId from (
+        select d.companyId from dc_yd_device d inner join dc_yd_device_group g on d.groupId=g.id where
+        d.status=0  and g.status=0
+        <if test="pcCompanyId!=null">
+            and d.pcCompanyId=#{pcCompanyId}
+        </if>
+        <if test="searchValue != null ">
+            and d.deviceName like   '%${searchValue}%'
+        </if>
+        union  select companyId from dc_yd_device_group g where
+        g.status= 0
+        <if test="pcCompanyId!=null">
+            and g.pcCompanyId=#{pcCompanyId}
+        </if>
+        <if test="searchValue != null ">
+            and  g.groupName like  '%${searchValue}%'
+        </if>
+        ) t     limit  #{start}  ,#{pageSize}
+    </select>
+
+
+    <select id="searchCompanyIdCountByDevice" resultType="int">
+        select count(1) from (
+        select d.companyId from dc_yd_device d inner join dc_yd_device_group g on d.groupId=g.id where
+        d.status=0  and g.status=0
+        <if test="pcCompanyId!=null">
+            and d.pcCompanyId=#{pcCompanyId}
+        </if>
+        <if test="searchValue != null ">
+            and d.deviceName like   '%${searchValue}%'
+        </if>
+        union  select companyId from dc_yd_device_group g where
+        g.status= 0
+        <if test="pcCompanyId!=null">
+            and g.pcCompanyId=#{pcCompanyId}
+        </if>
+        <if test="searchValue != null ">
+            and  g.groupName like  '%${searchValue}%'
+        </if>
+        ) t
+    </select>
+
+
+
+
+
+    <select id="searchPcCompanyIdByDevice" resultType="string">
+        select distinct t.pcCompanyId from (
+        select d.pcCompanyId from dc_yd_device d inner join dc_yd_device_group g on d.groupId=g.id where
+        d.status=0  and g.status=0 and d.companyId  in
+        <foreach collection="companyIdList"  item="companyId" index="" separator=","  open="(" close=")" >
+            #{companyId}
+        </foreach>
+        <if test="searchValue != null ">
+            and d.deviceName like   '%${searchValue}%'
+        </if>
+        union  select pcCompanyId from dc_yd_device_group g where
+        g.status= 0 and g.companyId  in
+        <foreach collection="companyIdList"  item="companyId" index="" separator=","  open="(" close=")" >
+            #{companyId}
+        </foreach>
+        <if test="searchValue != null ">
+            and  g.groupName like  '%${searchValue}%'
+        </if>
+        ) t     limit  #{start}  ,#{pageSize}
+    </select>
+
+
+    <select id="searchPcCompanyIdCountByDevice" resultType="int">
+        select count(1) from (
+        select d.pcCompanyId from dc_yd_device d inner join dc_yd_device_group g on d.groupId=g.id where
+        d.status=0  and g.status=0  and d.companyId   in
+
+        <foreach collection="companyIdList"  item="companyId" index="" separator=","  open="(" close=")" >
+            #{companyId}
+        </foreach>
+
+        <if test="searchValue != null ">
+            and d.deviceName like   '%${searchValue}%'
+        </if>
+        union  select pcCompanyId from dc_yd_device_group g where
+        g.status= 0  and g.companyId   in
+        <foreach collection="companyIdList"  item="companyId" index="" separator=","  open="(" close=")" >
+            #{companyId}
+        </foreach>
+        <if test="searchValue != null ">
+            and  g.groupName like  '%${searchValue}%'
+        </if>
+        ) t
+    </select>
+
+
+
+    <select id="selectAllBuildingsByCompanyId" resultType="java.util.Map">
+
+        SELECT
+        g.id,
+        g.companyId,
+        gpp.companyName,
+        g.pcCompanyId,
+        g.groupName ,
+        g.groupType,
+        g.address,
+        g.country,
+        g.province,
+        g.city,
+        g.county,
+        g.longitude,
+        g.latitude,
+        g.responsibleUserId,
+        g.createDate,
+        g.createdBy,
+        g.updateDate,
+        g.updatedBy,
+        gp.id as parentId,
+        gp.groupName as parentGroupName
+        FROM
+        dc_yd_device_group g
+        left join dc_yd_device_group gp on g.parentId=gp.id
+        left join dc_company  gpp on g.companyId=gpp.id
+        where
+        g.status=0
+        and g.groupType='3'
+        <if test="pcCompanyId!=null and pcCompanyId!=''">
+            and g.pcCompanyId=#{pcCompanyId}
+        </if>
+        <if test="companyId!=null and companyId!=''">
+            and g.companyId=#{companyId}
+        </if>
+    </select>
+
+    <select id="selectDeviceGroupByDepartmentId" resultType="java.util.Map">
+        SELECT
+         g.id,
+        <if test="flag==0">
+            case when  g.parentId is null or g.parentId='' then g.companyId else  g.parentId end as parentId,
+        </if>
+        <if test="flag==1">
+            case when  g.parentId is null or g.parentId='' then g.pcCompanyId else  g.parentId end as parentId,
+        </if>
+        <if test="flag!=1 and flag !=2">
+            g.parentId,
+        </if>
+        g.companyId,
+        g.pcCompanyId,
+        g.groupName,
+        g.groupType,
+        g.address,
+        g.country,
+        g.province,
+        g.city,
+        g.county,
+        g.longitude,
+        g.latitude,
+        g.responsibleUserId,
+        g.createDate,
+        g.createdBy,
+        g.updateDate,
+        g.updatedBy
+FROM
+	dc_yd_device_group g
+WHERE
+	g.id IN (
+		SELECT
+			pg.groupId
+		FROM
+			dc_yd_inspection_plan_group pg
+		WHERE
+			pg.inspectionPlanId IN (
+				SELECT
+					p.id
+				FROM
+					dc_yd_inspection_plan p
+				WHERE
+					p.departmentId = #{departmentId}
+			)
+	) and g.status=0
+        <if test="pcCompanyId!=null and pcCompanyId!=''">
+        and g.pcCompanyId=#{pcCompanyId}
+       </if>
+    </select>
+
+    <select id="selectDeviceGroupByResponsibleUser" resultType="java.util.Map">
+       SELECT
+         g.id,
+        <if test="flag==0">
+            case when  g.parentId is null or g.parentId='' then g.companyId else  g.parentId end as parentId,
+        </if>
+        <if test="flag==1">
+            case when  g.parentId is null or g.parentId='' then g.pcCompanyId else  g.parentId end as parentId,
+        </if>
+        <if test="flag!=1 and flag !=2">
+            g.parentId,
+        </if>
+        g.companyId,
+        g.pcCompanyId,
+        g.groupName,
+        g.groupType,
+        g.address,
+        g.country,
+        g.province,
+        g.city,
+        g.county,
+        g.longitude,
+        g.latitude,
+        g.responsibleUserId,
+        g.createDate,
+        g.createdBy,
+        g.updateDate,
+        g.updatedBy
+FROM
+	dc_yd_device_group g
+WHERE
+	 g.responsibleUserId=#{responsibleUserId}
+
+        <if test="pcCompanyId!=null and pcCompanyId!=''">
+            and g.pcCompanyId=#{pcCompanyId}
+        </if>
+
+    </select>
+
+
+    <select id="selectDeviceGroupIdsByParentIds" resultType="string">
+        SELECT
+         g.id
+FROM
+	dc_yd_device_group g
+WHERE
+	 g.parentId in
+        <foreach collection="parentIdList"  item="id" index="" separator=","  open="(" close=")" >
+            #{id}
+        </foreach>
+    </select>
+
+
+    <select id="selectParentGroupIdsByGroupIds" resultType="string">
+        SELECT
+        g.parentId
+        FROM
+        dc_yd_device_group g
+        WHERE
+        g.id in
+        <foreach collection="idList"  item="id" index="" separator=","  open="(" close=")" >
+            #{id}
+        </foreach>
+    </select>
+
+
+
+    <select id="selectDeviceGroupByIds" resultType="java.util.Map">
+        SELECT
+        g.id,
+        <if test="flag==0">
+            case when  g.parentId is null or g.parentId='' then g.companyId else  g.parentId end as parentId,
+        </if>
+        <if test="flag==1">
+            case when  g.parentId is null or g.parentId='' then g.pcCompanyId else  g.parentId end as parentId,
+        </if>
+        <if test="flag!=1 and flag !=2">
+            g.parentId,
+        </if>
+        g.companyId,
+        g.pcCompanyId,
+        g.groupName,
+        g.groupType,
+        g.address,
+        g.country,
+        g.province,
+        g.city,
+        g.county,
+        g.longitude,
+        g.latitude,
+        g.responsibleUserId,
+        g.createDate,
+        g.createdBy,
+        g.updateDate,
+        g.updatedBy
+        FROM
+        dc_yd_device_group g
+        WHERE
+         g.id in
+        <foreach collection="idList"  item="id" index="" separator=","  open="(" close=")" >
+            #{id}
+        </foreach>
+
+    </select>
+
+    <select id="selectGroupIdAndCompanyIdByUserId" resultType="java.util.Map">
+        SELECT
+            dc_yd_device_group.id AS groupId,
+            dc_yd_device_group.companyId AS companyId,
+            dc_company.companyName AS companyName,
+            dc_company.userLevel AS userLevel
+        FROM dc_yd_device_group
+            RIGHT JOIN dc_company
+                ON dc_yd_device_group.companyId=dc_company.id AND dc_company.status=0
+        <if test="userLevel != null and userLevel != ''">
+        AND dc_company.userLevel = #{userLevel}
+        </if>
+        <if test="companyName != null and companyName!=''">
+            AND dc_company.companyName LIKE concat('%', #{companyName}, '%')
+        </if>
+        WHERE dc_yd_device_group.pcCompanyId=#{pcCompanyId} AND dc_yd_device_group.responsibleUserId=#{userId}
+    </select>
+    <select id="getGroupIdByUserId" resultType="java.lang.String">
+        SELECT dydg.id FROM dc_yd_device_group dydg WHERE responsibleUserId=#{userId}
+    </select>
+
+</mapper>

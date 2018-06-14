@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.MsgUserRecordMapper">
+
+
+    <select id="selectRecordByUserId" resultType="java.util.Map">
+        SELECT r.*, d.deviceName, t.msg_zh, t.msg_en, t.msg_type, t.msg_level , dc.companyName, d.deviceType FROM msg_user_record r
+            LEFT JOIN msg_event_text t ON r.eventid = t.id
+            LEFT JOIN dc_yd_device d ON r.device_id = d.id
+            LEFT JOIN dc_company dc ON dc.id=d.companyId
+        WHERE userid=#{userId} order by r.datetime desc limit #{start}, #{pageSize}
+    </select>
+    <select id="countRecordByUserId" resultType="java.lang.Integer">
+        SELECT count(*) FROM msg_user_record WHERE userid=#{userId};
+    </select>
+</mapper>

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.DictionaryMapper" >
+  <resultMap id="BaseResultMap" type="Dictionary" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="ttype" property="ttype" jdbcType="VARCHAR" />
+    <result column="ttypeName" property="ttypeName" jdbcType="VARCHAR" />
+    <result column="value" property="value" jdbcType="VARCHAR" />
+    <result column="useCount" property="useCount" jdbcType="INTEGER" />
+    <result column="parentId" property="parentId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,parentId,ttype,ttypeName,value,useCount
+  </sql>
+ 
+  <select id="selectDictionaryById" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from dc_dictionary where id = #{id}
+  </select>
+ 
+  <select id="selectDictionaryTtypes" resultType="java.util.Map">
+  
+  	select distinct ttype,ttypeName from dc_dictionary
+  	where ttype is not null and ttype != '' and ttypeName is not null and ttypeName != '' and ttype !='industry'
+  	<if test="pcCompanyId==null or pcCompanyId==''">
+        and pcCompanyId is null
+    </if>
+      <if test="pcCompanyId!=null and pcCompanyId!=''">
+            and  pcCompanyId is not null
+      </if>
+  	 group by ttype
+  
+  </select>
+  
+  <select id="selectDictionarysByTtypes" resultType="java.util.Map">
+  
+  	select id,parentId,ttype,ttypeName,value,useCount from dc_dictionary where ${ttypes}
+      and (pcCompanyId is null or  pcCompanyId=#{pcCompanyId})
+      order by level asc
+  	
+  	<if test="pageSize != 0 ">
+  	
+    	limit #{currentPage},#{pageSize}
+    	
+    </if>
+  	 
+  
+  </select>
+ 
+ <select id="selectDictionaryByTtypeValue" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from dc_dictionary where ttype = #{ttype}
+     and (pcCompanyId is null or  pcCompanyId=#{pcCompanyId})
+     and value = #{value}
+  </select>
+ 
+  <select id="selectDictionaryByTtype" resultMap="BaseResultMap" >
+    select  
+    <include refid="Base_Column_List" />
+    from dc_dictionary
+    <if test="ttype != null and ttype !='' ">
+    	where ttype = #{ttype}
+        and (pcCompanyId is null or  pcCompanyId=#{pcCompanyId})
+    	<if test="ttype=='industry'">
+    	  and parentId != '0'
+    	</if>    	
+    	 order by level asc
+    </if>
+  </select>
+  
+  
+
+  
+  
+  <select id="selectDictionaryParentValueByType" resultType="java.lang.String" >
+  
+    select  value from dc_dictionary
+    <if test="ttype != null and ttype !='' ">
+    	where ttype = #{ttype} and parentId = '0'
+        and (pcCompanyId is null or  pcCompanyId=#{pcCompanyId})
+        order by level asc
+    </if>
+    
+  </select>
+  
+  <select id="selectParentDictionaryByTtype" resultMap="BaseResultMap" >
+    select  
+    <include refid="Base_Column_List" />
+    from dc_dictionary where parentId = '0'
+      and (pcCompanyId is null or  pcCompanyId=#{pcCompanyId})
+    <if test="ttype != null and ttype !='' ">
+    	and ttype = #{ttype} order by level asc
+    </if>
+  </select>
+  
+  
+  <select id="selectDictionaryByValue" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from dc_dictionary where value = #{value}
+      and (pcCompanyId is null or  pcCompanyId=#{pcCompanyId})
+  </select>
+  
+  <select id="selectDictionaryByParentId" resultMap="BaseResultMap">
+  	select false isSelected,
+  	<include refid="Base_Column_List" />
+  	from dc_dictionary where parentId = #{parentId} and ttype = #{ttype}
+      and (pcCompanyId is null or  pcCompanyId=#{pcCompanyId})
+  </select>
+  
+  <select id="selectMaxLevelByTtype" resultType="java.lang.Integer">
+  
+  	select max(level) from dc_dictionary where   (pcCompanyId is null or  pcCompanyId=#{pcCompanyId})  group by ttype having ttype = #{ttype}
+
+  </select>
+
+    <update id="updateDictionaryLevel">
+  
+  	update dc_dictionary set level = #{level} where id = #{id} 
+  
+  </update>
+  
+  <update id="clearColumnData">
+  
+  	${sql}
+  
+  </update>
+  
+  <delete id="deleteDictionaryById">
+  
+  	delete from dc_dictionary where id = #{id} 
+  
+  </delete>
+  
+
+
+  <insert id="saveDictionarys">
+  
+  	insert into
+  	 dc_dictionary(id,ttype,level,ttypeName,value,useCount,parentId,pcCompanyId) values
+  	 (uuid(),#{ttype},#{level},#{ttypeName},#{value},0,0,#{pcCompanyId})
+  	
+  </insert>
+  
+</mapper>

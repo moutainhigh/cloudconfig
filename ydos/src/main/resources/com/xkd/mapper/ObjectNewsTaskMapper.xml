@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xkd.mapper.ObjectNewsTaskMapper">
+    <insert id="insert">
+      insert into dc_yd_object_news_task
+      (
+        id,
+        objectId,
+        objectType,
+        content,
+        pcCompanyId,
+        flag,
+        status,
+        createDate,
+        createdBy
+        ) VALUES
+         (
+         #{id},
+         #{objectId},
+         #{objectType},
+         #{content},
+         #{pcCompanyId},
+         #{flag},
+         #{status},
+         #{createDate},
+         #{createdBy}
+         )
+    </insert>
+
+  <update id="update">
+    update dc_yd_object_news_task
+    set
+      <if test="objectId!=null and objectId!=''">
+          objectId=#{objectId},
+      </if>
+      <if test="objectType!=null and objectType!=''">
+      objectType=#{objectType},
+      </if>
+      <if test="content!=null and content!=''">
+      content=#{content},
+      </if>
+      <if test="pcCompanyId!=null and pcCompanyId!=''">
+          pcCompanyId=#{pcCompanyId},
+      </if>
+      <if test="flag!=null and flag!=''">
+      flag=#{flag},
+      </if>
+      <if test="status!=null and status!=''">
+          flag=#{status},
+      </if>
+      <if test="createDate!=null and createDate!=''">
+      createDate=#{createDate},
+      </if>
+      <if test="createdBy!=null and createdBy!=''">
+      createdBy=#{createdBy},
+      </if>
+      id=id
+     where id=#{id}
+  </update>
+
+
+
+  <select id="select" resultType="java.util.Map">
+    select
+    t.id,
+    t.objectId,
+    t.objectType,
+    t.content,
+    t.pcCompanyId,
+    t.flag,
+    t.createDate,
+    t.createdBy,
+    c.companyName	,
+    d.departmentName
+    from dc_yd_object_news_task  t
+    left join dc_company c on t.objectId=c.id
+    left join dc_department d on t.objectId=t.id
+
+    where  t.id=#{id}
+  </select>
+
+  <select id="selectList" resultType="java.util.Map">
+      select * from (
+                  select
+                  t.id,
+                  t.objectId,
+                  t.objectType,
+                  t.content,
+                  t.pcCompanyId,
+                  case
+                  when t.flag=0 then '未完成'
+                  when t.flag=1 then '进行中'
+                  when t.flag=2 then '已完成'
+                  end  as completeStatus,
+                  DATE_FORMAT(t.createDate ,'%Y-%m-%d %H:%i:%s') createDate,
+                  t.createdBy,
+                  d.departmentName as pushee
+                  from dc_yd_object_news_task t
+                  left join dc_department d on t.objectId=t.id
+
+                  where t.status=0 and objectType=1
+                  <if test="pcCompanyId!=null and pcCompanyId!=''">and t.pcCompanyId=#{pcCompanyId}
+                  </if>
+
+                  union
+
+                  select
+                  t.id,
+                  t.objectId,
+                  t.objectType,
+                  t.content,
+                  t.pcCompanyId,
+                   case
+                  when t.flag=0 then
+                  '未完成'
+                  when t.flag=1 then '进行中'
+                  when t.flag=2 then '已完成'
+                  end as completeStatus ,
+                  t.
+                  createDate,
+                  t.createdBy,
+                  c.companyName as pushee
+                  from dc_yd_object_news_task t
+                  left join dc_company c on t.objectId=c.id
+                  where t.status=0 and objectType=0
+
+                  <if test="pcCompanyId!=null and pcCompanyId!=''">
+                      and t.pcCompanyId=#{
+                  pcCompanyId}
+                  </if>
+) tt
+
+       order by  tt.createDate desc
+       limit #{start},#{pageSize}
+  </select>
+
+
+
+    <select id="selectListCount" resultType="int">
+        select count(1) from (
+        select
+        t.id,
+        t.objectId,
+        t.objectType,
+        t.content,
+        t.pcCompanyId,
+        case
+        when t.flag=0 then '未完成'
+        when t.flag=1 then '进行中'
+        when t.flag=2 then '已完成'
+        end ,
+        DATE_FORMAT(t.createDate,'%Y-%m-%d %H:%i') as createDate,
+        t.createdBy,
+        d.departmentName as pushee
+        from dc_yd_object_news_task t
+        left join dc_department d on t.objectId=t.id
+
+        where t.status=0 and objectType=1
+
+        <if test="pcCompanyId!=null and pcCompanyId!=''">
+            and t.pcCompanyId=#{pcCompanyId}
+        </if>
+
+        union
+
+        select
+        t.id,
+        t.objectId,
+        t.objectType,
+        t.content,
+        t.pcCompanyId,
+        case
+        when t.flag=0 then '未完成'
+        when t.flag=1 then '进行中'
+        when t.flag=2 then '已完成'
+        end ,
+        DATE_FORMAT(t.createDate,'%Y-%m-%d %H:%i') as createDate,
+        t.createdBy,
+        c.companyName as pushee
+        from dc_yd_object_news_task t
+        left join dc_company c on t.objectId=c.id
+        where t.status=0 and objectType=0
+
+        <if test="pcCompanyId!=null and pcCompanyId!=''">
+            and t.pcCompanyId=#{pcCompanyId}
+        </if>
+        ) t
+
+    </select>
+
+    <select id="selectUndoneTaskId" resultType="string">
+        select id from dc_yd_object_news_task where t.flag=0
+    </select>
+
+</mapper>

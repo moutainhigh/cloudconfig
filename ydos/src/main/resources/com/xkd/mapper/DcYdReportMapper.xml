@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.DcYdReportMapper">
+    <insert id="insert">
+        INSERT INTO dc_yd_report (id, type, summary, plan, createDate, createdBy, status, bindDate) VALUES
+            (#{id}, #{type}, #{summary}, #{plan}, #{createDate}, #{createdBy}, #{status}, #{bindDate})
+    </insert>
+    <insert id="insertForSchedule">
+        INSERT INTO dc_yd_report (id, type, createDate,createdBy, bindDate, status, pcCompanyId) VALUES
+            (#{id}, #{type}, now(), #{userId}, now(), 1, #{pcCompanyId})
+    </insert>
+
+    <delete id="deleteById" parameterType="string">
+        DELETE * FROM dc_yd_report
+        WHERE id = #{id};
+        DELETE * FROM dc_yd_report_sheet WHERE reportId=#{id};
+        DELETE * FROM dc_yd_report_comment WHERE reportId=#{id};
+        DELETE * FROM dc_yd_attachment WHERE objectId=#{id} AND imgType=3
+    </delete>
+
+    <update id="update" parameterType="java.util.Map">
+        UPDATE dc_yd_report
+        <set>
+            <if test="summary != null ">
+                summary=#{summary},
+            </if>
+            <if test="plan != null ">
+                plan=#{plan},
+            </if>
+            <if test="updateDate != null ">
+                updateDate = #{updateDate},
+            </if>
+            <if test="updatedBy != null ">
+                updatedBy=#{updatedBy},
+            </if>
+            <if test="status != null ">
+                status=#{status}
+            </if>
+            <if test="bindDate != null and bindDate != ''">
+                bindDate=#{bindDate}
+            </if>
+        </set>
+        WHERE id=#{id}
+    </update>
+    <update id="updateReportStatus">
+        UPDATE dc_yd_report SET status=0 WHERE id IN
+        <foreach collection="reportIdList" item="reportId" open="(" close=")" separator="," index="">
+            #{reportId}
+        </foreach>
+    </update>
+
+    <select id="filterReport" resultType="java.util.Map">
+        SELECT t.*,
+        CASE
+        WHEN t.status=1 THEN '未完成'
+        WHEN t.status=0 THEN '已完成'
+        END compaleteFlag,
+        du.uname AS userName,
+        CASE
+        WHEN t.type=1 THEN '日报'
+        WHEN t.type=2 THEN '周报'
+        WHEN t.type=3 THEN '月报'
+        END typeName
+        FROM dc_yd_report t
+        LEFT JOIN dc_user du ON t.createdBy=du.id
+        WHERE 1=1
+        <if test="pcCompanyId!=null and pcCompanyId!=''">
+            AND t.pcCompanyId=#{pcCompanyId}
+        </if>
+        <if test="userIdList != null and userIdList.size()>0">
+            AND t.createdBy IN
+            <foreach collection="userIdList" item="userId" separator="," open="(" close=")" index="">
+                #{userId}
+            </foreach>
+        </if>
+        <if test="status != null">
+            AND t.status=#{status}
+        </if>
+        <if test="type != null ">
+            AND t.type=#{type}
+        </if>
+        <if test="startDate != null and startDate!=''">
+            <if test="endDate == null or endDate == ''">
+                AND t.bindDate >= date(#{startDate})
+            </if>
+            <if test="endDate != null and endDate!=''">
+                AND date(#{endDate})>= t.bindDate and t.bindDate >= date(#{startDate})
+            </if>
+        </if>
+        <if test="dateFilter==1">
+            AND date_format(bindDate, '%y-%u')=date_format(now(), '%y-%u')
+        </if>
+        <if test="dateFilter==2">
+            AND date_format(bindDate,'%y-%m')=date_format(now(),'%y-%m')
+        </if>
+        <if test="dateFilter==3">
+            AND date_format(date_sub(bindDate, INTERVAL 1 MONTH), '%y-%m')=
+            date_format(date_sub(now(), INTERVAL 1 MONTH),'%y-%m')
+        </if>
+        <if test="dateFilter==4">
+            AND date_format(bindDate, '%y')=date_format(now(), '%y')
+        </if>
+        <if test="dateFilter==5">
+            AND date_format(date_sub(bindDate, INTERVAL 1 YEAR), '%y')=
+            date_format(date_sub(now(), INTERVAL 1 YEAR), '%y')
+        </if>
+        ORDER BY  t.bindDate DESC LIMIT #{start}, #{pageSize}
+    </select>
+
+    <select id="filterReportCount" resultType="java.lang.Integer">
+        SELECT count(*) FROM dc_yd_report WHERE 1=1
+        <if test="pcCompanyId!=null and pcCompanyId!=''">
+             AND pcCompanyId=#{pcCompanyId}
+        </if>
+        <if test="userIdList != null and userIdList.size()>0">
+            AND createdBy IN
+            <foreach collection="userIdList" index="" item="userId" open="(" close=")" separator=",">
+                #{userId}
+            </foreach>
+        </if>
+        <if test="status != null ">
+            AND status=#{status}
+        </if>
+        <if test="type != null ">
+            AND type=#{type}
+        </if>
+        <if test="startDate != null and startDate != ''">
+            <if test="endDate == null or endDate=='' ">
+                AND createDate > #{startDate}
+            </if>
+            <if test="endDate != null and endDate != ''">
+                AND #{endDate}> createDate and createDate > #{startDate}
+            </if>
+        </if>
+        <if test="dateFilter==1">
+            AND date_format(bindDate, '%y-%u')=date_format(now(), '%y-%u')
+        </if>
+        <if test="dateFilter==2">
+            AND date_format(bindDate,'%y-%m')=date_format(now(),'%y-%m')
+        </if>
+        <if test="dateFilter==3">
+            AND date_format(date_sub(bindDate, INTERVAL 1 MONTH), '%y-%m')=
+            date_format(date_sub(now(), INTERVAL 1 MONTH),'%y-%m')
+        </if>
+        <if test="dateFilter==4">
+            AND date_format(bindDate, '%y')=date_format(now(), '%y')
+        </if>
+        <if test="dateFilter==5">
+            AND date_format(date_sub(bindDate, INTERVAL 1 YEAR), '%y')=
+            date_format(date_sub(now(), INTERVAL 1 YEAR), '%y')
+        </if>
+    </select>
+
+    <select id="findUserByRoleAndCompany" resultType="java.lang.String">
+        SELECT id
+        FROM dc_user
+        WHERE pcCompanyId = #{pcCompanyId} AND roleId = #{roleId}
+    </select>
+
+    <select id="selectById" parameterType="string" resultType="java.util.Map">
+        SELECT t.*,
+            CASE
+            WHEN t.status = 1 THEN '未完成'
+            WHEN t.status = 2 THEN '已完成'
+            END completeFalg,
+            CASE
+            WHEN t.type=1 THEN '日报'
+            WHEN t.type=2 THEN '周报'
+            WHEN t.type=3 THEN '月报'
+            END typeName,
+            du.uname AS userName
+        FROM dc_yd_report t
+            LEFT JOIN dc_user du ON t.createdBy=du.id
+        WHERE t.id = #{id}
+    </select>
+
+    <select id="selectByUserId" parameterType="string" resultType="java.util.Map">
+        SELECT *
+        FROM dc_yd_report
+        WHERE createdBy = #{userId}
+    </select>
+
+    <select id="selectByUserIdAndType" resultType="java.util.Map">
+        SELECT *
+        FROM dc_yd_report
+        WHERE createdBy = #{userId} AND type = #{type}
+    </select>
+
+    <select id="selectByUserIdAndDate" resultType="java.util.Map">
+        SELECT *
+        FROM dc_yd_report
+        WHERE createdBy = #{userId} AND createDate = #{date}
+    </select>
+
+    <select id="countReportByPcCompanyIdAndDate" resultType="java.lang.Integer">
+        SELECT count(*) FROM  dc_yd_report
+        WHERE date_format(bindDate, '%y-%m-%d') = date_format(date_sub(now(), INTERVAL 1 DAY), '%y-%m-%d')
+              AND pcCompanyId=#{pcCompanyId}
+              AND status=0
+    </select>
+
+    <select id="selectAllLastDayReport" resultType="java.util.Map">
+        SELECT id, createdBy FROM dc_yd_report WHERE
+            <if test="type==1">
+                date(bindDate)=date(date_sub(now(), INTERVAL 1 DAY)) AND type=1
+            </if>
+            <if test="type==2">
+                date(bindDate)=date(date_sub(now(), INTERVAL 1 WEEK)) AND type=2
+            </if>
+            <if test="type==3">
+                date_format(bindDate,'%y-%m')=date_format(date_sub(now(), INTERVAL 1 MONTH), '%y-%m') AND type=3
+            </if>
+    </select>
+
+</mapper>

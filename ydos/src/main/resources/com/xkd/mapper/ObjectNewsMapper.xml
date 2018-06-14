@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xkd.mapper.ObjectNewsMapper">
+
+  <select id="selectObjectNewsByUserId"  resultType="java.util.Map">
+      select id,appFlag,objectId,userId,title,content,createdBy,flag,status,newsType,imgUrl,
+      DATE_FORMAT(
+      createDate,
+      '%Y-%m-%d %H:%i'
+      ) AS createDate
+      from dc_yd_object_news where  status = 0 and appFlag = #{appFlag}
+    <if test="userId != '' and userId != null">
+      and userId = #{userId}
+    </if>
+      <if test="newsTypeList != '' and newsTypeList != null">
+          and newsType  in
+          <foreach collection="newsTypeList" item="newsType" separator="," open="(" close=")">
+              #{newsType}
+          </foreach>
+      </if>
+
+    order by createDate desc
+    limit #{currentPage},#{pageSize}
+
+  </select>
+
+    <select id="selectTotalObjectNewsByUserId"  resultType="java.lang.Integer">
+        select count(1)
+        from dc_yd_object_news where  status = 0 and appFlag = #{appFlag}
+        <if test="userId != '' and userId != null">
+            and userId = #{userId}
+        </if>
+        <if test="newsTypeList != '' and newsTypeList != null">
+            and newsType  in
+            <foreach collection="newsTypeList" item="newsType" separator="," open="(" close=")">
+                #{newsType}
+            </foreach>
+        </if>
+
+    </select>
+
+  <select id="getNoReadNewsCount" resultType="java.lang.Integer">
+    select count(1) from dc_yd_object_news where userId = #{userId} and status = 0 and flag = 0
+  </select>
+
+  <update id="updateAllNewsRead">
+     update dc_yd_object_news set flag = 1 where userId = #{userId}
+  </update>
+
+  <update id="updateReadById">
+    update dc_yd_object_news set flag = 1 where id = #{newsId}
+  </update>
+
+
+  <insert id="saveObjectNews">
+    insert into dc_yd_object_news(id,appFlag,objectId,userId,title,content,createDate,createdBy,flag,status,newsType,imgUrl) values
+    <foreach collection="ObjectNewsList"  item="ObjectNews" index="" separator="," >
+      (#{ObjectNews.id},#{ObjectNews.appFlag},#{ObjectNews.objectId},#{ObjectNews.userId},#{ObjectNews.title},#{ObjectNews.content},#{ObjectNews.createDate}
+      ,#{ObjectNews.createdBy},#{ObjectNews.flag},#{ObjectNews.status},#{ObjectNews.newsType},#{ObjectNews.imgUrl})
+    </foreach>
+  </insert>
+
+
+<select id="selectById" resultType="java.util.Map">
+  select
+    o.id,
+    o.appFlag,
+    o.objectId,
+    o.userId,
+    o.title,
+    o.content,
+    o.imgUrl,
+    o.newsType
+  from dc_yd_object_news o where o.id=#{id}
+</select>
+
+
+  <select id="selectCustomerPushNews" resultType="java.util.Map">
+      select
+            DATE_FORMAT(o.createDate,'%Y-%m-%d %H:%i') as createDate,
+            o.id,
+            o.title,
+            o.content,
+            o.imgUrl,
+            d.departmentName as pusher
+      from dc_yd_object_news o
+		left join dc_yd_object_news_task t on t.id=o.objectId
+    left join dc_department d on d.id=t.pcCompanyId
+       where o.newsType=3  and o.userId=#{userId}
+       order by o.createDate desc
+       limit #{start},#{pageSize}
+  </select>
+
+
+  <select id="selectCustomerPushNewsCount" resultType="int">
+ select
+    count(1)
+    from dc_yd_object_news o
+		left join dc_yd_object_news_task t on t.id=o.objectId
+    left join dc_department d on d.id=t.pcCompanyId
+    where o.newsType=3  and o.userId=#{userId}
+  </select>
+
+
+  <select id="selectTechnicanPushNews" resultType="java.util.Map">
+    select
+    DATE_FORMAT(o.createDate,'%Y-%m-%d %H:%i') as createDate,
+    o.id,
+    o.title,
+    o.content,
+    o.imgUrl
+    from dc_yd_object_news o
+    where o.newsType=3  and o.userId=#{userId}
+    order by o.createDate desc
+    limit #{start},#{pageSize}
+  </select>
+
+  <select id="selectTechnicanPushNewsCount" resultType="int">
+    select
+      count(1)
+    from dc_yd_object_news o
+    where o.newsType=3  and o.userId=#{userId}
+  </select>
+
+
+
+  <select id="selectPushNewsByTaskId" resultType="java.util.Map">
+   select
+				DATE_FORMAT(o.createDate,'%Y-%m-%d %H:%i') as createDate,
+				o.id,
+				o.title,
+				o.content,
+				o.imgUrl,
+				u.uname
+    from dc_yd_object_news o
+		left join dc_user u on u.id=o.userId
+		left join dc_yd_object_news_task t on t.id=o.objectId
+    where o.newsType=3  and t.id=#{taskId}
+    order by o.createDate desc
+    limit #{start},#{pageSize}
+  </select>
+
+  <select id="selectPushNewsByTaskIdCount" resultType="int">
+    select
+				count(1)
+    from dc_yd_object_news o
+		left join dc_user u on u.id=o.userId
+		left join dc_yd_object_news_task t on t.id=o.objectId
+    where o.newsType=3  and t.id=#{taskId}
+  </select>
+
+
+    <delete id="deleteById">
+      delete from dc_yd_object_news where id=#{id}
+    </delete>
+
+</mapper>

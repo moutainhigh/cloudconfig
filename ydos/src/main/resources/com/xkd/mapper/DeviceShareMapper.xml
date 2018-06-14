@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.DeviceShareMapper">
+
+
+    <select id="selectShareListBySharer" resultType="java.util.Map">
+            select
+                    s.id,
+                    u.mobile,
+                    u.uname,
+                    s.control,
+                    s.warningLevel
+             from dc_yd_device_share s
+                    left join dc_user u on u.id=s.sharee
+             where s.sharer=#{userId}
+    </select>
+
+
+    <select id="delete"   >
+          delete from dc_yd_device_share where id in
+        <foreach collection="idList"  item="id" index="" separator=","  open="(" close=")" >
+            #{id}
+        </foreach>
+    </select>
+
+    <insert id="insertList">
+
+        insert into dc_yd_device_share(
+            id,
+            sharer,
+            sharee,
+            control,
+            warningLevel
+        ) values
+
+        <foreach collection="shareList"  item="share" index="" separator="," >
+            (
+            #{share.id},
+            #{share.sharer},
+            #{share.sharee},
+            #{share.control},
+            #{share.warningLevel}
+            )
+        </foreach>
+    </insert>
+
+
+
+
+    <select id="selectShareeByCompanyIdAndPcCompanyId" resultType="string">
+
+        select s.sharee from dc_yd_device_share s where s.sharer in(
+			select  c.userId from dc_company_contactor c where c.companyId=#{companyId} and c.pcCompanyId=#{pcCompanyId}
+)
+
+    </select>
+
+
+    <select id="selectById" resultType="java.util.Map">
+       select s.id,s.sharee,s.sharer from dc_yd_device_share s where s.id=#{id}
+    </select>
+
+    <select id="selectBySharerAndSharee" resultType="java.util.Map">
+       select * from dc_yd_device_share s where s.sharee=#{sharee} and s.sharer=#{sharer}
+    </select>
+
+</mapper>

@@ -1,0 +1,1527 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.UserMapper" >
+
+	<sql id="Base_Column_List" >
+	id,roleId,uname,nickName,titleId,qq,mobile,password,phone,
+	email,sex,age,useStatus,remark,userLogo,wechat,weixin,departmentId,
+	level,status,platform,createdBy,createDate,updatedBy,updateDate,pcCompanyId,lastLoginIp,DATE_FORMAT( lastLoginTime, "%Y-%m-%d %H:%i:%s" ) AS lastLoginTime,
+	appPushFlag,messagePushFlag,voicePushFlag,emailPushFlag
+  </sql>
+
+	<select id="selectUserById" resultType="java.util.HashMap">
+		  	SELECT
+			u.id,
+			u.roleId,
+			u.uname,
+			u.userCompanyName,
+			u.userIndustry,
+			u.userContactAddress,
+			u.userServerMobile,
+			u.password,
+			u.nickName,
+			u.titleId,
+			u.qq,
+			u.mobile,
+			u.phone,
+			u.email,
+			u.sex,
+			u.age,
+			u.useStatus,
+			u.remark,
+			u.userLogo,
+			u.wechat,
+			u.weixin,
+			u. LEVEL,
+			u. STATUS,
+			u.platform,
+			u.createdBy,
+			u.createDate,
+			u.updatedBy,
+			u.updateDate,
+			u.appPushFlag,u.messagePushFlag,u.voicePushFlag,u.emailPushFlag ,
+			u.userCompanyName,
+			u.userIndustry,
+			u.userContactAddress,
+			u.userServerMobile,
+			r.roleName,
+			u.departmentId,
+			dp.departmentName,
+			dc.value as title,
+			u.enrollDate,
+			u.pcCompanyId,
+			r.isAdmin,
+			dt.degree,
+			dt.workAge,
+			dt.professionTitle,
+			dt.graduationImg,
+			dt.professionNo,
+			dt.professionImg,
+			dt.idCard,
+			dt.strongpoint,
+			dt.qualification,
+			dt.graduation,
+			dt.major,
+			dt.udesc,
+			u.lastLoginIp,
+			DATE_FORMAT( u.lastLoginTime, "%Y-%m-%d %H:%i:%s" ) AS lastLoginTime
+
+		FROM
+			dc_user u
+			left join dc_user_detail dt on u.id=dt.id
+		LEFT JOIN dc_sys_role r ON u.roleId = r.id
+		left join dc_department dp on u.departmentId=dp.id
+		left join dc_dictionary dc on u.titleId=dc.id and u.teacherShow = 1
+		WHERE
+			u.id = #{id}
+  
+  </select>
+
+
+	<select id="selectUserByMobile" resultType="java.util.Map">
+
+		select
+
+		<include refid="Base_Column_List"/>
+
+		from dc_user where mobile = #{mobile} and status = 0
+
+		<if test="platform != '' and platform != null">
+			and platform = #{platform}
+		</if>
+
+	</select>
+
+
+
+
+
+
+	<select id="selectUserByOnlyMobile" resultType="java.util.HashMap">
+
+		SELECT
+		u.id,
+		u.uname,
+		u.roleId,
+		u.id as userId,
+		dd.birth,
+		dd.idCard,
+		u.sex,
+		u.age,
+		u.mobile,
+		u.phone,
+		u.email,
+		u.qq,
+		u.wechat,
+		u.nickName AS nickName,
+		dd.hobbies,
+		dd.strongpoint,
+		dd.userResource,
+		dd.qualification,
+		dd.graduation,
+		dd.major,
+		dd.profession,
+		dd.personAnalysis,
+		dd.udesc as `desc`,
+		u.status ,
+		u.platform,
+		u.departmentId
+		FROM
+		dc_user u
+		LEFT JOIN dc_user_detail dd ON u.id = dd.id
+		WHERE u.mobile=#{mobile}
+
+	</select>
+
+
+	<select id="selectUserByEmail" resultType="java.util.HashMap">
+
+		select
+
+		<include refid="Base_Column_List"/>
+
+		from dc_user where email = #{email} and status = 0
+
+		<if test="platform != '' and platform != null">
+			and platform = #{platform}
+		</if>
+
+	</select>
+
+
+
+	<select id="selectUsersByContent" resultType="java.util.Map">
+
+		select u.id,u.roleId,r.roleName,u.uname as name,u.email,u.sex,u.userLogo,
+
+		u.createDate,u.updateDate,u.createdBy,u.updatedBy
+
+		from dc_user u left join (select * from dc_sys_role where status = 0) r on u.roleId = r.id where u.status = 0
+
+		<if test="content !='' and  content != null">
+			${content}
+		</if>
+
+		order by  u.createDate desc ,u.updateDate desc
+
+		limit #{currentPageInt},#{pageSizeInt}
+
+	</select>
+
+	<select id="selectUsersByContentCount" resultType="java.lang.Integer">
+
+		select count(1)
+
+		from dc_user u left join (select * from dc_sys_role where status = 0) r on u.roleId = r.id where u.status = 0
+
+		<if test="content !='' and  content != null">
+			${content}
+		</if>
+
+	</select>
+
+	<update id="updateUserPasswordById">
+
+		update dc_user set password = #{password} where id = #{id}
+
+	</update>
+
+	<update id="deleteUserRolesByRoles">
+
+		update dc_user set roleId = NULL where ${roleIds}
+
+	</update>
+
+	<insert id="saveUser" parameterType="java.util.HashMap">
+
+		INSERT INTO dc_user (
+		id,
+		roleId,
+		uname,
+		password,
+		sex,
+		email,
+		platform,
+		createdBy,
+		createDate,
+		departmentId,
+		titleId
+		)
+		VALUES
+		(
+		uuid(),
+		#{roleId},
+		#{uname},
+		#{password},
+		#{sex},
+		#{email},
+		1,
+		#{createdBy},
+		now(),
+		#{departmentId},
+		#{titleId}
+		)
+
+	</insert>
+
+	<insert id="updateUserById" parameterType="java.util.HashMap">
+
+		update dc_user
+		set
+		roleId = #{roleId},
+		uname = #{uname},
+		sex = #{sex},
+		email = #{email},
+		updatedBy = #{updatedBy},
+		updateDate = now(),
+		departmentId=#{departmentId},
+		titleId=#{titleId}
+		where
+		id = #{id}
+
+	</insert>
+
+
+	<insert id="insertDcUser" parameterType="java.util.Map">
+		insert into dc_user(
+		<if test="id != null and id !='' " >
+			id
+		</if>
+		<if test="roleId != null and roleId !='' " >
+			,roleId
+		</if>
+		<if test="uname != null and uname !='' " >
+			,uname
+		</if>
+		<if test="nickName != null and nickName !='' " >
+			,nickName
+		</if>
+		<if test="titleId != null and titleId !='' " >
+			,titleId
+		</if>
+		<if test="qq != null and qq !='' " >
+			,qq
+		</if>
+		<if test="mobile != null and mobile !='' " >
+			,mobile
+		</if>
+		<if test="password != null and password !='' " >
+			,password
+		</if>
+		<if test="phone != null and phone !='' " >
+			,phone
+		</if>
+		<if test="email != null and email !='' " >
+			,email
+		</if>
+		<if test="sex != null and sex !='' " >
+			,sex
+		</if>
+		<if test="age != null and age !='' " >
+			,age
+		</if>
+		<if test="useStatus != null and useStatus !='' " >
+			,useStatus
+		</if>
+		<if test="remark != null and remark !='' " >
+			,remark
+		</if>
+		<if test="userLogo != null and userLogo !='' " >
+			,userLogo
+		</if>
+		<if test="wechat != null and wechat !='' " >
+			,wechat
+		</if>
+		<if test="weixin != null and weixin !='' " >
+			, weixin
+		</if>
+		<if test="level != null and level !='' " >
+			,level
+		</if>
+		<if test="status != null and status !='' " >
+			,status
+		</if>
+		<if test="platform != null and platform !='' " >
+			,platform
+		</if>
+		<if test="createdBy != null and createdBy !='' " >
+			,createdBy
+		</if>
+		<if test="createDate != null and createDate !='' " >
+			,createDate
+		</if>
+		<if test="updatedBy != null and updatedBy !='' " >
+			,updatedBy
+		</if>
+		<if test="updateDate != null and updateDate !='' " >
+			,updateDate
+		</if>
+		<if test="enrollDate != null and enrollDate !='' " >
+			,enrollDate
+		</if>
+		<if test="departmentId != null and departmentId !='' " >
+			,departmentId
+		</if>
+		<if test="pcCompanyId != null and pcCompanyId !='' " >
+			,pcCompanyId
+		</if>
+		<if test="lastLoginIp != null and lastLoginIp !='' " >
+			,lastLoginIp
+		</if>
+		<if test="lastLoginTime != null and lastLoginTime !='' " >
+			,lastLoginTime
+		</if>
+		<if test="appPushFlag != null and appPushFlag !='' " >
+			,appPushFlag
+		</if>
+		<if test="messagePushFlag != null and messagePushFlag !='' " >
+			,messagePushFlag
+		</if>
+		<if test="voicePushFlag != null and voicePushFlag !='' " >
+			,voicePushFlag
+		</if>
+		<if test="emailPushFlag != null and emailPushFlag !='' " >
+			,emailPushFlag
+		</if>
+		) values (
+		<if test="id != null and id !='' " >
+			#{id }
+		</if>
+		<if test="roleId != null and roleId !='' " >
+			,#{roleId }
+		</if>
+		<if test="uname != null and uname !='' " >
+			,#{uname}
+		</if>
+		<if test="nickName != null and nickName !='' " >
+			,#{nickName}
+		</if>
+		<if test="titleId != null and titleId !='' " >
+			,#{titleId }
+		</if>
+		<if test="qq != null and qq !='' " >
+			,#{qq}
+		</if>
+		<if test="mobile != null and mobile !='' " >
+			,#{mobile}
+		</if>
+		<if test="password != null and password !='' " >
+			,#{password}
+		</if>
+		<if test="phone != null and phone !='' " >
+			,#{phone}
+		</if>
+		<if test="email != null and email !='' " >
+			,#{email }
+		</if>
+		<if test="sex != null and sex !='' " >
+			,#{sex }
+		</if>
+		<if test="age != null and age !='' " >
+			,#{age}
+		</if>
+		<if test="useStatus != null and useStatus !='' " >
+			,#{useStatus}
+		</if>
+		<if test="remark != null and remark !='' " >
+			,#{remark}
+		</if>
+		<if test="userLogo != null and userLogo !='' " >
+			,#{userLogo}
+		</if>
+		<if test="wechat != null and wechat !='' " >
+			,#{wechat}
+		</if>
+		<if test="weixin != null and weixin !='' " >
+			, #{weixin}
+		</if>
+		<if test="level != null and level !='' " >
+			,#{level}
+		</if>
+		<if test="status != null and status !='' " >
+			,#{status}
+		</if>
+		<if test="platform != null and platform !='' " >
+			,#{platform}
+		</if>
+		<if test="createdBy != null and createdBy !='' " >
+			,#{createdBy}
+		</if>
+		<if test="createDate != null and createDate !='' " >
+			,#{createDate}
+		</if>
+		<if test="updatedBy != null and updatedBy !='' " >
+			,#{updatedBy}
+		</if>
+		<if test="updateDate != null and updateDate !='' " >
+			,#{updateDate}
+		</if>
+		<if test="enrollDate != null and enrollDate !='' " >
+			,#{enrollDate}
+		</if>
+		<if test="departmentId != null and departmentId !='' " >
+			,#{departmentId}
+		</if>
+		<if test="pcCompanyId != null and pcCompanyId !='' " >
+			,#{pcCompanyId}
+		</if>
+		<if test="lastLoginIp != null and lastLoginIp !='' " >
+			,#{lastLoginIp}
+		</if>
+		<if test="lastLoginTime != null and lastLoginTime !='' " >
+			,#{lastLoginTime}
+		</if>
+		<if test="appPushFlag != null and appPushFlag !='' " >
+			,#{appPushFlag}
+		</if>
+		<if test="messagePushFlag != null and messagePushFlag !='' " >
+			,#{messagePushFlag}
+		</if>
+		<if test="voicePushFlag != null and voicePushFlag !='' " >
+			,#{voicePushFlag}
+		</if>
+		<if test="emailPushFlag != null and emailPushFlag !='' " >
+			,#{emailPushFlag}
+		</if>
+		)
+
+	</insert>
+
+
+	<update id="updateDcUser" parameterType="java.util.Map">
+		update dc_user set
+		<if test="id != null" >
+			id=#{id}
+		</if>
+		<if test="roleId != null" >
+			,roleId =#{roleId}
+		</if>
+		<if test="uname != null" >
+			,uname =#{uname}
+		</if>
+		<if test="nickName != null" >
+			,nickName=#{nickName}
+		</if>
+		<if test="titleId != null" >
+			,titleId =#{titleId}
+		</if>
+		<if test="qq != null" >
+			,qq =#{qq}
+		</if>
+		<if test="mobile != null and mobile !='***'" >
+			,mobile =#{mobile}
+		</if>
+		<if test="password != null" >
+			,password=#{password}
+		</if>
+		<if test="phone != null and phone !='***'" >
+			,phone =#{phone}
+		</if>
+		<if test="email != null " >
+			,email =#{email}
+		</if>
+		<if test="sex != null" >
+			,sex =#{sex}
+		</if>
+		<if test="age != null" >
+			,age =#{age}
+		</if>
+		<if test="useStatus != null" >
+			,useStatus=#{useStatus}
+		</if>
+		<if test="remark != null" >
+			,remark=#{remark}
+		</if>
+		<if test="userLogo != null" >
+			,userLogo=#{userLogo}
+		</if>
+		<if test="wechat != null" >
+			,wechat=#{wechat}
+		</if>
+		<if test="weixin != null" >
+			, weixin=#{weixin}
+		</if>
+		<if test="level != null" >
+			,level=#{level}
+		</if>
+		<if test="status != null" >
+			,status=#{status}
+		</if>
+		<if test="platform != null" >
+			,platform=#{platform}
+		</if>
+		<if test="createdBy != null" >
+			,createdBy=#{createdBy}
+		</if>
+		<if test="createDate != null" >
+			,createDate=#{createDate}
+		</if>
+		<if test="updatedBy != null" >
+			,updatedBy=#{updatedBy}
+		</if>
+		<if test="updateDate != null" >
+			,updateDate=#{updateDate}
+		</if>
+		<if test="enrollDate != null" >
+			,enrollDate=#{enrollDate}
+		</if>
+		<if test="departmentId != null" >
+			,departmentId=#{departmentId}
+		</if>
+		<if test="pcCompanyId != null" >
+			,pcCompanyId=#{pcCompanyId}
+		</if>
+		<if test="lastLoginIp != null" >
+			,lastLoginIp=#{lastLoginIp}
+		</if>
+		<if test="lastLoginTime != null" >
+			,lastLoginTime=#{lastLoginTime}
+		</if>
+		<if test="userCompanyName != null" >
+			,userCompanyName=#{userCompanyName}
+		</if>
+		<if test="userIndustry != null" >
+			,userIndustry=#{userIndustry}
+		</if>
+		<if test="userContactAddress != null" >
+			,userContactAddress=#{userContactAddress}
+		</if>
+		<if test="userServerMobile != null" >
+			,userServerMobile=#{userServerMobile}
+		</if>
+		<if test="appPushFlag != null" >
+			,appPushFlag=#{appPushFlag}
+		</if>
+		<if test="messagePushFlag != null" >
+			,messagePushFlag=#{messagePushFlag}
+		</if>
+		<if test="voicePushFlag != null" >
+			,voicePushFlag=#{voicePushFlag}
+		</if>
+		<if test="emailPushFlag != null" >
+			,emailPushFlag=#{emailPushFlag}
+		</if>
+		where id=#{id}
+
+	</update>
+
+
+
+	<insert id="insertDcUserDetail" parameterType="java.util.Map">
+		insert into dc_user_detail(
+		<if test="id != null and id !='' " >
+			id
+		</if>
+		<if test="birth != null and birth !='' " >
+			,birth
+		</if>
+		<if test="idCard != null and idCard !='' " >
+			,idCard
+		</if>
+		<if test="hobbies != null and hobbies !='' " >
+			,hobbies
+		</if>
+		<if test="strongpoint != null and strongpoint !='' " >
+			,strongpoint
+		</if>
+		<if test="userResource != null and userResource !='' " >
+			,userResource
+		</if>
+		<if test="qualification != null and qualification !='' " >
+			,qualification
+		</if>
+		<if test="graduation != null and graduation !='' " >
+			,graduation
+		</if>
+		<if test="major != null and major !='' " >
+			,major
+		</if>
+		<if test="profession != null and profession !='' " >
+			,profession
+		</if>
+		<if test="personAnalysis != null and personAnalysis !='' " >
+			,personAnalysis
+		</if>
+		<if test="udesc != null and udesc !='' " >
+			,udesc
+		</if>
+		<if test="updateDate != null and updateDate !='' " >
+			,updateDate
+		</if>
+		<if test="createdBy != null and createdBy !='' " >
+			,createdBy
+		</if>
+		<if test="createDate != null and createDate !='' " >
+			,createDate
+		</if>
+		<if test="updatedBy != null and updatedBy !='' " >
+			,updatedBy
+		</if>
+		<if test="degree != null and degree !='' " >
+			,degree
+		</if>
+		<if test="workAge != null and workAge !='' " >
+			,workAge
+		</if>
+		<if test="graduationImg != null and graduationImg !='' " >
+			,graduationImg
+		</if>
+		<if test="professionTitle != null and professionTitle !='' " >
+			,professionTitle
+		</if>
+		<if test="professionNo != null and professionNo !='' " >
+			,professionNo
+		</if>
+		<if test="professionImg != null and professionImg !='' " >
+			,professionImg
+		</if>
+		<if test="userCompanyName != null and userCompanyName !=''" >
+			,userCompanyName
+		</if>
+		<if test="userIndustry != null  and userIndustry !=''" >
+			,userIndustry
+		</if>
+		<if test="userContactAddress != null  and userContactAddress !=''" >
+			,userContactAddress
+		</if>
+		<if test="userServerMobile != null  and userServerMobile !=''" >
+			,userServerMobile
+		</if>
+		) values (
+		<if test="id != null and id !='' " >
+			#{id}
+		</if>
+		<if test="birth != null and birth !='' " >
+			,#{birth}
+		</if>
+		<if test="idCard != null and idCard !='' " >
+			,#{idCard}
+		</if>
+		<if test="hobbies != null and hobbies !='' " >
+			,#{hobbies}
+		</if>
+		<if test="strongpoint != null and strongpoint !='' " >
+			,#{strongpoint}
+		</if>
+		<if test="userResource != null and userResource !='' " >
+			,#{userResource}
+		</if>
+		<if test="qualification != null and qualification !='' " >
+			,#{qualification}
+		</if>
+		<if test="graduation != null and graduation !='' " >
+			,#{graduation}
+		</if>
+		<if test="major != null and major !='' " >
+			,#{major}
+		</if>
+		<if test="profession != null and profession !='' " >
+			,#{profession}
+		</if>
+		<if test="personAnalysis != null and personAnalysis !='' " >
+			,#{personAnalysis}
+		</if>
+
+		<if test="udesc != null and udesc !='' " >
+			,#{udesc}
+		</if>
+		<if test="updateDate != null and updateDate !='' " >
+			,#{updateDate}
+		</if>
+		<if test="createdBy != null and createdBy !='' " >
+			,#{createdBy}
+		</if>
+		<if test="createDate != null and createDate !='' " >
+			,#{createDate}
+		</if>
+		<if test="updatedBy != null and updatedBy !='' " >
+			,#{updatedBy}
+		</if>
+		<if test="degree != null and degree !='' " >
+			,#{degree}
+		</if>
+		<if test="workAge != null and workAge !='' " >
+			,#{workAge}
+		</if>
+		<if test="graduationImg != null and graduationImg !='' " >
+			,#{graduationImg}
+		</if>
+		<if test="professionTitle != null and professionTitle !='' " >
+			,#{professionTitle}
+		</if>
+		<if test="professionNo != null and professionNo !='' " >
+			,#{professionNo}
+		</if>
+		<if test="professionImg != null and professionImg !='' " >
+			,#{professionImg}
+		</if>
+		<if test="userCompanyName != null and userCompanyName !=''" >
+			,#{userCompanyName}
+		</if>
+		<if test="userIndustry != null  and userIndustry !=''" >
+			,#{userIndustry}
+		</if>
+		<if test="userContactAddress != null and userContactAddress !=''" >
+			,#{userContactAddress}
+		</if>
+		<if test="userServerMobile != null  and userServerMobile !=''" >
+			,#{userServerMobile}
+		</if>
+		)
+
+	</insert>
+
+	<update id="updateDcUserDetail" parameterType="java.util.Map">
+		update dc_user_detail set
+		<if test="id != null" >
+			id=#{id}
+		</if>
+		<if test="birth != null" >
+			,birth=#{birth}
+		</if>
+		<if test="idCard != null" >
+			,idCard=#{idCard}
+		</if>
+		<if test="hobbies != null" >
+			,hobbies=#{hobbies}
+		</if>
+		<if test="strongpoint != null" >
+			,strongpoint=#{strongpoint}
+		</if>
+		<if test="userResource != null" >
+			,userResource=#{userResource}
+		</if>
+		<if test="qualification != null" >
+			,qualification=#{qualification}
+		</if>
+		<if test="graduation != null" >
+			,graduation=#{graduation}
+		</if>
+		<if test="major != null" >
+			,major=#{major}
+		</if>
+		<if test="profession != null" >
+			,profession=#{profession}
+		</if>
+		<if test="personAnalysis != null" >
+			,personAnalysis=#{personAnalysis}
+		</if>
+		<if test="udesc != null" >
+			,udesc=#{udesc}
+		</if>
+		<if test="createdBy != null" >
+			,createdBy=#{createdBy}
+		</if>
+		<if test="createDate != null" >
+			,createDate=#{createDate}
+		</if>
+		<if test="updatedBy != null" >
+			,updatedBy=#{updatedBy}
+		</if>
+		<if test="updateDate != null" >
+			,updateDate=#{updateDate}
+		</if>
+		<if test="degree != null" >
+			,degree=#{degree}
+		</if>
+		<if test="workAge != null" >
+			,workAge=#{workAge}
+		</if>
+		<if test="graduationImg != null" >
+			,graduationImg=#{graduationImg}
+		</if>
+		<if test="professionTitle != null" >
+			,professionTitle=#{professionTitle}
+		</if>
+		<if test="professionNo != null" >
+			,professionNo=#{professionNo}
+		</if>
+		<if test="professionImg != null" >
+			,professionImg=#{professionImg}
+		</if>
+		where id=#{id}
+	</update>
+
+	<update id="repeatPcUserPasswordsByIds">
+
+		update dc_user set password = #{encodeRepeatPassWord},updatedBy = #{updateBy},updateDate=NOW() where ${ids}
+
+	</update>
+
+
+
+
+
+	<update id="deleteUserByIds">
+
+		update dc_user set status = 2,roleId=null where id in
+		<foreach collection="idList" index="index" item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+
+	</update>
+
+
+
+	<select id="selecUserByDepartmentIds" resultType="java.util.Map">
+		SELECT
+		u.id,
+		u.departmentId,
+		u.uname,
+		u.id as userId,
+		dd.birth,
+		dd.idCard,
+		u.sex,
+		u.mobile,
+		u.phone,
+		u.email,
+		u.qq,
+		u.wechat,
+		u.nickName AS nickName,
+		dd.hobbies,
+		dd.strongpoint,
+		dd.userResource,
+		dd.qualification,
+		dd.graduation,
+		dd.major,
+		dd.profession,
+		dd.personAnalysis,
+		dd.udesc as `desc`,
+		u.status,
+		dp.departmentName,
+		dc.value as title,
+		ro.roleName ,
+		ro.isAdmin,
+		ro.id as roleId,
+		case when u.id=dp.principalId  then 1 else 0 end  as isTeamLeader
+		FROM
+		dc_user u
+		LEFT JOIN dc_user_detail dd ON u.id = dd.id
+		left join dc_department dp on u.departmentId=dp.id
+		left join dc_dictionary dc on u.titleId=dc.id
+		left join dc_sys_role ro on ro.id=u.roleId
+		WHERE u.platform=1
+		<if test="userName!=null">
+			and (u.uname like '%${userName}%' or u.mobile like '%${userName}%')
+		</if>
+		<if test="departmentIds!=null">
+			and u.departmentId in
+			<foreach collection="departmentIds" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		and u.status=0
+		order by u.createdBy desc
+		limit #{start},#{end}
+
+	</select>
+
+	<select id="selecTotalUserByDepartmentIds" resultType="int">
+		SELECT
+		count(1)
+		FROM
+		dc_user u
+		LEFT JOIN dc_user_detail dd ON u.id = dd.id
+		left join dc_department dp on u.departmentId=dp.id
+		left join dc_dictionary dc on u.titleId=dc.id
+		left join dc_sys_role ro on ro.id=u.roleId
+		WHERE u.platform=1
+		<if test="userName!=null">
+			and u.uname like '%${userName}%'
+		</if>
+		<if test="departmentIds!=null">
+			and u.departmentId in
+			<foreach collection="departmentIds" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		and u.status=0
+
+
+
+	</select>
+
+	<select id="selectUsersUnderRole" resultType="java.util.Map">
+		SELECT
+		u.id,
+		u.uname,
+		u.id as userId,
+		dd.birth,
+		dd.idCard,
+		u.sex,
+		u.mobile,
+		u.phone,
+		u.email,
+		u.qq,
+		u.wechat,
+		u.nickName AS nickName,
+		dd.hobbies,
+		dd.strongpoint,
+		dd.userResource,
+		dd.qualification,
+		dd.graduation,
+		dd.major,
+		dd.profession,
+		dd.personAnalysis,
+		dd.udesc as `desc`,
+		u.status,
+		dp.departmentName,
+		dc.value as title,
+		ro.roleName
+		FROM
+		dc_user u
+		LEFT JOIN dc_user_detail dd ON u.id = dd.id
+		left join dc_department dp on u.departmentId=dp.id
+		left join dc_dictionary dc on u.titleId=dc.id
+		left join dc_sys_role ro on ro.id=u.roleId
+		WHERE u.roleId=#{roleId}
+		and u.platform=1
+		and u.status=0
+
+		<if test="userName!=null">
+			and u.uname like '%${userName}%'
+		</if>
+		limit #{start},#{pageSize}
+
+	</select>
+
+	<select id="selectTotalUsersCountUnderRole"  resultType="int" >
+		SELECT
+		count(1)
+		FROM
+		dc_user u
+		LEFT JOIN dc_user_detail dd ON u.id = dd.id
+		left join dc_department dp on u.departmentId=dp.id
+		left join dc_dictionary dc on u.titleId=dc.id
+		left join dc_sys_role ro on ro.id=u.roleId
+		WHERE u.roleId=#{roleId}
+		and u.platform=1
+		and u.status=0
+		<if test="userName!=null">
+			and u.uname like '%${userName}%'
+		</if>
+
+
+	</select>
+
+	<select id="selectUsersNotUnderRole" resultType="java.util.Map">
+		SELECT
+		u.id,
+		u.uname,
+		u.id as userId,
+		dd.birth,
+		dd.idCard,
+		u.sex,
+		u.mobile,
+		u.phone,
+		u.email,
+		u.qq,
+		u.wechat,
+		u.nickName AS nickName,
+		dd.hobbies,
+		dd.strongpoint,
+		dd.userResource,
+		dd.qualification,
+		dd.graduation,
+		dd.major,
+		dd.profession,
+		dd.personAnalysis,
+		dd.udesc as `desc`,
+		u.status,
+		dp.departmentName,
+		dc.value as title,
+		ro.roleName,
+		ro.id as roleId
+		FROM
+		dc_user u
+		LEFT JOIN dc_user_detail dd ON u.id = dd.id
+		left join dc_department dp on u.departmentId=dp.id
+		left join dc_dictionary dc on u.titleId=dc.id
+		left join dc_sys_role ro on ro.id=u.roleId
+		WHERE (u.roleId!=#{roleId} or u.roleId is null or u.roleId='')
+		and u.platform=1
+		and u.status=0
+		<if test="excludeSuperRoleUser==1">
+			and ro.id!='1'
+		</if>
+
+		<if test="userName!=null">
+			and u.uname like '%${userName}%'
+		</if>
+		<if test="departmentIds!=null">
+			and u.departmentId in
+			<foreach collection="departmentIds" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+
+		limit #{start},#{pageSize}
+
+	</select>
+
+	<select id="selectTotalUsersCountNotUnderRole"  resultType="int" >
+		SELECT
+		count(1)
+		FROM
+		dc_user u
+		LEFT JOIN dc_user_detail dd ON u.id = dd.id
+		left join dc_department dp on u.departmentId=dp.id
+		left join dc_dictionary dc on u.titleId=dc.id
+		left join dc_sys_role ro on ro.id=u.roleId
+		WHERE (u.roleId!=#{roleId} or u.roleId is null or u.roleId='' )
+		and u.platform=1
+		and u.status=0
+		<if test="excludeSuperRoleUser==1">
+			and ro.id!='1'
+		</if>
+		<if test="userName!=null">
+			and u.uname like '%${userName}%'
+		</if>
+		<if test="departmentIds!=null">
+			and u.departmentId in
+			<foreach collection="departmentIds" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+
+	</select>
+
+
+	<select id="searchPcUserbyName" resultType="java.util.Map">
+		select
+		u.id,
+		u.uname,
+		u.mobile,
+		u.email,
+		u.titleId,
+		u.departmentId,
+		d.departmentName,
+		dt.value as title
+		from (
+		select * from dc_user where status = 0 and platform=1
+		<if test="userName!=null and userName!='' ">
+			and (uname like '%${userName}%' or  mobile like '%${userName}%')
+		</if>
+		<if test="pcCompanyId!=null and pcCompanyId!=''">
+			and pcCompanyId=#{pcCompanyId}
+		</if>
+
+		) u left join dc_department d on u.departmentId = d.id
+		left join dc_dictionary dt on u.titleId = dt.id
+	</select>
+
+
+	<select id="searchUserNoTitleByName" resultType="java.util.Map">
+		select
+		u.id,
+		u.uname,
+		u.mobile,
+		u.email,
+		u.titleId,
+		u.departmentId,
+		d.departmentName,
+		dt.value as title
+		from (
+
+		select * from dc_user where status = 0 and platform=1 and titleId is not null and teacherShow = 0
+		<if test="pcCompanyId!=null and pcCompanyId!=''">
+			and pcCompanyId=#{pcCompanyId}
+		</if>
+		) u left join dc_department d on u.departmentId = d.id
+		left join dc_dictionary dt on u.titleId = dt.id where dt.value !='其他'
+
+		<if test="userName != null and userName !='' ">
+			and  u.uname like CONCAT('%',#{userName},'%')
+		</if>
+
+		limit #{currentPage},#{pageSize}
+	</select>
+
+	<select id="searchUserNoTitleByNameTotal" resultType="java.lang.Integer">
+		select
+		count(1)
+		from (
+		select * from dc_user where status = 0 and platform=1 and titleId is not null and teacherShow = 0
+		<if test="pcCompanyId!=null and pcCompanyId!=''">
+			and pcCompanyId=#{pcCompanyId}
+		</if>
+		) u left join dc_department d on u.departmentId = d.id
+		left join dc_dictionary dt on u.titleId = dt.id where  dt.value !='其他'
+
+		<if test="userName != null and userName !='' ">
+			and  u.uname like CONCAT('%',#{userName},'%')
+		</if>
+
+	</select>
+
+	<update id="changeDepartmentByUserIds">
+		update dc_user d set d.departmentId=#{departmentId},d.pcCompanyId=#{pcCompanyId} where d.id in
+		<foreach collection="userIds" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</update>
+
+
+
+
+	<select id="selectUserDepartmentStatistic" resultType="java.util.Map">
+		SELECT
+		u.departmentId,
+		COUNT(1) as count
+		FROM
+		dc_user u
+		WHERE
+		u.departmentId IS NOT NULL
+		AND u.platform = 1
+
+		<if test="departmentIds!=null">
+			and u.departmentId in
+			<foreach collection="departmentIds" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+
+		GROUP BY
+		u.departmentId
+	</select>
+
+
+
+
+	<select id="selectUsers" resultType="java.util.Map">
+		SELECT
+		u.id,
+		u.uname,
+		u.mobile
+		FROM
+		dc_user u
+		WHERE
+		u.pcCompanyId = #{pcCompanyId}
+
+		<if test="content != null and content != ''">
+			and (u.mobile like concat("%",#{content},"%") or u.uname like concat("%",#{content},"%"))
+		</if>
+
+	</select>
+
+
+    <select id="searchUserByMobile" resultType="java.util.Map">
+			SELECT
+				u.id ,u.mobile
+			FROM
+				dc_user u
+			WHERE
+				u.mobile LIKE '%${mobile}%'
+			AND u.`status` = 0
+	</select>
+
+
+
+	<select id="searchTeamers" resultType="java.util.Map">
+			SELECT
+				t.id,
+				t.uname,
+				t.mobile,
+				dd.departmentName
+			FROM
+				(
+					SELECT
+						u.*
+					FROM
+						dc_user u
+					WHERE
+						u.status=0
+						and u.roleId=3
+						and u.departmentId IN (
+							SELECT
+								d.id
+							FROM
+								dc_department d
+							WHERE
+								d.isTeam = 1
+						<if test="pcCompanyId!=null">
+							AND d.parentId = #{pcCompanyId}
+						</if>
+						)
+						<if test="uname!=null">
+							and (u.uname like '%${uname}%' or u.mobile like '%${uname}%')
+						</if>
+						<if test="level!=null and level==1">
+							and u.id in (select  d.principalId from dc_department d where d.isTeam=1 and d.parentId=#{pcCompanyId})
+						</if>
+						<if test="level!=null and level==0">
+							and u.id not in (select  d.principalId from dc_department d where d.isTeam=1 and d.parentId=#{pcCompanyId})
+						</if>
+						order by u.createDate desc
+						limit  #{start},#{pageSize}
+
+				) t
+			LEFT JOIN dc_department dd ON t.departmentId = dd.id
+
+	</select>
+	<select id="searchTeamersCount" resultType="int">
+		SELECT
+		  count(1)
+		FROM
+		(
+		SELECT
+		u.*
+		FROM
+		dc_user u
+		WHERE
+		u.status=0
+		and u.roleId=3
+		and  u.departmentId IN (
+					SELECT
+					d.id
+					FROM
+					dc_department d
+					WHERE
+					d.isTeam = 1
+					<if test="pcCompanyId!=null">
+						AND d.parentId = #{pcCompanyId}
+					</if>
+				)
+		<if test="uname!=null">
+			and (u.uname like '%${uname}%' or u.mobile like '%${uname}%')
+		</if>
+		<if test="level!=null and level==1">
+			and u.id in (select  d.principalId from dc_department d where d.isTeam=1 and d.parentId=#{pcCompanyId})
+		</if>
+		<if test="level!=null and level==0">
+			and u.id not in (select  d.principalId from dc_department d where d.isTeam=1 and d.parentId=#{pcCompanyId})
+		</if>
+		) t
+		LEFT JOIN dc_department dd ON t.departmentId = dd.id
+
+	</select>
+
+
+
+	<select id="searchAllUserByMobileAndRole" resultType="java.util.Map">
+		SELECT
+			u.id,
+			u.mobile,
+			u.uname,
+			u.userLogo
+		FROM
+			dc_user u
+		WHERE
+		1=1
+		<if test="mobile!=null and mobile != ''">
+		and  u.mobile LIKE '%${mobile}%'
+		</if>
+		AND u.roleId = #{roleId}
+		<if test="excludeExists=1">
+			<if test="roleId==3">
+				and u.id not in (select id from dc_user u where u.pcCompanyId=#{pcCompanyId})
+			</if>
+			<if test="roleId==4">
+				and u.id not in (select c.userId from dc_company_contactor c where c.pcCompanyId=#{pcCompanyId})
+			</if>
+		</if>
+		limit #{start},#{pageSize}
+	</select>
+
+
+	<select id="searchAllUserCountByMobileAndRole" resultType="int">
+		SELECT
+			count(1)
+		FROM
+		dc_user u
+		WHERE
+		1=1
+		<if test="mobile!=null and mobile != ''">
+			and  u.mobile LIKE '%${mobile}%'
+		</if>
+		AND u.roleId = #{roleId}
+		<if test="excludeExists=1">
+			<if test="roleId==3">
+				and u.id not in (select id from dc_user u where u.pcCompanyId=#{pcCompanyId})
+			</if>
+			<if test="roleId==4">
+				and u.id not in (select c.userId from dc_company_contactor c where c.pcCompanyId=#{pcCompanyId})
+			</if>
+		</if>
+ 	</select>
+
+
+	<select id="selectStaff" resultType="java.util.Map">
+		select
+						u.id,
+						u.uname ,
+						u.mobile,
+						d.departmentName as teamName,
+						u.departmentId,
+						case when d.principalId=u.id then '组长' else '技师' end as position
+		 from dc_user u
+		left join dc_department d on d.id=u.departmentId
+		left join dc_department dd on dd.id=u.pcCompanyId
+		where 1=1 and u.status=0
+		<if test="roleId!=null">
+			and u.roleId=#{roleId}
+		</if>
+		<if test="uname!=null and uname !=''">
+			and u.uname like '%${uname}%'
+		</if>
+		<if test="pcCompanyId!=null and pcCompanyId!=''">
+			and u.pcCompanyId=#{pcCompanyId}
+		</if>
+		<if test="level==1">
+			and u.id=d.principalId
+		</if>
+		<if test="level==0">
+			and u.id!=d.principalId
+		</if>
+		<if test="departmentIdList!=null and departmentIdList.size>0">
+			and u.departmentId in
+			<foreach collection="departmentIdList" index="index" item="id" open="(" separator="," close=")">
+				#{id}
+			</foreach>
+		</if>
+
+		limit #{start},#{pageSize}
+	</select>
+
+
+	<select id="selectStaffCount" resultType="int">
+		select
+ 			count(1)
+		from dc_user u
+		left join dc_department d on d.id=u.departmentId
+		left join dc_department dd on dd.id=u.pcCompanyId
+		where 1=1 and u.status=0
+		<if test="roleId!=null">
+			and u.roleId=#{roleId}
+		</if>
+		<if test="uname!=null and uname !=''">
+			and u.uname like '%${uname}%'
+		</if>
+		<if test="pcCompanyId!=null and pcCompanyId!=''">
+			and u.pcCompanyId=#{pcCompanyId}
+		</if>
+		<if test="level==1">
+			and u.id=d.principalId
+		</if>
+		<if test="level==0">
+			and u.id!=d.principalId
+		</if>
+		<if test="departmentIdList!=null and departmentIdList.size>0">
+			and u.departmentId in
+			<foreach collection="departmentIdList" index="index" item="id" open="(" separator="," close=")">
+				#{id}
+			</foreach>
+		</if>
+	</select>
+
+    <update id="deleteStaff" >
+		update dc_user u set u.pcCompanyId=null,u.departmentId=null where u.id=#{id}
+	</update>
+
+	<select id="selectUserByMobileAndappFlag" resultType="java.util.Map">
+		select * from (select * from dc_user where mobile = #{tel} and status = 0 and platform = #{platform}) u
+		INNER JOIN  (select * from dc_sys_role where id =#{appFlag}) r on u.roleId = r.id
+	</select>
+
+
+
+	<select id="selectCustomerContactor" resultType="java.util.Map">
+		select u.id,u.uname,u.mobile,u.departmentId,d.departmentName,u.email,u.mobile,r.roleName,dd.departmentName as pcCompanyName from  dc_user u
+		left join dc_department d on d.id=u.departmentId
+		left join dc_department dd on dd.id=u.pcCompanyId
+		left join dc_sys_role r on u.roleId=r.id
+		where u.id in (
+	select u.id from dc_user u where u.departmentId in (
+	select pl.departmentId from dc_yd_inspection_plan pl
+	INNER JOIN dc_yd_inspection_plan_group p on pl.id=p.inspectionPlanId
+	INNER JOIN dc_yd_device_group g on p.groupId=g.id
+	where  g.companyId in
+
+		<foreach collection="companyIdList" index="index" item="id" open="(" separator="," close=")">
+			 #{id}
+		</foreach>
+
+	  and g.pcCompanyId=#{pcCompanyId}
+	)
+	UNION
+	select  u.id from dc_user u where u.id in ( select  g.responsibleUserId from dc_yd_device_group g  where g.companyId in
+
+		<foreach collection="companyIdList" index="index" item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+
+		and g.pcCompanyId=#{pcCompanyId})
+	)
+		limit #{start},#{pageSize}
+	</select>
+
+
+
+	<select id="selectCustomerContactorCount" resultType="int">
+		select  count(1) from  dc_user u  left join dc_department d on d.id=u.departmentId where u.id in (
+		select u.id from dc_user u where u.departmentId in (
+		select pl.departmentId from dc_yd_inspection_plan pl
+		INNER JOIN dc_yd_inspection_plan_group p on pl.id=p.inspectionPlanId
+		INNER JOIN dc_yd_device_group g on p.groupId=g.id
+		where  g.companyId in
+
+		<foreach collection="companyIdList" index="index" item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+
+		and g.pcCompanyId=#{pcCompanyId}
+		)
+		UNION
+		select  u.id from dc_user u where u.id in ( select  g.responsibleUserId from dc_yd_device_group g  where g.companyId in
+
+		<foreach collection="companyIdList" index="index" item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+
+		and g.pcCompanyId=#{pcCompanyId})
+		)
+	</select>
+
+
+	<select id="selectAllUserIdByPcCompanyId" resultType="java.util.Map">
+		select u.id,u.roleId from dc_user u where u.pcCompanyId=#{pcCompanyId}
+	</select>
+
+	<select id="selectAllRoleId3" resultType="java.util.Map">
+		SELECT id, pcCompanyId FROM dc_user WHERE roleId=3
+	</select>
+    <select id="getUserId" resultType="java.lang.String">
+		SELECT id FROM  dc_user;
+	</select>
+
+	<select id="selectUserByPcCompanyIdAndRoleId" resultType="java.lang.String">
+		SELECT id FROM dc_user WHERE pcCompanyId=#{pcCompanyId} AND roleId=#{roleId}
+	</select>
+
+	<select id="selectAllUsers" resultType="java.util.Map">
+			SELECT
+			u.id,
+			u.roleId,
+			u.uname,
+			u.userCompanyName,
+			u.userIndustry,
+			u.userContactAddress,
+			u.userServerMobile,
+			u.password,
+			u.nickName,
+			u.titleId,
+			u.qq,
+			u.mobile,
+			u.phone,
+			u.email,
+			u.sex,
+			u.age,
+			u.useStatus,
+			u.remark,
+			u.userLogo,
+			u.wechat,
+			u.weixin,
+			u. LEVEL,
+			u. STATUS,
+			u.platform,
+			u.createdBy,
+			u.createDate,
+			u.updatedBy,
+			u.updateDate,
+			u.appPushFlag,u.messagePushFlag,u.voicePushFlag,u.emailPushFlag ,
+			u.userCompanyName,
+			u.userIndustry,
+			u.userContactAddress,
+			u.userServerMobile,
+			r.roleName,
+			u.departmentId,
+			dp.departmentName,
+			dc.value as title,
+			u.enrollDate,
+			u.pcCompanyId,
+			r.isAdmin,
+			dt.degree,
+			dt.workAge,
+			dt.professionTitle,
+			dt.graduationImg,
+			dt.professionNo,
+			dt.professionImg,
+			dt.idCard,
+			dt.strongpoint,
+			dt.qualification,
+			dt.graduation,
+			dt.major,
+			dt.udesc,
+			u.lastLoginIp,
+			DATE_FORMAT( u.lastLoginTime, "%Y-%m-%d %H:%i:%s" ) AS lastLoginTime
+
+		FROM
+			dc_user u
+			left join dc_user_detail dt on u.id=dt.id
+		LEFT JOIN dc_sys_role r ON u.roleId = r.id
+		left join dc_department dp on u.departmentId=dp.id
+		left join dc_dictionary dc on u.titleId=dc.id and u.teacherShow = 1
+		WHERE
+			 u.status=0
+	</select>
+</mapper>

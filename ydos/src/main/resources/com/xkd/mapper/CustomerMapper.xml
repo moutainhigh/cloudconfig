@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.CustomerMapper" >
+
+
+
+
+
+
+
+  <select id="searchPcCompany" resultType="java.util.Map">
+      SELECT
+          id,
+          departmentName,
+          remark,
+          principalId,
+          parentId,
+          mobile,
+          email,
+          address,
+          DATE_FORMAT(dateFrom,   '%Y-%m-%d') as dateFrom,
+          DATE_FORMAT(dateTo,   '%Y-%m-%d') as dateTo,
+          province,
+          city,
+          county,
+          DATE_FORMAT(createDate,   '%Y-%m-%d') as createDate,
+          enableStatus,
+          DATE_FORMAT(dateTo,   '%Y-%m-%d')&lt;DATE_FORMAT(NOW(),   '%Y-%m-%d')  as expireStatus
+      FROM
+      dc_department d
+      WHERE
+      d.parentId = '1'  and status=0
+      <if test="startDate!=null and startDate!=''">
+          AND DATE_FORMAT(d.createDate,   '%Y-%m-%d') >= #{startDate}
+      </if>
+      <if test="endDate!=null and endDate!=''">
+          AND DATE_FORMAT(d.createDate,   '%Y-%m-%d') &lt; #{endDate}
+      </if>
+      <if test="departmentName!=null and departmentName!=''">
+         AND d.departmentName LIKE '%${departmentName}%'
+      </if>
+      <if test="province!=null and province!=''">
+          AND d.province = #{province}
+      </if>
+      <if test="city!=null and city!=''">
+        AND d.city = #{city}
+      </if>
+      <if test="status!=null and status==1">
+          and DATE_FORMAT(d.dateTo,   '%Y-%m-%d')&lt;DATE_FORMAT(NOW(),   '%Y-%m-%d')
+      </if>
+      <if test="status!=null and status==2">
+          and DATE_FORMAT(d.dateTo,   '%Y-%m-%d')>=DATE_FORMAT(NOW(),   '%Y-%m-%d')
+      </if>
+      <if test="status!=null and status==3">
+          and enableStatus=0
+      </if>
+      <if test="status!=null and status==4">
+          and enableStatus=1
+      </if>
+      <if test="idList!=null and idList.size>0">
+          and id in
+          <foreach collection="idList" index="index" item="id" open="(" separator="," close=")">
+              #{id}
+          </foreach>
+      </if>
+      order by createDate desc
+  </select>
+
+
+
+    <select id="searchPcCompanyCount" resultType="int">
+        SELECT
+           count(1)
+        FROM
+        dc_department d
+        WHERE
+        d.parentId = '1'  and status=0
+        <if test="startDate!=null and startDate!=''">
+            AND DATE_FORMAT(d.createDate,   '%Y-%m-%d') >= #{startDate}
+        </if>
+        <if test="endDate!=null and endDate!=''">
+            AND DATE_FORMAT(d.createDate,   '%Y-%m-%d') &lt; #{endDate}
+        </if>
+        <if test="departmentName!=null and departmentName!=''">
+            AND d.departmentName LIKE '%${departmentName}%'
+        </if>
+        <if test="province!=null and province!=''">
+            AND d.province = #{province}
+        </if>
+        <if test="city!=null and city!=''">
+            AND d.city = #{city}
+        </if>
+        <if test="status!=null and status==1">
+            and DATE_FORMAT(d.dateTo,   '%Y-%m-%d')&lt;DATE_FORMAT(NOW(),   '%Y-%m-%d')
+        </if>
+        <if test="status!=null and status==2">
+            and DATE_FORMAT(d.dateTo,   '%Y-%m-%d')>=DATE_FORMAT(NOW(),   '%Y-%m-%d')
+        </if>
+        <if test="status!=null and status==3">
+            and enableStatus=0
+        </if>
+        <if test="status!=null and status==4">
+            and enableStatus=1
+        </if>
+        <if test="idList!=null and idList.size>0">
+            and id in
+            <foreach collection="idList" index="index" item="id" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </if>
+    </select>
+
+
+    <insert id="insertPcCompany" parameterType="java.util.Map">
+        INSERT INTO dc_department
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null"> id, </if>
+            <if test="departmentName != null"> departmentName, </if>
+            <if test="remark != null"> remark, </if>
+            <if test="principalId != null"> principalId, </if>
+            <if test="parentId != null"> parentId, </if>
+            <if test="status != null"> status, </if>
+            <if test="mobile != null"> mobile, </if>
+            <if test="email != null"> email, </if>
+            <if test="address != null"> address, </if>
+            <if test="dateFrom != null"> dateFrom, </if>
+            <if test="dateTo != null"> dateTo, </if>
+            <if test="enableStatus != null"> enableStatus, </if>
+            <if test="province != null"> province, </if>
+            <if test="city != null"> city, </if>
+            <if test="county != null"> county, </if>
+            <if test="createDate != null"> createDate, </if>
+            <if test="isTeam != null"> isTeam, </if>
+            <if test="enterpriseLevel != null"> enterpriseLevel, </if>
+            <if test="businessLicense != null"> businessLicense, </if>
+            <if test="contactor != null"> contactor, </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null"> #{id}, </if>
+            <if test="departmentName != null"> #{departmentName}, </if>
+            <if test="remark != null"> #{remark}, </if>
+            <if test="principalId != null"> #{principalId}, </if>
+            <if test="parentId != null"> #{parentId}, </if>
+            <if test="status != null"> #{status}, </if>
+            <if test="mobile != null"> #{mobile}, </if>
+            <if test="email != null"> #{email}, </if>
+            <if test="address != null"> #{address}, </if>
+            <if test="dateFrom != null"> #{dateFrom}, </if>
+            <if test="dateTo != null"> #{dateTo}, </if>
+            <if test="enableStatus != null"> #{enableStatus}, </if>
+            <if test="province != null"> #{province}, </if>
+            <if test="city != null"> #{city}, </if>
+            <if test="county != null"> #{county}, </if>
+            <if test="createDate != null"> #{createDate}, </if>
+            <if test="isTeam != null"> #{isTeam}, </if>
+            <if test="enterpriseLevel != null"> #{enterpriseLevel}, </if>
+            <if test="businessLicense != null"> #{businessLicense}, </if>
+            <if test="contactor != null"> #{contactor}, </if>
+        </trim>
+    </insert>
+
+    <update id="updatePcCompany"  parameterType="java.util.Map">
+        UPDATE dc_department
+        <set>
+            <if test="id != null"> id = #{id} </if>
+            <if test="departmentName != null"> ,departmentName = #{departmentName} </if>
+            <if test="remark != null"> ,remark = #{remark} </if>
+            <if test="principalId != null">, principalId = #{principalId} </if>
+            <if test="parentId != null">, parentId = #{parentId} </if>
+            <if test="status != null"> ,status = #{status} </if>
+            <if test="mobile != null">, mobile = #{mobile} </if>
+            <if test="email != null">, email = #{email} </if>
+            <if test="address != null"> ,address = #{address} </if>
+            <if test="dateFrom != null">, dateFrom = #{dateFrom} </if>
+            <if test="dateTo != null">, dateTo = #{dateTo} </if>
+            <if test="enableStatus != null"> ,enableStatus = #{enableStatus}</if>
+            <if test="province != null">, province = #{province} </if>
+            <if test="city != null">, city = #{city} </if>
+            <if test="county != null">, county = #{county}</if>
+            <if test="createDate != null"> ,createDate = #{createDate} </if>
+            <if test="isTeam != null"> ,isTeam = #{isTeam} </if>
+            <if test="enterpriseLevel != null"> ,enterpriseLevel = #{enterpriseLevel} </if>
+            <if test="businessLicense != null"> ,businessLicense = #{businessLicense} </if>
+            <if test="contactor != null"> ,contactor = #{contactor} </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <select id="selectPcAdminUserByPcCompanyId"  resultType="java.util.Map">
+        SELECT
+				u.id,
+				u.uname,
+				u.id as userId,
+ 				dd.birth,
+				dd.idCard,
+				u.sex,
+				u.age,
+				u.mobile,
+				u.phone,
+				u.email,
+				DATE_FORMAT(u.createDate,   '%Y-%m-%d') as createDate
+			FROM
+				  dc_user u
+			LEFT JOIN dc_user_detail dd ON u.id = dd.id
+ 			WHERE u.pcCompanyId=#{pcCompanyId}   and u.roleId='2'
+			order by u.createDate desc
+    </select>
+
+
+
+
+
+
+
+
+
+
+    <select id="selectPcCompanyById" resultType="java.util.Map">
+        SELECT
+          id,
+          departmentName,
+          contactor,
+          remark,
+          principalId,
+          parentId,
+          mobile,
+          email,
+          address,
+          DATE_FORMAT(dateFrom,   '%Y-%m-%d') as dateFrom,
+          DATE_FORMAT(dateTo,   '%Y-%m-%d') as dateTo,
+          province,
+          city,
+          county,
+          DATE_FORMAT(createDate,   '%Y-%m-%d') as createDate ,
+          enableStatus,
+          DATE_FORMAT(dateTo,   '%Y-%m-%d')&lt;DATE_FORMAT(NOW(),   '%Y-%m-%d')  as expireStatus,
+          isTeam,
+          enterpriseLevel,
+          businessLicense
+      FROM
+      dc_department d
+      where d.id=#{id}
+    </select>
+
+
+
+
+</mapper>

@@ -1,0 +1,598 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.CompanyMapper">
+
+
+    <select id="selectCompanyByName" resultType="com.xkd.model.Company">
+        SELECT
+        id ,
+        companyName ,
+        englishName ,
+        label ,
+        logo ,
+        userLevel ,
+        contactUserId ,
+        contactName ,
+        contactPhone ,
+        country ,
+        province ,
+        city ,
+        county ,
+        address ,
+        status ,
+        createdBy ,
+        DATE_FORMAT(createDate ,'%Y-%m-%d %H:%i:%s') as createDate ,
+        updatedBy ,
+        DATE_FORMAT(updateDate,'%Y-%m-%d %H:%i:%s') as updateDate ,
+        departmentId ,
+        pcCompanyId ,
+        companyDesc ,
+        website ,
+        phone ,
+        email ,
+        wechat ,
+        content
+        FROM
+        dc_company
+        WHERE
+        companyName = #{companyName} and status = 0
+
+        <if test="pcCompanyId != null and pcCompanyId !='' ">
+            pcCompanyId = #{pcCompanyId}
+        </if>
+
+    </select>
+
+    <select id="selectCompanyByIds" resultType="java.util.Map">
+        SELECT
+        id ,
+        companyName ,
+        englishName ,
+        label ,
+        logo ,
+        userLevel ,
+        contactUserId ,
+        contactName ,
+        contactPhone ,
+        country ,
+        province ,
+        city ,
+        county ,
+        address ,
+        status ,
+        createdBy ,
+        DATE_FORMAT(createDate ,'%Y-%m-%d %H:%i:%s') as createDate ,
+        updatedBy ,
+        DATE_FORMAT(updateDate,'%Y-%m-%d %H:%i:%s') as updateDate ,
+        departmentId ,
+        pcCompanyId ,
+        companyDesc ,
+        website ,
+        phone ,
+        email ,
+        wechat ,
+        content
+        FROM
+        dc_company
+        WHERE
+        id in
+        <foreach collection="idList" item="id" index="" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+
+
+    </select>
+
+
+    <select id="selectCompanyByNameIncludingDeleted" resultType="com.xkd.model.Company">
+        SELECT
+            id,
+            companyName,
+            englishName,
+            label,
+            logo,
+            userLevel,
+            contactUserId,
+            contactName,
+            contactPhone,
+            country,
+            province,
+            city,
+            county,
+            address,
+            status,
+            createdBy,
+            DATE_FORMAT(createDate, '%Y-%m-%d %H:%i:%s') AS createDate,
+            updatedBy,
+            DATE_FORMAT(updateDate, '%Y-%m-%d %H:%i:%s') AS updateDate,
+            departmentId,
+            pcCompanyId,
+            companyDesc,
+            website,
+            phone,
+            email,
+            wechat,
+            content
+        FROM
+            dc_company
+        WHERE
+            companyName = #{companyName}
+            AND pcCompanyId = #{pcCompanyId}
+
+
+    </select>
+
+
+    <select id="selectCompanyInfoById" resultType="com.xkd.model.Company">
+        SELECT
+            d.id,
+            d.companyName,
+            d.englishName,
+            d.label,
+            d.logo,
+            d.userLevel,
+            d.contactUserId,
+            d.contactName,
+            d.contactPhone,
+            d.country,
+            d.province,
+            d.city,
+            d.county,
+            d.address,
+            d.status,
+            d.createdBy,
+            DATE_FORMAT(d.createDate, '%Y-%m-%d %H:%i:%s') AS createDate,
+            d.updatedBy,
+            DATE_FORMAT(d.updateDate, '%Y-%m-%d %H:%i:%s') AS updateDate,
+            d.departmentId,
+            d.pcCompanyId,
+            d.companyDesc,
+            d.website,
+            d.phone,
+            d.email,
+            d.wechat,
+            d.content,
+            du3.uname                                      AS createdByName
+        FROM
+            dc_company d
+            LEFT JOIN dc_user du3 ON d.createdBy = du3.id
+        WHERE
+            d.id = #{companyId}
+    </select>
+
+
+    <select id="searchCompanyByName" resultType="java.util.Map">
+        select
+        id ,
+        companyName ,
+        englishName ,
+        label ,
+        logo ,
+        userLevel ,
+        contactUserId ,
+        contactName ,
+        contactPhone ,
+        country ,
+        province ,
+        city ,
+        county ,
+        address ,
+        status ,
+        createdBy ,
+        DATE_FORMAT(createDate ,'%Y-%m-%d %H:%i:%s') as createDate ,
+        updatedBy ,
+        DATE_FORMAT(updateDate,'%Y-%m-%d %H:%i:%s') as updateDate ,
+        departmentId ,
+        pcCompanyId ,
+        companyDesc ,
+        website ,
+        phone ,
+        email ,
+        wechat ,
+        content
+        from dc_company where companyName like '%${companyName}%' and status = 0
+        <if test="pcCompanyId!=null">
+            and pcCompanyId =#{pcCompanyId}
+        </if>
+        <if test="userLevel!=null and userLevel!=''">
+            and userLevel=#{userLevel}
+        </if>
+        <if test="fromDate!=null and fromDate!=''">
+            and createDate>#{fromDate}
+        </if>
+        <if test="toDate!=null and toDate !='' ">
+           and createDate  &lt;#{toDate}
+        </if>
+        order by createDate desc
+        limit #{start},#{pageSize}
+    </select>
+
+
+    <select id="searchCompanyCountByName" resultType="int">
+        select
+        count(1)
+        from dc_company where companyName like '%${companyName}%' and status = 0
+        <if test="pcCompanyId!=null">
+            and pcCompanyId =#{pcCompanyId}
+        </if>
+        <if test="userLevel!=null and userLevel!=''">
+            and userLevel=#{userLevel}
+        </if>
+        <if test="fromDate!=null and fromDate!=''">
+            and createDate>#{fromDate}
+        </if>
+        <if test="toDate!=null and toDate !='' ">
+            and createDate  &lt;#{toDate}
+        </if>
+    </select>
+
+
+    <update id="updateCompanyInfoById" parameterType="java.util.HashMap">
+        update dc_company set
+        <if test="id != null  ">
+            id= #{id}
+        </if>
+        <if test="companyName != null  and companyName !='' ">
+            ,companyName =#{companyName}
+        </if>
+        <if test="englishName != null  ">
+            ,englishName=#{englishName}
+        </if>
+        <if test="label != null  ">
+            ,label=#{label}
+        </if>
+        <if test="logo != null  ">
+            ,logo=#{logo}
+        </if>
+        <if test="userLevel != null ">
+            ,userLevel=#{userLevel}
+        </if>
+        <if test="contactUserId != null  ">
+            ,contactUserId=#{contactUserId}
+        </if>
+        <if test="contactName != null  ">
+            ,contactName=#{contactName}
+        </if>
+        <if test="contactPhone != null  ">
+            ,contactPhone=#{contactPhone}
+        </if>
+        <if test="country != null  ">
+            ,country=#{country}
+        </if>
+        <if test="province != null ">
+            ,province=#{province}
+        </if>
+        <if test="city != null  ">
+            ,city=#{city}
+        </if>
+        <if test="county != null  ">
+            ,county=#{county}
+        </if>
+        <if test="address != null  ">
+            ,address=#{address}
+        </if>
+        <if test="status != null  ">
+            ,status=#{status}
+        </if>
+        <if test="createdBy != null  ">
+            ,createdBy=#{createdBy}
+        </if>
+        <if test="createDate != null  ">
+            ,createDate=#{createDate}
+        </if>
+        <if test="updatedBy != null  ">
+            ,updatedBy=#{updatedBy}
+        </if>
+        <if test="updateDate != null  ">
+            ,updateDate=#{updateDate}
+        </if>
+        <if test="departmentId != null  ">
+            ,departmentId=#{departmentId}
+        </if>
+        <if test="pcCompanyId != null ">
+            ,pcCompanyId=#{pcCompanyId}
+        </if>
+        <if test="companyDesc != null  ">
+            ,companyDesc=#{companyDesc}
+        </if>
+        <if test="website != null  ">
+            ,website=#{website}
+        </if>
+        <if test="phone != null  ">
+            ,phone=#{phone}
+        </if>
+        <if test="email != null  ">
+            ,email=#{email}
+        </if>
+        <if test="wechat != null  ">
+            ,wechat=#{wechat}
+        </if>
+        <if test="content != null ">
+            ,content=#{content}
+        </if>
+
+        where id=#{id}
+    </update>
+
+
+    <update id="deleteCompanyById">
+
+        update dc_company set status = 2
+        where id in
+        <foreach collection="idList" item="id" index="" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+
+
+    </update>
+
+
+    <insert id="insertCompanyInfo" parameterType="java.util.HashMap">
+        INSERT INTO dc_company (
+        <if test="id != null and id !='' ">
+            id
+        </if>
+        <if test="companyName != null and companyName !='' ">
+            , companyName
+        </if>
+        <if test="englishName != null and englishName !='' ">
+            ,englishName
+        </if>
+        <if test="label != null and label !='' ">
+            ,label
+        </if>
+        <if test="logo != null and logo !='' ">
+            ,logo
+        </if>
+        <if test="userLevel != null and userLevel !='' ">
+            ,userLevel
+        </if>
+        <if test="contactUserId != null and contactUserId !='' ">
+            ,contactUserId
+        </if>
+        <if test="contactName != null and contactName !='' ">
+            ,contactName
+        </if>
+        <if test="contactPhone != null and contactPhone !='' ">
+            ,contactPhone
+        </if>
+        <if test="country != null and country !='' ">
+            ,country
+        </if>
+        <if test="province != null and province !='' ">
+            ,province
+        </if>
+        <if test="city != null and city !='' ">
+            ,city
+        </if>
+        <if test="county != null and county !='' ">
+            ,county
+        </if>
+        <if test="address != null and address !='' ">
+            ,address
+        </if>
+        <if test="status != null and status !='' ">
+            ,status
+        </if>
+        <if test="createdBy != null and createdBy !='' ">
+            ,createdBy
+        </if>
+        <if test="createDate != null and createDate !='' ">
+            ,createDate
+        </if>
+        <if test="updatedBy != null and updatedBy !='' ">
+            ,updatedBy
+        </if>
+        <if test="updateDate != null and updateDate !='' ">
+            ,updateDate
+        </if>
+        <if test="departmentId != null and departmentId !='' ">
+            ,departmentId
+        </if>
+        <if test="pcCompanyId != null and pcCompanyId !='' ">
+            ,pcCompanyId
+        </if>
+        <if test="companyDesc != null and companyDesc !='' ">
+            ,companyDesc
+        </if>
+        <if test="website != null and website !='' ">
+            ,website
+        </if>
+        <if test="phone != null and phone !='' ">
+            ,phone
+        </if>
+        <if test="email != null and email !='' ">
+            ,email
+        </if>
+        <if test="wechat != null and wechat !='' ">
+            ,wechat
+        </if>
+        <if test="content != null and content !='' ">
+            ,content
+        </if>
+        )
+        VALUES
+        (
+        <if test="id != null and id !='' ">
+            #{id}
+        </if>
+        <if test="companyName != null and companyName !='' ">
+            , #{companyName}
+        </if>
+        <if test="englishName != null and englishName !='' ">
+            ,#{englishName}
+        </if>
+        <if test="label != null and label !='' ">
+            ,#{label}
+        </if>
+        <if test="logo != null and logo !='' ">
+            ,#{logo}
+        </if>
+        <if test="userLevel != null and userLevel !='' ">
+            ,#{userLevel}
+        </if>
+        <if test="contactUserId != null and contactUserId !='' ">
+            ,#{contactUserId}
+        </if>
+        <if test="contactName != null and contactName !='' ">
+            ,#{contactName}
+        </if>
+        <if test="contactPhone != null and contactPhone !='' ">
+            ,#{contactPhone}
+        </if>
+        <if test="country != null and country !='' ">
+            ,#{country}
+        </if>
+        <if test="province != null and province !='' ">
+            ,#{province}
+        </if>
+        <if test="city != null and city !='' ">
+            ,#{city}
+        </if>
+        <if test="county != null and county !='' ">
+            ,#{county}
+        </if>
+        <if test="address != null and address !='' ">
+            ,#{address}
+        </if>
+        <if test="status != null and status !='' ">
+            ,#{status}
+        </if>
+        <if test="createdBy != null and createdBy !='' ">
+            ,#{createdBy}
+        </if>
+        <if test="createDate != null and createDate !='' ">
+            ,#{createDate}
+        </if>
+        <if test="updatedBy != null and updatedBy !='' ">
+            ,#{updatedBy}
+        </if>
+        <if test="updateDate != null and updateDate !='' ">
+            ,#{updateDate}
+        </if>
+        <if test="departmentId != null and departmentId !='' ">
+            ,#{departmentId}
+        </if>
+        <if test="pcCompanyId != null and pcCompanyId !='' ">
+            ,#{pcCompanyId}
+        </if>
+        <if test="companyDesc != null and companyDesc !='' ">
+            ,#{companyDesc}
+        </if>
+        <if test="website != null and website !='' ">
+            ,#{website}
+        </if>
+        <if test="phone != null and phone !='' ">
+            ,#{phone}
+        </if>
+        <if test="email != null and email !='' ">
+            ,#{email}
+        </if>
+        <if test="wechat != null and wechat !='' ">
+            ,#{wechat}
+        </if>
+        <if test="content != null and content !='' ">
+            ,#{content}
+        </if>
+        )
+
+    </insert>
+
+
+    <update id="updatePagerFileName">
+
+        UPDATE dc_pagerfile
+        SET pagerName = #{companyName}
+        WHERE id = #{id}
+
+    </update>
+
+
+    <delete id="deleteByCompanyById">
+        UPDATE dc_company
+        SET status = 2, companyName = concat(companyName, '_', DATE_FORMAT(now(), '%Y-%m-%d %H:%i:%s'))
+        WHERE id = #{id}
+    </delete>
+    <select id="selecAllCompanyId" resultType="string">
+        SELECT id
+        FROM dc_company
+    </select>
+
+    <select id="findCompanyByPcCompanyId" resultType="java.util.Map">
+        SELECT  id, companyName, userLevel FROM dc_company WHERE pcCompanyId=#{pcCompanyId} AND status=0
+        <if test="userLevel != null and userLevel != ''">
+        AND userLevel = #{userLevel}
+        </if>
+        <if test="companyName != null and companyName!=''">
+            AND companyName LIKE concat('%',#{companyName},'%')
+        </if>
+    </select>
+
+
+    <select id="selectCompanyIdByTechinicanId" resultType="java.util.Map">
+        select DISTINCT
+        d.companyId ,
+        dc.companyName,
+        d.responsibleUserId
+        from dc_yd_device_group d
+   INNER join dc_company dc on dc.id=d.companyId
+    where d.responsibleUserId
+    in
+     <foreach collection="responsibleUserIdList" item="id" index="" separator="," open="(" close=")">
+        #{id}
+    </foreach>
+        and d.pcCompanyId=#{pcCompanyId}
+        group by concat(d.companyId,d.responsibleUserId)
+     </select>
+
+
+
+    <select id="selectPcCompanyCustomer"  resultType="java.util.Map">
+        select d.id,d.departmentName from dc_department d where d.id in (
+	  select DISTINCT pcCompanyId from dc_yd_inspection_plan p where p.companyId in
+        <foreach collection="idList" item="id" index="" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+union
+	select g.pcCompanyId from dc_yd_device_group g where g.companyId in
+        <foreach collection="idList" item="id" index="" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+)
+    </select>
+
+
+    <select id="selectPcCompanyCustomerCount"  resultType="int">
+        select  count(1) from dc_department d where d.id in (
+        select DISTINCT pcCompanyId from dc_yd_inspection_plan p where p.companyId in
+        <foreach collection="idList" item="id" index="" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+        union
+        select g.pcCompanyId from dc_yd_device_group g where g.companyId in
+        <foreach collection="idList" item="id" index="" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+        )
+    </select>
+    <select id="selectAllCompany" resultType="java.util.Map">
+        SELECT * FROM dc_company LIMIT #{start}, #{pageSize}
+    </select>
+    <select id="countAllCompany" resultType="java.lang.Integer">
+        SELECT count(*) FROM dc_company
+    </select>
+
+    <select id="selectInspectionCompanyIdByDepartmentId" resultType="java.util.Map">
+        select DISTINCT
+        pl.companyId,
+        pl.departmentId,
+        c.companyName
+        from dc_yd_inspection_plan  pl left join dc_company c on pl.companyId=c.id
+                where pl.departmentId  in
+                    <foreach collection="departmentIdList" item="id" index="" separator="," open="(" close=")">
+                        #{id}
+                    </foreach>
+       and pl.pcCompanyId=#{pcCompanyId}
+    </select>
+
+</mapper>

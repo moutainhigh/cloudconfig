@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.InspectionMapper">
+
+
+    <insert id="insertInspectionPlan">
+        INSERT INTO dc_yd_inspection_plan
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null"> id, </if>
+            <if test="planNo != null"> planNo, </if>
+            <if test="companyId != null"> companyId, </if>
+            <if test="pcCompanyId != null"> pcCompanyId, </if>
+            <if test="departmentId != null"> departmentId, </if>
+            <if test="contractId != null"> contractId, </if>
+            <if test="templateId != null"> templateId, </if>
+            <if test="period != null"> period, </if>
+            <if test="startTime != null"> startTime, </if>
+            <if test="endTime != null"> endTime, </if>
+            <if test="inspectionTimePoint != null"> inspectionTimePoint, </if>
+            <if test="description != null"> description, </if>
+            <if test="createdBy != null"> createdBy, </if>
+            <if test="createDate != null">createDate,</if>
+            <if test="updatedBy != null"> updatedBy, </if>
+            <if test="updateDate !=null ">updateDate,</if>
+            <if test="status != null"> status, </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null"> #{id}, </if>
+            <if test="planNo != null"> #{planNo}, </if>
+            <if test="companyId != null"> #{companyId}, </if>
+            <if test="pcCompanyId != null"> #{pcCompanyId}, </if>
+            <if test="departmentId != null"> #{departmentId}, </if>
+            <if test="contractId != null"> #{contractId}, </if>
+            <if test="templateId != null"> #{templateId}, </if>
+            <if test="period != null"> #{period}, </if>
+            <if test="startTime != null"> #{startTime}, </if>
+            <if test="endTime != null"> #{endTime}, </if>
+            <if test="inspectionTimePoint != null"> #{inspectionTimePoint}, </if>
+            <if test="description != null"> #{description}, </if>
+            <if test="createdBy != null"> #{createdBy}, </if>
+            <if test="createDate != null"> #{createDate}, </if>
+            <if test="updatedBy != null"> #{updatedBy}, </if>
+            <if test="updateDate != null"> #{updateDate}, </if>
+            <if test="status != null"> #{status}, </if>
+        </trim>
+    </insert>
+
+
+
+    <update id="updateInspectionPlan">
+        UPDATE dc_yd_inspection_plan
+        <set>
+            <if test="id != null"> id = #{id}, </if>
+            <if test="companyId != null"> companyId = #{companyId}, </if>
+            <if test="pcCompanyId != null"> pcCompanyId = #{pcCompanyId}, </if>
+            <if test="departmentId != null"> departmentId = #{departmentId}, </if>
+            <if test="contractId != null"> contractId = #{contractId}, </if>
+            <if test="templateId != null"> templateId = #{templateId}, </if>
+            <if test="period != null"> period = #{period}, </if>
+            <if test="inspectionTimePoint != null"> inspectionTimePoint = #{inspectionTimePoint}, </if>
+            <if test="startTime != null"> startTime = #{startTime}, </if>
+            <if test="endTime != null"> endTime = #{endTime}, </if>
+            <if test="descrption != null"> descrption = #{descrption}, </if>
+            <if test="createdBy != null"> createdBy = #{createdBy}, </if>
+            <if test="createDate != null"> createDate = #{createDate}, </if>
+            <if test="updatedBy != null"> updatedBy = #{updatedBy}, </if>
+            <if test="updateDate != null"> updateDate = #{updateDate}, </if>
+            <if test="status != null"> status = #{status} </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <select   id="selectInspectionPlanByCompanyId"  resultType="java.util.Map">
+     select
+            p.id,
+            p.period,
+            p.inspectionTimePoint,
+            DATE_FORMAT(p.startTime ,'%Y-%m-%d %H:%i:%s')   as startTime,
+            DATE_FORMAT(p.endTime ,'%Y-%m-%d %H:%i:%s')   as endTime,
+            p.description
+     from dc_yd_inspection_plan p
+     where p.companyId=#{companyId} and p.`status`=0
+    </select>
+
+
+    <select   id="selectInspectionPlanCountByCompanyId"  resultType="int">
+        select
+          count(1)
+        from dc_yd_inspection_plan p
+        where p.companyId=#{companyId} and p.`status`=0
+    </select>
+
+
+    <insert id="insertInspectionPlanGroup">
+        insert into dc_yd_inspection_plan_group(id,groupId,inspectionPlanId)
+        values  (#{id},#{groupId},#{inspectionPlanId})
+    </insert>
+
+
+
+    <select id="searchInspectionPlan" resultType="java.util.Map">
+        select
+        p.id ,
+        p.planNo,
+        p.companyId  ,
+        p.pcCompanyId  ,
+        p.departmentId  ,
+        p.contractId ,
+        p.templateId ,
+        p.period,
+        case
+        when p.period =1 then '日常巡检'
+        when p.period=2 then '每周巡检'
+        when p.period=3 then '月度巡检'
+        when p.period=4 then '季度巡检'
+        when p.period=5 then '年度巡检' else '未知'
+        end as periodName,
+        p.inspectionTimePoint  ,
+        DATE_FORMAT(p.startTime,'%Y-%m-%d') as startTime ,
+        DATE_FORMAT(p.endTime,'%Y-%m-%d') as endTime  ,
+        p.description  ,
+        p.createDate  ,
+        p.createdBy ,
+        p.updateDate  ,
+        p.updatedBy ,
+        d.departmentName  as teamName ,
+        dc.companyName
+         from dc_yd_inspection_plan   p
+        left join dc_department d on p.departmentId=d.id
+        left join dc_company dc on dc.id=p.companyId
+          where p.status=0
+        <if test="pcCompanyId!=null and pcCompanyId!=''">
+            and p.pcCompanyId=#{pcCompanyId}
+        </if>
+        <if test="period!=null">
+            and p.period=#{period}
+        </if>
+        <if test="companyId!=null and companyId!=''">
+            and p.companyId=#{companyId}
+        </if>
+        <if test="departmentId!=null and departmentId!=''">
+            and p.departmentId=#{departmentId}
+        </if>
+         order by p.createDate desc
+        limit  #{start},#{pageSize}
+    </select>
+
+    <select id="searchInspectionPlanCount" resultType="int">
+        select
+        count(1)
+        from dc_yd_inspection_plan   p
+        where p.status=0
+        <if test="pcCompanyId!=null and pcCompanyId!=''">
+            and p.pcCompanyId=#{pcCompanyId}
+        </if>
+        <if test="period!=null">
+            and p.period=#{period}
+        </if>
+        <if test="companyId!=null and companyId!=''">
+            and p.companyId=#{companyId}
+        </if>
+        <if test="departmentId!=null and departmentId!=''">
+            and p.departmentId=#{departmentId}
+        </if>
+
+    </select>
+
+    <select id="selectInspectionPlanByGroupId" resultType="java.util.Map">
+        SELECT id,
+        DATE_FORMAT(startTime,'%Y-%m-%d %H:%i:%s') as startTime ,
+        DATE_FORMAT(endTime,'%Y-%m-%d %H:%i:%s') as endTime  ,
+          period FROM dc_yd_inspection_plan
+        WHERE id  IN
+              (SELECT inspectionPlanId FROM dc_yd_inspection_plan_group WHERE groupId=#{groupId}) order by  endtime desc limit 1
+    </select>
+
+    <select id="inspectionCount" resultType="int">
+        SELECT count(*) from dc_yd_inspection_plan
+        WHERE endTime>= now() AND now()>=startTime AND
+              id IN (SELECT inspectionPlanId FROM dc_yd_inspection_plan_group WHERE groupId=#{groupId})
+    </select>
+    <select id="selectAllInspectionPlanByGroupId" resultType="java.util.Map">
+        SELECT DISTINCT inspectionPlanId  AS id FROM dc_yd_inspection_plan_group WHERE groupId=#{groupId}
+    </select>
+
+
+    <select id="selectInspectionById" resultType="java.util.Map">
+         select
+        p.id ,
+        p.planNo,
+        p.companyId  ,
+        p.pcCompanyId  ,
+        p.departmentId  ,
+        p.contractId ,
+        p.templateId ,
+        p.period,
+        case
+        when p.period =1 then '日常巡检'
+        when p.period=2 then '每周巡检'
+        when p.period=3 then '月度巡检'
+        when p.period=4 then '季度巡检'
+        when p.period=5 then '年度巡检' else '未知'
+        end as periodName,
+        p.inspectionTimePoint as inspectionTimePoints  ,
+        DATE_FORMAT(p.startTime,'%Y-%m-%d') as startTime ,
+        DATE_FORMAT(p.endTime,'%Y-%m-%d') as endTime  ,
+        p.description  ,
+        p.createDate  ,
+        p.createdBy ,
+        p.updateDate  ,
+        p.updatedBy ,
+        d.departmentName  as teamName ,
+				(select  GROUP_CONCAT(dg.groupName) from dc_yd_device_group dg INNER JOIN dc_yd_inspection_plan_group pg on pg.groupId=dg.id where pg.inspectionPlanId=p.id) as groupNames,
+        dc.companyName,
+				ex.title as templateName,
+				con.contractName
+        from dc_yd_inspection_plan   p
+        left join dc_department d on p.departmentId=d.id
+        left join dc_company dc on dc.id=p.companyId
+				left join dc_yd_contract con on con.id=p.contractId
+				left join dc_wj_exercise ex on ex.id=p.templateId
+        where p.id=#{id}
+
+    </select>
+
+</mapper>

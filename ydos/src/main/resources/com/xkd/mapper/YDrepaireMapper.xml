@@ -1,0 +1,842 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xkd.mapper.YDrepaireMapper">
+  <select id="selectById"  resultType="java.util.Map">
+    select 
+    id, applyId, pcCompanyId, repaireNo, dueTime, description, dealDescription,
+    summary, statusFlag, responseScore, altitudeScore, professionScore, customerFeedback,
+    createDate, createdBy, updateDate, updatedBy, status,solution
+    from dc_yd_repaire
+    where id = #{id,jdbcType=CHAR}
+  </select>
+
+  <select id="selectRepaireApplys" resultType="java.util.Map">
+
+          SELECT
+          ra.id,
+          ra.description,
+          ra.statusFlag,
+          ra.createFlag,
+          ra.companyId,
+          (
+              SELECT
+                  uname
+              FROM
+                  dc_user
+              WHERE
+                  id = ra.createdBy
+          ) AS uname,
+          DATE_FORMAT(
+              ra.createDate,
+              '%Y-%m-%d %H:%i'
+          ) AS createDate,
+          (
+              to_days(now()) - to_days(ra.createDate)
+          ) AS dates,
+          CASE
+      WHEN ra.statusFlag = 0 THEN
+          '待审核'
+      WHEN ra.statusFlag = 1 THEN
+          '驳回'
+      WHEN ra.statusFlag = 2 THEN
+          '已通过'
+      END statusFlagValue
+      FROM
+      (select * from dc_yd_repaire_apply where status = 0) ra
+     where 1=1
+      <if test="loginUserId != null and loginUserId != ''">
+          and ra.createdBy = #{loginUserId}
+      </if>
+    <if test="companyName != null and companyName != ''">
+        and (ra.id in
+        (select rad.applyId from dc_yd_repaire_apply_device rad
+        LEFT JOIN dc_yd_device d ON rad.deviceId = d.id
+        LEFT JOIN dc_company c ON d.companyId = c.id
+        where c.companyName like concat('%',#{companyName},'%')))
+    </if>
+    <if test="statusFlag != null and statusFlag != ''">and ra.statusFlag = #{statusFlag}</if>
+      <if test="startTime != null and startTime != ''">and DATE_FORMAT(ra.createDate,'%Y-%m-%d')&gt;= #{startTime}</if>
+      <if test="endTime != null and endTime != ''">and DATE_FORMAT(ra.createDate,'%Y-%m-%d') &lt;= #{endTime}</if>
+    <if test="pcCompanyId != null and pcCompanyId != ''">and ra.pcCompanyId = #{pcCompanyId}</if>
+
+    ORDER BY createDate desc
+    limit #{currentPage},#{pageSize}
+
+  </select>
+
+  <select id="selectTotalRepaireApplys" resultType="java.lang.Integer">
+
+      SELECT
+      count(1)
+      FROM
+      dc_yd_repaire_apply ra
+      where 1=1
+      <if test="loginUserId != null and loginUserId != ''">
+          and ra.createdBy = #{loginUserId}
+      </if>
+      <if test="companyName != null and companyName != ''">
+          and (ra.id in
+          (select rad.applyId from dc_yd_repaire_apply_device rad
+          LEFT JOIN dc_yd_device d ON rad.deviceId = d.id
+          LEFT JOIN dc_company c ON d.companyId = c.id
+          where c.companyName like concat('%',#{companyName},'%')))
+      </if>
+      <if test="statusFlag != null and statusFlag != ''">and  ra.statusFlag = #{statusFlag}</if>
+      <if test="startTime != null and startTime != ''">and DATE_FORMAT(ra.createDate,'%Y-%m-%d')&gt;= #{startTime}</if>
+      <if test="endTime != null and endTime != ''">and DATE_FORMAT(ra.createDate,'%Y-%m-%d') &lt;= #{endTime}</if>
+      <if test="pcCompanyId != null and pcCompanyId != ''">and ra.pcCompanyId = #{pcCompanyId}</if>
+
+  </select>
+
+
+  <select id="selectRepaires" resultType="java.util.Map">
+
+    SELECT
+    r.id,
+    r.repaireNo,
+    r.description,
+    r.statusFlag,
+    (
+    SELECT
+    uname
+    FROM
+    dc_user
+    WHERE
+    id = r.createdBy
+    ) AS uname,
+    (
+      to_days(now()) - to_days(r.createDate)
+    ) AS dates,
+    DATE_FORMAT(
+    r.completeDate,
+    '%Y-%m-%d %H:%i'
+    ) AS completeDate,
+      DATE_FORMAT(
+      r.createDate,
+      '%Y-%m-%d %H:%i'
+      ) AS createDate,
+    DATE_FORMAT(
+    r.completeDate,
+    '%Y-%m-%d %H:%i'
+    ) AS completeDate,
+    CASE
+    WHEN r.statusFlag = 0 THEN
+    '待领取'
+    WHEN r.statusFlag = 1 THEN
+    '已领取'
+    WHEN r.statusFlag = 2 THEN
+    '技师已出发'
+    WHEN r.statusFlag = 3 THEN
+    '进行中'
+    WHEN r.statusFlag = 4 THEN
+    '完成（待评价）'
+    WHEN r.statusFlag = 5 THEN
+    '完成（已评价）'
+    END statusFlagValue
+    FROM
+      (select * from dc_yd_repaire where status = 0) r
+    where 1 = 1
+      <if test="loginUserId != null and loginUserId != ''">
+          and (r.id in (select rr.id  from  dc_yd_repaire rr where rr.createdBy = #{loginUserId} UNION ALL
+          select rt.repaireId from dc_yd_repaire_techinician rt  where rt.technicianId = #{loginUserId}))
+      </if>
+      <if test="companyIdList != null and companyIdList != ''">
+          and r.id in (select rd.repaireId from dc_yd_repaire_device rd
+          LEFT JOIN dc_yd_device d ON rd.deviceId = d.id
+          where d.companyId in
+          <foreach collection="companyIdList" item="companyId" index="" separator="," open="(" close=")">
+              #{companyId}
+          </foreach>
+          )
+      </if>
+      <if test="companyName != null and companyName != ''">
+          and (r.id in
+          (select rd.repaireId from dc_yd_repaire_device rd
+          LEFT JOIN dc_yd_device d ON rd.deviceId = d.id
+          LEFT JOIN dc_company c ON d.companyId = c.id
+          where c.companyName like concat('%',#{companyName},'%')))
+      </if>
+      <if test="userId != null and userId != ''">
+          and (r.id in
+          (select rt.repaireId from dc_yd_repaire_techinician rt
+          where rt.technicianId = #{userId} ))
+      </if>
+    <if test="statusFlag != null and statusFlag != ''">${statusFlag}</if>
+    <if test="technicianName != null and technicianName != ''">
+      and (r.id in (select rt.repaireId from (select * from dc_user where uname like concat('%',#{technicianName},'%')) u
+      INNER JOIN dc_yd_repaire_techinician rt on u.id = rt.technicianId ))
+    </if>
+    <if test="pcCompanyId != null and pcCompanyId != ''">and r.pcCompanyId = #{pcCompanyId}</if>
+      <if test="completeFlag != null and completeFlag != '' and completeFlag == 0">and r.statusFlag  &lt; 4 </if>
+      <if test="completeFlag != null and completeFlag != '' and completeFlag == 1">and r.statusFlag  &gt;= 4 </if>
+      <if test="startDate != null and startDate != ''">
+          and (DATE_FORMAT(
+          #{startDate},
+          '%Y-%m-%d'
+          ) &lt;= DATE_FORMAT(
+          r.createDate,
+          '%Y-%m-%d'
+          ))
+      </if>
+      <if test="endDate != null and endDate != ''">
+          and (DATE_FORMAT(
+          #{endDate},
+          '%Y-%m-%d'
+          ) &gt;= DATE_FORMAT(
+          r.createDate,
+          '%Y-%m-%d'
+          ))
+      </if>
+
+      <if test="dueTimeStartDate != null and dueTimeStartDate != ''">
+          and (DATE_FORMAT(
+          #{dueTimeStartDate},
+          '%Y-%m-%d'
+          ) &lt;= DATE_FORMAT(
+          r.dueTime,
+          '%Y-%m-%d'
+          ))
+      </if>
+      <if test="dueTimeEndDate != null and dueTimeEndDate != ''">
+          and (DATE_FORMAT(
+          #{dueTimeEndDate},
+          '%Y-%m-%d'
+          ) &gt;= DATE_FORMAT(
+          r.dueTime,
+          '%Y-%m-%d'
+          ))
+      </if>
+
+    ORDER BY createDate desc
+    limit #{currentPage},#{pageSize}
+
+  </select>
+
+  <select id="selectTotalSelectRepaires" resultType="java.lang.Integer">
+      SELECT
+      count(1)
+      FROM
+      (select * from dc_yd_repaire where status = 0) r
+      where 1 = 1
+      <if test="loginUserId != null and loginUserId != ''">
+          and (r.id in (select rr.id  from  dc_yd_repaire rr where rr.createdBy = #{loginUserId} UNION ALL
+          select rt.repaireId from dc_yd_repaire_techinician rt  where rt.technicianId = #{loginUserId}))
+      </if>
+      <if test="companyIdList != null and companyIdList != ''">
+          and r.id in (select rd.repaireId from dc_yd_repaire_device rd
+          LEFT JOIN dc_yd_device d ON rd.deviceId = d.id
+          where d.companyId in
+          <foreach collection="companyIdList" item="companyId" index="" separator="," open="(" close=")">
+              #{companyId}
+          </foreach>
+          )
+      </if>
+      <if test="companyName != null and companyName != ''">
+          and (r.id in
+          (select rd.repaireId from dc_yd_repaire_device rd
+          LEFT JOIN dc_yd_device d ON rd.deviceId = d.id
+          LEFT JOIN dc_company c ON d.companyId = c.id
+          where c.companyName like concat('%',#{companyName},'%')))
+      </if>
+      <if test="userId != null and userId != ''">
+          and (r.id in
+          (select rd.repaireId from dc_yd_repaire_techinician rt
+          where rt.technicianId = #{userId} ))
+      </if>
+      <if test="statusFlag != null and statusFlag != ''">${statusFlag}</if>
+      <if test="technicianName != null and technicianName != ''">
+          and r.id in (select rt.repaireId from (select * from dc_user where uname like concat('%',#{technicianName},'%')) u
+          INNER JOIN dc_yd_repaire_techinician rt on u.id = rt.technicianId )
+      </if>
+      <if test="pcCompanyId != null and pcCompanyId != ''">and r.pcCompanyId = #{pcCompanyId}</if>
+      <if test="completeFlag != null and completeFlag != '' and completeFlag == 0">and r.statusFlag  &lt; 4 </if>
+      <if test="completeFlag != null and completeFlag != '' and completeFlag == 1">and r.statusFlag  &gt;= 4 </if>
+      <if test="startDate != null and startDate != ''">
+          and (DATE_FORMAT(
+          #{startDate},
+          '%Y-%m-%d'
+          ) &lt;= DATE_FORMAT(
+          r.createDate,
+          '%Y-%m-%d'
+          ))
+      </if>
+      <if test="endDate != null and endDate != ''">
+          and (DATE_FORMAT(
+          #{endDate},
+          '%Y-%m-%d'
+          ) &gt;= DATE_FORMAT(
+          r.createDate,
+          '%Y-%m-%d'
+          ))
+      </if>
+      <if test="dueTimeStartDate != null and dueTimeStartDate != ''">
+          and (DATE_FORMAT(
+          #{dueTimeStartDate},
+          '%Y-%m-%d'
+          ) &lt;= DATE_FORMAT(
+          r.dueTime,
+          '%Y-%m-%d'
+          ))
+      </if>
+      <if test="dueTimeEndDate != null and dueTimeEndDate != ''">
+          and (DATE_FORMAT(
+          #{dueTimeEndDate},
+          '%Y-%m-%d'
+          ) &gt;= DATE_FORMAT(
+          r.dueTime,
+          '%Y-%m-%d'
+          ))
+      </if>
+  </select>
+
+  <select id="selectRepaireApplyById" resultType="java.util.Map">
+       SELECT
+          ra.id,
+          r.id as repaireId,
+          r.repaireNo,
+          ra.description,
+          ra.statusFlag,
+          ra.createFlag,
+          ra.companyId,
+          ra.refuseReason,
+           CASE
+        WHEN ra.createFlag = 0 THEN
+        '技师'
+        WHEN ra.createFlag = 1 THEN
+        '客户'
+        END createFlagValue,
+           CASE
+        WHEN ra.statusFlag = 0 THEN
+        '待审核'
+        WHEN ra.statusFlag = 1 THEN
+        '驳回'
+        WHEN ra.statusFlag = 2 THEN
+        '已通过'
+        END statusFlagValue,
+          u.uname,
+          u.mobile,
+          DATE_FORMAT(
+              ra.createDate,
+              '%Y-%m-%d %H:%i'
+          ) AS createDate
+      FROM
+          dc_yd_repaire_apply ra
+      LEFT JOIN dc_user u on u.id = ra.createdBy
+      LEFT JOIN dc_yd_repaire r on ra.id = r.applyId
+      WHERE ra.id = #{id}
+  </select>
+
+  <select id="selectRepaireDetailById" resultType="java.util.Map">
+      SELECT
+          r.id,
+          r.statusFlag,
+          r.description,
+          r.dealDescription,
+          r.priority,
+          r.solution,
+          r.repaireNo,
+          r.responseScore,
+          r.altitudeScore,
+          r.professionScore,
+          r.customerFeedback,
+          r.companyId,
+          r.summary,
+          (select uname from dc_user where id = r.createdBy) as createdByName,
+          (select uname from dc_user where id = r.updatedBy1) as updatedBy1Name,
+          (select uname from dc_user where id = r.updatedBy2) as updatedBy2Name,
+          (select uname from dc_user where id = r.updatedBy3) as updatedBy3Name,
+          (select uname from dc_user where id = r.updatedBy4) as updatedBy4Name,
+           DATE_FORMAT(
+              r.dueTime,
+              '%Y-%m-%d %H:%i'
+          ) AS dueTime,
+          DATE_FORMAT(
+              r.createDate,
+              '%Y-%m-%d %H:%i'
+          ) AS createDate,
+          DATE_FORMAT(
+              r.dueTime,
+              '%Y-%m-%d %H:%i'
+          ) AS dueTime,
+          DATE_FORMAT(
+              r.updateDate1,
+              '%Y-%m-%d %H:%i'
+          ) AS updateDate1,
+          DATE_FORMAT(
+              r.updateDate2,
+              '%Y-%m-%d %H:%i'
+          ) AS updateDate2,
+          DATE_FORMAT(
+              r.updateDate3,
+              '%Y-%m-%d %H:%i'
+          ) AS updateDate3,
+          DATE_FORMAT(
+              r.updateDate4,
+              '%Y-%m-%d %H:%i'
+          ) AS updateDate4
+      FROM
+          dc_yd_repaire r
+      WHERE r.id = #{id}
+  </select>
+
+  <insert id="insert">
+    insert into dc_yd_repaire
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="applyId != null">
+        applyId,
+      </if>
+      <if test="pcCompanyId != null">
+        pcCompanyId,
+      </if>
+      <if test="repaireNo != null">
+        repaireNo,
+      </if>
+      <if test="dueTime != null">
+        dueTime,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="dealDescription != null">
+        dealDescription,
+      </if>
+      <if test="priority != null">
+        priority,
+      </if>
+      <if test="summary != null">
+        summary,
+      </if>
+      <if test="statusFlag != null">
+        statusFlag,
+      </if>
+      <if test="responseScore != null">
+        responseScore,
+      </if>
+      <if test="altitudeScore != null">
+        altitudeScore,
+      </if>
+      <if test="professionScore != null">
+        professionScore,
+      </if>
+      <if test="customerFeedback != null">
+        customerFeedback,
+      </if>
+      <if test="createDate != null">
+        createDate,
+      </if>
+      <if test="createdBy != null">
+        createdBy,
+      </if>
+      <if test="updateDate != null">
+        updateDate,
+      </if>
+      <if test="updatedBy != null">
+        updatedBy,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+        <if test="updateDate1 != null">updateDate1,</if>
+        <if test="updateDate2 != null">updateDate2,</if>
+        <if test="updateDate3 != null">updateDate3,</if>
+        <if test="updateDate4 != null">updateDate4,</if>
+        <if test="updatedBy1 != null">updatedBy1,</if>
+        <if test="updatedBy2 != null">updatedBy2,</if>
+        <if test="updatedBy3 != null">updatedBy3,</if>
+        <if test="updatedBy4 != null">updatedBy4,</if>
+        <if test="solution != null">solution,</if>
+        <if test="companyId != null">companyId,</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="applyId != null">
+        #{applyId,jdbcType=CHAR},
+      </if>
+      <if test="pcCompanyId != null">
+        #{pcCompanyId,jdbcType=CHAR},
+      </if>
+      <if test="repaireNo != null">
+        #{repaireNo,jdbcType=CHAR},
+      </if>
+      <if test="dueTime != null">
+        #{dueTime,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="dealDescription != null">
+        #{dealDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="priority != null">
+            #{priority,jdbcType=VARCHAR},
+      </if>
+      <if test="summary != null">
+        #{summary,jdbcType=VARCHAR},
+      </if>
+      <if test="statusFlag != null">
+        #{statusFlag,jdbcType=INTEGER},
+      </if>
+      <if test="responseScore != null">
+        #{responseScore},
+      </if>
+      <if test="altitudeScore != null">
+        #{altitudeScore},
+      </if>
+      <if test="professionScore != null">
+        #{professionScore},
+      </if>
+      <if test="customerFeedback != null">
+        #{customerFeedback,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null">
+        #{createdBy,jdbcType=CHAR},
+      </if>
+      <if test="updateDate != null">
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        #{updatedBy,jdbcType=CHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+        <if test="updateDate1 != null">#{updateDate1,jdbcType=TIMESTAMP},</if>
+        <if test="updateDate2 != null">#{updateDate2,jdbcType=TIMESTAMP},</if>
+        <if test="updateDate3 != null">#{updateDate3,jdbcType=TIMESTAMP},</if>
+        <if test="updateDate4 != null">#{updateDate4,jdbcType=TIMESTAMP},</if>
+        <if test="updatedBy1 != null">#{updatedBy1,jdbcType=CHAR},,</if>
+        <if test="updatedBy2 != null">#{updatedBy2,jdbcType=CHAR},</if>
+        <if test="updatedBy3 != null">#{updatedBy3,jdbcType=CHAR},</if>
+        <if test="updatedBy4 != null">#{updatedBy4,jdbcType=CHAR},</if>
+        <if test="solution != null">#{solution},</if>
+        <if test="companyId != null">#{companyId},</if>
+    </trim>
+  </insert>
+  <update id="updateById">
+    update dc_yd_repaire
+    <set>
+      <if test="applyId != null">
+        applyId = #{applyId,jdbcType=CHAR},
+      </if>
+      <if test="pcCompanyId != null">
+        pcCompanyId = #{pcCompanyId,jdbcType=CHAR},
+      </if>
+      <if test="repaireNo != null">
+        repaireNo = #{repaireNo,jdbcType=CHAR},
+      </if>
+      <if test="dueTime != null">
+        dueTime = #{dueTime,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="dealDescription != null">
+        dealDescription = #{dealDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="summary != null">
+        summary = #{summary,jdbcType=VARCHAR},
+      </if>
+      <if test="statusFlag != null">
+        statusFlag = #{statusFlag,jdbcType=INTEGER},
+      </if>
+      <if test="responseScore != null">
+        responseScore = #{responseScore},
+      </if>
+      <if test="altitudeScore != null">
+        altitudeScore = #{altitudeScore},
+      </if>
+      <if test="professionScore != null">
+        professionScore = #{professionScore},
+      </if>
+      <if test="customerFeedback != null">
+        customerFeedback = #{customerFeedback,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        createDate = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null">
+        createdBy = #{createdBy,jdbcType=CHAR},
+      </if>
+      <if test="updateDate != null">
+        updateDate = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        updatedBy = #{updatedBy,jdbcType=CHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+        <if test="updateDate1 != null">updateDate1 = #{updateDate1,jdbcType=TIMESTAMP},</if>
+        <if test="updateDate2 != null">updateDate2 = #{updateDate2,jdbcType=TIMESTAMP},</if>
+        <if test="updateDate3 != null">updateDate3 = #{updateDate3,jdbcType=TIMESTAMP},</if>
+        <if test="updateDate4 != null">updateDate4 = #{updateDate4,jdbcType=TIMESTAMP},</if>
+        <if test="updatedBy1 != null">updatedBy1 = #{updatedBy1,jdbcType=CHAR},,</if>
+        <if test="updatedBy2 != null">updatedBy2 = #{updatedBy2,jdbcType=CHAR},</if>
+        <if test="updatedBy3 != null">updatedBy3 = #{updatedBy3,jdbcType=CHAR},</if>
+        <if test="updatedBy4 != null">updatedBy4 = #{updatedBy4,jdbcType=CHAR},</if>
+        <if test="solution != null">solution = #{solution},</if>
+        <if test="companyId != null">companyId = #{companyId},</if>
+        <if test="priority != null">priority = #{priority},</if>
+    </set>
+    where id = #{id,jdbcType=CHAR}
+  </update>
+
+  <insert id="insertTechnicianList">
+    insert into dc_yd_repaire_techinician(id, repaireId,technicianId) values
+    <foreach collection="technicianList"  item="technician" index="" separator="," >
+      (#{technician.id},#{technician.repaireId},#{technician.technicianId})
+    </foreach>
+  </insert>
+
+  <select id="selectRepaireByCompanyId" resultType="java.util.Map">
+    select
+    r.id,
+    r.repaireNo,
+    r.description,
+    r.dealDescription,
+    r.summary,
+    case
+    when 0=r.priority then '高'
+    when 1=r.priority then '中'
+    when 2=r.priority then '低'
+    else '未知'  end as priority,
+    DATE_FORMAT(r.dueTime ,'%Y-%m-%d %H:%i:%s')   as dueTime
+    from dc_yd_repaire r where r.companyId=#{companyId}
+  </select>
+
+    <select id="selectRepaireCountByCompanyId" resultType="int">
+        select
+          count(1)
+        from dc_yd_repaire r where r.companyId=#{companyId}
+    </select>
+
+
+
+    <select id="selectCurrentRepaireByGroupId" resultType="java.util.Map">
+        select
+        r.id,
+        r.repaireNo,
+        r.description,
+        r.dealDescription,
+        r.summary,
+        case
+        when 0=r.priority then '高'
+        when 1=r.priority then '中'
+        when 2=r.priority then '低'
+        else '未知'  end as priority,
+        de.deviceName,
+        gr.groupName,
+        dco.companyName,
+        r.companyId,
+        DATE_FORMAT(r.createDate ,'%Y-%m-%d %H:%i')   as createDate,
+        DATE_FORMAT(r.dueTime ,'%Y-%m-%d %H:%i')   as dueTime
+        from dc_yd_repaire r  INNER JOIN dc_yd_repaire_device dd on r.id=dd.repaireId
+        INNER JOIN dc_yd_device  de on de.id=dd.deviceId
+        left join dc_yd_device_group gr on gr.id=de.groupId
+        left join dc_company dco on dco.id=r.companyId
+        where   r.statusFlag not in (4,5)   and de.groupId  in
+            <foreach collection="groupIdList" item="id" separator="," open="(" close=")">
+                #{id}
+            </foreach>
+        <if test="pcCompanyId!=null and pcCompanyId!=''">
+            and r.pcCompanyId=#{pcCompanyId}
+        </if>
+        order by r.createDate desc
+    </select>
+
+    <select id="selectTechniciansByRepaireId" resultType="java.util.Map">
+
+       select u.id,u.uname from dc_yd_repaire_techinician rt INNER JOIN dc_user u on rt.technicianId = u.id
+       where repaireId = #{repaireId}
+
+    </select>
+
+    <select id="selectOutOfDateRepaire" resultType="java.util.Map">
+        select
+        r.id, r.applyId, r.pcCompanyId, r.repaireNo, r.dueTime, r.description, r.dealDescription,
+        r.summary, r.statusFlag, r.responseScore, r.altitudeScore, r.professionScore, r.customerFeedback,
+        r.createDate, r.createdBy, r.updateDate, r.updatedBy, r.status
+        from dc_yd_repaire r
+        where DATE_FORMAT(
+              NOW(),
+              '%Y-%m-%d %H:%i'
+          ) > DATE_FORMAT(
+              r.dueTime,
+              '%Y-%m-%d %H:%i'
+          )
+        and  DATE_FORMAT(
+        r.dueTime,
+        '%Y-%m-%d %H:%i'
+        ) >= (select date_sub(curdate(),interval 1 day))
+
+        and  DATE_FORMAT(
+        r.dueTime,
+        '%Y-%m-%d %H:%i'
+        ) &lt; (select curdate())
+
+          and r.status = 0 and (r.statusFlag &lt; 4)
+          and (r.id not in (select DISTINCT objectId from dc_yd_object_news where newsType = 0 and title like '%工单已逾期%'))
+    </select>
+
+    <select id="getUserIdsHasOutOfDateNews" resultType="java.lang.String">
+        select userId from dc_yd_object_news where objectId = #{repaireId} and status = 0 and title like '%工单已逾期%'
+    </select>
+
+    <select id="selectRepaireStatusById" resultType="java.util.Map">
+
+        select
+        r.statusFlag,
+        CASE
+        WHEN r.statusFlag = 0 THEN
+        '创建'
+        WHEN r.statusFlag = 1 THEN
+        '接单'
+        WHEN r.statusFlag = 2 THEN
+        '出发'
+        WHEN r.statusFlag = 3 THEN
+        '开始'
+        WHEN (r.statusFlag = 4 or r.statusFlag = 5) THEN
+        '完成'
+        END statusFlagValue
+        from dc_yd_repaire r
+        where r.id = #{repaireId}
+
+    </select>
+
+    <select id="selectCompanyUserByRepaireId" resultType="java.lang.String">
+        select u.id from (select * from dc_yd_repaire where status = 0 and id = #{repaireId}) r INNER  JOIN  dc_yd_repaire_device rd
+        ON r.id = rd.repaireId INNER JOIN
+        (select * from dc_yd_device where status = 0) d ON  rd.deviceId = d.id INNER JOIN (select * from dc_company where status = 0) c
+        on d.companyId = c.id INNER  JOIN dc_company_contactor cc on c.id = cc.companyId
+        INNER JOIN (select * from dc_user where status = 0) u on cc.userId = u.id
+    </select>
+
+
+
+
+
+
+    <select id="selectDeviceIdListByRepaireId" resultType="string">
+        select d.deviceId from dc_yd_repaire_device d where d.repaireId=#{repaireId}
+    </select>
+    <select id="countRepairApplyByStatusAndPcCompanyId" resultType="java.lang.Integer">
+        SELECT count(*) FROM  dc_yd_repaire_apply WHERE pcCompanyId=#{pcCompanyId} AND status=0
+    </select>
+    <select id="countRepairByStatusAndPcCompanyId" resultType="java.lang.Integer">
+        SELECT count(*) FROM  dc_yd_repaire WHERE pcCompanyId=#{pcCompanyId} AND statusFlag IN (1,2,3)
+    </select>
+    <select id="countRepairByStatusAndPcCompanyIdAndDate" resultType="java.lang.Integer">
+        SELECT count(*) FROM  dc_yd_repaire WHERE pcCompanyId=#{pcCompanyId} AND statusFlag IN (1,2,3) AND date_format(dueTime, '%y-%m-%d')=date_format(now(), '%y-%m-%d')
+    </select>
+    <select id="selectRepairByUserAndDate" resultType="java.util.Map">
+        SELECT r.id AS objectId, concat('维修-', c.companyName) AS repairName, 1 AS  flag,
+            CASE WHEN r.statusFlag IN (1,2,3) THEN '未完成'
+                 WHEN r.statusFlag IN (4,5) THEN '完成'
+                 END statusflag,
+            CASE WHEN r.statusFlag IN (1,2,3) THEN 0
+                 WHEN r.statusFlag IN (4,5) THEN 1
+                 END completeFlag
+        FROM dc_yd_repaire r LEFT JOIN dc_company c ON c.id=r.companyId
+        LEFT JOIN dc_yd_repaire_techinician t ON t.repaireId = r.id
+        WHERE r.statusFlag != 0 AND #{userId} = t.technicianId AND (r.completeDate IS NULL OR
+            <if test="type==1">
+                date_format(r.completeDate,'%Y-%m-%d')=date_format(#{date}, '%Y-%m-%d')
+            </if>
+            <if test="type==2">
+                date_format(r.completeDate,'%Y-%u')=date_format(#{date}, '%Y-%u')
+            </if>
+            <if test="type==3">
+                date_format(r.completeDate,'%Y-%m')=date_format(#{date}, '%Y-%m')
+            </if>)
+    </select>
+
+    <update id="deleteRepaireByIds">
+        update dc_yd_repaire set status = 2 where id in
+        <foreach collection="repaireIds" item="repaireId" separator="," open="(" close=")">
+            #{repaireId}
+        </foreach>
+    </update>
+
+
+
+
+    <select id="selectHistoryRepaireByGroupId" resultType="java.util.Map">
+        select r.id  ,
+        DATE_FORMAT(r.dueTime ,'%Y-%m-%d %H:%i') as dueTime,
+        DATE_FORMAT(r.completeDate ,'%Y-%m-%d %H:%i') as completeDate,
+        (select GROUP_CONCAT(u.uname) from dc_yd_repaire_techinician t left join dc_user u on t.technicianId=u.id where t.repaireId=r.id) as uname,
+        (select GROUP_CONCAT(de.deviceName) from dc_yd_repaire_device d left join dc_yd_device de on d.deviceId=de.id where d.repaireId=r.id group by d.repaireId)  as deviceNames
+        from dc_yd_repaire r  left join dc_yd_repaire_device re on r.id=re.repaireId left join dc_yd_device dev on re.deviceId=dev.id where dev.groupId=#{groupId}
+        <if test="fromDate!=null and fromDate !='' ">
+        and r.completeDate>#{fromDate}
+        </if>
+        <if test="toDate!=null and toDate !='' ">
+        and r.completeDate &lt;=#{toDate}
+        </if>
+        and r.statusFlag IN (4,5)
+        order by r.dueTime desc
+        limit #{start},#{pageSize}
+    </select>
+
+
+
+    <select id="selectHistoryRepaireCountByGroupId" resultType="int">
+        select
+           count(1)
+        from dc_yd_repaire r  left join dc_yd_repaire_device re on r.id=re.repaireId left join dc_yd_device dev on re.deviceId=dev.id where dev.groupId=#{groupId}
+        <if test="fromDate!=null and fromDate !='' ">
+            and r.completeDate>#{fromDate}
+        </if>
+        <if test="toDate!=null and toDate !='' ">
+            and r.completeDate &lt;=#{toDate}
+        </if>
+        and r.statusFlag IN (4,5)
+    </select>
+    <select id="selectCurrentRepairOrder" resultType="java.util.Map">
+        SELECT r.id, dc.companyName, dyd.deviceName,
+        CASE
+        WHEN r.priority=1 THEN '高'
+        WHEN r.priority=2 THEN '中'
+        WHEN r.priority=3 THEN '低'
+        END priority,
+            date_format(r.createDate, '%Y-%m-%d') AS createDate
+        FROM dc_yd_repaire r
+            LEFT JOIN dc_company dc ON dc.id = r.companyId
+            LEFT JOIN dc_yd_device dyd ON dyd.id = #{deviceId}
+        WHERE r.id IN (SELECT repaireId FROM dc_yd_repaire_device WHERE deviceId=#{deviceId})
+              AND r.statusFlag IN (0,1,2,3)
+    </select>
+    <select id="countUserRepair" resultType="java.lang.Integer">
+    SELECT count(*) FROM dc_yd_repaire dyr
+        LEFT JOIN dc_yd_repaire_techinician dyrt ON dyrt.technicianId=#{userId}
+        WHERE dyr.id=dyrt.repaireId AND pcCompanyId=#{pcCompanyId}
+    </select>
+    <select id="countCompanyRepair" resultType="java.lang.Integer">
+        SELECT count(*) FROM dc_yd_repaire dyr WHERE dyr.statusFlag IN (1,2,3) AND dyr.companyId IN (SELECT companyId FROM dc_company_contactor WHERE userId=#{userId})
+    </select>
+    <insert id="saveRepaireUserContent">
+      insert into dc_yd_repaire_content(
+      id,
+      repaireId,
+      userId,
+      content,
+      createDate,
+      status) values(
+      #{id},
+      #{repaireId},
+      #{userId},
+      #{content},
+      #{createDate},
+      #{status}
+      )
+    </insert>
+
+</mapper>

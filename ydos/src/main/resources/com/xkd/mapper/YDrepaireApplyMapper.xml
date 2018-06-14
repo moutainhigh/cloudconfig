@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xkd.mapper.YDrepaireApplyMapper">
+
+  <sql id="Base_Column_List">
+    id, applyNo, deviceId, pcCompanyId, description, refuseReason, statusFlag, createDate, 
+    createdBy, updateDate, updatedBy, status,createFlag
+  </sql>
+  <select id="selectById" resultType="java.util.Map">
+    select 
+    <include refid="Base_Column_List" />
+    from dc_yd_repaire_apply
+    where id = #{id,jdbcType=CHAR}
+  </select>
+
+  <insert id="insert">
+    insert into dc_yd_repaire_apply
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="applyNo != null">
+        applyNo,
+      </if>
+      <if test="deviceId != null">
+        deviceId,
+      </if>
+      <if test="pcCompanyId != null">
+        pcCompanyId,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="refuseReason != null">
+        refuseReason,
+      </if>
+      <if test="statusFlag != null">
+        statusFlag,
+      </if>
+      <if test="createDate != null">
+        createDate,
+      </if>
+      <if test="createdBy != null">
+        createdBy,
+      </if>
+      <if test="updateDate != null">
+        updateDate,
+      </if>
+      <if test="updatedBy != null">
+        updatedBy,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="createFlag != null">
+        createFlag,
+      </if>
+      <if test="companyId != null">
+        companyId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="applyNo != null">
+        #{applyNo,jdbcType=CHAR},
+      </if>
+      <if test="deviceId != null">
+        #{deviceId,jdbcType=CHAR},
+      </if>
+      <if test="pcCompanyId != null">
+        #{pcCompanyId,jdbcType=CHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="refuseReason != null">
+        #{refuseReason,jdbcType=VARCHAR},
+      </if>
+      <if test="statusFlag != null">
+        #{statusFlag,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null">
+        #{createdBy,jdbcType=CHAR},
+      </if>
+      <if test="updateDate != null">
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        #{updatedBy,jdbcType=CHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="createFlag != null">
+        #{createFlag,jdbcType=TINYINT},
+      </if>
+      <if test="companyId != null">
+        #{companyId,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateById">
+    update dc_yd_repaire_apply
+    <set>
+      <if test="applyNo != null">
+        applyNo = #{applyNo,jdbcType=CHAR},
+      </if>
+      <if test="deviceId != null">
+        deviceId = #{deviceId,jdbcType=CHAR},
+      </if>
+      <if test="pcCompanyId != null">
+        pcCompanyId = #{pcCompanyId,jdbcType=CHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="refuseReason != null">
+        refuseReason = #{refuseReason,jdbcType=VARCHAR},
+      </if>
+      <if test="statusFlag != null">
+        statusFlag = #{statusFlag,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null">
+        createDate = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null">
+        createdBy = #{createdBy,jdbcType=CHAR},
+      </if>
+      <if test="updateDate != null">
+        updateDate = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        updatedBy = #{updatedBy,jdbcType=CHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="createFlag != null">
+        status = #{createFlag,jdbcType=TINYINT},
+      </if>
+      <if test="companyId != null">
+        companyId = #{companyId,jdbcType=CHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=CHAR}
+  </update>
+
+
+<select id="selectDeviceIdByApplyId" resultType="string">
+select d.deviceId from dc_yd_repaire_apply_device d where d.applyId=#{applyId}
+</select>
+
+</mapper>

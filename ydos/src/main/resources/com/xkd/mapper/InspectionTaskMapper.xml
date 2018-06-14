@@ -1,0 +1,936 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.InspectionTaskMapper">
+
+
+
+
+
+
+    <insert id="insertList">
+        INSERT INTO dc_yd_inspection_task(
+        id,
+        companyId,
+        pcCompanyId,
+        departmentId,
+        inspectionPlanId,
+        templateId,
+        period,
+        planCompletionDate,
+        createdBy,
+        createDate,
+        taskNo
+        )VALUES
+        <foreach collection="tasks" item="task" index="index" separator=",">
+            (
+            #{task.id},
+            #{task.companyId},
+            #{task.pcCompanyId},
+            #{task.departmentId},
+            #{task.inspectionPlanId},
+            #{task.templateId},
+            #{task.period},
+            #{task.planCompletionDate},
+            #{task.createdBy},
+            #{task.createDate},
+            #{task.taskNo}
+            )
+        </foreach>
+    </insert>
+
+
+
+    <update id="updateInspectionTask">
+        UPDATE dc_yd_inspection_task
+        <set>
+            <if test="id != null"> id = #{id}, </if>
+            <if test="companyId != null"> companyId = #{companyId}, </if>
+            <if test="pcCompanyId != null"> pcCompanyId = #{pcCompanyId}, </if>
+            <if test="departmentId != null"> departmentId = #{departmentId}, </if>
+            <if test="inspectionPlanId != null"> inspectionPlanId = #{inspectionPlanId}, </if>
+            <if test="templateId != null"> templateId = #{templateId}, </if>
+            <if test="period != null"> period = #{period}, </if>
+            <if test="completedBy != null"> completedBy = #{completedBy}, </if>
+            <if test="planCompletionDate != null"> planCompletionDate = #{planCompletionDate}, </if>
+            <if test="completionDate != null"> completionDate = #{completionDate}, </if>
+            <if test="createdBy != null"> createdBy = #{createdBy}, </if>
+            <if test="createdBy != null"> createDate = #{createDate}, </if>
+            <if test="updatedBy != null"> updatedBy = #{updatedBy} </if>
+            <if test="createdBy != null"> updateDate = #{updateDate}, </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+
+    <select id="selectHistoryTaskByPlanId" resultType="java.util.Map">
+        select
+        t.id,
+        t.taskNo,
+        t.templateId,
+        DATE_FORMAT(t.planCompletionDate,'%Y-%m-%d %H:%i') as planCompletionDate ,
+        DATE_FORMAT(t.completionDate,'%Y-%m-%d %H:%i') as completionDate ,
+        case when t.completionDate>t.planCompletionDate  then '是' else '否' end as exceedTimeLimit,
+        case when t.completionDate>t.planCompletionDate  then 1 else  0  end as exceedTimeLimitFlag,
+        u.uname as completedByName
+        from dc_yd_inspection_task t left join dc_user u on t.completedBy=u.id
+        where t.completionDate is not null and t.inspectionPlanId=#{inspectionPlanId}
+        <if test="fromDate!=null and fromDate!=''">
+            and DATE_FORMAT(t.planCompletionDate,'%Y-%m-%d') > #{fromDate}
+        </if>
+        <if test="toDate!=null and toDate!=''">
+            and DATE_FORMAT(t.planCompletionDate,'%Y-%m-%d')  &lt; = #{toDate}
+        </if>
+        <if test="isExceedTime==1">
+            and t.completionDate>t.planCompletionDate
+        </if>
+        <if test="isExceedTime==0">
+            and t.completionDate&lt;=t.planCompletionDate
+        </if>
+        <if test="completedBy!=null and completedBy!=''">
+          and t.completedBy=#{completedBy}
+        </if>
+        order by t.taskNo asc
+        limit #{start},#{pageSize}
+    </select>
+
+    <select id="selectHistoryTaskCountByPlanId" resultType="int">
+        select
+        count(1)
+        from dc_yd_inspection_task t left join dc_user u on t.completedBy=u.id
+        where t.completionDate is not null and t.inspectionPlanId=#{inspectionPlanId}
+        <if test="fromDate!=null and fromDate!=''">
+            and DATE_FORMAT(t.planCompletionDate,'%Y-%m-%d') > #{fromDate}
+        </if>
+        <if test="toDate!=null and toDate!=''">
+            and DATE_FORMAT(t.planCompletionDate,'%Y-%m-%d')  &lt; = #{toDate}
+        </if>
+        <if test="isExceedTime==1">
+            and t.completionDate>t.planCompletionDate
+        </if>
+        <if test="isExceedTime==0">
+            and t.completionDate&lt;=t.planCompletionDate
+        </if>
+        <if test="completedBy!=null and completedBy!=''">
+            and t.completedBy=#{completedBy}
+        </if>
+    </select>
+
+    <select id="searchInspectionTask" resultType="java.util.Map">
+        select
+        t.id,
+        t.taskNo,
+        t.templateId,
+        DATE_FORMAT(t.planCompletionDate,'%Y-%m-%d %H:%i') as planCompletionDate ,
+        DATE_FORMAT(t.completionDate,'%Y-%m-%d %H:%i') as completionDate ,
+        case  when DATEDIFF (NOW(),t.planCompletionDate) &lt; 0 then 0 else  DATEDIFF (NOW(),t.planCompletionDate)  end as exceedDays  ,
+        case  when TIMESTAMPDIFF (HOUR,t.planCompletionDate,NOW()) &lt; 0 then 0 else  TIMESTAMPDIFF (HOUR,t.planCompletionDate,NOW())  end as exceedHours  ,
+        case
+        when t.completionDate is null or t.completionDate =''    then '未完成'
+        when t.completionDate is not null and t.completionDate!=''  and t.completionDate>t.planCompletionDate then '逾期完成'
+        when t.completionDate is not null and t.completionDate!='' and t.completionDate &lt;=t.planCompletionDate then '已完成'
+        end as completionStatus,
+        case
+        when t.completionDate is null or t.completionDate =''    then  0
+        when t.completionDate is not null and t.completionDate!=''  and t.completionDate>t.planCompletionDate then 2
+        when t.completionDate is not null and t.completionDate!='' and t.completionDate &lt;=t.planCompletionDate then  1
+        end as isDone,
+        d.departmentName as teamName,
+        d.id as departmentId,
+        dc.companyName,
+        t.inspectionPlanId,
+        t.period,
+        case
+        when t.period =1 then '日常巡检'
+        when t.period=2 then '每周巡检'
+        when t.period=3 then '月度巡检'
+        when t.period=4 then '季度巡检'
+        when t.period=5 then '年度巡检' else '未知'
+        end as periodName
+        from dc_yd_inspection_task t
+        left join dc_department d on d.id=t.departmentId
+        left join dc_company dc on dc.id=t.companyId
+        where   1=1
+        <if test="fromDate!=null and fromDate !=''">
+             and  t.planCompletionDate >=#{fromDate}
+        </if>
+        <if test="toDate==null or toDate=''">
+            and
+            (
+            (
+            YEAR(NOW())=YEAR(t.planCompletionDate) and (
+            (DAYOFYEAR(NOW())>=DAYOFYEAR(t.planCompletionDate) and t.period=1)
+            OR (WEEKOFYEAR( NOW())>=WEEKOFYEAR(t.planCompletionDate) and t.period=2)
+            OR (MONTH( NOW())>=MONTH(t.planCompletionDate) and t.period=3)
+            OR (QUARTER( NOW())>=QUARTER(t.planCompletionDate) and t.period=4)
+            OR (YEAR( NOW())>=YEAR(t.planCompletionDate) and t.period=5)
+            )
+            )
+            OR YEAR( NOW())>YEAR(t.planCompletionDate)
+            )
+        </if>
+        <if test="toDate!=null and toDate != '' ">
+           and  t.planCompletionDate &lt;#{toDate}
+        </if>
+        <if test="isDone==0">
+            and (t.completionDate is  NULL or t.completionDate='')
+        </if>
+        <if test="isDone==1">
+            and t.completionDate is  not NULL  and t.completionDate!=''
+        </if>
+        <if test="isDone==2">
+            and  t.completionDate is not null and t.completionDate!=''  and t.completionDate>t.planCompletionDate
+        </if>
+        <if test="pcCompanyId!=null and pcCompanyId!=''">
+            and t.pcCompanyId=#{pcCompanyId}
+        </if>
+        <if test="period!=null">
+            and t.period=#{period}
+        </if>
+        <if test="companyId!=null and companyId!=''">
+            and t.companyId=#{companyId}
+        </if>
+        <if test="departmentId!=null and departmentId!=''">
+            and t.departmentId=#{departmentId}
+        </if>
+        order by t.planCompletionDate desc
+        limit #{start},#{pageSize}
+    </select>
+
+
+    <select id="searchInspectionTaskCount" resultType="int">
+        select
+        count(1)
+        from dc_yd_inspection_task t
+        where 1=1
+        <if test="fromDate!=null and fromDate !=''">
+            and  t.planCompletionDate >=#{fromDate}
+        </if>
+        <if test="toDate==null or toDate=''">
+            and
+            (
+            (
+            YEAR(NOW())=YEAR(t.planCompletionDate) and (
+            (DAYOFYEAR(NOW())>=DAYOFYEAR(t.planCompletionDate) and t.period=1)
+            OR (WEEKOFYEAR( NOW())>=WEEKOFYEAR(t.planCompletionDate) and t.period=2)
+            OR (MONTH( NOW())>=MONTH(t.planCompletionDate) and t.period=3)
+            OR (QUARTER( NOW())>=QUARTER(t.planCompletionDate) and t.period=4)
+            OR (YEAR( NOW())>=YEAR(t.planCompletionDate) and t.period=5)
+            )
+            )
+            OR YEAR( NOW())>YEAR(t.planCompletionDate)
+            )
+        </if>
+        <if test="toDate!=null and toDate != '' ">
+            and  t.planCompletionDate &lt;#{toDate}
+        </if>
+        <if test="isDone==0">
+            and (t.completionDate is  NULL or t.completionDate='')
+        </if>
+        <if test="isDone==1">
+            and t.completionDate is  not NULL  and t.completionDate!=''
+        </if>
+        <if test="isDone==2">
+            and  t.completionDate is not null and t.completionDate!=''  and t.completionDate>t.planCompletionDate
+        </if>
+        <if test="pcCompanyId!=null and pcCompanyId!=''">
+            and t.pcCompanyId=#{pcCompanyId}
+        </if>
+        <if test="period!=null">
+            and t.period=#{period}
+        </if>
+        <if test="companyId!=null and companyId!=''">
+            and t.companyId=#{companyId}
+        </if>
+        <if test="departmentId!=null and departmentId!=''">
+            and t.departmentId=#{departmentId}
+        </if>
+    </select>
+
+
+
+    <select id="searchTechnicalInspectionTask" resultType="java.util.Map">
+        select
+        t.id,
+        t.taskNo,
+        t.templateId,
+        DATE_FORMAT(t.planCompletionDate,'%Y-%m-%d %H:%i') as planCompletionDate ,
+        case when DATEDIFF (NOW(),t.planCompletionDate) &lt; 0 then 0 else  DATEDIFF (NOW(),t.planCompletionDate)  end  as exceedDays,
+        case  when TIMESTAMPDIFF (HOUR,t.planCompletionDate,NOW()) &lt; 0 then 0 else  TIMESTAMPDIFF (HOUR,t.planCompletionDate,NOW())  end as exceedHours  ,
+        t.inspectionPlanId,
+        case
+        when t.completionDate is null or t.completionDate =''    then '未完成'
+        when t.completionDate is not null and t.completionDate!=''  and t.completionDate>t.planCompletionDate then '逾期完成'
+        when t.completionDate is not null and t.completionDate!='' and t.completionDate &lt;=t.planCompletionDate then '已完成'
+        end as completionStatus,
+        case
+        when t.completionDate is null or t.completionDate =''    then  0
+        when t.completionDate is not null and t.completionDate!=''  and t.completionDate>t.planCompletionDate then 2
+        when t.completionDate is not null and t.completionDate!='' and t.completionDate &lt;=t.planCompletionDate then  1
+        end as isDone,
+        dc.companyName,
+        t.period,
+        case
+        when t.period =1 then '日常巡检'
+        when t.period=2 then '每周巡检'
+        when t.period=3 then '月度巡检'
+        when t.period=4 then '季度巡检'
+        when t.period=5 then '年度巡检' else '未知'
+        end as periodName
+        from dc_yd_inspection_task t
+        left join dc_company dc on dc.id=t.companyId
+        where 1=1
+        <if test="fromDate!=null and fromDate!=''">
+          and t.planCompletionDate  >= #{fromDate}
+        </if>
+        <if test="toDate==null or toDate=''">
+            and
+            (
+            (
+            YEAR(NOW())=YEAR(t.planCompletionDate) and (
+            (DAYOFYEAR(NOW())>=DAYOFYEAR(t.planCompletionDate) and t.period=1)
+            OR (WEEKOFYEAR( NOW())>=WEEKOFYEAR(t.planCompletionDate) and t.period=2)
+            OR (MONTH( NOW())>=MONTH(t.planCompletionDate) and t.period=3)
+            OR (QUARTER( NOW())>=QUARTER(t.planCompletionDate) and t.period=4)
+            OR (YEAR( NOW())>=YEAR(t.planCompletionDate) and t.period=5)
+            )
+            )
+            OR YEAR( NOW())>YEAR(t.planCompletionDate)
+            )
+        </if>
+        <if test="toDate!=null and toDate!='' ">
+            and t.planCompletionDate  &lt; #{toDate}
+        </if>
+        and t.departmentId=#{departmentId}
+
+
+        <if test="companyId!=null and companyId!=''">
+            and t.companyId=#{companyId}
+        </if>
+        <if test="period!=null and period!=''">
+            and t.period=#{period}
+        </if>
+        <if test="isDone==0">
+            and (t.completionDate is  NULL or t.completionDate='')
+        </if>
+        <if test="isDone==1">
+            and t.completionDate is  not NULL  and t.completionDate!=''
+        </if>
+        <if test="isDone==2">
+            and  t.completionDate is not null and t.completionDate!=''  and t.completionDate>t.planCompletionDate
+        </if>
+        order by t.planCompletionDate desc
+        limit #{start},#{pageSize}
+    </select>
+
+    <select id="searchTechnicalInspectionTaskCount" resultType="int">
+        select
+        count(1)
+        from dc_yd_inspection_task t
+        where  1=1
+        <if test="fromDate!=null and fromDate!=''">
+            and t.planCompletionDate  >= #{fromDate}
+        </if>
+        <if test="toDate==null or toDate=''">
+            and
+            (
+            (
+            YEAR(NOW())=YEAR(t.planCompletionDate) and (
+            (DAYOFYEAR(NOW())>=DAYOFYEAR(t.planCompletionDate) and t.period=1)
+            OR (WEEKOFYEAR( NOW())>=WEEKOFYEAR(t.planCompletionDate) and t.period=2)
+            OR (MONTH( NOW())>=MONTH(t.planCompletionDate) and t.period=3)
+            OR (QUARTER( NOW())>=QUARTER(t.planCompletionDate) and t.period=4)
+            OR (YEAR( NOW())>=YEAR(t.planCompletionDate) and t.period=5)
+            )
+            )
+            OR YEAR( NOW())>YEAR(t.planCompletionDate)
+            )
+        </if>
+        <if test="toDate!=null and toDate!='' ">
+            and t.planCompletionDate  &lt; #{toDate}
+        </if>
+           and t.departmentId=#{departmentId}
+
+        <if test="companyId!=null and companyId!=''">
+            and t.companyId=#{companyId}
+        </if>
+        <if test="period!=null and period!=''">
+            and t.period=#{period}
+        </if>
+        <if test="isDone==0">
+            and (t.completionDate is  NULL or t.completionDate='')
+        </if>
+        <if test="isDone==1">
+            and t.completionDate is  not NULL  and t.completionDate!=''
+        </if>
+        <if test="isDone==2">
+            and  t.completionDate is not null and t.completionDate!=''  and t.completionDate>t.planCompletionDate
+        </if>
+    </select>
+
+
+
+
+
+
+
+
+
+
+    <select id="searchCustomerInspectionTask" resultType="java.util.Map">
+        select
+        t.id,
+        t.taskNo,
+        t.templateId,
+        DATE_FORMAT(t.completionDate,'%Y-%m-%d %H:%i') as completionDate ,
+         t.inspectionPlanId,
+        dc.companyName,
+        dd.departmentName,
+        t.period,
+        case
+        when t.period =1 then '日常巡检'
+        when t.period=2 then '每周巡检'
+        when t.period=3 then '月度巡检'
+        when t.period=4 then '季度巡检'
+        when t.period=5 then '年度巡检' else '未知'
+        end as periodName
+        from dc_yd_inspection_task t
+        left join dc_company dc on dc.id=t.companyId
+        left join dc_department dd on dd.id=t.pcCompanyId
+        where  t.completionDate is not null
+        <if test="dateTo!=null">
+            and DATE_FORMAT(t.completionDate,'%Y-%m-%d')  &lt;=#{dateTo}
+        </if>
+        <if test="dateFrom">
+            and  DATE_FORMAT(t.completionDate,'%Y-%m-%d')>=#{dateFrom}
+        </if>
+        and t.companyId in
+        <foreach collection="companyIdList" item="id" index="" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+        order by t.completionDate desc
+        limit #{start},#{pageSize}
+    </select>
+
+    <select id="searchCustomerInspectionTaskCount" resultType="int">
+        select
+          count(1)
+        from dc_yd_inspection_task t
+        left join dc_company dc on dc.id=t.companyId
+        left join dc_department dd on dd.id=t.pcCompanyId
+        where   t.completionDate is not null
+        <if test="dateTo!=null">
+            and DATE_FORMAT(t.completionDate,'%Y-%m-%d')  &lt;=#{dateTo}
+        </if>
+        <if test="dateFrom">
+            and  DATE_FORMAT(t.completionDate,'%Y-%m-%d')>=#{dateFrom}
+        </if>
+        and t.companyId in
+        <foreach collection="companyIdList" item="id" index="" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </select>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <select id="selectDeviceGroupByInspectitonIds" resultType="java.util.Map">
+        SELECT
+        g.id,
+        g.groupName,
+        pg.inspectionPlanId
+        FROM
+        dc_yd_device_group g
+        INNER JOIN dc_yd_inspection_plan_group   pg on g.id=pg.groupId
+        where pg.inspectionPlanId  in
+        <foreach collection="inspectionPlanIdList" index="index" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+
+    </select>
+
+
+
+
+    <select id="selectTaskDetail" resultType="java.util.Map">
+        select
+        t.id,
+        t.taskNo,
+        t.templateId,
+        DATE_FORMAT(t.planCompletionDate,'%Y-%m-%d %H:%i') as planCompletionDate ,
+        DATE_FORMAT(t.completionDate,'%Y-%m-%d %H:%i') as completionDate ,
+        t.inspectionPlanId,
+        t.templateId,
+        dc.companyName,
+        du.uname as completedByName,
+        dd.departmentName
+        from dc_yd_inspection_task t
+        left join dc_company dc on dc.id=t.companyId
+        left join dc_user du on du.id=t.completedBy
+        left join dc_department dd on dd.id=t.departmentId
+        where t.id=#{id}
+    </select>
+
+
+    <select id="selectInspectionTaskNote" resultType="java.util.Map">
+
+        SELECT
+        t.id,
+        t.inspectionTaskId,
+        t.description,
+        DATE_FORMAT(
+        t.createDate,
+        '%Y-%m-%d %H:%i:%s'
+        ) AS createDate,
+        u.uname AS createdByName
+        FROM
+        dc_yd_inspection_task_note t
+        LEFT JOIN dc_user u ON t.createdBy = u.id
+        WHERE
+        t.inspectionPlanId = #{inspectionPlanId}
+        and t.completionStatus=#{completionStatus}
+        order by t.createDate desc
+        <if test="completionStatus==1">
+            limit 0,100
+        </if>
+
+    </select>
+
+
+
+
+
+
+
+    <insert id="insertTaskNote">
+        INSERT INTO dc_yd_inspection_task_note (
+        id,
+        inspectionPlanId,
+        inspectionTaskId,
+        description,
+        createDate,
+        createdBy
+        )
+        VALUES
+        (
+        #{id},
+        #{inspectionPlanId},
+        #{inspectionTaskId},
+        #{description},
+        #{createDate},
+        #{createdBy}
+        )
+    </insert>
+
+    <insert id="completeTaskNote" >
+     update dc_yd_inspection_task_note t set t.completionStatus=1 where t.id=#{id}
+    </insert>
+
+
+    <select id="selectInspectionTaskByGroupId" resultType="java.util.Map">
+        select
+        t.taskNo,
+        t.templateId,
+        DATE_FORMAT(t.planCompletionDate,'%Y-%m-%d %H:%i') as planCompletionDate ,
+        DATE_FORMAT(t.completionDate,'%Y-%m-%d %H:%i') as completionDate ,
+        case when t.completionDate>t.planCompletionDate  then '是' else '否' end as exceedTimeLimit,
+        u.uname as completedByName
+        from dc_yd_inspection_task t left join dc_user u on t.completedBy=u.id
+        where t.completionDate is not null    and t.inspectionPlanId in (
+        select pg.inspectionPlanId  from dc_yd_inspection_plan_group pg where pg.groupId =#{groupId}
+        <if test="pcCompanyId!=null and pcCompanyId!=''">
+            and t.pcCompanyId=#{pcCompanyId}
+        </if>
+        )
+        <if test="pcCompanyId!=null and pcCompanyId!=''">
+            and t.pcCompanyId=#{pcCompanyId}
+        </if>
+        order by t.taskNo desc
+        limit #{start},#{pageSize}
+    </select>
+    <select id="selectInspectionTaskCountByGroupId" resultType="int">
+        select
+        COUNT(1)
+        from dc_yd_inspection_task t left join dc_user u on t.completedBy=u.id
+        where t.completionDate is not null    and t.inspectionPlanId in (
+        select pg.inspectionPlanId  from dc_yd_inspection_plan_group pg where pg.groupId =#{groupId}
+
+        )
+        <if test="pcCompanyId!=null and pcCompanyId!=''">
+            and t.pcCompanyId=#{pcCompanyId}
+        </if>
+
+    </select>
+
+
+    <delete id="deleteUnCompletedTaskByPlanId" >
+        delete from dc_yd_inspection_task where  completionDate is null  and inspectionPlanId=#{inspectionPlanId}
+    </delete>
+
+
+
+    <select id="selectNextPlanTaskByInspectionPlanIds" resultType="java.util.Map">
+        select
+        t.inspectionPlanId,
+        DATE_FORMAT(t.planCompletionDate,'%Y-%m-%d %H:%i') as nextPlanCompletionDate,
+        case when t.completionDate is null and t.planCompletionDate  > now() then '是'  else '否' end as exceedLimit,
+        case when t.completionDate is null and t.planCompletionDate  > now() then 1  else 0  end as exceedLimitFlag
+
+        from dc_yd_inspection_task  t  where  t.taskNo  in
+
+        (select  min( taskNo)  from dc_yd_inspection_task  where completionDate is null
+
+        and inspectionPlanId in
+        <foreach collection="idList" index="index" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        group by inspectionPlanId )
+    </select>
+
+
+    <select id="selectInspectionTaskByInspectionId" resultType="java.util.Map">
+        select
+        t.id,
+        t.taskNo,
+        t.templateId,
+        DATE_FORMAT(t.planCompletionDate,'%Y-%m-%d %H:%i') as planCompletionDate ,
+        case when DATEDIFF (NOW(),t.planCompletionDate) &lt; 0 then 0 else  DATEDIFF (NOW(),t.planCompletionDate)  end  as exceedDays,
+        t.inspectionPlanId,
+        case
+        when t.completionDate is null or t.completionDate =''    then '未完成'
+        when t.completionDate is not null and t.completionDate!=''  and t.completionDate>t.planCompletionDate then '逾期完成'
+        when t.completionDate is not null and t.completionDate!='' and t.completionDate &lt;=t.planCompletionDate then '已完成'
+        end as completionStatus,
+        dc.companyName,
+        d.uname as completedByName,
+        case
+        when t.period =1 then '日常巡检'
+        when t.period=2 then '每周巡检'
+        when t.period=3 then '月度巡检'
+        when t.period=4 then '季度巡检'
+        when t.period=5 then '年度巡检' else '未知'
+        end as periodName
+        from dc_yd_inspection_task t
+        left join dc_company dc on dc.id=t.companyId
+        left join dc_user d on d.id=t.completedBy
+        where t.planCompletionDate  >=#{fromTime}  and t.planCompletionDate &lt;=#{toTime}
+        and t.inspectionPlanId=#{inspectionPlanId}
+
+    </select>
+
+    <select id="selectLastInspectionTask" resultType="java.util.Map">
+        SELECT completionDate, completedBy FROM dc_yd_inspection_task WHERE inspectionPlanId=#{inspectionId} AND completionDate
+        IS NOT NULL ORDER BY completionDate DESC LIMIT 1
+    </select>
+    <select id="selectFinishedInspectionTaskByInspectionPlan" resultType="java.util.Map">
+        SELECT t.id AS taskId,
+            CASE
+            WHEN t.period=1 THEN '日常巡检'
+            WHEN t.period=2 THEN '每周巡检'
+            WHEN t.period=3 THEN '月度巡检'
+            WHEN t.period=4 THEN '季度巡检'
+            WHEN t.period=5 THEN '年度巡检' ELSE '未知'
+            END AS periodName,
+            u.uname AS userName,
+            t.planCompletionDate,
+            t.completionDate,
+        (select GROUP_CONCAT(g.groupName) from dc_yd_inspection_plan_group pg INNER JOIN dc_yd_device_group g on pg.groupId=g.id where pg.inspectionPlanId=t.inspectionPlanId) as deviceGroups,
+        d.departmentName
+        from dc_yd_inspection_task as t
+            LEFT JOIN dc_user AS u  ON t.completedBy = u.id
+            LEFT JOIN dc_department AS d on u.departmentId = d.id
+        WHERE t.completionDate IS NOT NULL
+        <if test="inspectionPlanList != null and inspectionPlanList.size()>0">
+            AND t.inspectionPlanId IN
+            <foreach collection="inspectionPlanList" item="inspection" open="(" close=")" separator=",">
+                #{inspection.id}
+            </foreach>
+        </if>
+        <if test="startDate != null and startDate != ''">
+            <if test="endDate != null and endDate != ''">
+                AND date(#{endDate}) >= t.completionDate >= date(#{startDate})
+            </if>
+        </if>
+        order by t.planCompletionDate desc
+        LIMIT #{start}, #{pageSize}
+    </select>
+    <select id="countInspectionTaskByPcCompanyIdAndDate" resultType="java.lang.Integer">
+        SELECT count(*) FROM  dc_yd_inspection_task
+        WHERE date_format(planCompletionDate, '%y-%m-%d') = date_format(now(), '%y-%m-%d')
+              AND pcCompanyId=#{pcCompanyId}
+        <if test="status == 1">
+            AND completedBy is not null
+        </if>
+    </select>
+
+    <select id="selectInspectionByUserAndDate" resultType="java.util.Map">
+        SELECT t.id AS objectId ,concat('巡检-', c.companyName), 2 AS flag, 1 AS completeFlag FROM dc_yd_inspection_task t LEFT JOIN dc_company c ON c.id=t.companyId
+        WHERE t.completedBy=#{userId} and
+        <if test="type==1">
+            date_format(t.completionDate, '%Y-%m-%d')=date_format(date(#{date}), '%Y-%m-%d')
+        </if>
+        <if test="type==2">
+            date_format(t.completionDate, '%Y-%u')=date_format(date(#{date}, '%Y-%u')
+        </if>
+        <if test="type==3">
+            date_format(t.completionDate, '%Y-%m')=date_format(date(#{date}, '%Y-%m')
+        </if>
+    </select>
+
+
+
+    <select id="selectToRemindInspectionTechinican" resultType="java.util.Map">
+        SELECT
+        t.id,
+        u.id AS userId
+        FROM
+        dc_yd_inspection_task t
+        LEFT JOIN dc_user u ON t.departmentId = u.departmentId
+        AND u. STATUS = 0
+        WHERE
+        1 = 1
+        and 	TIMESTAMPDIFF(MINUTE,NOW(),t.planCompletionDate) &lt; 20
+        and   TIMESTAMPDIFF(MINUTE,NOW(),t.planCompletionDate)>15
+        AND t.remindStatus = 0  limit 0,1000
+    </select>
+    <select id="countFinishedInspectionTaskByInspectionPlan" resultType="java.lang.Integer">
+        SELECT count(*) FROM dc_yd_inspection_task as t
+        WHERE t.completionDate IS NOT NULL
+        <if test="inspectionPlanList != null and inspectionPlanList.size()>0">
+            AND t.inspectionPlanId IN
+            <foreach collection="inspectionPlanList" item="inspection" open="(" close=")" separator=",">
+                #{inspection.id}
+            </foreach>
+        </if>
+        <if test="startDate != null and startDate != ''">
+            <if test="endDate != null and endDate != ''">
+                AND date(#{endDate}) >= t.completionDate >= date(#{startDate})
+            </if>
+        </if>
+    </select>
+
+
+    <update id="updateRemindStatusByIds">
+      update dc_yd_inspection_task t set t.remindStatus=1 where t.id in
+        <foreach collection="idList"  item="id" index="" separator=","  open="(" close=")" >
+            #{id}
+        </foreach>
+    </update>
+
+
+
+    <select id="selectHistoryInspectionTaskByGroupId" resultType="java.util.Map">
+        select t.id,
+        case
+        when t.period =1 then '日常巡检'
+        when t.period=2 then '每周巡检'
+        when t.period=3 then '月度巡检'
+        when t.period=4 then '季度巡检'
+        when t.period=5 then '年度巡检' else '未知'
+        end as periodName,
+        DATE_FORMAT(t.planCompletionDate ,'%Y-%m-%d %H:%i')  as planCompletionDate,
+        DATE_FORMAT(t.completionDate ,'%Y-%m-%d %H:%i')  as completionDate,
+        u.uname as userName,
+        (select GROUP_CONCAT(g.groupName) from dc_yd_inspection_plan_group pg INNER JOIN dc_yd_device_group g on pg.groupId=g.id where pg.inspectionPlanId=t.inspectionPlanId) as deviceGroups,
+        dd.departmentName
+        from dc_yd_inspection_task t left join dc_yd_inspection_plan p on t.inspectionPlanId=p.id
+        left join dc_yd_inspection_plan_group g on g.inspectionPlanId=p.id
+        left join dc_user u on t.completedBy =u.id
+        left join dc_department dd on dd.id=p.departmentId
+where  g.groupId=#{groupId}
+ and (t.completionDate is not null and t.completionDate!='')
+ <if test="toDate!=null and toDate!=''">
+     and t.completionDate    &lt;= #{toDate}
+ </if>
+        <if test="fromDate!=null and fromDate !=''">
+ and t.completionDate > #{fromDate}
+        </if>
+        order by t.completionDate desc
+        limit #{start},#{pageSize}
+    </select>
+
+
+
+    <select id="selectHistoryInspectionTaskCountByGroupId" resultType="int">
+        select
+        count(1)
+        from dc_yd_inspection_task t left join dc_yd_inspection_plan p on t.inspectionPlanId=p.id
+        left join dc_yd_inspection_plan_group g on g.inspectionPlanId=p.id
+        left join dc_user u on t.completedBy =u.id
+        left join dc_department dd on dd.id=p.departmentId
+        where  g.groupId=#{groupId}
+        and (t.completionDate is not null and t.completionDate!='')
+        <if test="toDate!=null and toDate!=''">
+            and t.completionDate    &lt;= #{toDate}
+        </if>
+        <if test="fromDate!=null and fromDate !=''">
+            and t.completionDate > #{fromDate}
+        </if>
+    </select>
+
+
+
+    <select id="selectHistoryInspectionAndRepaireByUserId" resultType="java.util.Map">
+        select * from (
+
+                select r.id  ,
+                1 as ttype,
+                '维修' as ttypeName,
+                co.companyName,
+                r.repaireNo as no,
+                 DATE_FORMAT(r.dueTime ,'%Y-%m-%d %H:%i') as dueTime,
+                DATE_FORMAT(r.completeDate ,'%Y-%m-%d %H:%i') as completeDate,
+                case
+                when r.completeDate is null or r.completeDate =''    then '未完成'
+                when r.completeDate is not null and r.completeDate!=''  and r.completeDate>r.dueTime then '逾期完成'
+                when r.completeDate is not null and r.completeDate!='' and r.completeDate  &lt;=r.dueTime then '已完成'
+                end as completionStatus,
+
+                case
+                when r.completeDate is null or r.completeDate =''    then 0
+                when r.completeDate is not null and r.completeDate!=''  and r.completeDate>r.dueTime then 2
+                when r.completeDate is not null and r.completeDate!='' and r.completeDate  &lt;=r.dueTime then  1
+                end as completionFlag,
+                 (select GROUP_CONCAT(de.deviceName) from dc_yd_repaire_device d left join dc_yd_device de on d.deviceId=de.id where d.repaireId=r.id group by d.repaireId)  as deviceNames
+                from dc_yd_repaire r  left join dc_yd_repaire_device re on r.id=re.repaireId
+                left join dc_company  co on co.id=r.companyId
+                 where r.updatedBy4=#{userId}
+                and r.pcCompanyId=#{pcCompanyId}
+                 <if test="fromDate!=null and fromDate!=''">
+                     and r.completeDate>#{fromDate}
+                 </if>
+                  <if test="toDate!=null and toDate!=''">
+                      and r.completeDate &lt;=#{toDate}
+                  </if>
+
+        union
+                    select
+                    t.id,
+                    2 as ttype,
+                    '巡检' as ttypeName,
+                    co.companyName,
+                    t.taskNo as no,
+                     DATE_FORMAT(t.planCompletionDate ,'%Y-%m-%d %H:%i') as dueTime,
+                            DATE_FORMAT(t.completionDate ,'%Y-%m-%d %H:%i') as completeDate,
+                    case
+                    when t.completionDate is null or t.completionDate =''    then '未完成'
+                    when t.completionDate is not null and t.completionDate!=''  and t.completionDate>t.planCompletionDate then '逾期完成'
+                    when t.completionDate is not null and t.completionDate!='' and t.completionDate &lt;=t.planCompletionDate then '已完成'
+                    end as completionStatus,
+                    case
+                    when t.completionDate is null or t.completionDate =''    then 0
+                    when t.completionDate is not null and t.completionDate!=''  and t.completionDate>t.planCompletionDate then 2
+                    when t.completionDate is not null and t.completionDate!='' and t.completionDate &lt;=t.planCompletionDate then 1
+                    end as completionFlag,
+                    (select GROUP_CONCAT(gr.groupName) from dc_yd_inspection_plan_group pg left join dc_yd_device_group gr on pg.groupId=gr.id where pg.inspectionPlanId=t.inspectionPlanId group by  pg.inspectionPlanId)   as deviceNames
+
+                    from dc_yd_inspection_task t
+        left join dc_company co on co.id=t.companyId
+
+        where t.completedBy=#{userId}
+        and  t.pcCompanyId=#{pcCompanyId}
+        <if test="fromDate!=null and fromDate!=''">
+                        and t.completionDate>#{fromDate}
+                    </if>
+                    <if test="toDate!=null and toDate!=''">
+                        and t.completionDate &lt;=#{toDate}
+                    </if>
+
+        ) tt
+
+        where 1=1
+            <if test="ttype!=null">
+                and tt.ttype=#{ttype}
+            </if>
+        order by tt.completeDate desc
+
+        limit #{start},#{pageSize}
+    </select>
+
+
+    <select id="selectHistoryInspectionAndRepaireCountByUserId" resultType="int">
+        select count(1) from (
+        select r.id  ,
+        1 as ttype,
+        DATE_FORMAT(r.dueTime ,'%Y-%m-%d %H:%i') as dueTime,
+        DATE_FORMAT(r.completeDate ,'%Y-%m-%d %H:%i') as completeDate,
+        (select GROUP_CONCAT(de.deviceName) from dc_yd_repaire_device d left join dc_yd_device de on d.deviceId=de.id where d.repaireId=r.id group by d.repaireId)  as deviceNames
+        from dc_yd_repaire r  left join dc_yd_repaire_device re on r.id=re.repaireId
+        where r.updatedBy4=#{userId}
+        and r.pcCompanyId=#{pcCompanyId}
+        <if test="fromDate!=null and fromDate!=''">
+            and r.completeDate>#{fromDate}
+        </if>
+        <if test="toDate!=null and toDate!=''">
+            and r.completeDate &lt;=#{toDate}
+        </if>
+
+        union
+        select
+        t.id,
+        2 as ttype,
+        DATE_FORMAT(t.planCompletionDate ,'%Y-%m-%d %H:%i') as dueTime,
+        DATE_FORMAT(t.completionDate ,'%Y-%m-%d %H:%i') as completeDate,
+        (select GROUP_CONCAT(gr.groupName) from dc_yd_inspection_plan_group pg left join dc_yd_device_group gr on pg.groupId=gr.id where pg.inspectionPlanId=t.inspectionPlanId group by  pg.inspectionPlanId)   as deviceNames
+
+        from dc_yd_inspection_task t   where t.completedBy=#{userId}  and t.pcCompanyId=#{pcCompanyId}
+        <if test="fromDate!=null and fromDate!=''">
+            and t.completionDate>#{fromDate}
+        </if>
+        <if test="toDate!=null and toDate!=''">
+            and t.completionDate &lt;=#{toDate}
+        </if>
+
+        ) tt
+
+        where 1=1
+        <if test="ttype!=null">
+            and tt.ttype=#{ttype}
+        </if>
+
+     </select>
+    <select id="selectCurrentInspection" resultType="java.util.Map">
+        SELECT dyit.id,
+            date_format(dyit.createDate, '%Y-%m-%d') AS createDate,
+            dc.companyName,
+            dyd.deviceName,
+            CASE
+            WHEN dyit.period=1 THEN '日常巡检'
+            WHEN dyit.period=2 THEN '每周巡检'
+            WHEN dyit.period=3 THEN '每月巡检'
+            WHEN dyit.period=4 THEN '季度巡检'
+            WHEN dyit.period=5 THEN '年度巡检'
+            END period
+        FROM dc_yd_inspection_task dyit
+            LEFT JOIN dc_yd_device dyd ON dyd.id=#{deviceId}
+            LEFT JOIN dc_company dc ON dyit.companyId=dc.id
+            LEFT JOIN dc_yd_inspection_plan dyip
+                ON dyip.id IN (SELECT dc_yd_inspection_plan_group.inspectionPlanId
+                                             FROM dc_yd_inspection_plan_group
+                                             WHERE groupId IN (SELECT groupId
+                                                            FROM dc_yd_device
+                                                            WHERE dc_yd_device.id=#{deviceId})) AND dyip.endTime>now()
+            LEFT JOIN dc_department dd ON dd.id=dyit.departmentId
+        WHERE dyit.inspectionPlanId=dyip.id AND completionDate IS NULL ORDER BY dyit.planCompletionDate LIMIT 1
+    </select>
+    <select id="countUserInspection" resultType="java.lang.Integer">
+        SELECT count(*) FROM dc_yd_inspection_plan dyip
+            LEFT JOIN dc_user du ON du.id=#{userId}
+        WHERE dyip.pcCompanyId=#{pcCompanyId} AND dyip.departmentId=du.departmentId AND dyip.endTime>now()
+    </select>
+
+
+</mapper>

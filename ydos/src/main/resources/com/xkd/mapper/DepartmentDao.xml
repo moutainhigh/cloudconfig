@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.DepartmentDao">
+
+
+    <insert id="insert" parameterType="java.util.Map">
+        INSERT INTO dc_department
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null"> id, </if>
+            <if test="departmentName != null"> departmentName, </if>
+            <if test="remark != null"> remark, </if>
+            <if test="principalId != null"> principalId, </if>
+            <if test="parentId != null"> parentId, </if>
+            <if test="status != null"> status, </if>
+            <if test="isTeam != null"> isTeam, </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null"> #{id}, </if>
+            <if test="departmentName != null"> #{departmentName}, </if>
+            <if test="remark != null"> #{remark}, </if>
+            <if test="principalId != null"> #{principalId}, </if>
+            <if test="parentId != null"> #{parentId}, </if>
+            <if test="status != null"> #{status}, </if>
+            <if test="isTeam != null"> #{isTeam}, </if>
+        </trim>
+    </insert>
+
+    <update id="update"  parameterType="java.util.Map">
+        UPDATE dc_department
+        <set>
+            <if test="id != null"> id = #{id}, </if>
+            <if test="departmentName != null"> departmentName = #{departmentName}, </if>
+            <if test="remark != null"> remark = #{remark}, </if>
+            <if test="principalId != null"> principalId = #{principalId}, </if>
+            <if test="parentId != null"> parentId = #{parentId}, </if>
+            <if test="status != null"> status = #{status} </if>
+            <if test="isTeam != null"> isTeam = #{isTeam} </if>
+        </set>
+         WHERE id = #{id}
+    </update>
+    
+     <select id="selectAllDepartment" resultType="java.util.Map">
+		SELECT
+			d.id,
+			d.departmentName,
+			d.remark,
+			d.principalId,
+			d.parentId,
+			u.uname as principal,
+			d.isTeam
+		FROM
+			dc_department d left join dc_user u on d.principalId=u.id where d.status=0
+     </select>
+     
+     <delete id="delete">
+     	update  dc_department set status=2 where id=#{id}
+     </delete>
+
+
+            <select id="searchTeamByPcCompanyId" resultType="java.util.Map">
+              SELECT
+                d.id,
+                d.departmentName,
+                du1.uname AS teamLeader,
+                IFNULL(u.count, 0) AS count
+                FROM
+                dc_department d
+                LEFT JOIN (
+                SELECT
+                count(1) AS count,
+                u.departmentId
+                FROM
+                dc_user u
+                WHERE
+                u.status=0
+                <if test="pcCompanyId!=null">
+                    and
+                    u.pcCompanyId =#{pcCompanyId}
+                </if>
+                GROUP BY
+                u.departmentId
+                ) u ON d.id = u.departmentId
+                LEFT JOIN dc_user du1 ON d.principalId = du1.id
+                WHERE
+                d.isTeam = 1 and d.status=0
+                <if test="departmentName!=null">
+                    and (d.departmentName like '%${departmentName}%' or du1.uname like '%${departmentName}%')
+                </if>
+                <if test="pcCompanyId!=null">
+                    AND d.parentId=#{pcCompanyId}
+                </if>
+
+                limit #{start},#{pageSize}
+
+            </select>
+
+    <select id="searchTeamCountByPcCompanyId" resultType="java.lang.Integer">
+        SELECT
+          count(1)
+        FROM
+        dc_department d
+        LEFT JOIN (
+        SELECT
+        count(1) AS count,
+        u.departmentId
+        FROM
+        dc_user u
+        WHERE
+        u.status=0
+        <if test="pcCompanyId!=null">
+            and
+            u.pcCompanyId =#{pcCompanyId}
+        </if>
+        GROUP BY
+        u.departmentId
+        ) u ON d.id = u.departmentId
+        LEFT JOIN dc_user du1 ON d.principalId = du1.id
+        WHERE
+        d.isTeam = 1 and d.status=0
+        <if test="departmentName!=null">
+            and (d.departmentName like '%${departmentName}%' or du1.uname like '%${departmentName}%')
+        </if>
+        <if test="pcCompanyId!=null">
+            AND d.parentId=#{pcCompanyId}
+        </if>
+
+
+    </select>
+     
+     
+     <select id="selectTeamByNameAndPcCompanyId" resultType="java.util.Map">
+		SELECT
+			d.id,
+			d.departmentName,
+			d.remark,
+			d.principalId,
+			d.parentId,
+			u.uname AS principal,
+			d.isTeam
+		FROM
+			dc_department d
+		LEFT JOIN dc_user u ON d.principalId = u.id
+		WHERE
+			d.departmentName = #{departmentName}  and d.status=0
+			<if test="pcCompanyId!=null and pcCompanyId!=''">
+                and d.parentId=#{pcCompanyId}
+            </if>
+     </select>
+
+
+    <select id="selectDepartmentById" resultType="java.util.Map">
+        SELECT
+        d.id,
+        d.departmentName,
+        d.remark,
+        d.principalId,
+        d.parentId,
+        u.uname AS principal,
+        d.isTeam
+        FROM
+        dc_department d
+        LEFT JOIN dc_user u ON d.principalId = u.id
+        WHERE
+        d.id = #{id}
+    </select>
+
+
+    <select id="getTreeByPid" resultType="java.util.Map">
+        SELECT
+        d.id,
+        d.departmentName,
+        d.remark,
+        d.principalId,
+        d.parentId,
+        d.isTeam
+        FROM
+        dc_department d  where parentId = #{id} and d.status=0
+    </select>
+
+    <select id="getChildTreeUserSum" resultType="java.lang.Integer" >
+        select count(*) from dc_user where status = 0   and platform = '1'
+        <if test="childUserId != null and childUserId.size > 0 ">
+           and (
+            <foreach collection="childUserId" item="id"  separator="or">
+                departmentId  = #{id}
+            </foreach>
+            )
+        </if>
+
+
+    </select>
+
+
+    <select id="selectDepartmentByIds" resultType="java.util.Map">
+         SELECT
+        d.id,
+        d.departmentName,
+        d.remark,
+        d.principalId,
+        d.parentId,
+        d.isTeam
+        FROM
+        dc_department d  where id in
+        <foreach collection="idList"  item="id" index="" separator=","  open="(" close=")" >
+            #{id}
+        </foreach>
+        limit #{start},#{pageSize}
+    </select>
+
+    <select id="selectDepartmentCountByIds" resultType="java.lang.Integer">
+        SELECT
+          count(1)
+        FROM
+        dc_department d  where id in
+        <foreach collection="idList"  item="id" index="" separator=","  open="(" close=")" >
+            #{id}
+        </foreach>
+    </select>
+
+
+
+    <update id="updateDataDepartmentId">
+      update  ${table} d set d.departmentId=#{newDepartmentId} where d.departmentId
+      in
+        <foreach collection="departmentIdList"  item="id" index="" separator=","  open="(" close=")" >
+            #{id}
+        </foreach>
+    </update>
+
+
+    <select id="selectDataCount" resultType="java.lang.Integer">
+        select count(1) from ${table}  where departmentId in
+        <foreach collection="departmentIdList"  item="id" index="" separator=","  open="(" close=")" >
+            #{id}
+        </foreach>
+    </select>
+
+
+
+    <select id="selectSuperRoleDepartment" resultType="java.util.Map">
+    SELECT
+            d.id,
+            d.departmentName,
+            d.remark,
+            d.principalId,
+            d.parentId,
+            d.isTeam
+            FROM
+            dc_department d  where id ='1'
+             or parentId='1' and d.status=0
+    </select>
+
+    <select id="selectAllCompany" resultType="java.lang.String">
+        SELECT id FROM dc_department WHERE isTeam=0
+    </select>
+    <select id="selectAllPcCompanyInfo" resultType="java.util.Map">
+        SELECT id, departmentName, date_format(dateFrom, '%Y-%M-%d') AS dateFrom, date_format(dateTo,'%Y-%M-%d') AS dateTo FROM dc_department WHERE isTeam=0 LIMIT #{start}, #{pageSize}
+    </select>
+    <select id="countAllPcCompany" resultType="java.lang.Integer">
+        SELECT count(*) FROM dc_department WHERE isTeam = 0
+    </select>
+
+
+</mapper>

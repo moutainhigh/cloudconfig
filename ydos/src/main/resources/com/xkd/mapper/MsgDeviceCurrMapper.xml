@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.MsgDeviceCurrMapper" >
+    <insert id="insertmsg">
+        INSERT INTO msg_device_curr
+        (id, userid, uuid, datetime, eventid, box_id, device_id) VALUES
+            (#{id}, #{userId}, #{uuid},now(), #{eventId}, #{boxId}, #{deviceId})
+    </insert>
+    <insert id="insertevent">
+        INSERT INTO msg_event_text (id, msg_zh, msg_en, msg_type) VALUES (#{eventId}, #{msg_zh},  #{msg_zh}, 1)
+    </insert>
+    <update id="ignoreMessage">
+        UPDATE msg_device_curr SET `ignore`=1
+    </update>
+
+    <select id="selectAbnormalDeviceMsg" resultType="java.util.Map">
+        SELECT *
+        FROM msg_event_text
+        WHERE
+            id = (SELECT eventid
+                  FROM msg_device_curr
+                  WHERE msg_device_curr.userid = #{userId}
+                        AND msg_device_curr.box_id=#{boxId}
+                        AND msg_device_curr.ignore=0
+            )
+    </select>
+</mapper>

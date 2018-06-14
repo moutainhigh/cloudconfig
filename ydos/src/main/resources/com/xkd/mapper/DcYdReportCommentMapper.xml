@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.DcYdReportCommentMapper">
+    <insert id="insert" parameterType="java.util.Map">
+        INSERT INTO dc_yd_report_comment (id, reportId, description, createDate, createdBy)
+        VALUES (#{id}, #{reportId}, #{description}, #{createDate}, #{createBy})
+    </insert>
+
+    <delete id="delete">
+        DELETE FROM dc_yd_report_comment WHERE id=#{commentId}
+    </delete>
+
+    <update id="update">
+        UPDATE dc_yd_report_comment
+        <set>
+            <if test="description != null ">
+                description=#{description}
+            </if>
+        </set>
+        WHERE id=#{commentId}
+    </update>
+
+    <select id="list" resultType="java.util.Map">
+        SELECT * FROM dc_yd_report_comment WHERE reportId=#{reportId} ORDER BY createDate
+    </select>
+
+</mapper>

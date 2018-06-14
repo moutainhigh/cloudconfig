@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xkd.mapper.CarouseMapper">
+  <insert id="insert">
+    insert into dc_yd_carouse(id,url,ttype,pcCompanyId) values (#{id},#{url},#{ttype},#{pcCompanyId})
+  </insert>
+
+
+  <insert id="deleteByTType">
+    delete from dc_yd_carouse where ttype=#{ttype} and pcCompanyId=#{pcCompanyId}
+  </insert>
+
+
+  <insert id="deleteById">
+    delete from dc_yd_carouse where id=#{id}
+  </insert>
+
+
+
+  <select id="selectByTType" resultType="java.util.Map">
+     select c.id,c.url from dc_yd_carouse c where c.ttype=#{ttype} and c.pcCompanyId in
+    <foreach collection="pcCompanyIdList"  item="id" index="" separator=","  open="(" close=")" >
+      #{id}
+    </foreach>
+  </select>
+
+</mapper>

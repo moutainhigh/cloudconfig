@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.ContractMapper">
+
+    <insert id="insertContact">
+        INSERT INTO dc_yd_contract
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null"> id, </if>
+            <if test="contractName != null"> contractName, </if>
+            <if test="contractNo != null"> contractNo, </if>
+            <if test="companyId != null"> companyId, </if>
+            <if test="pcCompanyId != null"> pcCompanyId, </if>
+            <if test="type != null"> type, </if>
+            <if test="startDate != null"> startDate, </if>
+            <if test="endDate != null"> endDate, </if>
+            <if test="responsibleUserId != null"> responsibleUserId, </if>
+            <if test="moneyAmount != null"> moneyAmount, </if>
+            <if test="createdBy != null"> createdBy, </if>
+            <if test="updatedBy != null"> updatedBy, </if>
+            <if test="createDate != null"> createDate, </if>
+            <if test="updateDate != null"> updateDate, </if>
+            <if test="status != null"> status, </if>
+            <if test="deviceNum != null"> deviceNum, </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null"> #{id}, </if>
+            <if test="contractName != null"> #{contractName}, </if>
+            <if test="contractNo != null"> #{contractNo}, </if>
+            <if test="companyId != null"> #{companyId}, </if>
+            <if test="pcCompanyId != null"> #{pcCompanyId}, </if>
+            <if test="type != null"> #{type}, </if>
+            <if test="startDate != null"> #{startDate}, </if>
+            <if test="endDate != null"> #{endDate}, </if>
+            <if test="responsibleUserId != null"> #{responsibleUserId}, </if>
+            <if test="moneyAmount != null"> #{moneyAmount}, </if>
+            <if test="createdBy != null"> #{createdBy}, </if>
+            <if test="updatedBy != null"> #{updatedBy}, </if>
+            <if test="createDate != null"> #{createDate}, </if>
+            <if test="updateDate != null"> #{updateDate}, </if>
+            <if test="status != null"> #{status}, </if>
+            <if test="deviceNum != null"> #{deviceNum}, </if>
+        </trim>
+    </insert>
+
+    <update id="updateContact">
+        UPDATE dc_yd_contract
+        <set>
+            <if test="id != null"> id = #{id}, </if>
+            <if test="contractName != null"> contractName = #{contractName}, </if>
+            <if test="contractNo != null"> contractNo = #{contractNo}, </if>
+            <if test="companyId != null"> companyId = #{companyId}, </if>
+            <if test="pcCompanyId != null"> pcCompanyId = #{pcCompanyId}, </if>
+            <if test="type != null"> type = #{type}, </if>
+            <if test="startDate != null"> startDate = #{startDate}, </if>
+            <if test="endDate != null"> endDate = #{endDate}, </if>
+            <if test="responsibleUserId != null"> responsibleUserId = #{responsibleUserId}, </if>
+            <if test="moneyAmount != null"> moneyAmount = #{moneyAmount}, </if>
+            <if test="createdBy != null"> createdBy = #{createdBy}, </if>
+            <if test="updatedBy != null"> updatedBy = #{updatedBy}, </if>
+            <if test="createDate != null"> createDate = #{createDate}, </if>
+            <if test="updateDate != null"> updateDate = #{updateDate}, </if>
+            <if test="status != null"> status = #{status}, </if>
+            <if test="deviceNum != null"> deviceNum = #{deviceNum} </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <update id="deleteContractByIdList">
+        update dc_yd_contract t set t.status=2 where t.id in
+        <foreach collection="idList"  item="id" index="" separator=","  open="(" close=")" >
+            #{id}
+        </foreach>
+    </update>
+
+    <select id="selectContactByCompanyId" resultType="java.util.Map">
+               select
+                y.id,
+                y.contractName,
+                y.contractNo,
+                case
+                when 1=type then '巡检'
+                when 2=type then '保养'
+                when 4=type then '巡检+保养'
+                else '' end as type,
+                DATE_FORMAT(y.startDate ,'%Y-%m-%d %H:%i:%s')   as startDate,
+                DATE_FORMAT(y.endDate ,'%Y-%m-%d %H:%i:%s')   as endDate,
+                u1.uname as responsibleUserName,
+                u1.id as responsibleUserId,
+                u1.mobile,
+                y.deviceNum
+         from dc_yd_contract y
+					left join dc_user u1 on u1.id=y.responsibleUserId
+ where y.companyId=#{companyId} and y.status=0
+    </select>
+
+
+    <select id="selectContractByContractNo" resultType="java.util.Map">
+    select
+d.id,
+d.contractNo,
+d.contractName
+from dc_yd_contract d where d.contractNo=#{contractNo} and d.status=0
+</select>
+
+
+
+
+    <select id="selectContractByContractNoAndPcCompanyId" resultType="java.util.Map">
+        select
+        d.id,
+        d.contractNo,
+        d.contractName
+        from dc_yd_contract d where d.contractNo=#{contractNo} and d.pcCompanyId=#{pcCompanyId} and d.status=0
+    </select>
+
+
+
+    <select id="searchContract" resultType="java.util.Map">
+        SELECT
+        c.id,
+        c.contractName,
+        c.contractNo,
+        dc.companyName,
+        du.uname AS responsibleUser,
+        DATE_FORMAT(
+        c.startDate,
+        '%Y-%m-%d'
+        ) AS startDate,
+        DATE_FORMAT(
+        c.endDate,
+        '%Y-%m-%d'
+        ) AS endDate,
+         case when now()>c.endDate  then  0 else  ABS(datediff(now(), c.endDate)) end  AS dateDiff,
+        c.type,
+        case when 1=c.type then '巡检' when 2=c.type then '保养' when 4=c.type then '巡检+保养'  else '' end as typeName,
+
+        (select uu.uname from dc_company_contactor co left JOIN dc_user uu on co.userId=uu.id  where co.companyId=c.companyId limit 0,1) as contactorName
+
+        FROM
+        dc_yd_contract c
+        LEFT JOIN dc_company dc ON dc.id = c.companyId
+        LEFT JOIN dc_user du ON du.id = c.responsibleUserId
+        WHERE   c.status=0
+        <if test="contractName!=null and contractName!=''">
+            and  c.contractName LIKE '%${contractName}%'
+        </if>
+        <if test="contractNo!=null and contractNo!=''">
+            AND c.contractNo LIKE '%${contractNo}%'
+        </if>
+        <if test="type!=null">
+            AND c.type = #{type}
+        </if>
+        <if test="endDate!=null and endDate !=''  ">
+            AND DATE_FORMAT(
+            c.endDate,
+            '%Y-%m-%d'
+            ) = #{endDate}
+        </if>
+        <if test="pcCompanyId!=null and pcCompanyId!='' ">
+            and  c.pcCompanyId=#{pcCompanyId}
+        </if>
+
+        <if test="companyIdList!=null and companyIdList.size>0 ">
+            and c.companyId  in
+            <foreach collection="companyIdList"  item="companyId" index="" separator=","  open="(" close=")" >
+                #{companyId}
+            </foreach>
+        </if>
+        order by c.updateDate desc
+        limit #{start},#{pageSize}
+    </select>
+
+
+
+    <select id="searchContractCount" resultType="int">
+        SELECT
+        count(1)
+        FROM
+        dc_yd_contract c
+        LEFT JOIN dc_company dc ON dc.id = c.companyId
+        LEFT JOIN dc_user du ON du.id = c.responsibleUserId
+        WHERE   c.status=0
+        <if test="contractName!=null and contractName!=''">
+            and  c.contractName LIKE '%${contractName}%'
+        </if>
+        <if test="contractNo!=null and contractNo!=''">
+            AND c.contractNo LIKE '%${contractNo}%'
+        </if>
+        <if test="type!=null">
+            AND c.type = #{type}
+        </if>
+        <if test="endDate!=null and endDate !=''  ">
+            AND DATE_FORMAT(
+            c.endDate,
+            '%Y-%m-%d'
+            ) = #{endDate}
+        </if>
+        <if test="pcCompanyId!=null and pcCompanyId!='' ">
+            and  c.pcCompanyId=#{pcCompanyId}
+        </if>
+
+        <if test="companyIdList!=null and companyIdList.size>0 ">
+            and c.companyId  in
+            <foreach collection="companyIdList"  item="companyId" index="" separator=","  open="(" close=")" >
+                #{companyId}
+            </foreach>
+        </if>
+    </select>
+
+
+
+    <select id="selectContractById" resultType="java.util.Map">
+        SELECT
+           t. `id`,
+            t.`contractName`,
+            t.`contractNo`,
+            t.`companyId`,
+            t.`pcCompanyId`,
+            t.`type`,
+            case when t.type=1 then '巡检' when  t.type=2 then '保养'  when t.type=4 then  '维修加保养' else ''  end as typeName,
+            DATE_FORMAT(
+            t.startDate,
+            '%Y-%m-%d'
+            ) AS startDate,
+            t.`responsibleUserId`,
+            u.uname as responsibleUserName,
+            t.`moneyAmount`,
+            DATE_FORMAT(
+            t.endDate,
+            '%Y-%m-%d'
+            ) AS endDate,
+            ct.companyName,
+            t.deviceNum
+        FROM
+        dc_yd_contract t left join dc_user  u on t.responsibleUserId=u.id
+        left join dc_company  ct on ct.id=t.companyId
+        WHERE
+        t.id = #{id}
+    </select>
+
+
+
+    <select id="selectContractByGroupId" resultType="java.util.Map">
+        SELECT
+        y.id,
+        y.contractName,
+        y.contractNo,
+        CASE
+        WHEN 1 = type THEN
+        '巡检'
+        WHEN 2 = type THEN
+        '保养'
+        WHEN 4 = type THEN
+        '巡检+保养'
+        ELSE
+        ''
+        END AS type,
+        DATE_FORMAT(
+        y.startDate,
+        '%Y-%m-%d'
+        ) AS startDate,
+        DATE_FORMAT(
+        y.endDate,
+        '%Y-%m-%d'
+        ) AS endDate,
+        u1.uname AS responsibleUserName,
+        u1.id AS responsibleUserId,
+        u1.mobile
+        FROM
+        dc_yd_contract y
+        LEFT JOIN dc_user u1 ON u1.id = y.responsibleUserId
+        WHERE
+        y.id IN (
+        SELECT
+        p.contractId
+        FROM
+        dc_yd_inspection_plan p
+        INNER JOIN dc_yd_inspection_plan_group pg ON p.id = pg.inspectionPlanId
+        WHERE
+        pg.groupId = #{groupId}
+        <if test="pcCompanyId!=null and pcCompanyId!=''">
+            and p.pcCompanyId=#{pcCompanyId}
+        </if>
+
+        )
+        and y.status=0
+    </select>
+
+    <select id="selectContractCountByGroupId" resultType="int">
+        SELECT
+        count(1)
+        FROM
+        dc_yd_contract y
+        LEFT JOIN dc_user u1 ON u1.id = y.responsibleUserId
+        WHERE
+        y.id IN (
+        SELECT
+        p.contractId
+        FROM
+        dc_yd_inspection_plan p
+        INNER JOIN dc_yd_inspection_plan_group pg ON p.id = pg.inspectionPlanId
+        WHERE
+        pg.groupId = #{groupId}
+        <if test="pcCompanyId!=null and pcCompanyId!=''">
+            and p.pcCompanyId=#{pcCompanyId}
+        </if>
+
+        )
+        and y.status=0
+    </select>
+
+
+     <select id="selectContractStatistic" resultType="int">
+         select count(1) from dc_yd_contract t  where t.status=0
+         and t.pcCompanyId=#{pcCompanyId}
+          <if test="toTime">
+          and t.endDate &lt;=#{toTime}
+          </if>
+         <if test="fromTime">
+             and t.endDate >#{fromTime}
+         </if>
+     </select>
+
+
+    <select id="selectDueContract" resultType="java.util.Map">
+
+        SELECT
+            t.id,
+            t.contractName,
+            t.contractNo,
+            t.companyId,
+            t.pcCompanyId,
+            t.type,
+            CASE
+            WHEN 1 = type THEN
+            '巡检'
+            WHEN 2 = type THEN
+            '保养'
+            WHEN 4 = type THEN
+            '巡检+保养'
+            ELSE
+            ''
+            END AS typeName,
+            DATE_FORMAT(
+            t.startDate,
+            '%Y-%m-%d'
+            ) AS startDate,
+            DATE_FORMAT(
+            t.endDate,
+            '%Y-%m-%d'
+            ) AS endDate,
+            t.startDate,
+            t.responsibleUserId,
+            u.uname as responsibleUser,
+            t.moneyAmount,
+            ct.companyName,
+            case when now()>t.endDate  then  0 else  ABS(datediff(now(), t.endDate)) end  AS dateDiff,
+        t.deviceNum
+        FROM
+        dc_yd_contract t left join dc_user  u on t.responsibleUserId=u.id
+        left join dc_company  ct on ct.id=t.companyId
+       where t.status=0
+        and t.pcCompanyId=#{pcCompanyId}
+
+        <if test="toTime">
+            and t.endDate &lt;=#{toTime}
+        </if>
+        <if test="fromTime">
+            and t.endDate >#{fromTime}
+        </if>
+    </select>
+    <select id="countContractByPcCompanyId" resultType="java.lang.Integer">
+        SELECT count(*) FROM dc_yd_contract WHERE pcCompanyId=#{pcCompanyId} AND #{end} > datediff(endDate, now()) AND datediff(endDate, now())>=#{start} AND endDate>=now() and status=0
+    </select>
+    <select id="listExpiringContractByPcCompanyId" resultType="java.util.Map">
+        SELECT ct.id, ct.contractNo, ct.contractName, cp.companyName, cp.contactName, u.uname, ct.endDate, datediff(endDate, now()) leftTime,
+            CASE
+            WHEN ct.type = 1 THEN '巡检'
+            WHEN ct.type = 2 THEN '维修'
+            WHEN ct.type = 3 THEN '巡检+维修'
+            END type
+        FROM dc_yd_contract ct
+            LEFT JOIN dc_company cp ON ct.companyId=cp.id
+            LEFT JOIN dc_user u ON u.id=ct.responsibleUserId
+        WHERE ct.pcCompanyId=#{pcCompanyId} AND 30 >= datediff(ct.endDate, now()) AND ct.endDate>=now() and ct.status=0
+        limit #{start}, #{pageSize}
+    </select>
+
+
+</mapper>

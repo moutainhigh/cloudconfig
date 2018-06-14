@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.DcYdReportSheetMapper">
+
+    <insert id="insert" parameterType="java.util.Map">
+        INSERT INTO dc_yd_report_sheet (id, reportId, objectId, flag, completeFlag)
+                VALUES (#{id}, #{reportId}, #{objectId}, #{flag}, #{completeFlag})
+    </insert>
+
+    <delete id="deleteById">
+        DELETE FROM dc_yd_report_sheet WHERE id=#{id}
+    </delete>
+
+    <delete id="deleteByReportId">
+        DELETE FROM dc_yd_report_sheet WHERE reportId=#{id}
+    </delete>
+
+    <update id="update" >
+        UPDATE dc_yd_report_sheet
+        <set>
+            <if test="completeFlag != null ">
+                flag=#{completeFlag}
+            </if>
+        </set>
+        WHERE id=#{id}
+    </update>
+
+    <select id="list" resultType="java.util.Map">
+        SELECT rt.id,
+            CASE
+            WHEN rt.flag=1  THEN concat('维修-',
+                                         (SELECT c.companyName FROM dc_yd_repaire r
+                                             LEFT JOIN dc_company c ON c.id=r.companyId
+                                         WHERE rt.objectId=r.id))
+            WHEN rt.flag=2 THEN concat('巡检-',
+                                       (SELECT c.companyName FROM dc_yd_inspection_task t
+                                           LEFT JOIN dc_company c ON c.id=t.companyId
+                                       WHERE rt.objectId=t.id))
+            END AS reportName,
+            CASE
+            WHEN rt.flag=1 THEN '维修'
+            WHEN rt.flag=2 THEN '巡检'
+            END flag,
+            CASE
+            WHEN rt.completeFlag=0 THEN '未完成'
+            WHEN rt.completeFlag=1 THEN '已完成'
+            END completeFlag
+        FROM dc_yd_report_sheet rt
+        WHERE reportId=#{reportId}
+    </select>
+
+    <select id="getRepairCompanyName" resultType="string">
+        SELECT dc_company.companyName FROM dc_company
+        WHERE dc_company.id =   (SELECT companyId FROM dc_yd_repaire WHERE dc_yd_repaire.id=#{objectId})
+    </select>
+
+    <select id="getInspectionCompanyName" resultType="string">
+        SELECT dc_company.companyName FROM dc_company
+        WHERE dc_company.id =   (SELECT companyId FROM dc_yd_inspection_task WHERE dc_yd_inspection_task.id=#{objectId})
+    </select>
+
+</mapper>

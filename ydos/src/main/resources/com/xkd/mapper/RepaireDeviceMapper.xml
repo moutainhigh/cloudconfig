@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xkd.mapper.RepaireDeviceMapper">
+  <select id="selectByRepaireId"  resultType="java.util.Map">
+    select
+      rd.repaireId,
+      rd.deviceId,
+      d.deviceName,
+      d.deviceType,
+      d.companyId,
+      c.companyName
+    from dc_yd_repaire_device rd
+    LEFT JOIN dc_yd_device d ON rd.deviceId = d.id
+    LEFT JOIN dc_company c ON d.companyId = c.id
+    where rd.repaireId = #{repaireId,jdbcType=CHAR}
+  </select>
+
+  <select id="selectUserContentByRepaireId"  resultType="java.util.Map">
+    select
+    rc.id,
+    rc.repaireId,
+    rc.userId,
+    (select uname from dc_user where id =rc.userId) as uname,
+    rc.content,
+    DATE_FORMAT(rc.createDate ,'%Y-%m-%d %H:%i')   as createDate,
+    rc.status
+    from dc_yd_repaire_content rc
+    where rc.repaireId = #{repaireId,jdbcType=CHAR} and status = 0
+  </select>
+
+  <insert id="insert">
+    insert into dc_yd_repaire_device(id, repaireId,deviceId) values
+    <foreach collection="repaireDeviceList"  item="repaireDevice" index="" separator="," >
+      (#{repaireDevice.id},#{repaireDevice.repaireId},#{repaireDevice.deviceId})
+    </foreach>
+  </insert>
+
+
+
+</mapper>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkd.mapper.UserExamMapper" >
+ 	<resultMap id="BaseResultMap" type="UserExam" >
+	    <id column="ID" property="id" jdbcType="INTEGER" />
+	    <result column="eid" property="eid" jdbcType="VARCHAR" />
+	    <result column="uid" property="uid" jdbcType="VARCHAR" />
+	  </resultMap>
+  <insert id="saveUserExam" parameterType="UserExam" keyProperty="id" useGeneratedKeys="true">
+    insert into dc_wj_user_exam (
+    	id,exerciseId,openId,scores,submitDate,meetingId
+    )values (
+    	#{id},
+   		#{exerciseId,jdbcType=VARCHAR},
+   		#{openId,jdbcType=VARCHAR},
+   		#{scores,jdbcType=VARCHAR},
+   		now(),
+   		#{meetingId,jdbcType=VARCHAR}
+    )
+  </insert>
+  
+  <select id="getNewsExer" resultMap="BaseResultMap">
+  	select id,submitDate from dc_wj_user_exam e where 1=1
+  	<if test="meetingId != null">
+  		and e.meetingId = #{meetingId}
+  	</if>
+  	 ORDER BY e.submitDate desc limit 1
+  </select>
+  <delete id="deleteExamAnswer">
+  	delete e,a from dc_wj_user_exam e LEFT JOIN dc_wj_user_answer a on a.userExamId = e.id where e.exerciseId = #{id} and e.openId = #{uid}
+  </delete>
+
+	<delete id="deleteByMeetingId">
+		delete e,a from dc_wj_user_exam e LEFT JOIN dc_wj_user_answer a on a.userExamId = e.id where e.meetingId=#{meetingId}
+	</delete>
+</mapper>
