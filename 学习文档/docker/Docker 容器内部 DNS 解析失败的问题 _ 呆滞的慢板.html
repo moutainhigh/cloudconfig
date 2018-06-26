@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<!-- saved from url=(0060)https://www.huangwenchao.com.cn/2016/05/docker-dns-fail.html -->
+<html lang="zh-CN"><!--<![endif]--><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	
+	<meta name="viewport" content="width=device-width">
+
+	<meta name="description" content="呆滞的慢板——一个热爱数学与艺术的程序猿，怀揣着微小的梦想成就自己的天地。关注 WEB 开发、互联网应用开发、算法、数据结构。欢迎交流关注。 -- www.huangwenchao.com.cn">
+
+	<meta name="keywords" content="呆滞的慢板,博客,程序猿,程序员,黄文超">
+<meta property="qc:admins" content="534005657760516775630176375636">
+
+	<title>Docker 容器内部 DNS 解析失败的问题 | 呆滞的慢板</title>
+	<link rel="shortcut icon" href="http://www.huangwenchao.com.cn/wp-content/themes/huangwenchao/images/favicon.ico" type="image/x-icon">
+	<link rel="profile" href="http://gmpg.org/xfn/11">
+	<link rel="pingback" href="http://www.huangwenchao.com.cn/xmlrpc.php">
+	<!--[if lt IE 9]>
+	<script src="http://www.huangwenchao.com.cn/wp-content/themes/huangwenchao/js/html5.js"></script>
+	<![endif]-->
+	<!-- link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">-->
+        <!--<script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" data-appid="101173218" data-redirecturi="http://www.huangwenchao.com.cn/wp-content/themes/huangwenchao/qq-oauth.php" charset="utf-8"></script>-->
+	<link rel="dns-prefetch" href="https://fonts.googleapis.com/">
+<link rel="dns-prefetch" href="https://s.w.org/">
+<link rel="alternate" type="application/rss+xml" title="呆滞的慢板 » Feed" href="http://www.huangwenchao.com.cn/feed">
+<link rel="alternate" type="application/rss+xml" title="呆滞的慢板 » 评论Feed" href="http://www.huangwenchao.com.cn/comments/feed">
+<link rel="alternate" type="application/rss+xml" title="呆滞的慢板 » Docker 容器内部 DNS 解析失败的问题评论Feed" href="http://www.huangwenchao.com.cn/2016/05/docker-dns-fail.html/feed">
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.3\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.3\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/www.huangwenchao.com.cn\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.8.2"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,56826,8203,55356,56819),0,0),c=j.toDataURL(),b!==c&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55358,56794,8205,9794,65039),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55358,56794,8203,9794,65039),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script><script src="http://www.huangwenchao.com.cn/wp-includes/js/wp-emoji-release.min.js?ver=4.8.2" type="text/javascript" defer=""></script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel="stylesheet" id="twentyfourteen-lato-css" href="./Docker 容器内部 DNS 解析失败的问题 _ 呆滞的慢板_files/css" type="text/css" media="all">
+<link rel="stylesheet" id="genericons-css" href="http://www.huangwenchao.com.cn/wp-content/themes/huangwenchao/genericons/genericons.css?ver=3.0.2" type="text/css" media="all">
+<link rel="stylesheet" id="twentyfourteen-style-css" href="http://www.huangwenchao.com.cn/wp-content/themes/huangwenchao/style.css?ver=4.8.2" type="text/css" media="all">
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='twentyfourteen-ie-css'  href='http://www.huangwenchao.com.cn/wp-content/themes/huangwenchao/css/ie.css?ver=20131205' type='text/css' media='all' />
+<![endif]-->
+<script type="text/javascript" src="http://www.huangwenchao.com.cn/wp-includes/js/jquery/jquery.js?ver=1.12.4"></script>
+<script type="text/javascript" src="http://www.huangwenchao.com.cn/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1"></script>
+<link rel="https://api.w.org/" href="http://www.huangwenchao.com.cn/wp-json/">
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://www.huangwenchao.com.cn/xmlrpc.php?rsd">
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://www.huangwenchao.com.cn/wp-includes/wlwmanifest.xml"> 
+<link rel="prev" title="如何在 docker 宿主机将 .sql 数据库导入 mariadb/mysql 容器" href="http://www.huangwenchao.com.cn/2016/05/docker-mysql-import.html">
+<link rel="next" title="解决 PIP 缓慢和超时的问题" href="http://www.huangwenchao.com.cn/2016/05/pip-mirror.html">
+<meta name="generator" content="WordPress 4.8.2">
+<link rel="canonical" href="http://www.huangwenchao.com.cn/2016/05/docker-dns-fail.html">
+<link rel="shortlink" href="http://www.huangwenchao.com.cn/?p=3080">
+<link rel="alternate" type="application/json+oembed" href="http://www.huangwenchao.com.cn/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fwww.huangwenchao.com.cn%2F2016%2F05%2Fdocker-dns-fail.html">
+<link rel="alternate" type="text/xml+oembed" href="http://www.huangwenchao.com.cn/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fwww.huangwenchao.com.cn%2F2016%2F05%2Fdocker-dns-fail.html&amp;format=xml">
+    <script type="text/javascript" src="http://www.huangwenchao.com.cn/wp-content/plugins/wp-highlightjs/highlight.pack.js"></script>
+    <script type="text/javascript">hljs.initHighlightingOnLoad();</script>
+    <link rel="stylesheet" href="http://www.huangwenchao.com.cn/wp-content/plugins/wp-highlightjs/styles/railscasts.css">
+    <style>pre { padding: 1px; font-size: inherit; font-family: SimSun, monospace, sans-serif; }
+code.hljs { padding: 5px; font-size: inherit; border: none; }
+code { background: #F0F0F0; font-size: inherit; border: 1px solid #E5E5E5; padding: 1px 4px; }</style>
+</head>
+
+<body class="post-template-default single single-post postid-3080 single-format-standard masthead-fixed singular">
+<div id="page" class="hfeed site">
+	
+	<header id="masthead" class="site-header" role="banner">
+		<div class="header-main">
+			<h1 class="site-title"><a href="http://www.huangwenchao.com.cn/" rel="home">呆滞的慢板</a></h1>
+
+			<div class="search-toggle">
+				<a href="https://www.huangwenchao.com.cn/2016/05/docker-dns-fail.html#search-container" class="screen-reader-text">搜索</a>
+			</div>
+
+			<nav id="primary-navigation" class="site-navigation primary-navigation" role="navigation">
+				<h1 class="menu-toggle">主菜单</h1>
+				<a class="screen-reader-text skip-link" href="https://www.huangwenchao.com.cn/2016/05/docker-dns-fail.html#content">跳至内容</a>
+				<div class="menu-%e4%b8%bb%e8%8f%9c%e5%8d%95-container"><ul id="menu-%e4%b8%bb%e8%8f%9c%e5%8d%95" class="nav-menu"><li id="menu-item-95" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-95"><a href="http://www.huangwenchao.com.cn/">首页</a></li>
+<li id="menu-item-24" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-24"><a href="http://www.huangwenchao.com.cn/category/blog">日志</a>
+<ul class="sub-menu">
+	<li id="menu-item-108" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-108"><a href="http://www.huangwenchao.com.cn/category/blog/work">工作日志</a></li>
+	<li id="menu-item-109" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-109"><a href="http://www.huangwenchao.com.cn/category/blog/live">生活日志</a></li>
+</ul>
+</li>
+<li id="menu-item-23" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-has-children menu-item-23"><a href="http://www.huangwenchao.com.cn/category/tech">技术</a>
+<ul class="sub-menu">
+	<li id="menu-item-192" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-192"><a href="http://www.huangwenchao.com.cn/category/tech/acm">ACM</a></li>
+	<li id="menu-item-94" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-94"><a href="http://www.huangwenchao.com.cn/category/books">学习资料</a></li>
+	<li id="menu-item-61" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-61"><a href="http://www.huangwenchao.com.cn/category/tech/website">建站技术</a></li>
+</ul>
+</li>
+<li id="menu-item-25" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-25"><a href="http://www.huangwenchao.com.cn/category/music">音乐</a>
+<ul class="sub-menu">
+	<li id="menu-item-48" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-48"><a href="http://www.huangwenchao.com.cn/category/music/albums">分享专辑</a></li>
+</ul>
+</li>
+<li id="menu-item-567" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-567"><a href="http://www.huangwenchao.com.cn/about">关于我</a></li>
+<li id="menu-item-841" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-841"><a title="RSS" href="http://www.huangwenchao.com.cn/feed"><span class="genericon genericon-feed"></span> RSS</a></li>
+</ul></div>			</nav>
+
+		</div>
+
+		<div id="search-container" class="search-box-wrapper hide">
+			<div class="search-box">
+				<form role="search" method="get" class="search-form" action="http://www.huangwenchao.com.cn/">
+				<label>
+					<span class="screen-reader-text">搜索：</span>
+					<input type="search" class="search-field" placeholder="搜索…" value="" name="s">
+				</label>
+				<input type="submit" class="search-submit" value="搜索">
+			</form>			</div>
+		</div>
+	</header><!-- #masthead -->
+
+	<div id="main" class="site-main">
+
+	<div id="primary" class="content-area">
+		<div id="content" class="site-content" role="main">
+			
+<article id="post-3080" class="post-3080 post type-post status-publish format-standard hentry category-web category-tech category-deploy-web tag-dns tag-docker">
+		<header class="entry-header">
+				<div class="entry-meta">
+			<span class="cat-links"><a href="http://www.huangwenchao.com.cn/category/tech/web" rel="category tag">WEB</a>、<a href="http://www.huangwenchao.com.cn/category/tech" rel="category tag">技术</a>、<a href="http://www.huangwenchao.com.cn/category/tech/web/deploy-web" rel="category tag">部署</a></span>
+		</div>
+		<h1 class="entry-title">Docker 容器内部 DNS 解析失败的问题</h1>		<div class="entry-meta">
+			<span class="entry-date"><a href="http://www.huangwenchao.com.cn/2016/05/docker-dns-fail.html" rel="bookmark"><time class="entry-date" datetime="2016-05-25T22:36:39+00:00">2016年5月25日</time></a></span> <span class="byline"><span class="author vcard"><a class="url fn n" href="http://www.huangwenchao.com.cn/author/huangwc" rel="author">huangwc</a></span></span>			<span class="comments-link"><a href="http://www.huangwenchao.com.cn/2016/05/docker-dns-fail.html#respond">发表回复</a></span>
+					</div><!-- .entry-meta -->
+	</header><!-- .entry-header -->
+
+		<div class="entry-content">
+		<p>上段时间遇到了 docker 容器内部 dns 解析失败的问题，发现在 docker-compose 启动容器之后，容器内部访问外部的接口总是提示无法解析 dns</p>
+
+<p>用 <code>docker exec -it contaner_name bash</code> 进去，ping 任何域名都是不通。</p>
+
+<p>最终解决是这个 issue 帖子。</p>
+
+<p><a href="https://github.com/docker/docker/issues/13381">https://github.com/docker/docker/issues/13381</a></p>
+
+<p>最终的解决办法在在于，停止 docker daemon，删掉 ifconfig 查到的 docker0 这个 bridge，再重新启动 docker daemon，问题解决：</p>
+
+<p>官方的解决脚本是这样的：</p>
+
+<pre><code>$ sudo apt-get install bridge-utils -y
+$ sudo service docker stop
+$ sudo ip link set dev docker0 down
+$ sudo brctl delbr docker0
+$ sudo service docker start
+$ docker network inspect bridge
+</code></pre>
+
+<p>实际上我做了这一步就成功了：</p>
+
+<pre><code>$ sudo service docker stop
+$ sudo ip link set dev docker0 down
+$ sudo service docker start
+</code></pre>
+
+<p>当然，我还需要 <code>docker-compose up -d</code> 启用我原来的容器。</p>
+
+<h1>UPDATE 2017-01-22</h1>
+
+<p>彻底解决办法：</p>
+
+<h3>1. 在 <code>docker-compose.yml</code> 的容器配置里面，加入 dns 配置：</h3>
+
+<pre><code>  xxx:
+    image: xxx
+    volumes:
+     - xxx:xxx
+     - xxx:xxx
+    links:
+     - xxxx:xxx
+    depends_on:
+     - xxxxxx
+    dns: 
+     - 119.29.29.29
+     - 180.76.76.76
+</code></pre>
+
+<h3>2. 参照 <a href="https://github.com/docker/docker/issues/541#issuecomment-32444639">https://github.com/docker/docker/issues/541#issuecomment-32444639</a></h3>
+
+<p>在 “/etc/default/docker” 添加：</p>
+
+<pre><code>DOCKER_OPTS="-dns 119.29.29.29 -dns 180.76.76.76"
+</code></pre>
+
+<p>然后重启</p>
+<hr><h5>【转载请附】愿以此功德，回向 &gt;&gt;</h5><p>原文链接：<a href="http://www.huangwenchao.com.cn/2016/05/docker-dns-fail.html">http://www.huangwenchao.com.cn/2016/05/docker-dns-fail.html【Docker 容器内部 DNS 解析失败的问题】</a></p>	</div><!-- .entry-content -->
+	
+	<footer class="entry-meta"><span class="tag-links"><a href="http://www.huangwenchao.com.cn/tag/dns" rel="tag">dns</a><a href="http://www.huangwenchao.com.cn/tag/docker" rel="tag">docker</a></span></footer>
+</article><!-- #post-## -->	<nav class="navigation post-navigation" role="navigation">
+		<h1 class="screen-reader-text">文章导航</h1>
+		<div class="nav-links">
+			<a href="http://www.huangwenchao.com.cn/2016/05/docker-mysql-import.html" rel="prev"><span class="meta-nav">上一文章</span>如何在 docker 宿主机将 .sql 数据库导入 mariadb/mysql 容器</a><a href="http://www.huangwenchao.com.cn/2016/05/pip-mirror.html" rel="next"><span class="meta-nav">下一文章</span>解决 PIP 缓慢和超时的问题</a>		</div><!-- .nav-links -->
+	</nav><!-- .navigation -->
+	
+<div id="comments" class="comments-area">
+
+	
+		<div id="respond" class="comment-respond">
+		<h3 id="reply-title" class="comment-reply-title">发表评论 <small><a rel="nofollow" id="cancel-comment-reply-link" href="https://www.huangwenchao.com.cn/2016/05/docker-dns-fail.html#respond" style="display:none;">取消回复</a></small></h3>			<form action="http://www.huangwenchao.com.cn/wp-comments-post.php" method="post" id="commentform" class="comment-form" novalidate="">
+				<p class="comment-notes"><span id="email-notes">电子邮件地址不会被公开。</span> 必填项已用<span class="required">*</span>标注</p><p class="comment-form-comment"><label for="comment">评论</label> <textarea id="comment" name="comment" cols="45" rows="8" maxlength="65525" aria-required="true" required="required"></textarea></p><p class="comment-form-author"><label for="author">姓名 <span class="required">*</span></label> <input id="author" name="author" type="text" value="" size="30" maxlength="245" aria-required="true" required="required"></p>
+<p class="comment-form-email"><label for="email">电子邮件 <span class="required">*</span></label> <input id="email" name="email" type="email" value="" size="30" maxlength="100" aria-describedby="email-notes" aria-required="true" required="required"></p>
+<p class="comment-form-url"><label for="url">站点</label> <input id="url" name="url" type="url" value="" size="30" maxlength="200"></p>
+<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="发表评论"> <input type="hidden" name="comment_post_ID" value="3080" id="comment_post_ID">
+<input type="hidden" name="comment_parent" id="comment_parent" value="0">
+</p><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="f931a63088"></p><p style="display: none;"><input type="hidden" id="ak_js" name="ak_js" value="231"></p>			</form>
+			</div><!-- #respond -->
+	
+</div><!-- #comments -->
+		</div><!-- #content -->
+	</div><!-- #primary -->
+
+
+<div id="content-sidebar" class="content-sidebar widget-area" role="complementary">
+	<aside id="text-4" class="widget widget_text"><h1 class="widget-title">Stack Overflow</h1>			<div class="textwidget"><a href="https://stackoverflow.com/users/2544762/fish-ball">
+<img src="https://stackoverflow.com/users/flair/2544762.png" width="208" height="58" alt="profile for fish_ball at Stack Overflow, Q&amp;A for professional and enthusiast programmers" title="profile for fish_ball at Stack Overflow, Q&amp;A for professional and enthusiast programmers">
+</a></div>
+		</aside><aside id="tag_cloud-2" class="widget widget_tag_cloud"><h1 class="widget-title">标签</h1><div class="tagcloud"><a href="http://www.huangwenchao.com.cn/tag/acm-2" class="tag-cloud-link tag-link-34 tag-link-position-1" style="font-size: 18.8pt;" aria-label="acm (31个项目)">acm</a>
+<a href="http://www.huangwenchao.com.cn/tag/algorithm" class="tag-cloud-link tag-link-62 tag-link-position-2" style="font-size: 18pt;" aria-label="algorithm (27个项目)">algorithm</a>
+<a href="http://www.huangwenchao.com.cn/tag/amqp" class="tag-cloud-link tag-link-640 tag-link-position-3" style="font-size: 10pt;" aria-label="amqp (6个项目)">amqp</a>
+<a href="http://www.huangwenchao.com.cn/tag/bash" class="tag-cloud-link tag-link-510 tag-link-position-4" style="font-size: 14pt;" aria-label="bash (13个项目)">bash</a>
+<a href="http://www.huangwenchao.com.cn/tag/cheatsheet" class="tag-cloud-link tag-link-397 tag-link-position-5" style="font-size: 10.666666666667pt;" aria-label="cheatsheet (7个项目)">cheatsheet</a>
+<a href="http://www.huangwenchao.com.cn/tag/css" class="tag-cloud-link tag-link-113 tag-link-position-6" style="font-size: 10pt;" aria-label="css (6个项目)">css</a>
+<a href="http://www.huangwenchao.com.cn/tag/deploy" class="tag-cloud-link tag-link-182 tag-link-position-7" style="font-size: 10.666666666667pt;" aria-label="deploy (7个项目)">deploy</a>
+<a href="http://www.huangwenchao.com.cn/tag/django" class="tag-cloud-link tag-link-109 tag-link-position-8" style="font-size: 21.6pt;" aria-label="django (51个项目)">django</a>
+<a href="http://www.huangwenchao.com.cn/tag/docker" class="tag-cloud-link tag-link-584 tag-link-position-9" style="font-size: 15.066666666667pt;" aria-label="docker (16个项目)">docker</a>
+<a href="http://www.huangwenchao.com.cn/tag/dp" class="tag-cloud-link tag-link-77 tag-link-position-10" style="font-size: 10pt;" aria-label="DP (6个项目)">DP</a>
+<a href="http://www.huangwenchao.com.cn/tag/featured" class="tag-cloud-link tag-link-164 tag-link-position-11" style="font-size: 10.666666666667pt;" aria-label="featured (7个项目)">featured</a>
+<a href="http://www.huangwenchao.com.cn/tag/gcj" class="tag-cloud-link tag-link-195 tag-link-position-12" style="font-size: 9.0666666666667pt;" aria-label="GCJ (5个项目)">GCJ</a>
+<a href="http://www.huangwenchao.com.cn/tag/gcj2015" class="tag-cloud-link tag-link-460 tag-link-position-13" style="font-size: 9.0666666666667pt;" aria-label="gcj2015 (5个项目)">gcj2015</a>
+<a href="http://www.huangwenchao.com.cn/tag/google-code-jam" class="tag-cloud-link tag-link-196 tag-link-position-14" style="font-size: 10pt;" aria-label="Google Code Jam (6个项目)">Google Code Jam</a>
+<a href="http://www.huangwenchao.com.cn/tag/html5" class="tag-cloud-link tag-link-429 tag-link-position-15" style="font-size: 9.0666666666667pt;" aria-label="html5 (5个项目)">html5</a>
+<a href="http://www.huangwenchao.com.cn/tag/http" class="tag-cloud-link tag-link-305 tag-link-position-16" style="font-size: 8pt;" aria-label="http (4个项目)">http</a>
+<a href="http://www.huangwenchao.com.cn/tag/java" class="tag-cloud-link tag-link-396 tag-link-position-17" style="font-size: 10.666666666667pt;" aria-label="java (7个项目)">java</a>
+<a href="http://www.huangwenchao.com.cn/tag/javascript" class="tag-cloud-link tag-link-118 tag-link-position-18" style="font-size: 13.066666666667pt;" aria-label="javascript (11个项目)">javascript</a>
+<a href="http://www.huangwenchao.com.cn/tag/jquery" class="tag-cloud-link tag-link-112 tag-link-position-19" style="font-size: 13.466666666667pt;" aria-label="jQuery (12个项目)">jQuery</a>
+<a href="http://www.huangwenchao.com.cn/tag/linux" class="tag-cloud-link tag-link-181 tag-link-position-20" style="font-size: 18.8pt;" aria-label="linux (31个项目)">linux</a>
+<a href="http://www.huangwenchao.com.cn/tag/model" class="tag-cloud-link tag-link-166 tag-link-position-21" style="font-size: 9.0666666666667pt;" aria-label="model (5个项目)">model</a>
+<a href="http://www.huangwenchao.com.cn/tag/nginx" class="tag-cloud-link tag-link-186 tag-link-position-22" style="font-size: 10.666666666667pt;" aria-label="nginx (7个项目)">nginx</a>
+<a href="http://www.huangwenchao.com.cn/tag/php" class="tag-cloud-link tag-link-102 tag-link-position-23" style="font-size: 15.733333333333pt;" aria-label="php (18个项目)">php</a>
+<a href="http://www.huangwenchao.com.cn/tag/python" class="tag-cloud-link tag-link-27 tag-link-position-24" style="font-size: 22pt;" aria-label="python (55个项目)">python</a>
+<a href="http://www.huangwenchao.com.cn/tag/rabbitmq" class="tag-cloud-link tag-link-642 tag-link-position-25" style="font-size: 10pt;" aria-label="RabbitMQ (6个项目)">RabbitMQ</a>
+<a href="http://www.huangwenchao.com.cn/tag/shell" class="tag-cloud-link tag-link-604 tag-link-position-26" style="font-size: 9.0666666666667pt;" aria-label="SHELL (5个项目)">SHELL</a>
+<a href="http://www.huangwenchao.com.cn/tag/ssh" class="tag-cloud-link tag-link-214 tag-link-position-27" style="font-size: 9.0666666666667pt;" aria-label="ssh (5个项目)">ssh</a>
+<a href="http://www.huangwenchao.com.cn/tag/ubuntu" class="tag-cloud-link tag-link-183 tag-link-position-28" style="font-size: 17.066666666667pt;" aria-label="ubuntu (23个项目)">ubuntu</a>
+<a href="http://www.huangwenchao.com.cn/tag/vim" class="tag-cloud-link tag-link-236 tag-link-position-29" style="font-size: 15.733333333333pt;" aria-label="vim (18个项目)">vim</a>
+<a href="http://www.huangwenchao.com.cn/tag/vimscript" class="tag-cloud-link tag-link-237 tag-link-position-30" style="font-size: 15.733333333333pt;" aria-label="vimscript (18个项目)">vimscript</a>
+<a href="http://www.huangwenchao.com.cn/tag/webstorm" class="tag-cloud-link tag-link-124 tag-link-position-31" style="font-size: 9.0666666666667pt;" aria-label="webstorm (5个项目)">webstorm</a>
+<a href="http://www.huangwenchao.com.cn/tag/wordpress" class="tag-cloud-link tag-link-111 tag-link-position-32" style="font-size: 16.266666666667pt;" aria-label="wordpress (20个项目)">wordpress</a>
+<a href="http://www.huangwenchao.com.cn/tag/zoj" class="tag-cloud-link tag-link-35 tag-link-position-33" style="font-size: 17.466666666667pt;" aria-label="zoj (25个项目)">zoj</a>
+<a href="http://www.huangwenchao.com.cn/tag/%e5%89%8d%e7%ab%af" class="tag-cloud-link tag-link-98 tag-link-position-34" style="font-size: 11.333333333333pt;" aria-label="前端 (8个项目)">前端</a>
+<a href="http://www.huangwenchao.com.cn/tag/%e5%8a%a8%e6%80%81%e8%a7%84%e5%88%92" class="tag-cloud-link tag-link-78 tag-link-position-35" style="font-size: 9.0666666666667pt;" aria-label="动态规划 (5个项目)">动态规划</a>
+<a href="http://www.huangwenchao.com.cn/tag/%e5%a4%87%e4%bb%bd" class="tag-cloud-link tag-link-138 tag-link-position-36" style="font-size: 9.0666666666667pt;" aria-label="备份 (5个项目)">备份</a>
+<a href="http://www.huangwenchao.com.cn/tag/%e6%95%b0%e6%8d%ae%e7%bb%93%e6%9e%84" class="tag-cloud-link tag-link-66 tag-link-position-37" style="font-size: 10.666666666667pt;" aria-label="数据结构 (7个项目)">数据结构</a>
+<a href="http://www.huangwenchao.com.cn/tag/%e6%b6%88%e6%81%af%e9%98%9f%e5%88%97" class="tag-cloud-link tag-link-650 tag-link-position-38" style="font-size: 9.0666666666667pt;" aria-label="消息队列 (5个项目)">消息队列</a>
+<a href="http://www.huangwenchao.com.cn/tag/%e7%ae%80%e5%8d%95%e9%a2%98" class="tag-cloud-link tag-link-74 tag-link-position-39" style="font-size: 11.333333333333pt;" aria-label="简单题 (8个项目)">简单题</a>
+<a href="http://www.huangwenchao.com.cn/tag/%e7%ae%97%e6%b3%95" class="tag-cloud-link tag-link-39 tag-link-position-40" style="font-size: 18.933333333333pt;" aria-label="算法 (32个项目)">算法</a>
+<a href="http://www.huangwenchao.com.cn/tag/%e7%bf%bb%e5%a2%99" class="tag-cloud-link tag-link-47 tag-link-position-41" style="font-size: 8pt;" aria-label="翻墙 (4个项目)">翻墙</a>
+<a href="http://www.huangwenchao.com.cn/tag/%e8%84%9a%e6%9c%ac" class="tag-cloud-link tag-link-509 tag-link-position-42" style="font-size: 9.0666666666667pt;" aria-label="脚本 (5个项目)">脚本</a>
+<a href="http://www.huangwenchao.com.cn/tag/%e8%a7%a3%e9%a2%98%e6%8a%a5%e5%91%8a" class="tag-cloud-link tag-link-40 tag-link-position-43" style="font-size: 10.666666666667pt;" aria-label="解题报告 (7个项目)">解题报告</a>
+<a href="http://www.huangwenchao.com.cn/tag/%e8%b4%aa%e5%bf%83" class="tag-cloud-link tag-link-67 tag-link-position-44" style="font-size: 9.0666666666667pt;" aria-label="贪心 (5个项目)">贪心</a>
+<a href="http://www.huangwenchao.com.cn/tag/%e9%83%a8%e7%bd%b2" class="tag-cloud-link tag-link-184 tag-link-position-45" style="font-size: 15.466666666667pt;" aria-label="部署 (17个项目)">部署</a></div>
+</aside>		<aside id="recent-posts-3" class="widget widget_recent_entries">		<h1 class="widget-title">近期文章</h1>		<ul>
+					<li>
+				<a href="http://www.huangwenchao.com.cn/2017/12/micro-service.html">微服务架构实践笔记</a>
+							<span class="post-date">2017年12月6日</span>
+						</li>
+					<li>
+				<a href="http://www.huangwenchao.com.cn/2017/12/openresty-1.html">OpenResty 学习笔记</a>
+							<span class="post-date">2017年12月4日</span>
+						</li>
+					<li>
+				<a href="http://www.huangwenchao.com.cn/2017/10/%e5%85%b3%e4%ba%8e-gsm-%e5%bc%80%e5%8f%91%e7%9a%84%e7%ac%94%e8%ae%b0.html">关于 GSM 开发的笔记</a>
+							<span class="post-date">2017年10月23日</span>
+						</li>
+					<li>
+				<a href="http://www.huangwenchao.com.cn/2017/06/ios-quick-learn-note.html">iOS 临急抱佛脚速成学习笔记</a>
+							<span class="post-date">2017年6月30日</span>
+						</li>
+					<li>
+				<a href="http://www.huangwenchao.com.cn/2017/06/django-websocket-push-vue.html">Django+Vuejs 集成 WebSocket 实现服务器推送消息架构实践</a>
+							<span class="post-date">2017年6月27日</span>
+						</li>
+					<li>
+				<a href="http://www.huangwenchao.com.cn/2017/06/docker-mirror-2.html">【转】使用阿里云Docker镜像加速</a>
+							<span class="post-date">2017年6月22日</span>
+						</li>
+					<li>
+				<a href="http://www.huangwenchao.com.cn/2017/06/cordova-plugin-1.html">Cordova 插件开发手札（一）- 腾云互动直播云</a>
+							<span class="post-date">2017年6月21日</span>
+						</li>
+					<li>
+				<a href="http://www.huangwenchao.com.cn/2017/04/%e8%a7%a3%e5%86%b3-unbuntu-%e4%b8%8b-chromium-%e6%97%a0%e6%b3%95%e6%92%ad%e6%94%be%e5%a3%b0%e9%9f%b3%e7%9a%84%e9%97%ae%e9%a2%98.html">解决 Unbuntu 下 Chromium 无法播放声音的问题</a>
+							<span class="post-date">2017年4月27日</span>
+						</li>
+					<li>
+				<a href="http://www.huangwenchao.com.cn/2017/04/nvidia-ubuntu-%e6%8a%98%e8%85%be%e8%ae%b0%e5%bd%95.html">Nvidia ubuntu 折腾记录</a>
+							<span class="post-date">2017年4月25日</span>
+						</li>
+					<li>
+				<a href="http://www.huangwenchao.com.cn/2017/04/php-postfix.html">Linux 配置 Postfix 搭建本地域名邮箱支持 PHP 发送邮件</a>
+							<span class="post-date">2017年4月22日</span>
+						</li>
+				</ul>
+		</aside>		<aside id="calendar-2" class="widget widget_calendar"><div id="calendar_wrap" class="calendar_wrap"><table id="wp-calendar">
+	<caption>2016年五月</caption>
+	<thead>
+	<tr>
+		<th scope="col" title="星期一">一</th>
+		<th scope="col" title="星期二">二</th>
+		<th scope="col" title="星期三">三</th>
+		<th scope="col" title="星期四">四</th>
+		<th scope="col" title="星期五">五</th>
+		<th scope="col" title="星期六">六</th>
+		<th scope="col" title="星期日">日</th>
+	</tr>
+	</thead>
+
+	<tfoot>
+	<tr>
+		<td colspan="3" id="prev"><a href="http://www.huangwenchao.com.cn/2016/04">« 4月</a></td>
+		<td class="pad">&nbsp;</td>
+		<td colspan="3" id="next"><a href="http://www.huangwenchao.com.cn/2016/06">6月 »</a></td>
+	</tr>
+	</tfoot>
+
+	<tbody>
+	<tr>
+		<td colspan="6" class="pad">&nbsp;</td><td>1</td>
+	</tr>
+	<tr>
+		<td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td>
+	</tr>
+	<tr>
+		<td>9</td><td>10</td><td>11</td><td><a href="http://www.huangwenchao.com.cn/2016/05/12" aria-label="于2016年5月12日上发布的文章">12</a></td><td><a href="http://www.huangwenchao.com.cn/2016/05/13" aria-label="于2016年5月13日上发布的文章">13</a></td><td>14</td><td>15</td>
+	</tr>
+	<tr>
+		<td>16</td><td>17</td><td><a href="http://www.huangwenchao.com.cn/2016/05/18" aria-label="于2016年5月18日上发布的文章">18</a></td><td>19</td><td>20</td><td>21</td><td>22</td>
+	</tr>
+	<tr>
+		<td>23</td><td><a href="http://www.huangwenchao.com.cn/2016/05/24" aria-label="于2016年5月24日上发布的文章">24</a></td><td><a href="http://www.huangwenchao.com.cn/2016/05/25" aria-label="于2016年5月25日上发布的文章">25</a></td><td>26</td><td>27</td><td><a href="http://www.huangwenchao.com.cn/2016/05/28" aria-label="于2016年5月28日上发布的文章">28</a></td><td>29</td>
+	</tr>
+	<tr>
+		<td>30</td><td>31</td>
+		<td class="pad" colspan="5">&nbsp;</td>
+	</tr>
+	</tbody>
+	</table></div></aside><aside id="rss-4" class="widget widget_rss"><h1 class="widget-title"><a class="rsswidget" href="http://www.huangwenchao.com.cn/feed"><img class="rss-widget-icon" style="border:0" width="14" height="14" src="http://www.huangwenchao.com.cn/wp-includes/images/rss.png" alt="RSS"></a> <a class="rsswidget" href="http://www.huangwenchao.com.cn/">RSS</a></h1><ul><li><a class="rsswidget" href="http://www.huangwenchao.com.cn/2017/12/micro-service.html">微服务架构实践笔记</a> <span class="rss-date">2017年12月6日</span></li><li><a class="rsswidget" href="http://www.huangwenchao.com.cn/2017/12/openresty-1.html">OpenResty 学习笔记</a> <span class="rss-date">2017年12月4日</span></li><li><a class="rsswidget" href="http://www.huangwenchao.com.cn/2017/10/%E5%85%B3%E4%BA%8E-gsm-%E5%BC%80%E5%8F%91%E7%9A%84%E7%AC%94%E8%AE%B0.html">关于 GSM 开发的笔记</a> <span class="rss-date">2017年10月23日</span></li><li><a class="rsswidget" href="http://www.huangwenchao.com.cn/2017/06/ios-quick-learn-note.html">iOS 临急抱佛脚速成学习笔记</a> <span class="rss-date">2017年6月30日</span></li><li><a class="rsswidget" href="http://www.huangwenchao.com.cn/2017/06/django-websocket-push-vue.html">Django+Vuejs 集成 WebSocket 实现服务器推送消息架构实践</a> <span class="rss-date">2017年6月27日</span></li><li><a class="rsswidget" href="http://www.huangwenchao.com.cn/2017/06/docker-mirror-2.html">【转】使用阿里云Docker镜像加速</a> <span class="rss-date">2017年6月22日</span></li><li><a class="rsswidget" href="http://www.huangwenchao.com.cn/2017/06/cordova-plugin-1.html">Cordova 插件开发手札（一）- 腾云互动直播云</a> <span class="rss-date">2017年6月21日</span></li><li><a class="rsswidget" href="http://www.huangwenchao.com.cn/2017/04/%E8%A7%A3%E5%86%B3-unbuntu-%E4%B8%8B-chromium-%E6%97%A0%E6%B3%95%E6%92%AD%E6%94%BE%E5%A3%B0%E9%9F%B3%E7%9A%84%E9%97%AE%E9%A2%98.html">解决 Unbuntu 下 Chromium 无法播放声音的问题</a> <span class="rss-date">2017年4月27日</span></li><li><a class="rsswidget" href="http://www.huangwenchao.com.cn/2017/04/nvidia-ubuntu-%E6%8A%98%E8%85%BE%E8%AE%B0%E5%BD%95.html">Nvidia ubuntu 折腾记录</a> <span class="rss-date">2017年4月25日</span></li><li><a class="rsswidget" href="http://www.huangwenchao.com.cn/2017/04/php-postfix.html">Linux 配置 Postfix 搭建本地域名邮箱支持 PHP 发送邮件</a> <span class="rss-date">2017年4月22日</span></li></ul></aside></div><!-- #content-sidebar -->
+<div id="secondary">
+		<h2 class="site-description">——Alfred Huang (黄文超)的个人空间</h2>
+	
+		<nav role="navigation" class="navigation site-navigation secondary-navigation">
+		<div class="menu-%e4%b8%bb%e8%8f%9c%e5%8d%95-container"><ul id="menu-%e4%b8%bb%e8%8f%9c%e5%8d%95-1" class="menu"><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-95"><a href="http://www.huangwenchao.com.cn/">首页</a></li>
+<li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-24"><a href="http://www.huangwenchao.com.cn/category/blog">日志</a>
+<ul class="sub-menu">
+	<li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-108"><a href="http://www.huangwenchao.com.cn/category/blog/work">工作日志</a></li>
+	<li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-109"><a href="http://www.huangwenchao.com.cn/category/blog/live">生活日志</a></li>
+</ul>
+</li>
+<li class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-has-children menu-item-23"><a href="http://www.huangwenchao.com.cn/category/tech">技术</a>
+<ul class="sub-menu">
+	<li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-192"><a href="http://www.huangwenchao.com.cn/category/tech/acm">ACM</a></li>
+	<li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-94"><a href="http://www.huangwenchao.com.cn/category/books">学习资料</a></li>
+	<li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-61"><a href="http://www.huangwenchao.com.cn/category/tech/website">建站技术</a></li>
+</ul>
+</li>
+<li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-25"><a href="http://www.huangwenchao.com.cn/category/music">音乐</a>
+<ul class="sub-menu">
+	<li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-48"><a href="http://www.huangwenchao.com.cn/category/music/albums">分享专辑</a></li>
+</ul>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-567"><a href="http://www.huangwenchao.com.cn/about">关于我</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-841"><a title="RSS" href="http://www.huangwenchao.com.cn/feed"><span class="genericon genericon-feed"></span> RSS</a></li>
+</ul></div>	</nav>
+	
+		<div id="primary-sidebar" class="primary-sidebar widget-area" role="complementary">
+		<aside id="text-10" class="widget widget_text">			<div class="textwidget"><a style="font-size: 14px; font-weight: bold; color: yellow;" href="https://bandwagonhost.com/aff.php?aff=8059" target="_blank">$$ BandwagonHost VPS $$</a></div>
+		</aside><aside id="search-2" class="widget widget_search"><form role="search" method="get" class="search-form" action="http://www.huangwenchao.com.cn/">
+				<label>
+					<span class="screen-reader-text">搜索：</span>
+					<input type="search" class="search-field" placeholder="搜索…" value="" name="s">
+				</label>
+				<input type="submit" class="search-submit" value="搜索">
+			</form></aside>		<aside id="recent-posts-2" class="widget widget_recent_entries">		<h1 class="widget-title">近期文章</h1>		<ul>
+					<li>
+				<a href="http://www.huangwenchao.com.cn/2017/12/micro-service.html">微服务架构实践笔记</a>
+						</li>
+					<li>
+				<a href="http://www.huangwenchao.com.cn/2017/12/openresty-1.html">OpenResty 学习笔记</a>
+						</li>
+					<li>
+				<a href="http://www.huangwenchao.com.cn/2017/10/%e5%85%b3%e4%ba%8e-gsm-%e5%bc%80%e5%8f%91%e7%9a%84%e7%ac%94%e8%ae%b0.html">关于 GSM 开发的笔记</a>
+						</li>
+					<li>
+				<a href="http://www.huangwenchao.com.cn/2017/06/ios-quick-learn-note.html">iOS 临急抱佛脚速成学习笔记</a>
+						</li>
+					<li>
+				<a href="http://www.huangwenchao.com.cn/2017/06/django-websocket-push-vue.html">Django+Vuejs 集成 WebSocket 实现服务器推送消息架构实践</a>
+						</li>
+				</ul>
+		</aside>		<aside id="archives-2" class="widget widget_archive"><h1 class="widget-title">文章归档</h1>		<ul>
+			<li><a href="http://www.huangwenchao.com.cn/2017/12">2017年十二月</a></li>
+	<li><a href="http://www.huangwenchao.com.cn/2017/10">2017年十月</a></li>
+	<li><a href="http://www.huangwenchao.com.cn/2017/06">2017年六月</a></li>
+	<li><a href="http://www.huangwenchao.com.cn/2017/04">2017年四月</a></li>
+	<li><a href="http://www.huangwenchao.com.cn/2017/03">2017年三月</a></li>
+	<li><a href="http://www.huangwenchao.com.cn/2017/02">2017年二月</a></li>
+	<li><a href="http://www.huangwenchao.com.cn/2016/12">2016年十二月</a></li>
+	<li><a href="http://www.huangwenchao.com.cn/2016/10">2016年十月</a></li>
+	<li><a href="http://www.huangwenchao.com.cn/2016/09">2016年九月</a></li>
+	<li><a href="http://www.huangwenchao.com.cn/2016/08">2016年八月</a></li>
+	<li><a href="http://www.huangwenchao.com.cn/2016/07">2016年七月</a></li>
+	<li><a href="http://www.huangwenchao.com.cn/2016/06">2016年六月</a></li>
+	<li><a href="http://www.huangwenchao.com.cn/2016/05">2016年五月</a></li>
+	<li><a href="http://www.huangwenchao.com.cn/2016/04">2016年四月</a></li>
+	<li><a href="http://www.huangwenchao.com.cn/2016/03">2016年三月</a></li>
+	<li><a href="http://www.huangwenchao.com.cn/2016/01">2016年一月</a></li>
+	<li><a href="http://www.huangwenchao.com.cn/2015/12">2015年十二月</a></li>
+	<li><a href="http://www.huangwenchao.com.cn/2015/11">2015年十一月</a></li>
+	<li><a href="http://www.huangwenchao.com.cn/2015/10">2015年十月</a></li>
+	<li><a href="http://www.huangwenchao.com.cn/2015/09">2015年九月</a></li>
+	<li><a href="http://www.huangwenchao.com.cn/2015/08">2015年八月</a></li>
+	<li><a href="http://www.huangwenchao.com.cn/2015/07">2015年七月</a></li>
+	<li><a href="http://www.huangwenchao.com.cn/2015/06">2015年六月</a></li>
+	<li><a href="http://www.huangwenchao.com.cn/2015/05">2015年五月</a></li>
+	<li><a href="http://www.huangwenchao.com.cn/2015/04">2015年四月</a></li>
+	<li><a href="http://www.huangwenchao.com.cn/2015/03">2015年三月</a></li>
+	<li><a href="http://www.huangwenchao.com.cn/2015/02">2015年二月</a></li>
+	<li><a href="http://www.huangwenchao.com.cn/2015/01">2015年一月</a></li>
+	<li><a href="http://www.huangwenchao.com.cn/2014/12">2014年十二月</a></li>
+	<li><a href="http://www.huangwenchao.com.cn/2014/11">2014年十一月</a></li>
+	<li><a href="http://www.huangwenchao.com.cn/2014/10">2014年十月</a></li>
+	<li><a href="http://www.huangwenchao.com.cn/2014/09">2014年九月</a></li>
+	<li><a href="http://www.huangwenchao.com.cn/2014/08">2014年八月</a></li>
+	<li><a href="http://www.huangwenchao.com.cn/2014/07">2014年七月</a></li>
+	<li><a href="http://www.huangwenchao.com.cn/2014/06">2014年六月</a></li>
+	<li><a href="http://www.huangwenchao.com.cn/2014/05">2014年五月</a></li>
+	<li><a href="http://www.huangwenchao.com.cn/2014/04">2014年四月</a></li>
+	<li><a href="http://www.huangwenchao.com.cn/2014/03">2014年三月</a></li>
+	<li><a href="http://www.huangwenchao.com.cn/2014/02">2014年二月</a></li>
+	<li><a href="http://www.huangwenchao.com.cn/2014/01">2014年一月</a></li>
+	<li><a href="http://www.huangwenchao.com.cn/2013/12">2013年十二月</a></li>
+	<li><a href="http://www.huangwenchao.com.cn/2013/11">2013年十一月</a></li>
+	<li><a href="http://www.huangwenchao.com.cn/2013/03">2013年三月</a></li>
+	<li><a href="http://www.huangwenchao.com.cn/2010/03">2010年三月</a></li>
+		</ul>
+		</aside><aside id="categories-2" class="widget widget_categories"><h1 class="widget-title">分类目录</h1>		<ul>
+	<li class="cat-item cat-item-33"><a href="http://www.huangwenchao.com.cn/category/tech/acm">ACM</a>
+</li>
+	<li class="cat-item cat-item-594"><a href="http://www.huangwenchao.com.cn/category/tech/programming/bash">Bash</a>
+</li>
+	<li class="cat-item cat-item-595"><a href="http://www.huangwenchao.com.cn/category/tech/programming/c">C</a>
+</li>
+	<li class="cat-item cat-item-144"><a href="http://www.huangwenchao.com.cn/category/tech/erp-tech">ERP</a>
+</li>
+	<li class="cat-item cat-item-591"><a href="http://www.huangwenchao.com.cn/category/tech/os/linux">Linux</a>
+</li>
+	<li class="cat-item cat-item-598"><a href="http://www.huangwenchao.com.cn/category/tech/programming/php">PHP</a>
+</li>
+	<li class="cat-item cat-item-593"><a href="http://www.huangwenchao.com.cn/category/tech/programming/python">Python</a>
+</li>
+	<li class="cat-item cat-item-97"><a href="http://www.huangwenchao.com.cn/category/tech/web">WEB</a>
+</li>
+	<li class="cat-item cat-item-142"><a href="http://www.huangwenchao.com.cn/category/corp/meeting">会议纪要</a>
+</li>
+	<li class="cat-item cat-item-141"><a href="http://www.huangwenchao.com.cn/category/corp">公司事项</a>
+</li>
+	<li class="cat-item cat-item-9"><a href="http://www.huangwenchao.com.cn/category/music/albums">分享专辑</a>
+</li>
+	<li class="cat-item cat-item-247"><a href="http://www.huangwenchao.com.cn/category/tech/web/frontend">前端</a>
+</li>
+	<li class="cat-item cat-item-249"><a href="http://www.huangwenchao.com.cn/category/tech/web/backend">后台</a>
+</li>
+	<li class="cat-item cat-item-25"><a href="http://www.huangwenchao.com.cn/category/books">学习资料</a>
+</li>
+	<li class="cat-item cat-item-41"><a href="http://www.huangwenchao.com.cn/category/blog/work">工作日志</a>
+</li>
+	<li class="cat-item cat-item-18"><a href="http://www.huangwenchao.com.cn/category/tech/website">建站技术</a>
+</li>
+	<li class="cat-item cat-item-752"><a href="http://www.huangwenchao.com.cn/category/tech/%e6%9e%b6%e6%9e%84/%e5%be%ae%e6%9c%8d%e5%8a%a1">微服务</a>
+</li>
+	<li class="cat-item cat-item-5"><a href="http://www.huangwenchao.com.cn/category/tech">技术</a>
+</li>
+	<li class="cat-item cat-item-590"><a href="http://www.huangwenchao.com.cn/category/tech/os">操作系统</a>
+</li>
+	<li class="cat-item cat-item-680"><a href="http://www.huangwenchao.com.cn/category/tech/%e8%bf%90%e7%bb%b4/%e6%95%b0%e6%8d%ae%e5%ba%93">数据库</a>
+</li>
+	<li class="cat-item cat-item-647"><a href="http://www.huangwenchao.com.cn/category/tech/%e7%bc%96%e7%a0%81%e8%a7%84%e8%8c%83/%e6%96%87%e6%a1%a3%e5%8c%96">文档化</a>
+</li>
+	<li class="cat-item cat-item-2"><a href="http://www.huangwenchao.com.cn/category/blog">日志</a>
+</li>
+	<li class="cat-item cat-item-1"><a href="http://www.huangwenchao.com.cn/category/uncategorized">未分类</a>
+</li>
+	<li class="cat-item cat-item-644"><a href="http://www.huangwenchao.com.cn/category/tech/%e6%9e%b6%e6%9e%84">架构</a>
+</li>
+	<li class="cat-item cat-item-645"><a href="http://www.huangwenchao.com.cn/category/tech/%e6%9e%b6%e6%9e%84/%e6%b6%88%e6%81%af%e9%98%9f%e5%88%97">消息队列</a>
+</li>
+	<li class="cat-item cat-item-42"><a href="http://www.huangwenchao.com.cn/category/blog/live">生活日志</a>
+</li>
+	<li class="cat-item cat-item-632"><a href="http://www.huangwenchao.com.cn/category/tech/%e7%bc%96%e7%a0%81%e8%a7%84%e8%8c%83">编码规范</a>
+</li>
+	<li class="cat-item cat-item-28"><a href="http://www.huangwenchao.com.cn/category/tech/programming">编程</a>
+</li>
+	<li class="cat-item cat-item-633"><a href="http://www.huangwenchao.com.cn/category/tech/%e7%bd%91%e7%bb%9c">网络</a>
+</li>
+	<li class="cat-item cat-item-602"><a href="http://www.huangwenchao.com.cn/category/tech/secure">网络安全</a>
+</li>
+	<li class="cat-item cat-item-601"><a href="http://www.huangwenchao.com.cn/category/tech/website/crawler">网络抓取</a>
+</li>
+	<li class="cat-item cat-item-213"><a href="http://www.huangwenchao.com.cn/category/desn">设计</a>
+</li>
+	<li class="cat-item cat-item-143"><a href="http://www.huangwenchao.com.cn/category/corp/expense">财务费用</a>
+</li>
+	<li class="cat-item cat-item-679"><a href="http://www.huangwenchao.com.cn/category/tech/%e8%bf%90%e7%bb%b4">运维</a>
+</li>
+	<li class="cat-item cat-item-248"><a href="http://www.huangwenchao.com.cn/category/tech/web/deploy-web">部署</a>
+</li>
+	<li class="cat-item cat-item-6"><a href="http://www.huangwenchao.com.cn/category/music">音乐</a>
+</li>
+		</ul>
+</aside><aside id="meta-2" class="widget widget_meta"><h1 class="widget-title">功能</h1>			<ul>
+						<li><a href="http://www.huangwenchao.com.cn/wp-login.php">登录</a></li>
+			<li><a href="http://www.huangwenchao.com.cn/feed">文章<abbr title="Really Simple Syndication">RSS</abbr></a></li>
+			<li><a href="http://www.huangwenchao.com.cn/comments/feed">评论<abbr title="Really Simple Syndication">RSS</abbr></a></li>
+			<li><a href="https://cn.wordpress.org/" title="基于WordPress，一个优美、先进的个人信息发布平台。">WordPress.org</a></li>			</ul>
+			</aside><aside id="text-2" class="widget widget_text"><h1 class="widget-title">友情链接</h1>			<div class="textwidget"><ul>
+<li><a href="http://www.aifabiao.cn/" target="_blank" rel="noopener">爱发标APP</a></li>
+<li><a href="http://pt.easecloud.cn/" target="_blank" rel="noopener">亲子鉴定</a></li>
+<li><a href="https://github.com/fish-ball" target="_blank" rel="noopener">我的 GitHub</a></li>
+<li><a href="http://community.topcoder.com/tc?module=MemberProfile&amp;cr=22720177" target="_blank" rel="noopener">我的 TopCoder</a></li>
+<li><a href="http://blog.easecloud.cn/" target="_blank" rel="noopener">逸云科技官方博客</a></li>
+<li><a href="http://www.cgangee.com/" target="_blank" rel="noopener">cgangEE 的博客</a></li>
+<li><a href="http://www.ixiaohei.info/" target="_blank" rel="noopener">xiaohei</a></li>
+<li><a href="http://www.easecloud.cn/" target="_blank" rel="noopener">逸云科技</a></li>
+<li><a href="http://www.whaleapp.cn/" target="_blank" rel="noopener">紫鲸互联</a></li>
+<li><a href="https://m.kuaidi100.com/" target="_blank" rel="noopener">快递查询</a></li>
+<li><a href="http://alizs.cc/" target="_blank" rel="noopener">Lizs</a></li>
+</ul>
+</div>
+		</aside>	</div><!-- #primary-sidebar -->
+	</div><!-- #secondary -->
+
+		</div><!-- #main -->
+
+		<footer id="colophon" class="site-footer" role="contentinfo">
+
+			
+			<div class="site-info">
+				<a href="http://www.miitbeian.gov.cn/" rel="nofollow" title="工业和信息化部ICP/IP地址/域名信息备案管理系统">粤ICP备14050779号-1</a>
+				<a href="http://wordpress.org/">自豪地采用WordPress</a>
+			</div><!-- .site-info -->
+
+		</footer><!-- #colophon -->
+	</div><!-- #page -->
+
+	<script type="text/javascript" src="http://www.huangwenchao.com.cn/wp-includes/js/comment-reply.min.js?ver=4.8.2"></script>
+<script type="text/javascript" src="http://www.huangwenchao.com.cn/wp-content/themes/huangwenchao/js/functions.js?ver=20131209"></script>
+<script type="text/javascript" src="http://www.huangwenchao.com.cn/wp-includes/js/wp-embed.min.js?ver=4.8.2"></script>
+<script type="text/javascript" src="http://www.huangwenchao.com.cn/wp-content/plugins/akismet/_inc/form.js?ver=4.0"></script>
+
+
+<!-- 百度统计代码 -->
+<div style="display: none;">
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fa5bda52d1139251552aab84066321ad1' type='text/javascript'%3E%3C/script%3E"));
+</script><script src="https://hm.baidu.com/h.js?a5bda52d1139251552aab84066321ad1" type="text/javascript"></script>
+</div>
+<!--end 百度统计-->
+
+
+
+</body></html>
