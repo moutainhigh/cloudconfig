@@ -1,1 +1,0 @@
-document.write("<iframe width=760 height=90 noresize scrolling=No frameborder=0 marginheight=0 marginwidth=0 src=\"http://image.51cto.com/ad/art/tonglan_new/cloud.htm\" align=\"center\"></iframe>");

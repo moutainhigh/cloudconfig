@@ -1,3 +1,0 @@
-var OX_6f9d1881 = '';
-OX_6f9d1881 += "<"+"script type=\"text/javascript\" src=\"\"><"+"/script><"+"a href=\'//gg1.51cto.com/www/delivery/ck.php?oaparams=2__bannerid=7466__zoneid=257__cb=36a8a26503__oadest=https%3A%2F%2Fcloud.tencent.com%2Fdeveloper%2Fsalon%2Factivity-1074%3Fchannel%3D51cto\' target=\'_blank\'><"+"font color=\'red\'>聚焦在线教育，共谋教学未来<"+"/font><"+"/a><"+"div id=\'beacon_36a8a26503\' style=\'position: absolute; left: 0px; top: 0px; visibility: hidden;\'><"+"img src=\'//gg3.51cto.com/www/delivery/lg.php?bannerid=7466&amp;campaignid=1592&amp;zoneid=257&amp;loc=1&amp;referer=http%3A%2F%2Fcloud.51cto.com%2Fart%2F201707%2F544957.htm&amp;cb=36a8a26503\' width=\'0\' height=\'0\' alt=\'\' style=\'width: 0px; height: 0px;\' /><"+"/div>\n";
-document.write(OX_6f9d1881);
