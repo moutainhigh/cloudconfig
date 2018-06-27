@@ -99,7 +99,7 @@
                 <configuration>
                     <dockerHost>${docker-host}</dockerHost>
                     <imageName>${project.name}:${project.version}</imageName>
-                    <baseImage>root/java:8</baseImage>
+                    <baseImage>java:8</baseImage>
                     <entryPoint>["java", "-jar", "/${project.build.finalName}.jar"]</entryPoint>
                     <skipDockerBuild>false</skipDockerBuild>
                     <resources>
