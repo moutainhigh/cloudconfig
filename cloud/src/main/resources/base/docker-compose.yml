@@ -39,7 +39,7 @@ services:
      environment:
        - server_port=8888
        - eureka_client_service-url_defaultZone=http://eureka1:1111/eureka/,http://eureka2:1112/eureka/
-       - spring_rabbitmq_host=192.168.42.244
+       - spring_rabbitmq_host=192.168.42.181
        - spring_rabbitmq_port=5672
        - spring_rabbitmq_username=springcloud
        - spring_rabbitmq_password=springcloud
