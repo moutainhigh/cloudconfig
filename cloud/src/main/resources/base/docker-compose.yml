@@ -1,7 +1,7 @@
 version: '2'
 services:
   eureka1:
-    image: "eureka:1.0-SNAPSHOT"
+    image: "192.168.42.162:5000/eureka:1.0-SNAPSHOT"
     hostname: eureka1
     ports:
       - "1111:1111"
@@ -14,7 +14,7 @@ services:
       - eureka_client_fetch-registry=true
       - eureka_client_service-url_defaultZone=http://eureka1:1111/eureka/,http://eureka2:1112/eureka/
   eureka2:
-    image: "eureka:1.0-SNAPSHOT"
+    image: "192.168.42.162:5000/eureka:1.0-SNAPSHOT"
     hostname: eureka2
     ports:
       - "1112:1112"
@@ -27,7 +27,7 @@ services:
       - eureka_client_fetch-registry=true
       - eureka_client_service-url_defaultZone=http://eureka1:1111/eureka/,http://eureka2:1112/eureka/
   config:
-     image: "config:1.0-SNAPSHOT"
+     image: "192.168.42.162:5000/config:1.0-SNAPSHOT"
      hostname: config
      ports:
        - "8888:8888"

@@ -1,8 +1,8 @@
 version: '2'
 services:
   gateway:
-     image: "gateway:1.0-SNAPSHOT"
-     hostname: gateway
+     image: "192.168.42.162:5000/gateway:1.0-SNAPSHOT"
+     hostname: gateway2
      ports:
        - "8080:8080"
      networks:
@@ -11,8 +11,8 @@ services:
        - server_port=8080
        - eureka_client_service-url_defaultZone=http://eureka1:1111/eureka/,http://eureka2:1112/eureka/
   hellocontroller:
-     image: "hellocontroller:1.0-SNAPSHOT"
-     hostname: hellocontroller
+     image: "192.168.42.162:5000/hellocontroller:1.0-SNAPSHOT"
+     hostname: hellocontroller2
      ports:
        - "6661:6661"
      networks:
@@ -21,8 +21,8 @@ services:
        - server_port=6661
        - eureka_client_service-url_defaultZone=http://eureka1:1111/eureka/,http://eureka2:1112/eureka/
   helloservice:
-     image: "helloservice:1.0-SNAPSHOT"
-     hostname: helloservice
+     image: "192.168.42.162:5000/helloservice:1.0-SNAPSHOT"
+     hostname: helloservice2
      ports:
        - "6671:6671"
      networks:
@@ -31,8 +31,8 @@ services:
        - server_port=6671
        - eureka_client_service-url_defaultZone=http://eureka1:1111/eureka/,http://eureka2:1112/eureka/
   zipkin:
-     image: "zipkin:1.0-SNAPSHOT"
-     hostname: zipkin
+     image: "192.168.42.162:5000/zipkin:1.0-SNAPSHOT"
+     hostname: zipkin2
      ports:
        - "9411:9411"
      networks:
