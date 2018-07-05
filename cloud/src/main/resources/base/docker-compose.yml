@@ -1,5 +1,27 @@
 version: '2'
 services:
+  mysql:
+    image: "mysql:latest"
+    hostname: mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - app_net
+  redis:
+    image: "redis:latest"
+    hostname: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - app_net
+  rabbitmq:
+    image: "rabbitmq:latest"
+    hostname: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - app_net
   eureka1:
     image: "192.168.42.162:5000/eureka:1.0-SNAPSHOT"
     hostname: eureka1
@@ -39,10 +61,11 @@ services:
      environment:
        - server_port=8888
        - eureka_client_service-url_defaultZone=http://eureka1:1111/eureka/,http://eureka2:1112/eureka/
-       - spring_rabbitmq_host=192.168.42.181
+#       - spring_rabbitmq_host=192.168.42.181
+       - spring_rabbitmq_host=rabbitmq
        - spring_rabbitmq_port=5672
-       - spring_rabbitmq_username=springcloud
-       - spring_rabbitmq_password=springcloud
+       - spring_rabbitmq_username=guest
+       - spring_rabbitmq_password=guest
 networks:
   app_net:
     external: true
