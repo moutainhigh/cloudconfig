@@ -1,12 +1,5 @@
 version: '2'
 services:
-  mysql:
-    image: "mysql:latest"
-    hostname: mysql
-    ports:
-      - "3306:3306"
-    networks:
-      - app_net
   redis:
     image: "redis:latest"
     hostname: redis
