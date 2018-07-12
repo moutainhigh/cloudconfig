@@ -70,7 +70,7 @@ public class AccessTokenFilter  extends ZuulFilter{
             }
             if (StringUtils.isNotBlank(token))
             {
-                redisCacheUtil.setCacheObject("555","555");
+//                redisCacheUtil.setCacheObject("555","555");
                 String userId = (String) redisCacheUtil.getCacheObject(token);
                 if (StringUtils.isNotBlank(userId)) {
                     pass = true;

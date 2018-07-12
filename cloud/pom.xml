@@ -9,25 +9,37 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>helloservice</module>
+        <module>userservice</module>
         <module>eureka</module>
-        <module>hellocontroller</module>
+        <module>usercontroller</module>
         <module>config</module>
         <module>zipkin</module>
         <module>gateway</module>
         <module>common</module>
-        <module>configuration</module>
+        <module>swaggerconfiguration</module>
         <module>utils</module>
+        <module>userserviceapi</module>
+        <module>idservice</module>
+        <module>idserviceapi</module>
+        <module>configconfiguration</module>
+        <module>zipkinconfiguration</module>
     </modules>
 
 
     <properties>
+        <docker-host>http://192.168.42.162:2375</docker-host>
         <cloud.common.version>1.0-SNAPSHOT</cloud.common.version>
         <cloud.utils.version>1.0-SNAPSHOT</cloud.utils.version>
-        <cloud.configuration>1.0-SNAPSHOT</cloud.configuration>
-
+        <cloud.swaggerconfiguration>1.0-SNAPSHOT</cloud.swaggerconfiguration>
+        <cloud.userserviceapi>1.0-SNAPSHOT</cloud.userserviceapi>
+        <cloud.idserviceapi>1.0-SNAPSHOT</cloud.idserviceapi>
+        <cloud.configconfiguration>1.0-SNAPSHOT</cloud.configconfiguration>
+        <cloud.zipkinconfiguration>1.0-SNAPSHOT</cloud.zipkinconfiguration>
         <fastjson.version>1.1.40</fastjson.version>
-        <docker-host>http://192.168.42.162:2375</docker-host>
+        <mysql-connector-java.version>5.1.44</mysql-connector-java.version>
+        <mybatis-spring-boot-starter.version>1.3.2</mybatis-spring-boot-starter.version>
+        <log4j.version>1.2.16</log4j.version>
+
 
     </properties>
 
@@ -59,6 +71,31 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql-connector-java.version}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-log4j2</artifactId>
+            <version>1.3.8.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>${log4j.version}</version>
         </dependency>
 
 
@@ -76,11 +113,6 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
-
-
-
-
 
 
 </project>

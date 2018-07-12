@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wjh.userservice.mapper.UserMapper">
+
+    <select id="detailByMobile" resultType="com.wjh.userserviceapi.model.User">
+        SELECT
+            id,
+            name,
+            nickname,
+            birthday,
+            mobile,
+            img,
+            gender,
+            password
+        FROM
+            user u
+        where u.mobile=#{mobile}
+    </select>
+
+
+    <insert id="insert">
+        INSERT INTO users
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null"> id, </if>
+            <if test="name != null"> name, </if>
+            <if test="nickname != null"> nickname, </if>
+            <if test="birthday != null"> birthday, </if>
+            <if test="mobile != null"> mobile, </if>
+            <if test="img != null"> img, </if>
+            <if test="gender != null"> gender, </if>
+            <if test="password != null"> password, </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null"> #{id}, </if>
+            <if test="name != null"> #{name}, </if>
+            <if test="nickname != null"> #{nickname}, </if>
+            <if test="birthday != null"> #{birthday}, </if>
+            <if test="mobile != null"> #{mobile}, </if>
+            <if test="img != null"> #{img}, </if>
+            <if test="gender != null"> #{gender}, </if>
+            <if test="password != null"> #{password}, </if>
+        </trim>
+    </insert>
+
+
+    <insert id="insertList">
+        INSERT INTO user(
+            id,
+            name,
+            nickname,
+            birthday,
+            mobile,
+            img,
+            gender,
+            password
+        )VALUES
+        <foreach collection="pojos" item="pojo" index="index" separator=",">
+            (
+            #{pojo.id},
+            #{pojo.name},
+            #{pojo.nickname},
+            #{pojo.birthday},
+            #{pojo.mobile},
+            #{pojo.img},
+            #{pojo.gender},
+            #{pojo.password}
+            )
+        </foreach>
+    </insert>
+
+
+    <update id="update">
+        UPDATE user
+        <set>
+            <if test="pojo.id != null"> id = #{pojo.id}, </if>
+            <if test="pojo.name != null"> name = #{pojo.name}, </if>
+            <if test="pojo.nickname != null"> nickname = #{pojo.nickname}, </if>
+            <if test="pojo.birthday != null"> birthday = #{pojo.birthday}, </if>
+            <if test="pojo.mobile != null"> mobile = #{pojo.mobile}, </if>
+            <if test="pojo.img != null"> img = #{pojo.img}, </if>
+            <if test="pojo.gender != null"> gender = #{pojo.gender}, </if>
+            <if test="pojo.password != null"> password = #{pojo.password} </if>
+        </set>
+        WHERE id = #{pojo.id}
+    </update>
+
+
+
+
+</mapper>

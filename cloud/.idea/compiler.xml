@@ -8,26 +8,36 @@
         <outputRelativeToContentRoot value="true" />
         <module name="common" />
         <module name="config" />
-        <module name="configuration" />
+        <module name="configconfiguration" />
         <module name="eureka" />
         <module name="gateway" />
-        <module name="hellocontroller" />
-        <module name="helloservice" />
+        <module name="idservice" />
+        <module name="idserviceapi" />
+        <module name="swaggerconfiguration" />
+        <module name="usercontroller" />
+        <module name="userservice" />
+        <module name="userserviceapi" />
         <module name="utils" />
         <module name="zipkin" />
+        <module name="zipkinconfiguration" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="cloud" target="1.6" />
       <module name="common" target="1.6" />
       <module name="config" target="1.6" />
-      <module name="configuration" target="1.6" />
+      <module name="configconfiguration" target="1.6" />
       <module name="eureka" target="1.6" />
       <module name="gateway" target="1.6" />
-      <module name="hellocontroller" target="1.6" />
-      <module name="helloservice" target="1.6" />
+      <module name="idservice" target="1.6" />
+      <module name="idserviceapi" target="1.6" />
+      <module name="swaggerconfiguration" target="1.6" />
+      <module name="usercontroller" target="1.6" />
+      <module name="userservice" target="1.6" />
+      <module name="userserviceapi" target="1.6" />
       <module name="utils" target="1.6" />
       <module name="zipkin" target="1.6" />
+      <module name="zipkinconfiguration" target="1.6" />
     </bytecodeTargetLevel>
   </component>
 </project>

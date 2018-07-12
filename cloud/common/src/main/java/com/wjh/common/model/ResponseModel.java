@@ -2,7 +2,7 @@ package com.wjh.common.model;
 
 import com.alibaba.fastjson.JSON;
 
-public class ResponseModel {
+public class ResponseModel <T> {
 
     private String repCode = "S0000";
 
@@ -11,9 +11,9 @@ public class ResponseModel {
     private String pertain = "gateway";
 
     //因为前段需要统计页数，加上这个属性
-    private Integer totalRows =0;
+    private Integer totalRows = 0;
 
-    private Object resModel;
+    private T resModel;
 
     private Object resExtra;
 
@@ -21,7 +21,7 @@ public class ResponseModel {
 
     }
 
-    public ResponseModel(String repCode, String repNote, String pertain, Integer totalRows, Object resModel, Object resExtra) {
+    public ResponseModel(String repCode, String repNote, String pertain, Integer totalRows, T resModel, Object resExtra) {
         this.repCode = repCode;
         this.repNote = repNote;
         this.pertain = pertain;
@@ -53,6 +53,30 @@ public class ResponseModel {
 
     public Object getResExtra() {
         return resExtra;
+    }
+
+    public void setRepCode(String repCode) {
+        this.repCode = repCode;
+    }
+
+    public void setRepNote(String repNote) {
+        this.repNote = repNote;
+    }
+
+    public void setPertain(String pertain) {
+        this.pertain = pertain;
+    }
+
+    public void setTotalRows(Integer totalRows) {
+        this.totalRows = totalRows;
+    }
+
+    public void setResModel(T resModel) {
+        this.resModel = resModel;
+    }
+
+    public void setResExtra(Object resExtra) {
+        this.resExtra = resExtra;
     }
 
     @Override

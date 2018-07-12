@@ -5,13 +5,18 @@
       <module fileurl="file://$PROJECT_DIR$/cloud.iml" filepath="$PROJECT_DIR$/cloud.iml" />
       <module fileurl="file://$PROJECT_DIR$/common/common.iml" filepath="$PROJECT_DIR$/common/common.iml" />
       <module fileurl="file://$PROJECT_DIR$/config/config.iml" filepath="$PROJECT_DIR$/config/config.iml" />
-      <module fileurl="file://$PROJECT_DIR$/configuration/configuration.iml" filepath="$PROJECT_DIR$/configuration/configuration.iml" />
+      <module fileurl="file://$PROJECT_DIR$/configconfiguration/configconfiguration.iml" filepath="$PROJECT_DIR$/configconfiguration/configconfiguration.iml" />
       <module fileurl="file://$PROJECT_DIR$/eureka/eureka.iml" filepath="$PROJECT_DIR$/eureka/eureka.iml" />
       <module fileurl="file://$PROJECT_DIR$/gateway/gateway.iml" filepath="$PROJECT_DIR$/gateway/gateway.iml" />
-      <module fileurl="file://$PROJECT_DIR$/hellocontroller/hellocontroller.iml" filepath="$PROJECT_DIR$/hellocontroller/hellocontroller.iml" />
-      <module fileurl="file://$PROJECT_DIR$/helloservice/helloservice.iml" filepath="$PROJECT_DIR$/helloservice/helloservice.iml" />
+      <module fileurl="file://$PROJECT_DIR$/idservice/idservice.iml" filepath="$PROJECT_DIR$/idservice/idservice.iml" />
+      <module fileurl="file://$PROJECT_DIR$/idserviceapi/idserviceapi.iml" filepath="$PROJECT_DIR$/idserviceapi/idserviceapi.iml" />
+      <module fileurl="file://$PROJECT_DIR$/swaggerconfiguration/swaggerconfiguration.iml" filepath="$PROJECT_DIR$/swaggerconfiguration/swaggerconfiguration.iml" />
+      <module fileurl="file://$PROJECT_DIR$/usercontroller/usercontroller.iml" filepath="$PROJECT_DIR$/usercontroller/usercontroller.iml" />
+      <module fileurl="file://$PROJECT_DIR$/userservice/userservice.iml" filepath="$PROJECT_DIR$/userservice/userservice.iml" />
+      <module fileurl="file://$PROJECT_DIR$/userserviceapi/userserviceapi.iml" filepath="$PROJECT_DIR$/userserviceapi/userserviceapi.iml" />
       <module fileurl="file://$PROJECT_DIR$/utils/utils.iml" filepath="$PROJECT_DIR$/utils/utils.iml" />
       <module fileurl="file://$PROJECT_DIR$/zipkin/zipkin.iml" filepath="$PROJECT_DIR$/zipkin/zipkin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/zipkinconfiguration/zipkinconfiguration.iml" filepath="$PROJECT_DIR$/zipkinconfiguration/zipkinconfiguration.iml" />
     </modules>
   </component>
 </project>

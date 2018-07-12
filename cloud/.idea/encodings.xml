@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="Encoding" defaultCharsetForPropertiesFiles="UTF-8">
+  <component name="Encoding">
     <file url="file://$PROJECT_DIR$" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/common" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/config" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/configuration" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/configconfiguration" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/eureka" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/gateway" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/hellocontroller" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/helloservice" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/idservice" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/idserviceapi" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/swaggerconfiguration" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/usercontroller" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/userservice" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/userserviceapi" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/utils" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/zipkin" charset="UTF-8" />
-    <file url="PROJECT" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/zipkinconfiguration" charset="UTF-8" />
   </component>
 </project>
