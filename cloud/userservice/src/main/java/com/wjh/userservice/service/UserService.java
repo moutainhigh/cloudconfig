@@ -2,7 +2,7 @@ package com.wjh.userservice.service;
 
 
 import com.wjh.userservice.mapper.UserMapper;
-import com.wjh.userserviceapi.model.User;
+import com.wjh.userservicemodel.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

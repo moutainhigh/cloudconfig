@@ -1,13 +1,10 @@
 package com.wjh.userservice.controller;
 
-import com.netflix.discovery.converters.Auto;
 import com.wjh.common.model.ResponseConstant;
 import com.wjh.common.model.ResponseModel;
-import com.wjh.idserviceapi.api.IdServiceI;
 import com.wjh.userservice.service.IdService;
 import com.wjh.userservice.service.UserService;
-import com.wjh.userserviceapi.api.UserServiceI;
-import com.wjh.userserviceapi.model.User;
+import com.wjh.userservicemodel.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -23,7 +20,8 @@ import static com.wjh.common.model.ResponseConstant.PASSWORD_NOT_EQUAL;
 @Api(description = "用户相关接口")
 @RefreshScope
 @RestController
-public class UserController implements UserServiceI {
+@RequestMapping("/user")
+public class UserController {
     @Autowired
     private UserService userService;
 
@@ -36,6 +34,9 @@ public class UserController implements UserServiceI {
 
 
         try {
+
+            long id=idService.generateId();
+
             User user = userService.detailByUser(mobile);
             ResponseModel<User> responseModel = new ResponseModel<User>();
             responseModel.setResModel(user);

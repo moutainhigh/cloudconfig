@@ -18,7 +18,7 @@
         <module>common</module>
         <module>swaggerconfiguration</module>
         <module>utils</module>
-        <module>userserviceapi</module>
+        <module>userservicemodel</module>
         <module>idservice</module>
         <module>idserviceapi</module>
         <module>configconfiguration</module>
@@ -31,8 +31,7 @@
         <cloud.common.version>1.0-SNAPSHOT</cloud.common.version>
         <cloud.utils.version>1.0-SNAPSHOT</cloud.utils.version>
         <cloud.swaggerconfiguration>1.0-SNAPSHOT</cloud.swaggerconfiguration>
-        <cloud.userserviceapi>1.0-SNAPSHOT</cloud.userserviceapi>
-        <cloud.idserviceapi>1.0-SNAPSHOT</cloud.idserviceapi>
+        <cloud.userservicemodel>1.0-SNAPSHOT</cloud.userservicemodel>
         <cloud.configconfiguration>1.0-SNAPSHOT</cloud.configconfiguration>
         <cloud.zipkinconfiguration>1.0-SNAPSHOT</cloud.zipkinconfiguration>
         <fastjson.version>1.1.40</fastjson.version>

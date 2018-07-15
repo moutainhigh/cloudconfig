@@ -64,7 +64,7 @@
     <orderEntry type="module" module-name="configconfiguration" />
     <orderEntry type="library" name="Maven: org.springframework.cloud:spring-cloud-starter-config:1.2.3.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.cloud:spring-cloud-config-client:1.2.3.RELEASE" level="project" />
-    <orderEntry type="module" module-name="userserviceapi" />
+    <orderEntry type="module" module-name="userservicemodel" />
     <orderEntry type="module" module-name="common" />
     <orderEntry type="module" module-name="swaggerconfiguration" />
     <orderEntry type="library" name="Maven: io.springfox:springfox-swagger2:2.6.1" level="project" />

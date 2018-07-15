@@ -28,11 +28,7 @@
             <artifactId>common</artifactId>
             <version>${cloud.common.version}</version>
         </dependency>
-        <dependency>
-            <groupId>cloud</groupId>
-            <artifactId>idserviceapi</artifactId>
-            <version>${cloud.idserviceapi}</version>
-        </dependency>
+
 
         <dependency>
             <groupId>cloud</groupId>

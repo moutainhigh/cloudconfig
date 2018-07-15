@@ -1,10 +1,12 @@
 package com.wjh.userservice.service;
 
-import com.wjh.idserviceapi.api.IdServiceI;
 import org.springframework.cloud.netflix.feign.FeignClient;
-import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 
 @FeignClient(value = "idservice")
-public interface IdService extends IdServiceI {
+public interface IdService {
+    @RequestMapping(value = "/id/generateId", method = RequestMethod.GET)
+    public long generateId();
 }

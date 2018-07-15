@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.wjh.userservice.mapper.UserMapper">
 
-    <select id="detailByMobile" resultType="com.wjh.userserviceapi.model.User">
+    <select id="detailByMobile" resultType="com.wjh.userservicemodel.model.User">
         SELECT
             id,
             name,
@@ -57,14 +57,14 @@
         )VALUES
         <foreach collection="pojos" item="pojo" index="index" separator=",">
             (
-            #{pojo.id},
-            #{pojo.name},
-            #{pojo.nickname},
-            #{pojo.birthday},
-            #{pojo.mobile},
-            #{pojo.img},
-            #{pojo.gender},
-            #{pojo.password}
+            #{id},
+            #{name},
+            #{nickname},
+            #{birthday},
+            #{mobile},
+            #{img},
+            #{gender},
+            #{password}
             )
         </foreach>
     </insert>
@@ -73,16 +73,16 @@
     <update id="update">
         UPDATE user
         <set>
-            <if test="pojo.id != null"> id = #{pojo.id}, </if>
-            <if test="pojo.name != null"> name = #{pojo.name}, </if>
-            <if test="pojo.nickname != null"> nickname = #{pojo.nickname}, </if>
-            <if test="pojo.birthday != null"> birthday = #{pojo.birthday}, </if>
-            <if test="pojo.mobile != null"> mobile = #{pojo.mobile}, </if>
-            <if test="pojo.img != null"> img = #{pojo.img}, </if>
-            <if test="pojo.gender != null"> gender = #{pojo.gender}, </if>
-            <if test="pojo.password != null"> password = #{pojo.password} </if>
+            <if test="id != null"> id = #{id}, </if>
+            <if test="name != null"> name = #{name}, </if>
+            <if test="nickname != null"> nickname = #{nickname}, </if>
+            <if test="birthday != null"> birthday = #{birthday}, </if>
+            <if test="mobile != null"> mobile = #{mobile}, </if>
+            <if test="img != null"> img = #{img}, </if>
+            <if test="gender != null"> gender = #{gender}, </if>
+            <if test="password != null"> password = #{password} </if>
         </set>
-        WHERE id = #{pojo.id}
+        WHERE id = #{id}
     </update>
 
 

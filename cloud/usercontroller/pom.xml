@@ -28,8 +28,8 @@
 
         <dependency>
             <groupId>cloud</groupId>
-            <artifactId>userserviceapi</artifactId>
-            <version>${cloud.userserviceapi}</version>
+            <artifactId>userservicemodel</artifactId>
+            <version>${cloud.userservicemodel}</version>
         </dependency>
 
 

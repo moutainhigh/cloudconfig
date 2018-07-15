@@ -23,11 +23,7 @@
             <artifactId>configconfiguration</artifactId>
             <version>${cloud.configconfiguration}</version>
         </dependency>
-        <dependency>
-            <groupId>cloud</groupId>
-            <artifactId>idserviceapi</artifactId>
-            <version>${cloud.idserviceapi}</version>
-        </dependency>
+
         <dependency>
             <groupId>cloud</groupId>
             <artifactId>common</artifactId>
@@ -36,8 +32,8 @@
 
         <dependency>
             <groupId>cloud</groupId>
-            <artifactId>userserviceapi</artifactId>
-            <version>${cloud.userserviceapi}</version>
+            <artifactId>userservicemodel</artifactId>
+            <version>${cloud.userservicemodel}</version>
         </dependency>
 
         <dependency>
@@ -69,6 +65,12 @@
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
             <version>${mybatis-spring-boot-starter.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
 

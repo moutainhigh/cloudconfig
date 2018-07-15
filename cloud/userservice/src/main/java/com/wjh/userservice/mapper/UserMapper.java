@@ -1,6 +1,6 @@
 package com.wjh.userservice.mapper;
 
- import com.wjh.userserviceapi.model.User;
+ import com.wjh.userservicemodel.model.User;
  import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 

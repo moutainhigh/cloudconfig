@@ -3,7 +3,7 @@ package com.wjh.usercontroller.controller;
 
 import com.wjh.common.model.ResponseModel;
 import com.wjh.usercontroller.service.UserService;
-import com.wjh.userserviceapi.model.User;
+import com.wjh.userservicemodel.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;

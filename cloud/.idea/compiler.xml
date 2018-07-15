@@ -12,11 +12,11 @@
         <module name="eureka" />
         <module name="gateway" />
         <module name="idservice" />
-        <module name="idserviceapi" />
         <module name="swaggerconfiguration" />
         <module name="usercontroller" />
         <module name="userservice" />
         <module name="userserviceapi" />
+        <module name="userservicemodel" />
         <module name="utils" />
         <module name="zipkin" />
         <module name="zipkinconfiguration" />
@@ -35,6 +35,7 @@
       <module name="usercontroller" target="1.6" />
       <module name="userservice" target="1.6" />
       <module name="userserviceapi" target="1.6" />
+      <module name="userservicemodel" target="1.6" />
       <module name="utils" target="1.6" />
       <module name="zipkin" target="1.6" />
       <module name="zipkinconfiguration" target="1.6" />

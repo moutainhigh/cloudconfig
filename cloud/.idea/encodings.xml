@@ -12,7 +12,7 @@
     <file url="file://$PROJECT_DIR$/swaggerconfiguration" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/usercontroller" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/userservice" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/userserviceapi" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/userservicemodel" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/utils" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/zipkin" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/zipkinconfiguration" charset="UTF-8" />
