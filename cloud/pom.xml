@@ -20,7 +20,6 @@
         <module>utils</module>
         <module>userservicemodel</module>
         <module>idservice</module>
-        <module>idserviceapi</module>
         <module>configconfiguration</module>
         <module>zipkinconfiguration</module>
     </modules>
