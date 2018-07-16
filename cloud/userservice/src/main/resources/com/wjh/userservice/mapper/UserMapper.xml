@@ -19,7 +19,7 @@
 
 
     <insert id="insert">
-        INSERT INTO users
+        INSERT INTO user
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null"> id, </if>
             <if test="name != null"> name, </if>
@@ -44,30 +44,7 @@
     </insert>
 
 
-    <insert id="insertList">
-        INSERT INTO user(
-            id,
-            name,
-            nickname,
-            birthday,
-            mobile,
-            img,
-            gender,
-            password
-        )VALUES
-        <foreach collection="pojos" item="pojo" index="index" separator=",">
-            (
-            #{id},
-            #{name},
-            #{nickname},
-            #{birthday},
-            #{mobile},
-            #{img},
-            #{gender},
-            #{password}
-            )
-        </foreach>
-    </insert>
+
 
 
     <update id="update">
@@ -87,5 +64,24 @@
 
 
 
+    <select id="selectByLogin" resultType="com.wjh.userservicemodel.model.User">
+         SELECT
+            id,
+            name,
+            nickname,
+            birthday,
+            mobile,
+            img,
+            gender,
+            password
+        FROM
+            user u
+        where u.mobile=#{mobile} and u.password=#{password}
+    </select>
+
+
+    <delete id="delete">
+        delete from user where id=#{id}
+    </delete>
 
 </mapper>
