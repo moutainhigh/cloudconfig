@@ -9,10 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @Api(description = "用户相关接口")
@@ -20,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/userInfo")
 public class UserController {
+
 
     @Autowired
     UserService userService;
@@ -30,6 +28,32 @@ public class UserController {
     public ResponseModel<User> detailByMobile(@ApiParam(value = "手机", required = true) @RequestParam(required = true) String mobile) {
         ResponseModel responseModel = userService.detailByMobile(mobile);
         return responseModel;
+    }
+
+
+
+    @ApiOperation(value = "注册")
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public ResponseModel register(
+            @ApiParam(value = "手机", required = true) @RequestParam(required = true) String mobile,
+            @ApiParam(value = "密码，MD5加密", required = true) @RequestParam(required = true) String password,
+            @ApiParam(value = "重复密码，MD5加密", required = true) @RequestParam(required = true) String repeatPassword) {
+        return userService.register(mobile,password,repeatPassword);
+    }
+
+
+    @ApiOperation(value = "更新")
+    @RequestMapping(value = "/update", method = RequestMethod.PUT)
+    public ResponseModel<User> update(@ApiParam(value = "用户") @RequestBody(required = true) User user) {
+        return userService.update(user);
+    }
+
+
+
+    @ApiOperation(value = "删除")
+    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
+    public ResponseModel<User> delete(@ApiParam(value = "id") @RequestParam(required = true) String id) {
+        return userService.delete(id);
     }
 
 }
