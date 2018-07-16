@@ -13,15 +13,16 @@
 
 
     <dependencies>
+
         <dependency>
             <groupId>cloud</groupId>
             <artifactId>zipkinconfiguration</artifactId>
-            <version>${cloud.zipkinconfiguration}</version>
+            <version>${cloud.zipkinconfiguration.version}</version>
         </dependency>
         <dependency>
             <groupId>cloud</groupId>
             <artifactId>configconfiguration</artifactId>
-            <version>${cloud.configconfiguration}</version>
+            <version>${cloud.configconfiguration.version}</version>
         </dependency>
 
         <dependency>
@@ -33,22 +34,23 @@
         <dependency>
             <groupId>cloud</groupId>
             <artifactId>userservicemodel</artifactId>
-            <version>${cloud.userservicemodel}</version>
+            <version>${cloud.userservicemodel.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>cloud</groupId>
-            <artifactId>common</artifactId>
-            <version>${cloud.common.version}</version>
-        </dependency>
+
 
 
         <dependency>
             <groupId>cloud</groupId>
             <artifactId>swaggerconfiguration</artifactId>
-            <version>${cloud.swaggerconfiguration}</version>
+            <version>${cloud.swaggerconfiguration.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>cloud</groupId>
+            <artifactId>commonconfiguration</artifactId>
+            <version>${cloud.commonconfiguration.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.cloud</groupId>
