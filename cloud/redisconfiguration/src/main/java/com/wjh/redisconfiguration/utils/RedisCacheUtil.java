@@ -1,4 +1,4 @@
-package com.wjh.utils.redis;
+package com.wjh.redisconfiguration.utils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

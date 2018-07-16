@@ -31,7 +31,7 @@ public class UserServiceHystrix implements UserService {
     @Override
     public ResponseModel<User> delete(String id) {
         ResponseModel responseModel = new ResponseModel();
-        responseModel.setResModel("aaaaaaaaaaaaaaaaaaaaaaaaa3");
+        responseModel.setResModel("aaaaaaaaaaaaaaaaaaaaaaaaa4");
         return responseModel;
     }
 }

@@ -92,6 +92,12 @@ public class UserController {
     public ResponseModel<User> delete(@ApiParam(value = "id") @RequestParam(required = true) String id) {
         long idLong = Long.valueOf(id);
         userService.delete(idLong);
+        logger.info("===============================================================00");
+        try {
+            Thread.currentThread().sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         ResponseModel<User> responseModel = new ResponseModel<User>();
         return responseModel;
     }

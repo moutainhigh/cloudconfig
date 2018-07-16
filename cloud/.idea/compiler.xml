@@ -7,11 +7,13 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="common" />
+        <module name="commonconfiguration" />
         <module name="config" />
         <module name="configconfiguration" />
         <module name="eureka" />
         <module name="gateway" />
         <module name="idservice" />
+        <module name="redisconfiguration" />
         <module name="swaggerconfiguration" />
         <module name="usercontroller" />
         <module name="userservice" />
@@ -25,12 +27,14 @@
     <bytecodeTargetLevel>
       <module name="cloud" target="1.6" />
       <module name="common" target="1.6" />
+      <module name="commonconfiguration" target="1.6" />
       <module name="config" target="1.6" />
       <module name="configconfiguration" target="1.6" />
       <module name="eureka" target="1.6" />
       <module name="gateway" target="1.6" />
       <module name="idservice" target="1.6" />
       <module name="idserviceapi" target="1.6" />
+      <module name="redisconfiguration" target="1.6" />
       <module name="swaggerconfiguration" target="1.6" />
       <module name="usercontroller" target="1.6" />
       <module name="userservice" target="1.6" />

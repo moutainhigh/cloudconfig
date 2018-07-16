@@ -3,7 +3,7 @@ package com.wjh.gateway.filter;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.wjh.common.model.ResponseConstant;
-import com.wjh.utils.redis.RedisCacheUtil;
+import com.wjh.redisconfiguration.utils.RedisCacheUtil;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,11 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Component;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.List;
-
 @Component
 @RefreshScope
 public class AccessTokenFilter  extends ZuulFilter{

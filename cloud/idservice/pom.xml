@@ -15,13 +15,18 @@
     <dependencies>
         <dependency>
             <groupId>cloud</groupId>
+            <artifactId>commonconfiguration</artifactId>
+            <version>${cloud.commonconfiguration.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>cloud</groupId>
             <artifactId>zipkinconfiguration</artifactId>
-            <version>${cloud.zipkinconfiguration}</version>
+            <version>${cloud.zipkinconfiguration.version}</version>
         </dependency>
         <dependency>
             <groupId>cloud</groupId>
             <artifactId>configconfiguration</artifactId>
-            <version>${cloud.configconfiguration}</version>
+            <version>${cloud.configconfiguration.version}</version>
         </dependency>
         <dependency>
             <groupId>cloud</groupId>
@@ -33,7 +38,7 @@
         <dependency>
             <groupId>cloud</groupId>
             <artifactId>swaggerconfiguration</artifactId>
-            <version>${cloud.swaggerconfiguration}</version>
+            <version>${cloud.swaggerconfiguration.version}</version>
         </dependency>
 
         <dependency>
