@@ -5,6 +5,7 @@ import com.wjh.common.model.ResponseModel;
 import com.wjh.common.model.ServiceIdConstant;
 import com.wjh.userservice.service.IdService;
 import com.wjh.userservice.service.UserService;
+import com.wjh.redisconfiguration.utils.RedisCacheUtil;
 import com.wjh.userservicemodel.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -15,11 +16,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
-import static com.wjh.common.model.ResponseConstant.LOGIN_FAIL;
-import static com.wjh.common.model.ResponseConstant.MOBILE_EXISTS;
-import static com.wjh.common.model.ResponseConstant.PASSWORD_NOT_EQUAL;
+import static com.wjh.common.model.ResponseConstant.*;
 
 @Api(description = "用户相关接口")
 @RefreshScope
@@ -31,20 +32,21 @@ public class UserController {
     private UserService userService;
 
 
+    @Autowired
+    private RedisCacheUtil redisCacheUtil;
+
     @ApiOperation(value = "查询用户")
     @RequestMapping(value = "/detailByMobile", method = RequestMethod.GET)
     public ResponseModel<User> detailByMobile(@ApiParam(value = "手机", required = true) @RequestParam(required = true) String mobile) {
 
 
         try {
-
-
             User user = userService.detailByUser(mobile);
             ResponseModel<User> responseModel = new ResponseModel<User>();
             responseModel.setResModel(user);
             return responseModel;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(ServiceIdConstant.userservice, e);
             return ResponseConstant.SYSTEM_EXCEPTION;
         }
 
@@ -80,10 +82,15 @@ public class UserController {
     @ApiOperation(value = "更新")
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
     public ResponseModel<User> update(@ApiParam(value = "用户") @RequestBody(required = true) User user) {
-        User userR = userService.update(user);
-        ResponseModel<User> responseModel = new ResponseModel<User>();
-        responseModel.setResModel(userR);
-        return responseModel;
+        try {
+            User userR = userService.update(user);
+            ResponseModel<User> responseModel = new ResponseModel<User>();
+            responseModel.setResModel(userR);
+            return responseModel;
+        } catch (Exception e) {
+            logger.error(ServiceIdConstant.userservice, e);
+            return SYSTEM_EXCEPTION;
+        }
     }
 
 
@@ -92,12 +99,6 @@ public class UserController {
     public ResponseModel<User> delete(@ApiParam(value = "id") @RequestParam(required = true) String id) {
         long idLong = Long.valueOf(id);
         userService.delete(idLong);
-        logger.info("===============================================================00");
-        try {
-            Thread.currentThread().sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         ResponseModel<User> responseModel = new ResponseModel<User>();
         return responseModel;
     }
@@ -116,12 +117,27 @@ public class UserController {
                 return LOGIN_FAIL;
             }
             String token = UUID.randomUUID().toString();
-            ResponseModel<String> responseModel = new ResponseModel<String>();
-            responseModel.setResModel(token);
+
+
+            //查看旧有的token-->userId,  userId-->token关系
+            String oldToken = (String) redisCacheUtil.getCacheObject(user.getId() + "");
+            if (null != oldToken) {
+                redisCacheUtil.delete(oldToken);
+            }
+            redisCacheUtil.delete(user.getId() + "");
+
+
+            //加入新的token-->userId,  userId-->token关系
+            redisCacheUtil.setCacheObject(token, user.getId() + "", 60 * 60 * 2);
+            redisCacheUtil.setCacheObject(user.getId() + "", token);
+
+            ResponseModel<Object> responseModel = new ResponseModel<Object>();
+            Map<String,Object> map=new HashMap(1);
+            map.put("token",token);
+            responseModel.setResModel(map);
             return responseModel;
 
         } catch (Exception e) {
-            ;
             logger.error(ServiceIdConstant.userservice, e);
             return ResponseConstant.SYSTEM_EXCEPTION;
         }

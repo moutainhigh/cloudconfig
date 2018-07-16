@@ -13,6 +13,11 @@
 
 
     <dependencies>
+        <dependency>
+            <groupId>cloud</groupId>
+            <artifactId>redisconfiguration</artifactId>
+            <version>${cloud.redisconfiguration.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>cloud</groupId>
