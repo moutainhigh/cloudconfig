@@ -29,19 +29,19 @@
       <module name="cloud" target="1.6" />
       <module name="common" target="1.6" />
       <module name="commonconfiguration" target="1.6" />
-      <module name="config" target="1.6" />
+      <module name="config" target="1.8" />
       <module name="configconfiguration" target="1.6" />
-      <module name="eureka" target="1.6" />
-      <module name="gateway" target="1.6" />
-      <module name="idservice" target="1.6" />
+      <module name="eureka" target="1.8" />
+      <module name="gateway" target="1.8" />
+      <module name="idservice" target="1.8" />
       <module name="quartz" target="1.8" />
       <module name="redisconfiguration" target="1.6" />
       <module name="swaggerconfiguration" target="1.6" />
-      <module name="usercontroller" target="1.6" />
-      <module name="userservice" target="1.6" />
+      <module name="usercontroller" target="1.8" />
+      <module name="userservice" target="1.8" />
       <module name="userservicemodel" target="1.6" />
       <module name="utils" target="1.6" />
-      <module name="zipkin" target="1.6" />
+      <module name="zipkin" target="1.8" />
       <module name="zipkinconfiguration" target="1.6" />
     </bytecodeTargetLevel>
   </component>

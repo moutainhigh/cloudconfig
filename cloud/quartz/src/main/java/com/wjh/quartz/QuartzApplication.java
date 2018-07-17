@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableScheduling
 @SpringBootApplication
 @ComponentScan("com.wjh")
-
+@EnableEurekaClient
 public class QuartzApplication {
 
     public static void main(String[] args) {
