@@ -3,13 +3,15 @@ package com.wjh.userservice.controller;
 import com.wjh.common.model.ResponseConstant;
 import com.wjh.common.model.ResponseModel;
 import com.wjh.common.model.ServiceIdConstant;
-import com.wjh.userservice.service.IdService;
 import com.wjh.userservice.service.UserService;
-import com.wjh.redisconfiguration.utils.RedisCacheUtil;
-import com.wjh.userservicemodel.model.User;
+import com.wjh.userservicemodel.model.UserDto;
+import com.wjh.userservicemodel.model.UserPo;
+import com.wjh.userservicemodel.model.UserVo;
+import com.wjh.utils.redis.RedisCacheUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,12 +39,12 @@ public class UserController {
 
     @ApiOperation(value = "查询用户")
     @RequestMapping(value = "/detailByMobile", method = RequestMethod.GET)
-    public ResponseModel<User> detailByMobile(@ApiParam(value = "手机", required = true) @RequestParam(required = true) String mobile) {
+    public ResponseModel detailByMobile(@ApiParam(value = "手机", required = true) @RequestParam(required = true) String mobile) {
 
 
         try {
-            User user = userService.detailByUser(mobile);
-            ResponseModel<User> responseModel = new ResponseModel<User>();
+            UserVo user = userService.detailByUser(mobile);
+            ResponseModel<UserVo> responseModel = new ResponseModel<UserVo>();
             responseModel.setResModel(user);
             return responseModel;
         } catch (Exception e) {
@@ -63,16 +65,16 @@ public class UserController {
             return PASSWORD_NOT_EQUAL;
         }
 
-        User userInDb = userService.detailByUser(mobile);
+        UserVo userInDb = userService.detailByUser(mobile);
         if (null != userInDb) {
             return MOBILE_EXISTS;
         }
 
-        User user = new User();
+        UserPo user = new UserPo();
         user.setMobile(mobile);
         user.setPassword(password);
-        User userR = userService.insert(user);
-        ResponseModel<User> responseModel = new ResponseModel();
+        UserPo userR = userService.insert(user);
+        ResponseModel responseModel = new ResponseModel();
         responseModel.setResModel(userR);
         return responseModel;
 
@@ -81,10 +83,14 @@ public class UserController {
 
     @ApiOperation(value = "更新")
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
-    public ResponseModel<User> update(@ApiParam(value = "用户") @RequestBody(required = true) User user) {
+    public ResponseModel update(@ApiParam(value = "用户") @RequestBody(required = true) UserDto user) {
         try {
-            User userR = userService.update(user);
-            ResponseModel<User> responseModel = new ResponseModel<User>();
+
+            UserPo userPo=new UserPo();
+            BeanUtils.copyProperties(userPo,user);
+
+            UserPo userR = userService.update(userPo);
+            ResponseModel responseModel = new ResponseModel();
             responseModel.setResModel(userR);
             return responseModel;
         } catch (Exception e) {
@@ -96,10 +102,10 @@ public class UserController {
 
     @ApiOperation(value = "删除")
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
-    public ResponseModel<User> delete(@ApiParam(value = "id") @RequestParam(required = true) String id) {
+    public ResponseModel delete(@ApiParam(value = "id") @RequestParam(required = true) String id) {
         long idLong = Long.valueOf(id);
         userService.delete(idLong);
-        ResponseModel<User> responseModel = new ResponseModel<User>();
+        ResponseModel responseModel = new ResponseModel();
         return responseModel;
     }
 
@@ -112,7 +118,7 @@ public class UserController {
         try {
 
 
-            User user = userService.selectByLogin(mobile, password);
+            UserVo user = userService.selectByLogin(mobile, password);
             if (null == user) {
                 return LOGIN_FAIL;
             }
@@ -132,7 +138,7 @@ public class UserController {
             redisCacheUtil.setCacheObject(token, user.getId() + "", expireSeconds);
             redisCacheUtil.setCacheObject(user.getId() + "", token,expireSeconds);
 
-            ResponseModel<Object> responseModel = new ResponseModel<Object>();
+            ResponseModel responseModel = new ResponseModel();
             Map<String,Object> map=new HashMap(1);
             map.put("token",token);
             responseModel.setResModel(map);

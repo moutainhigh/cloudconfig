@@ -20,6 +20,13 @@
             <artifactId>common</artifactId>
             <version>${cloud.common.version}</version>
         </dependency>
+        <dependency>
+            <groupId>cloud</groupId>
+            <artifactId>swaggerconfiguration</artifactId>
+            <version>${cloud.swaggerconfiguration.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
     </dependencies>
 
 </project>

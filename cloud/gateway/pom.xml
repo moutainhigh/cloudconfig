@@ -13,24 +13,24 @@
 
 
     <dependencies>
-
         <dependency>
             <groupId>cloud</groupId>
-            <artifactId>commonconfiguration</artifactId>
-            <version>${cloud.commonconfiguration.version}</version>
+            <artifactId>utils</artifactId>
+            <version>${cloud.utils.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>cloud</groupId>
-            <artifactId>redisconfiguration</artifactId>
-            <version>${cloud.redisconfiguration.version}</version>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-config</artifactId>
         </dependency>
 
+
         <dependency>
-            <groupId>cloud</groupId>
-            <artifactId>configconfiguration</artifactId>
-            <version>${cloud.configconfiguration.version}</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
+
+
 
         <dependency>
             <groupId>cloud</groupId>

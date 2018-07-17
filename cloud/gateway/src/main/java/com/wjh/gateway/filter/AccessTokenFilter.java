@@ -3,7 +3,7 @@ package com.wjh.gateway.filter;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.wjh.common.model.ResponseConstant;
-import com.wjh.redisconfiguration.utils.RedisCacheUtil;
+import com.wjh.utils.redis.RedisCacheUtil;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

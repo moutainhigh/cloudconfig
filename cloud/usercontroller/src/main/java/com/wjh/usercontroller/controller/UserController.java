@@ -3,7 +3,7 @@ package com.wjh.usercontroller.controller;
 
 import com.wjh.common.model.ResponseModel;
 import com.wjh.usercontroller.service.UserService;
-import com.wjh.userservicemodel.model.User;
+import com.wjh.userservicemodel.model.UserDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -25,7 +25,7 @@ public class UserController {
 
     @ApiOperation(value = "用户详情")
     @RequestMapping(value = "/detailByMobile", method = RequestMethod.GET)
-    public ResponseModel<User> detailByMobile(@ApiParam(value = "手机", required = true) @RequestParam(required = true) String mobile) {
+    public ResponseModel detailByMobile(@ApiParam(value = "手机", required = true) @RequestParam(required = true) String mobile) {
         ResponseModel responseModel = userService.detailByMobile(mobile);
         return responseModel;
     }
@@ -44,7 +44,7 @@ public class UserController {
 
     @ApiOperation(value = "更新")
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
-    public ResponseModel<User> update(@ApiParam(value = "用户") @RequestBody(required = true) User user) {
+    public ResponseModel update(@ApiParam(value = "用户") @RequestBody(required = true) UserDto user) {
         return userService.update(user);
     }
 
@@ -52,7 +52,7 @@ public class UserController {
 
     @ApiOperation(value = "删除")
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
-    public ResponseModel<User> delete(@ApiParam(value = "id") @RequestParam(required = true) String id) {
+    public ResponseModel delete(@ApiParam(value = "id") @RequestParam(required = true) String id) {
         return userService.delete(id);
     }
 

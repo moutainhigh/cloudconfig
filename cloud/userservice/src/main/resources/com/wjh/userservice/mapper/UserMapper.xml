@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.wjh.userservice.mapper.UserMapper">
 
-    <select id="detailByMobile" resultType="com.wjh.userservicemodel.model.User">
+    <select id="detailByMobile" resultType="com.wjh.userservicemodel.model.UserVo">
         SELECT
             id,
             name,
@@ -64,7 +64,7 @@
 
 
 
-    <select id="selectByLogin" resultType="com.wjh.userservicemodel.model.User">
+    <select id="selectByLogin" resultType="com.wjh.userservicemodel.model.UserVo">
          SELECT
             id,
             name,

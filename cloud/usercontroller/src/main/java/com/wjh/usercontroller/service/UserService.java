@@ -3,8 +3,7 @@ package com.wjh.usercontroller.service;
 
 import com.wjh.common.model.ResponseModel;
 import com.wjh.usercontroller.hystrix.UserServiceHystrix;
-import com.wjh.userservicemodel.model.User;
-import io.swagger.annotations.ApiParam;
+import com.wjh.userservicemodel.model.UserDto;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(value = "userservice", fallback = UserServiceHystrix.class)
 public interface UserService {
     @RequestMapping(value = "/user/detailByMobile", method = RequestMethod.GET)
-    ResponseModel<User> detailByMobile(@RequestParam("mobile") String mobile);
+    ResponseModel detailByMobile(@RequestParam("mobile") String mobile);
 
 
     @RequestMapping(value = "/user/register", method = RequestMethod.POST)
@@ -25,11 +24,11 @@ public interface UserService {
 
 
     @RequestMapping(value = "/user/update", method = RequestMethod.PUT)
-    public ResponseModel<User> update( @RequestBody User user);
+    public ResponseModel update(@RequestBody UserDto user);
 
 
 
     @RequestMapping(value = "/user/delete", method = RequestMethod.DELETE)
-    public ResponseModel<User> delete( @RequestParam("id") String id);
+    public ResponseModel delete(@RequestParam("id") String id);
 
 }

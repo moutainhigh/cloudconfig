@@ -4,14 +4,12 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/cloud.iml" filepath="$PROJECT_DIR$/cloud.iml" />
       <module fileurl="file://$PROJECT_DIR$/common/common.iml" filepath="$PROJECT_DIR$/common/common.iml" />
-      <module fileurl="file://$PROJECT_DIR$/commonconfiguration/commonconfiguration.iml" filepath="$PROJECT_DIR$/commonconfiguration/commonconfiguration.iml" />
       <module fileurl="file://$PROJECT_DIR$/config/config.iml" filepath="$PROJECT_DIR$/config/config.iml" />
-      <module fileurl="file://$PROJECT_DIR$/configconfiguration/configconfiguration.iml" filepath="$PROJECT_DIR$/configconfiguration/configconfiguration.iml" />
       <module fileurl="file://$PROJECT_DIR$/eureka/eureka.iml" filepath="$PROJECT_DIR$/eureka/eureka.iml" />
       <module fileurl="file://$PROJECT_DIR$/gateway/gateway.iml" filepath="$PROJECT_DIR$/gateway/gateway.iml" />
       <module fileurl="file://$PROJECT_DIR$/idservice/idservice.iml" filepath="$PROJECT_DIR$/idservice/idservice.iml" />
       <module fileurl="file://$PROJECT_DIR$/quartz/quartz.iml" filepath="$PROJECT_DIR$/quartz/quartz.iml" />
-      <module fileurl="file://$PROJECT_DIR$/redisconfiguration/redisconfiguration.iml" filepath="$PROJECT_DIR$/redisconfiguration/redisconfiguration.iml" />
+      <module fileurl="file://$PROJECT_DIR$/quartzmodel/quartzmodel.iml" filepath="$PROJECT_DIR$/quartzmodel/quartzmodel.iml" />
       <module fileurl="file://$PROJECT_DIR$/swaggerconfiguration/swaggerconfiguration.iml" filepath="$PROJECT_DIR$/swaggerconfiguration/swaggerconfiguration.iml" />
       <module fileurl="file://$PROJECT_DIR$/usercontroller/usercontroller.iml" filepath="$PROJECT_DIR$/usercontroller/usercontroller.iml" />
       <module fileurl="file://$PROJECT_DIR$/userservice/userservice.iml" filepath="$PROJECT_DIR$/userservice/userservice.iml" />

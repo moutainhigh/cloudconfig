@@ -20,24 +20,20 @@
         <module>utils</module>
         <module>userservicemodel</module>
         <module>idservice</module>
-        <module>configconfiguration</module>
         <module>zipkinconfiguration</module>
-        <module>redisconfiguration</module>
-        <module>commonconfiguration</module>
         <module>quartz</module>
+        <module>quartzmodel</module>
     </modules>
 
 
     <properties>
         <docker-host>http://192.168.42.162:2375</docker-host>
         <cloud.common.version>1.0-SNAPSHOT</cloud.common.version>
-        <cloud.redisconfiguration.version>1.0-SNAPSHOT</cloud.redisconfiguration.version>
         <cloud.swaggerconfiguration.version>1.0-SNAPSHOT</cloud.swaggerconfiguration.version>
         <cloud.userservicemodel.version>1.0-SNAPSHOT</cloud.userservicemodel.version>
-        <cloud.configconfiguration.version>1.0-SNAPSHOT</cloud.configconfiguration.version>
         <cloud.zipkinconfiguration.version>1.0-SNAPSHOT</cloud.zipkinconfiguration.version>
-        <cloud.commonconfiguration.version>1.0-SNAPSHOT</cloud.commonconfiguration.version>
         <cloud.utils.version>1.0-SNAPSHOT</cloud.utils.version>
+        <cloud.quartzmodel.version>1.0-SNAPSHOT</cloud.quartzmodel.version>
         <commons-lang.version>2.6</commons-lang.version>
         <fastjson.version>1.1.40</fastjson.version>
         <mysql-connector-java.version>5.1.44</mysql-connector-java.version>
@@ -48,7 +44,7 @@
         <encoding>UTF-8</encoding>
         <source.version>1.8</source.version>
         <target.version>1.8</target.version>
-
+        <beanutils.version>1.9.3</beanutils.version>
     </properties>
 
 
@@ -65,6 +61,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>1.4.0.RELEASE</version>
+
     </parent>
 
 
@@ -106,6 +103,12 @@
             <version>${log4j.version}</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/commons-beanutils/commons-beanutils -->
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+            <version>${beanutils.version}</version>
+        </dependency>
 
     </dependencies>
 

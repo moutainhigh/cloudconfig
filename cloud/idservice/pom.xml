@@ -14,20 +14,16 @@
 
     <dependencies>
         <dependency>
-            <groupId>cloud</groupId>
-            <artifactId>commonconfiguration</artifactId>
-            <version>${cloud.commonconfiguration.version}</version>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-config</artifactId>
         </dependency>
+
         <dependency>
             <groupId>cloud</groupId>
             <artifactId>zipkinconfiguration</artifactId>
             <version>${cloud.zipkinconfiguration.version}</version>
         </dependency>
-        <dependency>
-            <groupId>cloud</groupId>
-            <artifactId>configconfiguration</artifactId>
-            <version>${cloud.configconfiguration.version}</version>
-        </dependency>
+
         <dependency>
             <groupId>cloud</groupId>
             <artifactId>common</artifactId>
@@ -57,7 +53,6 @@
 
     <build>
         <plugins>
-
 
 
             <plugin>

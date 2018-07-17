@@ -7,14 +7,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="common" />
-        <module name="commonconfiguration" />
         <module name="config" />
-        <module name="configconfiguration" />
         <module name="eureka" />
         <module name="gateway" />
         <module name="idservice" />
         <module name="quartz" />
-        <module name="redisconfiguration" />
+        <module name="quartzmodel" />
         <module name="swaggerconfiguration" />
         <module name="usercontroller" />
         <module name="userservice" />
@@ -35,6 +33,7 @@
       <module name="gateway" target="1.8" />
       <module name="idservice" target="1.8" />
       <module name="quartz" target="1.8" />
+      <module name="quartzmodel" target="1.6" />
       <module name="redisconfiguration" target="1.6" />
       <module name="swaggerconfiguration" target="1.6" />
       <module name="usercontroller" target="1.8" />

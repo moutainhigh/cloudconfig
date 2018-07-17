@@ -1,6 +1,6 @@
 package com.wjh.quartz.service;
 
-import com.wjh.quartz.model.TaskInfo;
+import com.wjh.quartzmodel.model.TaskVo;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,8 +24,8 @@ public class TaskService {
     /**
      * 所有任务列表
      */
-    public List<TaskInfo> list(){
-        List<TaskInfo> list = new ArrayList<>();
+    public List<TaskVo> list(){
+        List<TaskVo> list = new ArrayList();
 
         try {
             for(String groupJob: scheduler.getJobGroupNames()){
@@ -42,7 +42,7 @@ public class TaskService {
                             cronExpression = cronTrigger.getCronExpression();
                             createTime = cronTrigger.getDescription();
                         }
-                        TaskInfo info = new TaskInfo();
+                        TaskVo info = new TaskVo();
                         info.setJobName(jobKey.getName());
                         info.setJobGroup(jobKey.getGroup());
                         info.setJobDescription(jobDetail.getDescription());
@@ -65,7 +65,7 @@ public class TaskService {
      * @param info
      */
     @SuppressWarnings("unchecked")
-    public void addJob(TaskInfo info) {
+    public void addJob(TaskVo info) {
         String jobName = info.getJobName(),
                 jobGroup = info.getJobGroup(),
                 cronExpression = info.getCronExpression(),
@@ -95,7 +95,7 @@ public class TaskService {
      * 修改定时任务
      * @param info
      */
-    public void edit(TaskInfo info) {
+    public void edit(TaskVo info) {
         String jobName = info.getJobName(),
                 jobGroup = info.getJobGroup(),
                 cronExpression = info.getCronExpression(),

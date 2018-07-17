@@ -1,10 +1,8 @@
-package com.wjh.redisconfiguration.utils;
+package com.wjh.utils.redis;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;

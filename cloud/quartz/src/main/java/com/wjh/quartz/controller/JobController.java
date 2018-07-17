@@ -3,15 +3,18 @@ package com.wjh.quartz.controller;
 import com.wjh.common.model.ResponseConstant;
 import com.wjh.common.model.ResponseModel;
 import com.wjh.common.model.ServiceIdConstant;
-import com.wjh.quartz.model.TaskInfo;
 import com.wjh.quartz.service.TaskService;
+import com.wjh.quartzmodel.model.TaskVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -30,7 +33,7 @@ public class JobController {
     public ResponseModel list() {
         try {
 
-            List<TaskInfo> infos = taskService.list();
+            List<TaskVo> infos = taskService.list();
             ResponseModel responseModel = new ResponseModel();
             responseModel.setResModel(infos);
             responseModel.setTotalRows(infos.size());
@@ -48,7 +51,7 @@ public class JobController {
                               @ApiParam(value = "任务描述", required = true) @RequestParam(required = true) String jobDescription,
                               @ApiParam(value = "cron表达式", required = true) @RequestParam(required = true) String cronExpression) {
         try {
-            TaskInfo taskInfo = new TaskInfo();
+            TaskVo taskInfo = new TaskVo();
             taskInfo.setJobName(jobName);
             taskInfo.setJobGroup(jobGroup);
             taskInfo.setJobDescription(jobDescription);
@@ -62,7 +65,7 @@ public class JobController {
     }
 
     @ApiOperation(value = "修改任务")
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @RequestMapping(value = "/update", method = RequestMethod.PUT)
     public ResponseModel update(@ApiParam(value = "任务ID", required = true) @RequestParam(required = true) Integer id,
                                 @ApiParam(value = "任务名称", required = true) @RequestParam(required = true) String jobName,
                                 @ApiParam(value = "任务组名称", required = true) @RequestParam(required = true) String jobGroup,
@@ -70,7 +73,7 @@ public class JobController {
                                 @ApiParam(value = "cron表达式", required = true) @RequestParam(required = true) String cronExpression) {
         try {
 
-            TaskInfo taskInfo = new TaskInfo();
+            TaskVo taskInfo = new TaskVo();
             taskInfo.setId(id);
             taskInfo.setJobName(jobName);
             taskInfo.setJobGroup(jobGroup);
@@ -85,7 +88,7 @@ public class JobController {
     }
 
     @ApiOperation(value = "删除任务")
-    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
     public ResponseModel delete(@ApiParam(value = "任务名称", required = true) @RequestParam(required = true) String jobName,
                                 @ApiParam(value = "任务组名称", required = true) @RequestParam(required = true) String jobGroup) {
         try {
@@ -98,7 +101,7 @@ public class JobController {
     }
 
     @ApiOperation(value = "暂停任务")
-    @RequestMapping(value = "/pause", method = RequestMethod.POST)
+    @RequestMapping(value = "/pause", method = RequestMethod.PUT)
     public ResponseModel pause(@ApiParam(value = "任务名称", required = true) @RequestParam(required = true) String jobName,
                                @ApiParam(value = "任务组名称", required = true) @RequestParam(required = true) String jobGroup) {
         try {
@@ -111,7 +114,7 @@ public class JobController {
     }
 
     @ApiOperation(value = "重新开始任务")
-    @RequestMapping(value = "/resume", method = RequestMethod.POST)
+    @RequestMapping(value = "/resume", method = RequestMethod.PUT)
     public ResponseModel resume(@ApiParam(value = "任务名称", required = true) @RequestParam(required = true) String jobName,
                                 @ApiParam(value = "任务组名称", required = true) @RequestParam(required = true) String jobGroup) {
         try {

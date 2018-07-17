@@ -2,13 +2,13 @@ package com.wjh.usercontroller.hystrix;
 
 import com.wjh.common.model.ResponseModel;
 import com.wjh.usercontroller.service.UserService;
-import com.wjh.userservicemodel.model.User;
+import com.wjh.userservicemodel.model.UserDto;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UserServiceHystrix implements UserService {
     @Override
-    public ResponseModel<User> detailByMobile(String mobile) {
+    public ResponseModel detailByMobile(String mobile) {
         ResponseModel responseModel = new ResponseModel();
         responseModel.setResModel("aaaaaaaaaaaaaaaaaaaaaaaaa1");
         return responseModel;
@@ -22,14 +22,14 @@ public class UserServiceHystrix implements UserService {
     }
 
     @Override
-    public ResponseModel<User> update(User user) {
+    public ResponseModel update(UserDto user) {
         ResponseModel responseModel = new ResponseModel();
         responseModel.setResModel("aaaaaaaaaaaaaaaaaaaaaaaaa3");
         return responseModel;
     }
 
     @Override
-    public ResponseModel<User> delete(String id) {
+    public ResponseModel delete(String id) {
         ResponseModel responseModel = new ResponseModel();
         responseModel.setResModel("aaaaaaaaaaaaaaaaaaaaaaaaa4");
         return responseModel;

@@ -1,10 +1,13 @@
 package com.wjh.userservicemodel.model;
 
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
-public class User {
+@ApiModel
+public class UserDto {
 
-    private long id;
+    private Long id;
     private String name;
     private String nickname;
     private String birthday;
@@ -13,14 +16,16 @@ public class User {
     private String gender;
     private String password;
 
-    public long getId() {
+    @ApiModelProperty(value = "id",required = true,example = "123456")
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
+    @ApiModelProperty(value = "姓名",required = true,example = "小明")
     public String getName() {
         return name;
     }
@@ -28,7 +33,7 @@ public class User {
     public void setName(String name) {
         this.name = name;
     }
-
+    @ApiModelProperty(value = "昵称",required = true,example = "少女杀手")
     public String getNickname() {
         return nickname;
     }
@@ -37,6 +42,7 @@ public class User {
         this.nickname = nickname;
     }
 
+    @ApiModelProperty(value = "出生日期",required = true,example = "1987-01-01")
     public String getBirthday() {
         return birthday;
     }
@@ -45,6 +51,7 @@ public class User {
         this.birthday = birthday;
     }
 
+    @ApiModelProperty(value = "手机号码",required = true,example = "13000000000")
     public String getMobile() {
         return mobile;
     }
@@ -53,6 +60,7 @@ public class User {
         this.mobile = mobile;
     }
 
+    @ApiModelProperty(value = "头像URL",required = true,example = "https://www.baidu.com/img/bd_logo1.png")
     public String getImg() {
         return img;
     }
@@ -61,6 +69,7 @@ public class User {
         this.img = img;
     }
 
+    @ApiModelProperty(value = "性别  0 未知  1 女  2 男 ",required = true,example = "0")
     public String getGender() {
         return gender;
     }
@@ -69,6 +78,7 @@ public class User {
         this.gender = gender;
     }
 
+    @ApiModelProperty(value = "密码 MD5 ",required = true,example = "e10adc3949ba59abbe56e057f20f883e")
     public String getPassword() {
         return password;
     }

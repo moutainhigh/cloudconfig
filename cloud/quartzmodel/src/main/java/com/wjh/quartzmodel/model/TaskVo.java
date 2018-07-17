@@ -1,8 +1,8 @@
-package com.wjh.quartz.model;
+package com.wjh.quartzmodel.model;
 
 import java.io.Serializable;
 
-public class TaskInfo implements Serializable {
+public class TaskVo implements Serializable {
     private static final long serialVersionUID = -8054692082716173379L;
     private int id = 0;
 

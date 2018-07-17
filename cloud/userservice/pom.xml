@@ -13,10 +13,30 @@
 
 
     <dependencies>
+
+
         <dependency>
             <groupId>cloud</groupId>
-            <artifactId>redisconfiguration</artifactId>
-            <version>${cloud.redisconfiguration.version}</version>
+            <artifactId>utils</artifactId>
+            <version>${cloud.utils.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-config</artifactId>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+
         </dependency>
 
         <dependency>
@@ -24,11 +44,8 @@
             <artifactId>zipkinconfiguration</artifactId>
             <version>${cloud.zipkinconfiguration.version}</version>
         </dependency>
-        <dependency>
-            <groupId>cloud</groupId>
-            <artifactId>configconfiguration</artifactId>
-            <version>${cloud.configconfiguration.version}</version>
-        </dependency>
+
+
 
         <dependency>
             <groupId>cloud</groupId>
@@ -49,11 +66,7 @@
             <version>${cloud.swaggerconfiguration.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>cloud</groupId>
-            <artifactId>commonconfiguration</artifactId>
-            <version>${cloud.commonconfiguration.version}</version>
-        </dependency>
+
 
         <dependency>
             <groupId>org.springframework.cloud</groupId>
