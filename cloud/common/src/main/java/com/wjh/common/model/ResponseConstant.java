@@ -7,5 +7,6 @@ public class ResponseConstant {
     public  static  ResponseModel SYSTEM_EXCEPTION=new ResponseModel("E0002","服务异常",ServiceIdConstant.gateway,0,null,null);
     public  static  ResponseModel MOBILE_EXISTS=new ResponseModel("E0003","手机号码已经注册过",ServiceIdConstant.gateway,0,null,null);
     public  static  ResponseModel LOGIN_FAIL=new ResponseModel("E0004","登录失败，请确保手机号码或密码正确",ServiceIdConstant.gateway,0,null,null);
+    public  static  ResponseModel QUARTZ_ADD_FAIL=new ResponseModel("E0005","创建调试任务失败",ServiceIdConstant.quartz,0,null,null);
 
 }

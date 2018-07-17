@@ -21,7 +21,6 @@ public class UserService {
         return userMapper.detailByMobile(mobile);
     }
 
-
     public User insert(User user) {
         long id = idService.generateId();
         user.setId(id);

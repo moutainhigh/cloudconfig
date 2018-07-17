@@ -127,9 +127,10 @@ public class UserController {
             redisCacheUtil.delete(user.getId() + "");
 
 
+            int expireSeconds=60 * 60 * 2;
             //加入新的token-->userId,  userId-->token关系
-            redisCacheUtil.setCacheObject(token, user.getId() + "", 60 * 60 * 2);
-            redisCacheUtil.setCacheObject(user.getId() + "", token);
+            redisCacheUtil.setCacheObject(token, user.getId() + "", expireSeconds);
+            redisCacheUtil.setCacheObject(user.getId() + "", token,expireSeconds);
 
             ResponseModel<Object> responseModel = new ResponseModel<Object>();
             Map<String,Object> map=new HashMap(1);
