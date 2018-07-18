@@ -45,6 +45,7 @@
         <source.version>1.8</source.version>
         <target.version>1.8</target.version>
         <beanutils.version>1.9.3</beanutils.version>
+        <commons-lang3.version>3.7</commons-lang3.version>
     </properties>
 
 

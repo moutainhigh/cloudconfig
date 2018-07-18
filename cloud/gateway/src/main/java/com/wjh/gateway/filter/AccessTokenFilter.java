@@ -83,7 +83,7 @@ public class AccessTokenFilter  extends ZuulFilter{
         } else {
             ctx.setSendZuulResponse(false);// 过滤该请求，不对其进行路由
             ctx.setResponseStatusCode(401);// 返回错误码
-            ctx.setResponseBody(ResponseConstant.TOKEN_INVALID.toString());// 返回错误内容
+            ctx.setResponseBody(ResponseConstant.GATEWAY_TOKEN_INVALID.toString());// 返回错误内容
             ctx.set("isSuccess", false);
             return null;
         }
