@@ -2,7 +2,6 @@ package com.wjh.userservice.service;
 
 
 import com.wjh.userservice.mapper.UserMapper;
-import com.wjh.userservicemodel.model.UserDto;
 import com.wjh.userservicemodel.model.UserPo;
 import com.wjh.userservicemodel.model.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;

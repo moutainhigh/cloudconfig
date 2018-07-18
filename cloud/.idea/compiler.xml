@@ -32,6 +32,7 @@
       <module name="eureka" target="1.8" />
       <module name="gateway" target="1.8" />
       <module name="idservice" target="1.8" />
+      <module name="idserviceconfiguration" target="1.6" />
       <module name="quartz" target="1.8" />
       <module name="quartzmodel" target="1.6" />
       <module name="redisconfiguration" target="1.6" />
