@@ -1,5 +1,7 @@
 package com.wjh.userservicemodel.model;
 
+import com.alibaba.fastjson.JSON;
+
 public class UserPo {
 
     private Long id;
@@ -73,5 +75,10 @@ public class UserPo {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return JSON.toJSONString(this);
     }
 }

@@ -1,6 +1,7 @@
 package com.wjh.userservicemodel.model;
 
 
+import com.alibaba.fastjson.JSON;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -85,5 +86,10 @@ public class UserDto {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return JSON.toJSONString(this);
     }
 }
