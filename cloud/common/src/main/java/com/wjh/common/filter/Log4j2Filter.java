@@ -1,6 +1,7 @@
 package com.wjh.common.filter;
 
 import org.apache.logging.log4j.ThreadContext;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
@@ -14,29 +15,33 @@ import java.net.UnknownHostException;
 @WebFilter(urlPatterns = "/*")
 public class Log4j2Filter implements Filter {
 
-    static String hostname;
-    static String ip;
+    @Value("${spring.application.name}")
+    String applicationName;
+
+    @Value("${spring.cloud.client.ipAddress}")
+    String ip;
+
+    @Value("${spring.cloud.client.hostname}")
+    String hostname;
+
+    @Value("${server.port}")
+    String port;
+
+
+
 
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        InetAddress addr = null;
-        try {
-            addr = InetAddress.getLocalHost();
-            hostname = addr.getHostName().toString(); //获取本机计算机名称
-            ip = addr.getHostAddress().toString(); //获取本机ip
 
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         ThreadContext.put("ip", ip);
-        ;
         ThreadContext.put("hostname", hostname);
-
+        ThreadContext.put("applicationName", applicationName);
+        ThreadContext.put("port", port);
         filterChain.doFilter(servletRequest, servletResponse);
     }
 

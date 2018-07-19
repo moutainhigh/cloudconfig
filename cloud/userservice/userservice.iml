@@ -89,6 +89,9 @@
     <orderEntry type="library" name="Maven: org.springframework.cloud:spring-cloud-bus:1.2.2.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.integration:spring-integration-core:4.3.1.RELEASE" level="project" />
     <orderEntry type="module" module-name="common" />
+    <orderEntry type="library" name="Maven: org.apache.kafka:kafka-clients:0.11.0.1" level="project" />
+    <orderEntry type="library" name="Maven: net.jpountz.lz4:lz4:1.3.0" level="project" />
+    <orderEntry type="library" name="Maven: org.xerial.snappy:snappy-java:1.1.2.6" level="project" />
     <orderEntry type="module" module-name="userservicemodel" />
     <orderEntry type="module" module-name="swaggerconfiguration" />
     <orderEntry type="library" name="Maven: io.springfox:springfox-swagger2:2.6.1" level="project" />

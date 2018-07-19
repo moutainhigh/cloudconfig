@@ -50,7 +50,7 @@ public class UserController {
     public ResponseModel detailByMobile(@ApiParam(value = "手机", required = true) @RequestParam(required = true) String mobile) {
 
 
-        logger.debug("parameter mobile{}",mobile);
+        logger.debug("request parameters: mobile=>{}",mobile);
 
         try {
             UserVo user = userService.detailByUser(mobile);
@@ -71,7 +71,7 @@ public class UserController {
             @ApiParam(value = "手机", required = true) @RequestParam(required = true) String mobile,
             @ApiParam(value = "密码，MD5加密", required = true) @RequestParam(required = true) String password,
             @ApiParam(value = "重复密码，MD5加密", required = true) @RequestParam(required = true) String repeatPassword) {
-        logger.debug("parameter mobile{},password{},repeatPassword{}",mobile,password,repeatPassword);
+        logger.debug("request parameters: mobile=>{},password=>{},repeatPassword=>{}",mobile,password,repeatPassword);
 
         if (!password.equals(repeatPassword)) {
             return USERSERVICE_PASSWORD_NOT_EQUAL;
@@ -98,7 +98,7 @@ public class UserController {
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
     public ResponseModel update(@ApiParam(value = "用户") @RequestBody(required = true) UserDto user) {
         try {
-            logger.debug("parameter user{}",user);
+            logger.debug("request parameters: user=>{}",user);
 
             UserPo userPo=new UserPo();
             BeanUtils.copyProperties(userPo,user);
@@ -117,7 +117,7 @@ public class UserController {
     @ApiOperation(value = "删除")
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
     public ResponseModel delete(@ApiParam(value = "id") @RequestParam(required = true) String id) {
-        logger.debug("parameter id{}",id);
+        logger.debug("request parameters: id=>{}",id);
 
         long idLong = Long.valueOf(id);
         userService.delete(idLong);
@@ -135,7 +135,7 @@ public class UserController {
             @ApiParam(value = "验证码", required = true) @RequestParam(required = true) String authCode) {
         try {
 
-            logger.debug("parameter uniqueKey{},mobile{},password{},authCode{}",uniqueKey,mobile,password,authCode);
+            logger.debug("request parameters: uniqueKey=>{},mobile=>{},password=>{},authCode=>{}",uniqueKey,mobile,password,authCode);
 
             /**
              * 验证验证码是否输入正确

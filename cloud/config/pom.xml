@@ -14,6 +14,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>cloud</groupId>
+            <artifactId>common</artifactId>
+            <version>${cloud.common.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-eureka</artifactId>
         </dependency>

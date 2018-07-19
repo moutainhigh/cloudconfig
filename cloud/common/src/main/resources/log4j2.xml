@@ -2,7 +2,7 @@
 <Configuration status="debug">
     <Appenders>
         <Console name="SYSOUT" target="SYSTEM_OUT">
-            <PatternLayout pattern="[%X{ip}]-[%X{hostname}]-%d{yyyy-MM-dd}-%t-%x-%-5p-%-10c:%m%n"/>
+            <PatternLayout pattern="[application:%X{applicationName}]_[hostname:%X{hostname}]_[ip:%X{ip}]_[port:%X{port}]_%d{yyyy-MM-dd}_%t_%x_%_5p_%_10c:%m%n"/>
             <ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY"/>
         </Console>
 
@@ -13,7 +13,7 @@
                      fileName="F:/logs/logs.logs"
                      filePattern="F:/logs/%d{yyyy-MM-dd}-debugs.log">
             <PatternLayout>
-                <Pattern> [%X{ip}]-[%X{hostname}]-%d{yyyy-MM-dd}-%t-%x-%-5p-%-10c:%m%n</Pattern>
+                <Pattern>[application:%X{applicationName}]_[hostname:%X{hostname}]_[ip:%X{ip}]_[port:%X{port}]_%d{yyyy-MM-dd}_%t_%x_%_5p_%_10c:%m%n</Pattern>
             </PatternLayout>
 
             <!-- 文件截断的条件，具体参考文档 -->
@@ -30,7 +30,7 @@
             <!-- 可以通过该参数来设置获取日志的权限 -->
             <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout>
-                <Pattern> [%X{ip}]-[%X{hostname}]-%d{yyyy-MM-dd}-%t-%x-%-5p-%-10c:%m%n</Pattern>
+                <Pattern>[application:%X{applicationName}]_[hostname:%X{hostname}]_[ip:%X{ip}]_[port:%X{port}]_%d{yyyy-MM-dd}_%t_%x_%_5p_%_10c:%m%n</Pattern>
             </PatternLayout>
             <Policies>
                 <TimeBasedTriggeringPolicy interval="24"/>
@@ -38,10 +38,10 @@
             </Policies>
         </RollingFile>
 
-        <!--<Kafka name="Kafka" topic="test" syncSend="false">-->
-            <!--<PatternLayout pattern="%d{yyyy-MM-dd}-%t-%x-%-5p-%-10c:%m%n"/>-->
-            <!--<Property name="bootstrap.servers">127.0.0.1:9092</Property>-->
-        <!--</Kafka>-->
+        <Kafka name="Kafka" topic="testlog" syncSend="false">
+            <PatternLayout pattern="[application:%X{applicationName}]_[hostname:%X{hostname}]_[ip:%X{ip}]_[port:%X{port}]_%d{yyyy-MM-dd}_%t_%x_%_5p_%_10c:%m%n"/>
+            <Property name="bootstrap.servers">127.0.0.1:9092</Property>
+        </Kafka>
 
 
     </Appenders>
@@ -74,7 +74,7 @@
             <AppenderRef ref="SYSOUT"/>
             <AppenderRef ref="DEBUG_ROLLING_FILE"/>
             <AppenderRef ref="ERROR_ROLLING_FILE"/>
-            <!--<AppenderRef ref="Kafka"/>-->
+            <AppenderRef ref="Kafka"/>
         </Root>
     </Loggers>
 </Configuration>
