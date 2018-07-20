@@ -38,9 +38,11 @@
             </Policies>
         </RollingFile>
 
-        <Kafka name="Kafka" topic="testlog" syncSend="false">
+        <Kafka name="Kafka" topic="testlog" syncSend="false"  ignoreExceptions="true">
             <PatternLayout pattern="[application:%X{applicationName}]_[hostname:%X{hostname}]_[ip:%X{ip}]_[port:%X{port}]_%d{yyyy-MM-dd}_%t_%x_%_5p_%_10c:%m%n"/>
-            <Property name="bootstrap.servers">127.0.0.1:9092</Property>
+        <!--<Property name="bootstrap.servers">127.0.0.1:9092</Property>-->
+        <Property name="bootstrap.servers">${sys:cloud.log4j2.kafka.bootstrapSevers}</Property>
+
         </Kafka>
 
 
@@ -70,7 +72,7 @@
 
 
 
-        <Root level="info">
+        <Root level="info" >
             <AppenderRef ref="SYSOUT"/>
             <AppenderRef ref="DEBUG_ROLLING_FILE"/>
             <AppenderRef ref="ERROR_ROLLING_FILE"/>
