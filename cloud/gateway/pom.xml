@@ -13,6 +13,13 @@
 
 
     <dependencies>
+
+        <dependency>
+            <groupId>cloud</groupId>
+            <artifactId>log4j2kafka</artifactId>
+            <version>${cloud.log4j2kafka.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>cloud</groupId>
             <artifactId>utils</artifactId>

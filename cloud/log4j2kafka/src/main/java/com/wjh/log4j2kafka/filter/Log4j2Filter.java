@@ -1,4 +1,4 @@
-package com.wjh.common.filter;
+package com.wjh.log4j2kafka.filter;
 
 import org.apache.logging.log4j.ThreadContext;
 import org.springframework.beans.factory.annotation.Value;
@@ -7,8 +7,6 @@ import org.springframework.stereotype.Component;
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 
 @Component

@@ -1,5 +1,6 @@
-package com.wjh.common.listener;
+package com.wjh.log4j2kafka.listener;
 
+import org.apache.logging.log4j.ThreadContext;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -20,8 +21,13 @@ public class Log4j2Listener implements ServletContextListener {
     String bootstrapServers;
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
-        try {
-            System.out.println(".............Log4j2Listener.......start..........");
+                try {
+                    System.out.println(".............Log4j2Listener.......start..........");
+
+
+
+
+
             System.setProperty("cloud.log4j2.kafka.bootstrapSevers",bootstrapServers);
         }catch (Exception e){
             e.printStackTrace();
