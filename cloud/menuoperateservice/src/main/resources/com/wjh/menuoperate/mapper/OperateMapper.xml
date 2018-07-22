@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wjh.menuoperate.mapper.OperateMapper">
+
+
+    <insert id="insert">
+        INSERT INTO sys_operate
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null"> id, </if>
+            <if test="menuId != null"> menu_id, </if>
+            <if test="url != null"> url, </if>
+            <if test="operateName != null"> operate_name, </if>
+            <if test="operateCode != null"> operate_code, </if>
+            <if test="orderNo != null"> order_no, </if>
+            <if test="createDate != null"> create_date, </if>
+            <if test="createdBy != null"> created_by, </if>
+            <if test="updateDate != null"> update_date, </if>
+            <if test="updatedBy != null"> updated_by, </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null"> #{id}, </if>
+            <if test="menuId != null"> #{menuId}, </if>
+            <if test="url != null"> #{url}, </if>
+            <if test="operateName != null"> #{operateName}, </if>
+            <if test="operateCode != null"> #{operateCode}, </if>
+            <if test="orderNo != null"> #{orderNo}, </if>
+            <if test="createDate != null"> #{createDate}, </if>
+            <if test="createdBy != null"> #{createdBy}, </if>
+            <if test="updateDate != null"> #{updateDate}, </if>
+            <if test="updatedBy != null"> #{updatedBy}, </if>
+        </trim>
+    </insert>
+
+
+    <update id="update">
+        UPDATE sys_operate
+        <set>
+            <if test="id != null"> id = #{id}, </if>
+            <if test="menuId != null"> menu_id = #{menuId}, </if>
+            <if test="url != null"> url = #{url}, </if>
+            <if test="operateName != null"> operate_name = #{operateName}, </if>
+            <if test="operateCode != null"> operate_code = #{operateCode}, </if>
+            <if test="orderNo != null"> order_no = #{orderNo}, </if>
+            <if test="createDate != null"> create_date = #{createDate}, </if>
+            <if test="createdBy != null"> created_by = #{createdBy}, </if>
+            <if test="updateDate != null"> update_date = #{updateDate}, </if>
+            <if test="updatedBy != null"> updated_by = #{updatedBy} </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+
+
+
+
+    <select id="search" resultType="com.wjh.menuoperateservicemodel.model.OperateVo">
+        SELECT
+            o.id,
+            o.menu_id as menuId,
+            o.url,
+            o.operate_name as operateName,
+            o.operate_code as operateCode,
+            o.order_no as orderNo,
+            o.create_date as createDate,
+            o.created_by as createdBy,
+            o.update_date as updateDate,
+            o.updated_by as updatedBy
+         from sys_operate o
+        where o.operate_name like '%${operateName}%'
+        limit #{start},#{pageSize}
+    </select>
+
+    <select id="searchCount" resultType="int">
+        SELECT
+          count(1) as count
+        from sys_operate o
+        where o.operate_name like '%${operateName}%'
+        limit #{start},#{pageSize}
+    </select>
+
+    <delete id="delete">
+        delete from sys_operate where id=#{id}
+    </delete>
+
+
+
+
+</mapper>

@@ -8,6 +8,8 @@
     <file url="file://$PROJECT_DIR$/gateway" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/idservice" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/log4j2kafka" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/menuoperateservice" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/menuoperateservicemodel" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/quartz" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/quartzmodel" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/swaggerconfiguration" charset="UTF-8" />

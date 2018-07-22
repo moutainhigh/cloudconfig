@@ -12,6 +12,10 @@
         <module name="gateway" />
         <module name="idservice" />
         <module name="log4j2kafka" />
+        <module name="menuoperate" />
+        <module name="menuoperatemodel" />
+        <module name="menuoperateservice" />
+        <module name="menuoperateservicemodel" />
         <module name="quartz" />
         <module name="quartzmodel" />
         <module name="swaggerconfiguration" />
@@ -35,6 +39,10 @@
       <module name="idservice" target="1.8" />
       <module name="idserviceconfiguration" target="1.6" />
       <module name="log4j2kafka" target="1.6" />
+      <module name="menuoperate" target="1.6" />
+      <module name="menuoperatemodel" target="1.6" />
+      <module name="menuoperateservice" target="1.6" />
+      <module name="menuoperateservicemodel" target="1.6" />
       <module name="quartz" target="1.8" />
       <module name="quartzmodel" target="1.6" />
       <module name="redisconfiguration" target="1.6" />

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wjh.menuoperate.mapper.MenuMapper">
+
+    <insert id="insert">
+        INSERT INTO sys_menu
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="parentMenuId != null">parent_menu_id,</if>
+            <if test="menuName != null">menu_name,</if>
+            <if test="innerOrder != null">inner_order,</if>
+            <if test="remark != null">remark,</if>
+            <if test="routerName != null">router_name,</if>
+            <if test="routerPath != null">router_path,</if>
+            <if test="iconNormalPath != null">icon_normal_path,</if>
+            <if test="iconCheckPath != null">icon_check_path,</if>
+            <if test="createdBy != null">created_by,</if>
+            <if test="createDate != null">create_date,</if>
+            <if test="updatedBy != null">updated_by,</if>
+            <if test="updateDate != null">update_date,</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="parentMenuId != null">#{parentMenuId},</if>
+            <if test="menuName != null">#{menuName},</if>
+            <if test="innerOrder != null">#{innerOrder},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="routerName != null">#{routerName},</if>
+            <if test="routerPath != null">#{routerPath},</if>
+            <if test="iconNormalPath != null">#{iconNormalPath},</if>
+            <if test="iconCheckPath != null">#{iconCheckPath},</if>
+            <if test="createdBy != null">#{createdBy},</if>
+            <if test="createDate != null">#{createDate},</if>
+            <if test="updatedBy != null">#{updatedBy},</if>
+            <if test="updateDate != null">#{updateDate},</if>
+        </trim>
+    </insert>
+
+
+    <update id="update">
+        UPDATE sys_menu
+        <set>
+            <if test="id != null">id = #{id},</if>
+            <if test="parentMenuId != null">parent_menu_id = #{parentMenuId},</if>
+            <if test="menuName != null">menu_name = #{menuName},</if>
+            <if test="innerOrder != null">inner_order = #{innerOrder},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="routerName != null">router_name = #{routerName},</if>
+            <if test="routerPath != null">router_path = #{routerPath},</if>
+            <if test="iconNormalPath != null">icon_normal_path = #{iconNormalPath},</if>
+            <if test="iconCheckPath != null">icon_check_path = #{iconCheckPath},</if>
+            <if test="createdBy != null">created_by = #{createdBy},</if>
+            <if test="createDate != null">create_date = #{createDate},</if>
+            <if test="updatedBy != null">updated_by = #{updatedBy},</if>
+            <if test="updateDate != null">update_date = #{updateDate}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <select id="search" resultType="com.wjh.menuoperateservicemodel.model.MenuVo">
+        SELECT
+            m.id,
+            m.parent_menu_id AS parentMenuId,
+            m.inner_order AS innerOrder,
+            m.remark,
+            m.router_name AS routerName,
+            m.router_path AS routerPath,
+            m.icon_normal_path AS iconNormalPath,
+            m.icon_check_path AS iconCheckPath,
+            m.create_date AS createDate,
+            m.created_by AS createdBy,
+            m.update_date AS updateDate,
+            m.updated_by AS updatedBy
+        FROM
+        sys_menu m
+        WHERE
+        m.menu_name LIKE '%${menuName}%'
+        limit  #{start},#{pageSize}
+    </select>
+
+
+    <select id="searchCount" resultType="int">
+        SELECT
+          count(1) as count
+        FROM
+        sys_menu m
+        WHERE
+        m.menu_name LIKE '%${menuName}%'
+    </select>
+
+
+    <delete id="delete">
+        delete from sys_menu where id=#{id}
+    </delete>
+
+
+</mapper>
