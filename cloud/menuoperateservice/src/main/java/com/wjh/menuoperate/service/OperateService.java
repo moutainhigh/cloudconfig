@@ -3,10 +3,10 @@ package com.wjh.menuoperate.service;
 import com.wjh.menuoperate.mapper.OperateMapper;
 import com.wjh.menuoperateservicemodel.model.OperatePo;
 import com.wjh.menuoperateservicemodel.model.OperateVo;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -19,14 +19,20 @@ public class OperateService {
     @Autowired
     OperateMapper operateMapper;
 
-    public OperatePo insert(OperatePo operatePo) {
+    public OperatePo insert(OperatePo operatePo,Long loginUserId) {
         Long id=idService.generateId();
+        Date date=new Date();
         operatePo.setId(id);
+        operatePo.setCreatedBy(loginUserId);
+        operatePo.setUpdatedBy(loginUserId);
+        operatePo.setCreateDate(date);
+        operatePo.setUpdateDate(date);
         operateMapper.insert(operatePo);
         return operatePo;
     }
 
-    public OperatePo update(OperatePo operatePo) {
+    public OperatePo update(OperatePo operatePo,Long loginUserId) {
+        operatePo.setUpdatedBy(loginUserId);
          operateMapper.update(operatePo);
          return operatePo;
     }

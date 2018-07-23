@@ -4,10 +4,12 @@ import com.netflix.discovery.converters.Auto;
 import com.wjh.menuoperate.mapper.MenuMapper;
 import com.wjh.menuoperateservicemodel.model.MenuPo;
 import com.wjh.menuoperateservicemodel.model.MenuVo;
+import com.wjh.utils.redis.RedisCacheUtil;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -19,14 +21,23 @@ public class MenuService {
     @Autowired
     MenuMapper menuMapper;
 
-    public MenuPo insert(MenuPo menuPo) {
+
+    public MenuPo insert(MenuPo menuPo,Long loginUserId) {
         Long id=idService.generateId();
         menuPo.setId(id);
+        Date date=new Date();
+        menuPo.setCreateDate(date);
+        menuPo.setUpdateDate(date);
+        menuPo.setCreatedBy(loginUserId);
+        menuPo.setUpdatedBy(loginUserId);
         menuMapper.insert(menuPo);
         return menuPo;
     }
 
-    public MenuPo update(MenuPo menuPo) {
+    public MenuPo update(MenuPo menuPo,Long loginUserId) {
+        Date date=new Date();
+        menuPo.setUpdateDate(date);
+        menuPo.setUpdatedBy(loginUserId);
         menuMapper.update(menuPo);
         return menuPo;
     }

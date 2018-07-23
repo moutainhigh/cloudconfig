@@ -7,11 +7,13 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 
 @Api(description = "用户相关接口")
 @RestController
@@ -45,7 +47,7 @@ public class IdController  {
 
     @ApiOperation(value = "生成全局ID")
     @RequestMapping(value = "/generateId", method = RequestMethod.GET)
-    public long generateId() {
+    public long generateId(HttpServletRequest httpServletRequest) {
         long id= snowflakeIdWorker.nextId();
         logger.info("id生成器"+workerId+"-"+datacenterId+"生成Id"+id);
         return id;

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Component;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.List;
@@ -46,6 +47,11 @@ public class AccessTokenFilter  extends ZuulFilter{
         ctx.getResponse().setContentType("text/html;charset=UTF-8");
 
         HttpServletRequest request = RequestContext.getCurrentContext().getRequest();
+
+
+
+
+
         logger.info("发送{}请求到{}", request.getMethod(), request.getRequestURL().toString());
         String url = request.getRequestURL().toString();
         boolean isExcluded = false;
@@ -61,6 +67,7 @@ public class AccessTokenFilter  extends ZuulFilter{
         }
 
         boolean pass = false;
+        String userId =null;
         if (!isExcluded) {
             String token = request.getHeader("token");
             if (StringUtils.isBlank(token)){
@@ -68,7 +75,7 @@ public class AccessTokenFilter  extends ZuulFilter{
             }
             if (StringUtils.isNotBlank(token))
             {
-                String userId = (String) redisCacheUtil.getCacheObject(token);
+                  userId = (String) redisCacheUtil.getCacheObject(token);
                 if (StringUtils.isNotBlank(userId)) {
                     pass = true;
                 }
@@ -76,6 +83,11 @@ public class AccessTokenFilter  extends ZuulFilter{
         }
 
         if (pass||isExcluded) {
+            //重新设置装饰类
+            if (StringUtils.isNotBlank(userId)){
+                ctx.addZuulRequestHeader("loginUserId",userId);
+
+            }
             ctx.setSendZuulResponse(true);// 对该请求进行路由
             ctx.setResponseStatusCode(200);
             ctx.set("isSuccess", true);// 设值，让下一个Filter看到上一个Filter的状态

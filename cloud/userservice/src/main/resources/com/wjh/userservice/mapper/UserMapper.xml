@@ -29,6 +29,10 @@
             <if test="img != null"> img, </if>
             <if test="gender != null"> gender, </if>
             <if test="password != null"> password, </if>
+            <if test="createDate != null"> create_date, </if>
+            <if test="createdBy != null"> created_by, </if>
+            <if test="updateDate != null"> update_date, </if>
+            <if test="updatedBy != null"> updated_by, </if>
         </trim>
         VALUES
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -40,6 +44,11 @@
             <if test="img != null"> #{img}, </if>
             <if test="gender != null"> #{gender}, </if>
             <if test="password != null"> #{password}, </if>
+            <if test="createDate != null"> #{createDate}, </if>
+            <if test="createdBy != null"> #{createdBy}, </if>
+            <if test="updateDate != null"> #{updateDate}, </if>
+            <if test="updatedBy != null"> #{updatedBy}, </if>
+
         </trim>
     </insert>
 
@@ -57,7 +66,11 @@
             <if test="mobile != null"> mobile = #{mobile}, </if>
             <if test="img != null"> img = #{img}, </if>
             <if test="gender != null"> gender = #{gender}, </if>
-            <if test="password != null"> password = #{password} </if>
+            <if test="password != null"> password = #{password}, </if>
+            <if test="createDate != null"> create_date = #{createDate}, </if>
+            <if test="createdBy != null"> created_by = #{createdBy}, </if>
+            <if test="updateDate != null"> update_date = #{updateDate}, </if>
+            <if test="updatedBy != null"> updated_by = #{updatedBy} </if>
         </set>
         WHERE id = #{id}
     </update>

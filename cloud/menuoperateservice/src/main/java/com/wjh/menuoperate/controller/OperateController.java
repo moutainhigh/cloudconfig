@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Api(description = "权限相关接口")
@@ -37,7 +38,7 @@ public class OperateController {
                                 @ApiParam(value = "每页多少条记录", required = true) @RequestParam(required = true) Integer pageSize) {
 
 
-        logger.debug("request parameters: operateName=>{},currentPage=>{},pageSize=>{}", operateName,currentPage,pageSize);
+        logger.debug("request parameters: operateName=>{},currentPage=>{},pageSize=>{}", operateName, currentPage, pageSize);
 
         try {
             List<OperateVo> list = operateService.search(operateName, currentPage, pageSize);
@@ -54,15 +55,17 @@ public class OperateController {
 
     @ApiOperation(value = "添加权限")
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public ResponseModel add(@ApiParam(value = "权限") @RequestBody(required = true) OperateAddDto operateAddDto) {
+    public ResponseModel add(@ApiParam(value = "权限") @RequestBody(required = true) OperateAddDto operateAddDto,
+                             HttpServletRequest httpServletRequest) {
 
 
         logger.debug("request parameters: operateAddDto=>{}", operateAddDto);
 
+        String loginUserId = httpServletRequest.getHeader("loginUserId");
         try {
             OperatePo operatePo = new OperatePo();
             BeanUtils.copyProperties(operatePo, operateAddDto);
-            OperatePo operatePoReturn = operateService.insert(operatePo);
+            OperatePo operatePoReturn = operateService.insert(operatePo, Long.valueOf(loginUserId));
             ResponseModel responseModel = new ResponseModel();
             responseModel.setResModel(operatePoReturn);
             return responseModel;
@@ -76,15 +79,16 @@ public class OperateController {
 
     @ApiOperation(value = "修改权限")
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
-    public ResponseModel update(@ApiParam(value = "权限") @RequestBody(required = true) OperateUpdateDto operateUpdateDto) {
+    public ResponseModel update(@ApiParam(value = "权限") @RequestBody(required = true) OperateUpdateDto operateUpdateDto,
+                                HttpServletRequest httpServletRequest) {
 
 
         logger.debug("request parameters: operateUpdateDto=>{}", operateUpdateDto);
-
+        String loginUserId = httpServletRequest.getHeader("loginUserId");
         try {
             OperatePo operatePo = new OperatePo();
             BeanUtils.copyProperties(operatePo, operateUpdateDto);
-            OperatePo operatePoReturn = operateService.update(operatePo);
+            OperatePo operatePoReturn = operateService.update(operatePo, Long.valueOf(loginUserId));
             ResponseModel responseModel = new ResponseModel();
             responseModel.setResModel(operatePoReturn);
             return responseModel;
@@ -98,11 +102,12 @@ public class OperateController {
 
     @ApiOperation(value = "删除权限")
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
-    public ResponseModel delete(@ApiParam(value = "权限Id", required = true) @RequestParam(required = true) Long id) {
+    public ResponseModel delete(@ApiParam(value = "权限Id", required = true) @RequestParam(required = true) Long id,
+                                HttpServletRequest httpServletRequest) {
 
 
         logger.debug("request parameters: id=>{}", id);
-
+        String loginUserId = httpServletRequest.getHeader("loginUserId");
         try {
             operateService.delete(id);
             ResponseModel responseModel = new ResponseModel();

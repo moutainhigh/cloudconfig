@@ -26,6 +26,11 @@
         <module>log4j2kafka</module>
         <module>menuoperateservice</module>
         <module>menuoperateservicemodel</module>
+        <module>useroperateservice</module>
+        <module>roleservice</module>
+        <module>userroleservice</module>
+        <module>roleoperateservice</module>
+        <module>roleservicemodel</module>
     </modules>
 
 
@@ -39,6 +44,7 @@
         <cloud.quartzmodel.version>1.0-SNAPSHOT</cloud.quartzmodel.version>
         <cloud.log4j2kafka.version>1.0-SNAPSHOT</cloud.log4j2kafka.version>
         <cloud.menuoperateservicemodel.version>1.0-SNAPSHOT</cloud.menuoperateservicemodel.version>
+        <cloud.roleservicermodel.version>1.0-SNAPSHOT</cloud.roleservicermodel.version>
          <commons-lang.version>2.6</commons-lang.version>
         <fastjson.version>1.1.40</fastjson.version>
         <mysql-connector-java.version>5.1.44</mysql-connector-java.version>

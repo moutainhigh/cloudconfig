@@ -3,7 +3,8 @@ package com.wjh.usercontroller.controller;
 
 import com.wjh.common.model.ResponseModel;
 import com.wjh.usercontroller.service.UserService;
-import com.wjh.userservicemodel.model.UserDto;
+import com.wjh.userservicemodel.model.UserAddDto;
+import com.wjh.userservicemodel.model.UserUpdateDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -44,7 +45,7 @@ public class UserController {
 
     @ApiOperation(value = "更新")
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
-    public ResponseModel update(@ApiParam(value = "用户") @RequestBody(required = true) UserDto user) {
+    public ResponseModel update(@ApiParam(value = "用户") @RequestBody(required = true) UserUpdateDto user) {
         return userService.update(user);
     }
 

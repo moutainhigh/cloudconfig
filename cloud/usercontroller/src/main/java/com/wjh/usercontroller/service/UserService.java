@@ -3,7 +3,8 @@ package com.wjh.usercontroller.service;
 
 import com.wjh.common.model.ResponseModel;
 import com.wjh.usercontroller.hystrix.UserServiceHystrix;
-import com.wjh.userservicemodel.model.UserDto;
+import com.wjh.userservicemodel.model.UserAddDto;
+import com.wjh.userservicemodel.model.UserUpdateDto;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +25,7 @@ public interface UserService {
 
 
     @RequestMapping(value = "/user/update", method = RequestMethod.PUT)
-    public ResponseModel update(@RequestBody UserDto user);
+    public ResponseModel update(@RequestBody UserUpdateDto user);
 
 
 

@@ -22,12 +22,7 @@ public class Log4j2Listener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
                 try {
-                    System.out.println(".............Log4j2Listener.......start..........");
-
-
-
-
-
+                    System.out.println(".............启动Log4j2Listener.................");
             System.setProperty("cloud.log4j2.kafka.bootstrapSevers",bootstrapServers);
         }catch (Exception e){
             e.printStackTrace();

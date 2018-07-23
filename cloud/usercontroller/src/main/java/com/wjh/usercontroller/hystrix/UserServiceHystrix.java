@@ -2,7 +2,8 @@ package com.wjh.usercontroller.hystrix;
 
 import com.wjh.common.model.ResponseModel;
 import com.wjh.usercontroller.service.UserService;
-import com.wjh.userservicemodel.model.UserDto;
+import com.wjh.userservicemodel.model.UserAddDto;
+import com.wjh.userservicemodel.model.UserUpdateDto;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -22,7 +23,7 @@ public class UserServiceHystrix implements UserService {
     }
 
     @Override
-    public ResponseModel update(UserDto user) {
+    public ResponseModel update(UserUpdateDto user) {
         ResponseModel responseModel = new ResponseModel();
         responseModel.setResModel("aaaaaaaaaaaaaaaaaaaaaaaaa3");
         return responseModel;

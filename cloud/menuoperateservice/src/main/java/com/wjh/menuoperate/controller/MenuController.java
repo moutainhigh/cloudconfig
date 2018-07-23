@@ -9,6 +9,7 @@ import com.wjh.menuoperateservicemodel.model.MenuAddDto;
 import com.wjh.menuoperateservicemodel.model.MenuPo;
 import com.wjh.menuoperateservicemodel.model.MenuUpdateDto;
 import com.wjh.menuoperateservicemodel.model.MenuVo;
+import com.wjh.utils.redis.RedisCacheUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Api(description = "菜单相关接口")
@@ -33,6 +35,9 @@ public class MenuController {
     @Autowired
     MenuService menuService;
 
+
+    @Autowired
+    RedisCacheUtil redisCacheUtil;
 
     @ApiOperation(value = "搜索菜单")
     @RequestMapping(value = "/search", method = RequestMethod.GET)
@@ -58,15 +63,16 @@ public class MenuController {
 
     @ApiOperation(value = "添加菜单")
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public ResponseModel add(@ApiParam(value = "菜单名称") @RequestBody(required = true) MenuAddDto menuAddDto) {
-
+    public ResponseModel add(@ApiParam(value = "菜单名称") @RequestBody(required = true) MenuAddDto menuAddDto,
+                             HttpServletRequest request) {
 
         logger.debug("request parameters: menuAddDto=>{}", menuAddDto);
+        String loginUserId=request.getHeader("loginUserId");
 
         try {
             MenuPo menuPo = new MenuPo();
             BeanUtils.copyProperties(menuPo, menuAddDto);
-            MenuPo menuPoReturn = menuService.insert(menuPo);
+             MenuPo menuPoReturn = menuService.insert(menuPo,Long.valueOf(loginUserId));
             ResponseModel responseModel = new ResponseModel();
             responseModel.setResModel(menuPoReturn);
             return responseModel;
@@ -80,15 +86,16 @@ public class MenuController {
 
     @ApiOperation(value = "更新菜单")
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
-    public ResponseModel update(@ApiParam(value = "菜单名称") @RequestBody(required = true) MenuUpdateDto menuUpdateDto) {
+    public ResponseModel update(@ApiParam(value = "菜单名称") @RequestBody(required = true) MenuUpdateDto menuUpdateDto,
+                                HttpServletRequest request) {
 
 
         logger.debug("request parameters: menuUpdateDto=>{}", menuUpdateDto);
-
+        String loginUserId=request.getHeader("loginUserId");
         try {
             MenuPo menuPo = new MenuPo();
             BeanUtils.copyProperties(menuPo, menuUpdateDto);
-            MenuPo menuPoReturn = menuService.update(menuPo);
+            MenuPo menuPoReturn = menuService.update(menuPo,Long.valueOf(loginUserId));
             ResponseModel responseModel = new ResponseModel();
             responseModel.setResModel(menuPoReturn);
             return responseModel;
@@ -102,11 +109,13 @@ public class MenuController {
 
     @ApiOperation(value = "删除菜单")
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
-    public ResponseModel delete(@ApiParam(value = "菜单Id", required = true) @RequestParam(required = true) Long id) {
+    public ResponseModel delete(@ApiParam(value = "菜单Id", required = true) @RequestParam(required = true) Long id,
+                                HttpServletRequest request) {
 
 
         logger.debug("request parameters: id=>{}", id);
 
+        String loginUserId=request.getHeader("loginUserId");
         try {
             menuService.delete(id);
             ResponseModel responseModel = new ResponseModel();

@@ -46,7 +46,7 @@ public class SwaggerConfig extends WebMvcConfigurerAdapter {
     public Docket createRestApi() {
         ParameterBuilder tokenPar = new ParameterBuilder();
         List<Parameter> pars = new ArrayList<Parameter>();
-        tokenPar.name("token").description("令牌").modelRef(new ModelRef("string")).parameterType("header").required(true).build();
+        tokenPar.name("loginUserId").description("登录用户Id").modelRef(new ModelRef("string")).parameterType("header").required(true).build();
         pars.add(tokenPar.build());
 
         return new Docket(DocumentationType.SWAGGER_2)

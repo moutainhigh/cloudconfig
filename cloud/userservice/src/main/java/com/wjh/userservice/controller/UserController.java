@@ -4,15 +4,15 @@ import com.wjh.common.model.ResponseConstant;
 import com.wjh.common.model.ResponseModel;
 import com.wjh.common.model.ServiceIdConstant;
 import com.wjh.userservice.service.UserService;
-import com.wjh.userservicemodel.model.UserDto;
+import com.wjh.userservicemodel.model.UserAddDto;
 import com.wjh.userservicemodel.model.UserPo;
+import com.wjh.userservicemodel.model.UserUpdateDto;
 import com.wjh.userservicemodel.model.UserVo;
 import com.wjh.utils.redis.RedisCacheUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,8 +70,10 @@ public class UserController {
     public ResponseModel register(
             @ApiParam(value = "手机", required = true) @RequestParam(required = true) String mobile,
             @ApiParam(value = "密码，MD5加密", required = true) @RequestParam(required = true) String password,
-            @ApiParam(value = "重复密码，MD5加密", required = true) @RequestParam(required = true) String repeatPassword) {
+            @ApiParam(value = "重复密码，MD5加密", required = true) @RequestParam(required = true) String repeatPassword,
+            HttpServletRequest httpServletRequest) {
         logger.debug("request parameters: mobile=>{},password=>{},repeatPassword=>{}",mobile,password,repeatPassword);
+
 
         if (!password.equals(repeatPassword)) {
             return USERSERVICE_PASSWORD_NOT_EQUAL;
@@ -86,7 +88,7 @@ public class UserController {
         UserPo user = new UserPo();
         user.setMobile(mobile);
         user.setPassword(password);
-        UserPo userR = userService.insert(user);
+        UserPo userR = userService.insert(user,null);
         ResponseModel responseModel = new ResponseModel();
         responseModel.setResModel(userR);
         return responseModel;
@@ -96,14 +98,16 @@ public class UserController {
 
     @ApiOperation(value = "更新")
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
-    public ResponseModel update(@ApiParam(value = "用户") @RequestBody(required = true) UserDto user) {
+    public ResponseModel update(@ApiParam(value = "用户") @RequestBody(required = true) UserUpdateDto user,
+                                HttpServletRequest httpServletRequest) {
         try {
             logger.debug("request parameters: user=>{}",user);
 
+            String loginUserId=httpServletRequest.getHeader("loginUserId");
+
             UserPo userPo=new UserPo();
             BeanUtils.copyProperties(userPo,user);
-
-            UserPo userR = userService.update(userPo);
+             UserPo userR = userService.update(userPo,Long.valueOf(loginUserId));
             ResponseModel responseModel = new ResponseModel();
             responseModel.setResModel(userR);
             return responseModel;
@@ -116,11 +120,9 @@ public class UserController {
 
     @ApiOperation(value = "删除")
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
-    public ResponseModel delete(@ApiParam(value = "id") @RequestParam(required = true) String id) {
+    public ResponseModel delete(@ApiParam(value = "id") @RequestParam(required = true) Long id) {
         logger.debug("request parameters: id=>{}",id);
-
-        long idLong = Long.valueOf(id);
-        userService.delete(idLong);
+         userService.delete(id);
         ResponseModel responseModel = new ResponseModel();
         return responseModel;
     }

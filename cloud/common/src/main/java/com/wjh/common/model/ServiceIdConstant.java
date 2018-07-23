@@ -7,4 +7,5 @@ public class ServiceIdConstant {
     public static  String idservice="idservice";
     public static  String quartz="quartz";
     public static String menuoperateservice="menuoperateservice";
+    public static String roleservice="roleservice";
 }

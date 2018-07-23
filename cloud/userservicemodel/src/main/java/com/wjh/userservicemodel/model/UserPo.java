@@ -2,6 +2,8 @@ package com.wjh.userservicemodel.model;
 
 import com.alibaba.fastjson.JSON;
 
+import java.util.Date;
+
 public class UserPo {
 
     private Long id;
@@ -12,6 +14,10 @@ public class UserPo {
     private String img;
     private String gender;
     private String password;
+    private Date createDate;
+    private Long createdBy;
+    private Date updateDate;
+    private Long updatedBy;
 
     public Long getId() {
         return id;
@@ -77,8 +83,41 @@ public class UserPo {
         this.password = password;
     }
 
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Long getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(Long createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Date getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
+    }
+
+    public Long getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(Long updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+
     @Override
     public String toString() {
         return JSON.toJSONString(this);
     }
+
 }

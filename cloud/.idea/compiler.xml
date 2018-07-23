@@ -18,8 +18,13 @@
         <module name="menuoperateservicemodel" />
         <module name="quartz" />
         <module name="quartzmodel" />
+        <module name="roleoperateservice" />
+        <module name="roleservice" />
+        <module name="roleservicemodel" />
         <module name="swaggerconfiguration" />
         <module name="usercontroller" />
+        <module name="useroperateservice" />
+        <module name="userroleservice" />
         <module name="userservice" />
         <module name="userserviceapi" />
         <module name="userservicemodel" />
@@ -46,8 +51,13 @@
       <module name="quartz" target="1.8" />
       <module name="quartzmodel" target="1.6" />
       <module name="redisconfiguration" target="1.6" />
+      <module name="roleoperateservice" target="1.6" />
+      <module name="roleservice" target="1.6" />
+      <module name="roleservicemodel" target="1.6" />
       <module name="swaggerconfiguration" target="1.6" />
       <module name="usercontroller" target="1.8" />
+      <module name="useroperateservice" target="1.6" />
+      <module name="userroleservice" target="1.6" />
       <module name="userservice" target="1.8" />
       <module name="userservicemodel" target="1.6" />
       <module name="utils" target="1.6" />

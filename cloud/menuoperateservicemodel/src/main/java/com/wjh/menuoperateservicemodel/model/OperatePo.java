@@ -1,6 +1,6 @@
 package com.wjh.menuoperateservicemodel.model;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
 public class OperatePo {
     private Long id;
@@ -9,10 +9,10 @@ public class OperatePo {
     private String operateName;
     private String operateCode;
     private Integer orderNo;
-    private String createDate;
-    private String createdBy;
-    private String updateDate;
-    private String updatedBy;
+    private Date createDate;
+    private Long createdBy;
+    private Date updateDate;
+    private Long updatedBy;
 
     public Long getId() {
         return id;
@@ -62,35 +62,35 @@ public class OperatePo {
         this.orderNo = orderNo;
     }
 
-    public String getCreateDate() {
+    public Date getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(String createDate) {
+    public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }
 
-    public String getCreatedBy() {
+    public Long getCreatedBy() {
         return createdBy;
     }
 
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(Long createdBy) {
         this.createdBy = createdBy;
     }
 
-    public String getUpdateDate() {
+    public Date getUpdateDate() {
         return updateDate;
     }
 
-    public void setUpdateDate(String updateDate) {
+    public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
     }
 
-    public String getUpdatedBy() {
+    public Long getUpdatedBy() {
         return updatedBy;
     }
 
-    public void setUpdatedBy(String updatedBy) {
+    public void setUpdatedBy(Long updatedBy) {
         this.updatedBy = updatedBy;
     }
 }

@@ -1,6 +1,5 @@
 package com.wjh.userservice.mapper;
 
-import com.wjh.userservicemodel.model.UserDto;
 import com.wjh.userservicemodel.model.UserPo;
 import com.wjh.userservicemodel.model.UserVo;
 import org.apache.ibatis.annotations.Param;

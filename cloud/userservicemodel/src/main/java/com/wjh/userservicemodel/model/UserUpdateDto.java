@@ -1,12 +1,9 @@
 package com.wjh.userservicemodel.model;
 
-
 import com.alibaba.fastjson.JSON;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel
-public class UserDto {
+public class UserUpdateDto {
 
     private Long id;
     private String name;
@@ -17,7 +14,7 @@ public class UserDto {
     private String gender;
     private String password;
 
-    @ApiModelProperty(value = "id",required = true,example = "123456")
+    @ApiModelProperty(value = "id", required = true, example = "123456")
     public Long getId() {
         return id;
     }
@@ -26,7 +23,7 @@ public class UserDto {
         this.id = id;
     }
 
-    @ApiModelProperty(value = "姓名",required = true,example = "小明")
+    @ApiModelProperty(value = "姓名", required = true, example = "小明")
     public String getName() {
         return name;
     }
@@ -34,7 +31,8 @@ public class UserDto {
     public void setName(String name) {
         this.name = name;
     }
-    @ApiModelProperty(value = "昵称",required = true,example = "少女杀手")
+
+    @ApiModelProperty(value = "昵称", required = true, example = "少女杀手")
     public String getNickname() {
         return nickname;
     }
@@ -43,7 +41,7 @@ public class UserDto {
         this.nickname = nickname;
     }
 
-    @ApiModelProperty(value = "出生日期",required = true,example = "1987-01-01")
+    @ApiModelProperty(value = "出生日期", required = true, example = "1987-01-01")
     public String getBirthday() {
         return birthday;
     }
@@ -52,7 +50,7 @@ public class UserDto {
         this.birthday = birthday;
     }
 
-    @ApiModelProperty(value = "手机号码",required = true,example = "13000000000")
+    @ApiModelProperty(value = "手机号码", required = true, example = "13000000000")
     public String getMobile() {
         return mobile;
     }
@@ -61,7 +59,7 @@ public class UserDto {
         this.mobile = mobile;
     }
 
-    @ApiModelProperty(value = "头像URL",required = true,example = "https://www.baidu.com/img/bd_logo1.png")
+    @ApiModelProperty(value = "头像URL", required = true, example = "https://www.baidu.com/img/bd_logo1.png")
     public String getImg() {
         return img;
     }
@@ -70,7 +68,7 @@ public class UserDto {
         this.img = img;
     }
 
-    @ApiModelProperty(value = "性别  0 未知  1 女  2 男 ",required = true,example = "0")
+    @ApiModelProperty(value = "性别  0 未知  1 女  2 男 ", required = true, example = "0")
     public String getGender() {
         return gender;
     }
@@ -79,7 +77,7 @@ public class UserDto {
         this.gender = gender;
     }
 
-    @ApiModelProperty(value = "密码 MD5 ",required = true,example = "e10adc3949ba59abbe56e057f20f883e")
+    @ApiModelProperty(value = "密码 MD5 ", required = true, example = "e10adc3949ba59abbe56e057f20f883e")
     public String getPassword() {
         return password;
     }
