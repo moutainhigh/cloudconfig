@@ -1,7 +1,6 @@
 package com.wjh.roleservice.controller;
 
 
-import com.netflix.discovery.converters.Auto;
 import com.wjh.common.model.ResponseConstant;
 import com.wjh.common.model.ResponseModel;
 import com.wjh.common.model.ServiceIdConstant;
@@ -12,11 +11,9 @@ import com.wjh.roleservicemodel.model.RolePo;
 import com.wjh.roleservicemodel.model.RoleUpdateDto;
 import com.wjh.roleservicemodel.model.RoleVo;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.lang3.event.EventListenerSupport;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -125,7 +122,6 @@ public class RoleController {
         String loginUserId = httpServletRequest.getHeader("loginUserId");
 
         try {
-
 
             roleService.delete(id, Long.valueOf(loginUserId));
             ResponseModel responseModel = new ResponseModel();
