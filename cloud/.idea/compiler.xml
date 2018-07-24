@@ -50,21 +50,21 @@
       <module name="log4j2kafka" target="1.6" />
       <module name="menuoperate" target="1.6" />
       <module name="menuoperatemodel" target="1.6" />
-      <module name="menuoperateservice" target="1.6" />
+      <module name="menuoperateservice" target="1.8" />
       <module name="menuoperateservicemodel" target="1.6" />
       <module name="quartz" target="1.8" />
       <module name="quartzmodel" target="1.6" />
       <module name="redisconfiguration" target="1.6" />
       <module name="roleoperatemodel" target="1.6" />
-      <module name="roleoperateservice" target="1.6" />
+      <module name="roleoperateservice" target="1.8" />
       <module name="roleoperateservicemodel" target="1.6" />
-      <module name="roleservice" target="1.6" />
+      <module name="roleservice" target="1.8" />
       <module name="roleservicemodel" target="1.6" />
       <module name="swaggerconfiguration" target="1.6" />
       <module name="usercontroller" target="1.8" />
-      <module name="useroperateservice" target="1.6" />
+      <module name="useroperateservice" target="1.8" />
       <module name="useroperateservicemodel" target="1.6" />
-      <module name="userroleservice" target="1.6" />
+      <module name="userroleservice" target="1.8" />
       <module name="userroleservicemodel" target="1.6" />
       <module name="userservice" target="1.8" />
       <module name="userservicemodel" target="1.6" />

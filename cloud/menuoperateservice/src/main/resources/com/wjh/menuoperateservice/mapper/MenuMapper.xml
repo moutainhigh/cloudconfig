@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.wjh.menuoperate.mapper.MenuMapper">
+<mapper namespace="com.wjh.menuoperateservice.mapper.MenuMapper">
 
     <insert id="insert">
         INSERT INTO sys_menu
@@ -68,9 +68,9 @@
             m.router_path AS routerPath,
             m.icon_normal_path AS iconNormalPath,
             m.icon_check_path AS iconCheckPath,
-            m.create_date AS createDate,
+            DATE_FORMAT(m.create_date,'%Y-%m-%d %H:%i:%s') as createDate,
             m.created_by AS createdBy,
-            m.update_date AS updateDate,
+            DATE_FORMAT(m.update_date,'%Y-%m-%d %H:%i:%s') as updateDate,
             m.updated_by AS updatedBy
         FROM
         sys_menu m

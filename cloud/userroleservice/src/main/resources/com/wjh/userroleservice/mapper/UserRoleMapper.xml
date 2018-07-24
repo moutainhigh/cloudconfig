@@ -43,7 +43,9 @@
             r.id,
             r.user_id AS userId,
             r.role_id AS roleId,
-            r.remark
+            r.remark,
+            DATE_FORMAT(r.update_date,'%Y-%m-%d %H:%i:%s') as updateDate,
+            DATE_FORMAT(r.create_date,'%Y-%m-%d %H:%i:%s') as createDate
         FROM
             sys_user_role r
             where r.user_id=#{userId}

@@ -7,12 +7,14 @@ import org.apache.commons.lang3.event.EventListenerSupport;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Service
+@Transactional
 public class RoleService {
 
 
@@ -30,6 +32,7 @@ public class RoleService {
         rolePo.setUpdateDate(date);
         rolePo.setCreatedBy(loginUserId);
         rolePo.setUpdatedBy(loginUserId);
+        roleMapper.insert(rolePo);
         return rolePo;
     }
 
@@ -37,6 +40,7 @@ public class RoleService {
         Date date = new Date();
         rolePo.setUpdateDate(date);
         rolePo.setUpdatedBy(loginUserId);
+        roleMapper.update(rolePo);
         return  rolePo;
     }
 

@@ -61,7 +61,7 @@ public class RoleController {
     }
 
     @ApiOperation(value = "通过Ids查询")
-    @RequestMapping(value = "/selectByIds", method = RequestMethod.GET)
+    @RequestMapping(value = "/selectByIds", method = RequestMethod.POST)
     public ResponseModel selectByIds(@ApiParam(value = "id数组 ", required = true) @RequestBody(required = true) List<Long> idList
                              ) {
 

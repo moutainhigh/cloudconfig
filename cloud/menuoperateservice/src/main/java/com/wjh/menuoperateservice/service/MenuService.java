@@ -1,11 +1,8 @@
-package com.wjh.menuoperate.service;
+package com.wjh.menuoperateservice.service;
 
-import com.netflix.discovery.converters.Auto;
-import com.wjh.menuoperate.mapper.MenuMapper;
+import com.wjh.menuoperateservice.mapper.MenuMapper;
 import com.wjh.menuoperateservicemodel.model.MenuPo;
 import com.wjh.menuoperateservicemodel.model.MenuVo;
-import com.wjh.utils.redis.RedisCacheUtil;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

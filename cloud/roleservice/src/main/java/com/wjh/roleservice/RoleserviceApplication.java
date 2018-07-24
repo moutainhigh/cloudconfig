@@ -1,4 +1,4 @@
-package com.wjh.menuoperate;
+package com.wjh.roleservice;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -13,11 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 @EnableEurekaClient
 @ComponentScan("com.wjh")
 @EnableFeignClients
-@MapperScan("com.wjh.menuoperate.mapper")
-public class MenuoperateApplication  {
-
+@MapperScan("com.wjh.roleservice.mapper")
+public class RoleserviceApplication {
     public static void main(String[] args) {
-        SpringApplication.run(MenuoperateApplication.class,args);
+        SpringApplication.run(RoleserviceApplication.class,args);
     }
-
 }

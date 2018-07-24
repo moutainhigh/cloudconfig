@@ -1,10 +1,10 @@
-package com.wjh.menuoperate.controller;
+package com.wjh.menuoperateservice.controller;
 
 
 import com.wjh.common.model.ResponseConstant;
 import com.wjh.common.model.ResponseModel;
 import com.wjh.common.model.ServiceIdConstant;
-import com.wjh.menuoperate.service.MenuService;
+import com.wjh.menuoperateservice.service.MenuService;
 import com.wjh.menuoperateservicemodel.model.MenuAddDto;
 import com.wjh.menuoperateservicemodel.model.MenuPo;
 import com.wjh.menuoperateservicemodel.model.MenuUpdateDto;

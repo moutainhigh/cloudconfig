@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @FeignClient(value = "userservice")
 public interface UserService {
 
-    @RequestMapping(value = "/userservice/selectByIds", method = RequestMethod.GET)
+    @RequestMapping(value = "/userservice/selectByIds", method = RequestMethod.POST)
     public ResponseModel selectByIds( @RequestBody(required = true) java.util.List<Long> idList);
 
 }

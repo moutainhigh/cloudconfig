@@ -11,7 +11,9 @@
             mobile,
             img,
             gender,
-            password
+            password,
+            DATE_FORMAT(u.create_date,'%Y-%m-%d %H:%i:%s') as createDate,
+            DATE_FORMAT(u.update_date,'%Y-%m-%d %H:%i:%s') as updateDate
         FROM
             user u
         where u.mobile=#{mobile}
@@ -108,7 +110,9 @@
             mobile,
             img,
             gender,
-            password
+            password,
+            DATE_FORMAT(u.update_date,'%Y-%m-%d %H:%i:%s') as updateDate,
+            DATE_FORMAT(u.create_date,'%Y-%m-%d %H:%i:%s') as createDate
         FROM
             user u
         where u.id in

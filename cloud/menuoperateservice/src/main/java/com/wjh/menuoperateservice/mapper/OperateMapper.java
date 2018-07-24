@@ -1,4 +1,4 @@
-package com.wjh.menuoperate.mapper;
+package com.wjh.menuoperateservice.mapper;
 
 import com.wjh.menuoperateservicemodel.model.OperatePo;
 import com.wjh.menuoperateservicemodel.model.OperateVo;

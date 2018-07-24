@@ -12,6 +12,6 @@ import java.util.List;
 
 @FeignClient(value = "menuoperateservice")
 public interface MenuOperateService {
-    @RequestMapping(value = "/operate/selectByIds", method = RequestMethod.GET)
+    @RequestMapping(value = "/operate/selectByIds", method = RequestMethod.POST)
     public ResponseModel<List<OperateVo>> selectByIds(@ApiParam(value = "id列表", required = true) @RequestBody(required = false) List<Long> idList);
 }

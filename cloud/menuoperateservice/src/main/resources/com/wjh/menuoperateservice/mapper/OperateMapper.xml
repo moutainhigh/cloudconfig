@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.wjh.menuoperate.mapper.OperateMapper">
+<mapper namespace="com.wjh.menuoperateservice.mapper.OperateMapper">
 
 
     <insert id="insert">
@@ -63,9 +63,9 @@
             o.operate_name as operateName,
             o.operate_code as operateCode,
             o.order_no as orderNo,
-            o.create_date as createDate,
+            DATE_FORMAT(o.create_date,'%Y-%m-%d %H:%i:%s') as  createDate,
             o.created_by as createdBy,
-            o.update_date as updateDate,
+            DATE_FORMAT(o.update_date,'%Y-%m-%d %H:%i:%s') as updateDate ,
             o.updated_by as updatedBy
          from sys_operate o
         where o.operate_name like '%${operateName}%'
@@ -94,9 +94,9 @@
             o.operate_name as operateName,
             o.operate_code as operateCode,
             o.order_no as orderNo,
-            o.create_date as createDate,
+            DATE_FORMAT(o.create_date,'%Y-%m-%d %H:%i:%s') as createDate,
             o.created_by as createdBy,
-            o.update_date as updateDate,
+            DATE_FORMAT(o.update_date,'%Y-%m-%d %H:%i:%s') as updateDate,
             o.updated_by as updatedBy
          from sys_operate o
         where o.id in

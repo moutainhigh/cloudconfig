@@ -50,7 +50,9 @@
         SELECT
             u.id,
             u.user_id AS userId,
-            u.operate_id AS operateId
+            u.operate_id AS operateId,
+            DATE_FORMAT(u.create_date,'%Y-%m-%d %H:%i:%s') as createDate,
+            DATE_FORMAT(u.update_date,'%Y-%m-%d %H:%i:%s') as updateDate
         FROM
             sys_user_operate u
         WHERE

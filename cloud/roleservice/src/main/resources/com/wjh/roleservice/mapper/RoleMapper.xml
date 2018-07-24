@@ -48,7 +48,9 @@
         SELECT
             r.id,
             r.role_name AS roleName,
-            r.remark
+            r.remark,
+            DATE_FORMAT(r.create_date,'%Y-%m-%d %H:%i:%s') as createDate,
+            DATE_FORMAT(r.update_date,'%Y-%m-%d %H:%i:%s') as updateDate
         FROM
             sys_role r where r.role_name like '%${roleName}%'
             limit #{start},#{pageSize}
@@ -58,7 +60,9 @@
         SELECT
             r.id,
             r.role_name AS roleName,
-            r.remark
+            r.remark,
+          DATE_FORMAT(r.create_date,'%Y-%m-%d %H:%i:%s') as createDate,
+          DATE_FORMAT(r.update_date,'%Y-%m-%d %H:%i:%s') as updateDate
         FROM
             sys_role r where r.id in
         <foreach collection="idList" index="index" item="id" open="(" separator="," close=")">

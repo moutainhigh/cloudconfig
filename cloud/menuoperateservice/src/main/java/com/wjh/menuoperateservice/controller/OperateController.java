@@ -1,10 +1,9 @@
-package com.wjh.menuoperate.controller;
+package com.wjh.menuoperateservice.controller;
 
-import com.netflix.discovery.converters.Auto;
 import com.wjh.common.model.ResponseConstant;
 import com.wjh.common.model.ResponseModel;
 import com.wjh.common.model.ServiceIdConstant;
-import com.wjh.menuoperate.service.OperateService;
+import com.wjh.menuoperateservice.service.OperateService;
 import com.wjh.menuoperateservicemodel.model.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -55,8 +54,8 @@ public class OperateController {
 
 
     @ApiOperation(value = "搜索权限")
-    @RequestMapping(value = "/selectByIds", method = RequestMethod.GET)
-    public ResponseModel<List<OperateVo>> selectByIds(@ApiParam(value = "id列表", required = true) @RequestBody(required = false) List<Long> idList) {
+    @RequestMapping(value = "/selectByIds", method = RequestMethod.POST)
+    public ResponseModel<List<OperateVo>> selectByIds(@ApiParam(value = "id列表", required = true) @RequestBody(required = true) List<Long> idList) {
 
 
         logger.debug("request parameters: idList=>{}", idList);

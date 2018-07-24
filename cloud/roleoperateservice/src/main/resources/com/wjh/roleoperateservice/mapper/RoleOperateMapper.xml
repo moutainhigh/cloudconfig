@@ -40,7 +40,9 @@
         SELECT
             r.id,
             r.role_id AS roleId,
-            r.operate_id AS operateId
+            r.operate_id AS operateId,
+            DATE_FORMAT(r.create_date,'%Y-%m-%d %H:%i:%s') as createDate,
+            DATE_FORMAT(r.update_date,'%Y-%m-%d %H:%i:%s') as updateDate
         FROM
             sys_role_operate r
         WHERE

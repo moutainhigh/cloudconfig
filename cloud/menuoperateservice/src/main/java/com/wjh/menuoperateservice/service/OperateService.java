@@ -1,6 +1,6 @@
-package com.wjh.menuoperate.service;
+package com.wjh.menuoperateservice.service;
 
-import com.wjh.menuoperate.mapper.OperateMapper;
+import com.wjh.menuoperateservice.mapper.OperateMapper;
 import com.wjh.menuoperateservicemodel.model.OperatePo;
 import com.wjh.menuoperateservicemodel.model.OperateVo;
 import org.springframework.beans.factory.annotation.Autowired;

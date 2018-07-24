@@ -11,6 +11,6 @@ import java.util.List;
 
 @FeignClient(value = "roleservice")
 public interface RoleService {
-    @RequestMapping(value = "/role/selectByIds", method = RequestMethod.GET)
+    @RequestMapping(value = "/role/selectByIds", method = RequestMethod.POST)
     public ResponseModel selectByIds( @RequestBody(required = true) List<Long> idList);
 }

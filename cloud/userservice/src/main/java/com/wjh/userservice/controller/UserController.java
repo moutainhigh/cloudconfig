@@ -64,7 +64,7 @@ public class UserController {
     }
 
     @ApiOperation(value = "根据ids 查询用户")
-    @RequestMapping(value = "/selectByIds", method = RequestMethod.GET)
+    @RequestMapping(value = "/selectByIds", method = RequestMethod.POST)
     public ResponseModel<java.util.List<UserVo>> selectByIds(@ApiParam(value = "id列表", required = true) @RequestBody(required = true) java.util.List<Long> idList) {
 
 
