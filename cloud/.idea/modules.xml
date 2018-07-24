@@ -14,12 +14,15 @@
       <module fileurl="file://$PROJECT_DIR$/quartz/quartz.iml" filepath="$PROJECT_DIR$/quartz/quartz.iml" />
       <module fileurl="file://$PROJECT_DIR$/quartzmodel/quartzmodel.iml" filepath="$PROJECT_DIR$/quartzmodel/quartzmodel.iml" />
       <module fileurl="file://$PROJECT_DIR$/roleoperateservice/roleoperateservice.iml" filepath="$PROJECT_DIR$/roleoperateservice/roleoperateservice.iml" />
+      <module fileurl="file://$PROJECT_DIR$/roleoperateservicemodel/roleoperateservicemodel.iml" filepath="$PROJECT_DIR$/roleoperateservicemodel/roleoperateservicemodel.iml" />
       <module fileurl="file://$PROJECT_DIR$/roleservice/roleservice.iml" filepath="$PROJECT_DIR$/roleservice/roleservice.iml" />
       <module fileurl="file://$PROJECT_DIR$/roleservicemodel/roleservicemodel.iml" filepath="$PROJECT_DIR$/roleservicemodel/roleservicemodel.iml" />
       <module fileurl="file://$PROJECT_DIR$/swaggerconfiguration/swaggerconfiguration.iml" filepath="$PROJECT_DIR$/swaggerconfiguration/swaggerconfiguration.iml" />
       <module fileurl="file://$PROJECT_DIR$/usercontroller/usercontroller.iml" filepath="$PROJECT_DIR$/usercontroller/usercontroller.iml" />
       <module fileurl="file://$PROJECT_DIR$/useroperateservice/useroperateservice.iml" filepath="$PROJECT_DIR$/useroperateservice/useroperateservice.iml" />
+      <module fileurl="file://$PROJECT_DIR$/useroperateservicemodel/useroperateservicemodel.iml" filepath="$PROJECT_DIR$/useroperateservicemodel/useroperateservicemodel.iml" />
       <module fileurl="file://$PROJECT_DIR$/userroleservice/userroleservice.iml" filepath="$PROJECT_DIR$/userroleservice/userroleservice.iml" />
+      <module fileurl="file://$PROJECT_DIR$/userroleservicemodel/userroleservicemodel.iml" filepath="$PROJECT_DIR$/userroleservicemodel/userroleservicemodel.iml" />
       <module fileurl="file://$PROJECT_DIR$/userservice/userservice.iml" filepath="$PROJECT_DIR$/userservice/userservice.iml" />
       <module fileurl="file://$PROJECT_DIR$/userservicemodel/userservicemodel.iml" filepath="$PROJECT_DIR$/userservicemodel/userservicemodel.iml" />
       <module fileurl="file://$PROJECT_DIR$/utils/utils.iml" filepath="$PROJECT_DIR$/utils/utils.iml" />

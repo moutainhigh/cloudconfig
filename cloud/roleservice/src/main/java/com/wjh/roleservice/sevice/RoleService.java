@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -56,5 +57,14 @@ public class RoleService {
         int start=(currentPage-1)*pageSize;
         return roleMapper.search(roleName,start,pageSize);
     }
+
+
+    public List<RoleVo> selectByIds(List<Long> idList){
+        if (idList.size()==0){
+            return new ArrayList<RoleVo>(0);
+        }
+        return roleMapper.selectByIds(idList);
+    }
+
 
 }

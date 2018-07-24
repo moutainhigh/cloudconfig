@@ -12,4 +12,104 @@
     <artifactId>roleoperateservice</artifactId>
 
 
+    <dependencies>
+        <dependency>
+            <groupId>cloud</groupId>
+            <artifactId>roleoperatemodel</artifactId>
+            <version>${cloud.roleoperateservicemodel.version}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>cloud</groupId>
+            <artifactId>menuoperateservicemodel</artifactId>
+            <version>${cloud.menuoperateservicemodel.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>cloud</groupId>
+            <artifactId>roleservicemodel</artifactId>
+            <version>${cloud.userroleservicemodel.version}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>cloud</groupId>
+            <artifactId>log4j2kafka</artifactId>
+            <version>${cloud.log4j2kafka.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>cloud</groupId>
+            <artifactId>utils</artifactId>
+            <version>${cloud.utils.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-config</artifactId>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+
+        </dependency>
+
+        <dependency>
+            <groupId>cloud</groupId>
+            <artifactId>zipkinconfiguration</artifactId>
+            <version>${cloud.zipkinconfiguration.version}</version>
+        </dependency>
+
+
+
+        <dependency>
+            <groupId>cloud</groupId>
+            <artifactId>common</artifactId>
+            <version>${cloud.common.version}</version>
+        </dependency>
+
+
+
+        <dependency>
+            <groupId>cloud</groupId>
+            <artifactId>swaggerconfiguration</artifactId>
+            <version>${cloud.swaggerconfiguration.version}</version>
+        </dependency>
+
+
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-eureka</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-feign</artifactId>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+            <version>${mybatis-spring-boot-starter.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+
+    </dependencies>
+
 </project>

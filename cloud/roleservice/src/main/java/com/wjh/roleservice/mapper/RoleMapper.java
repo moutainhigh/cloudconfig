@@ -17,4 +17,6 @@ public interface RoleMapper {
     public int delete(@Param("id") Long id);
 
     public List<RoleVo> search(@Param("roleName") String roleName,@Param("start") Integer start,@Param("pageSize") Integer pageSize);
+
+    public List<RoleVo>  selectByIds(@Param("idList")List<Long> idList);
 }

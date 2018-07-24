@@ -16,9 +16,22 @@
 
         <dependency>
             <groupId>cloud</groupId>
+            <artifactId>userservicemodel</artifactId>
+            <version>${cloud.userservicemodel.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>cloud</groupId>
             <artifactId>menuoperateservicemodel</artifactId>
             <version>${cloud.menuoperateservicemodel.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>cloud</groupId>
+            <artifactId>useroperateservicemodel</artifactId>
+            <version>${cloud.useroperateservicemodel.version}</version>
+        </dependency>
+
+
 
         <dependency>
             <groupId>cloud</groupId>

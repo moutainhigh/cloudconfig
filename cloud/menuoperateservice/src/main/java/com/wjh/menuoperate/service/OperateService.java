@@ -6,6 +6,7 @@ import com.wjh.menuoperateservicemodel.model.OperateVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -52,6 +53,14 @@ public class OperateService {
     public Long delete(Long id) {
          operateMapper.delete(id);
          return id;
+    }
+
+
+    public List<OperateVo>  selectByIds(List<Long> idList){
+        if (idList.size()==0){
+            return new ArrayList<OperateVo>(0);
+        }
+        return operateMapper.selectByIds(idList);
     }
 
 }

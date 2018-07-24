@@ -4,7 +4,6 @@ import com.wjh.common.model.ResponseConstant;
 import com.wjh.common.model.ResponseModel;
 import com.wjh.common.model.ServiceIdConstant;
 import com.wjh.userservice.service.UserService;
-import com.wjh.userservicemodel.model.UserAddDto;
 import com.wjh.userservicemodel.model.UserPo;
 import com.wjh.userservicemodel.model.UserUpdateDto;
 import com.wjh.userservicemodel.model.UserVo;
@@ -50,12 +49,32 @@ public class UserController {
     public ResponseModel detailByMobile(@ApiParam(value = "手机", required = true) @RequestParam(required = true) String mobile) {
 
 
-        logger.debug("request parameters: mobile=>{}",mobile);
+        logger.debug("request parameters: mobile=>{}", mobile);
 
         try {
             UserVo user = userService.detailByUser(mobile);
             ResponseModel<UserVo> responseModel = new ResponseModel<UserVo>();
             responseModel.setResModel(user);
+            return responseModel;
+        } catch (Exception e) {
+            logger.error(ServiceIdConstant.userservice, e);
+            return ResponseConstant.SYSTEM_EXCEPTION;
+        }
+
+    }
+
+    @ApiOperation(value = "根据ids 查询用户")
+    @RequestMapping(value = "/selectByIds", method = RequestMethod.GET)
+    public ResponseModel<java.util.List<UserVo>> selectByIds(@ApiParam(value = "id列表", required = true) @RequestBody(required = true) java.util.List<Long> idList) {
+
+
+        logger.debug("request parameters: idList=>{}", idList);
+
+
+        try {
+            java.util.List<UserVo> userVoList= userService.selectByIds(idList);
+            ResponseModel<java.util.List<UserVo>> responseModel = new ResponseModel();
+            responseModel.setResModel(userVoList);
             return responseModel;
         } catch (Exception e) {
             logger.error(ServiceIdConstant.userservice, e);
@@ -72,7 +91,7 @@ public class UserController {
             @ApiParam(value = "密码，MD5加密", required = true) @RequestParam(required = true) String password,
             @ApiParam(value = "重复密码，MD5加密", required = true) @RequestParam(required = true) String repeatPassword,
             HttpServletRequest httpServletRequest) {
-        logger.debug("request parameters: mobile=>{},password=>{},repeatPassword=>{}",mobile,password,repeatPassword);
+        logger.debug("request parameters: mobile=>{},password=>{},repeatPassword=>{}", mobile, password, repeatPassword);
 
 
         if (!password.equals(repeatPassword)) {
@@ -88,7 +107,7 @@ public class UserController {
         UserPo user = new UserPo();
         user.setMobile(mobile);
         user.setPassword(password);
-        UserPo userR = userService.insert(user,null);
+        UserPo userR = userService.insert(user, null);
         ResponseModel responseModel = new ResponseModel();
         responseModel.setResModel(userR);
         return responseModel;
@@ -101,13 +120,13 @@ public class UserController {
     public ResponseModel update(@ApiParam(value = "用户") @RequestBody(required = true) UserUpdateDto user,
                                 HttpServletRequest httpServletRequest) {
         try {
-            logger.debug("request parameters: user=>{}",user);
+            logger.debug("request parameters: user=>{}", user);
 
-            String loginUserId=httpServletRequest.getHeader("loginUserId");
+            String loginUserId = httpServletRequest.getHeader("loginUserId");
 
-            UserPo userPo=new UserPo();
-            BeanUtils.copyProperties(userPo,user);
-             UserPo userR = userService.update(userPo,Long.valueOf(loginUserId));
+            UserPo userPo = new UserPo();
+            BeanUtils.copyProperties(userPo, user);
+            UserPo userR = userService.update(userPo, Long.valueOf(loginUserId));
             ResponseModel responseModel = new ResponseModel();
             responseModel.setResModel(userR);
             return responseModel;
@@ -121,8 +140,8 @@ public class UserController {
     @ApiOperation(value = "删除")
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
     public ResponseModel delete(@ApiParam(value = "id") @RequestParam(required = true) Long id) {
-        logger.debug("request parameters: id=>{}",id);
-         userService.delete(id);
+        logger.debug("request parameters: id=>{}", id);
+        userService.delete(id);
         ResponseModel responseModel = new ResponseModel();
         return responseModel;
     }
@@ -137,14 +156,14 @@ public class UserController {
             @ApiParam(value = "验证码", required = true) @RequestParam(required = true) String authCode) {
         try {
 
-            logger.debug("request parameters: uniqueKey=>{},mobile=>{},password=>{},authCode=>{}",uniqueKey,mobile,password,authCode);
+            logger.debug("request parameters: uniqueKey=>{},mobile=>{},password=>{},authCode=>{}", uniqueKey, mobile, password, authCode);
 
             /**
              * 验证验证码是否输入正确
              */
 
-            String authCodeInRedis= (String) redisCacheUtil.getCacheObject(uniqueKey);
-            if (!authCode.equals(authCodeInRedis)){
+            String authCodeInRedis = (String) redisCacheUtil.getCacheObject(uniqueKey);
+            if (!authCode.equals(authCodeInRedis)) {
                 return USERSERVICE_LOGIN_AUTHCODE_ERROR;
             }
 
@@ -164,14 +183,14 @@ public class UserController {
             redisCacheUtil.delete(user.getId() + "");
 
 
-            int expireSeconds=60 * 60 * 2;
+            int expireSeconds = 60 * 60 * 2;
             //加入新的token-->userId,  userId-->token关系
             redisCacheUtil.setCacheObject(token, user.getId() + "", expireSeconds);
-            redisCacheUtil.setCacheObject(user.getId() + "", token,expireSeconds);
+            redisCacheUtil.setCacheObject(user.getId() + "", token, expireSeconds);
 
             ResponseModel responseModel = new ResponseModel();
-            Map<String,Object> map=new HashMap(1);
-            map.put("token",token);
+            Map<String, Object> map = new HashMap(1);
+            map.put("token", token);
             responseModel.setResModel(map);
             return responseModel;
 
@@ -182,9 +201,8 @@ public class UserController {
     }
 
 
-
     @ApiOperation(value = "获取验证码")
-    @RequestMapping(value = "/authcode",method = { RequestMethod.GET})
+    @RequestMapping(value = "/authcode", method = {RequestMethod.GET})
     public void authcode(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
         int width = 63;
@@ -202,10 +220,10 @@ public class UserController {
         Graphics g = image.getGraphics();
         //Graphics类的样式
         g.setColor(this.getRandColor(200, 250));
-        g.setFont(new Font("Times New Roman",0,28));
+        g.setFont(new Font("Times New Roman", 0, 28));
         g.fillRect(0, 0, width, height);
         //绘制干扰线
-        for(int i=0;i<40;i++){
+        for (int i = 0; i < 40; i++) {
             g.setColor(this.getRandColor(130, 200));
             int x = random.nextInt(width);
             int y = random.nextInt(height);
@@ -216,38 +234,37 @@ public class UserController {
 
         //绘制字符
         String strCode = "";
-        for(int i=0;i<4;i++){
+        for (int i = 0; i < 4; i++) {
             String rand = String.valueOf(random.nextInt(10));
             strCode = strCode + rand;
-            g.setColor(new Color(20+random.nextInt(110),20+random.nextInt(110),20+random.nextInt(110)));
-            g.drawString(rand, 13*i+6, 28);
+            g.setColor(new Color(20 + random.nextInt(110), 20 + random.nextInt(110), 20 + random.nextInt(110)));
+            g.drawString(rand, 13 * i + 6, 28);
         }
 
-        String uniqueKey=UUID.randomUUID().toString().toUpperCase();
+        String uniqueKey = UUID.randomUUID().toString().toUpperCase();
 
 
         //将字符保存到redis中用于前端的验证,5分钟后过期
-        redisCacheUtil.setCacheObject(uniqueKey,strCode,60*5);
+        redisCacheUtil.setCacheObject(uniqueKey, strCode, 60 * 5);
         g.dispose();
 
-        response.setHeader("uniqueKey",uniqueKey);
+        response.setHeader("uniqueKey", uniqueKey);
         ImageIO.write(image, "JPEG", response.getOutputStream());
         response.getOutputStream().flush();
 
     }
-    Color getRandColor(int fc,int bc){
+
+    Color getRandColor(int fc, int bc) {
         Random random = new Random();
-        if(fc>255)
+        if (fc > 255)
             fc = 255;
-        if(bc>255)
+        if (bc > 255)
             bc = 255;
         int r = fc + random.nextInt(bc - fc);
         int g = fc + random.nextInt(bc - fc);
         int b = fc + random.nextInt(bc - fc);
-        return new Color(r,g,b);
+        return new Color(r, g, b);
     }
-
-
 
 
 }

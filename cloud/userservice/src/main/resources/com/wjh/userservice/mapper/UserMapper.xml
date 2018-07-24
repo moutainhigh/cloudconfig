@@ -97,4 +97,25 @@
         delete from user where id=#{id}
     </delete>
 
+
+
+    <select id="selectByIds" resultType="com.wjh.userservicemodel.model.UserVo">
+     SELECT
+            id,
+            name,
+            nickname,
+            birthday,
+            mobile,
+            img,
+            gender,
+            password
+        FROM
+            user u
+        where u.id in
+        <foreach collection="idList" index="index" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+
+    </select>
+
 </mapper>

@@ -20,4 +20,5 @@ public interface OperateMapper {
 
     public int delete(@Param("id") Long id);
 
+    public List<OperateVo> selectByIds(@Param("idList")List<Long> idList);
 }

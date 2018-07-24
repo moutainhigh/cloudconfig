@@ -9,4 +9,7 @@ public class ServiceIdConstant {
     public static String menuoperateservice="menuoperateservice";
     public static String roleservice="roleservice";
     public static String userroleservice="userroleservice";
+    public static String useroperateservice="useroperateservice";
+    public static String roleoperateservice="roleoperateservice";
+
 }

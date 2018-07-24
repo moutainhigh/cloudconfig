@@ -86,5 +86,24 @@
 
 
 
+    <select id="selectByIds" resultType="com.wjh.menuoperateservicemodel.model.OperateVo">
+          SELECT
+            o.id,
+            o.menu_id as menuId,
+            o.url,
+            o.operate_name as operateName,
+            o.operate_code as operateCode,
+            o.order_no as orderNo,
+            o.create_date as createDate,
+            o.created_by as createdBy,
+            o.update_date as updateDate,
+            o.updated_by as updatedBy
+         from sys_operate o
+        where o.id in
+        <foreach collection="idList" index="index" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
 
 </mapper>

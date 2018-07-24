@@ -33,7 +33,7 @@ public class OperateController {
 
     @ApiOperation(value = "搜索权限")
     @RequestMapping(value = "/search", method = RequestMethod.GET)
-    public ResponseModel search(@ApiParam(value = "权限名称", required = false) @RequestParam(required = false) String operateName,
+    public ResponseModel<List<OperateVo>> search(@ApiParam(value = "权限名称", required = false) @RequestParam(required = false) String operateName,
                                 @ApiParam(value = "当前页", required = true) @RequestParam(required = true) Integer currentPage,
                                 @ApiParam(value = "每页多少条记录", required = true) @RequestParam(required = true) Integer pageSize) {
 
@@ -51,6 +51,29 @@ public class OperateController {
         }
 
     }
+
+
+
+    @ApiOperation(value = "搜索权限")
+    @RequestMapping(value = "/selectByIds", method = RequestMethod.GET)
+    public ResponseModel<List<OperateVo>> selectByIds(@ApiParam(value = "id列表", required = true) @RequestBody(required = false) List<Long> idList) {
+
+
+        logger.debug("request parameters: idList=>{}", idList);
+
+        try {
+            List<OperateVo> list = operateService.selectByIds(idList);
+            ResponseModel responseModel = new ResponseModel();
+            responseModel.setResModel(list);
+            return responseModel;
+        } catch (Exception e) {
+            logger.error(ServiceIdConstant.menuoperateservice, e);
+            return ResponseConstant.SYSTEM_EXCEPTION;
+        }
+
+    }
+
+
 
 
     @ApiOperation(value = "添加权限")

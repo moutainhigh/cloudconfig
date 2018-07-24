@@ -31,6 +31,9 @@
         <module>userroleservice</module>
         <module>roleoperateservice</module>
         <module>roleservicemodel</module>
+        <module>useroperateservicemodel</module>
+        <module>userroleservicemodel</module>
+        <module>roleoperateservicemodel</module>
     </modules>
 
 
@@ -45,6 +48,9 @@
         <cloud.log4j2kafka.version>1.0-SNAPSHOT</cloud.log4j2kafka.version>
         <cloud.menuoperateservicemodel.version>1.0-SNAPSHOT</cloud.menuoperateservicemodel.version>
         <cloud.roleservicermodel.version>1.0-SNAPSHOT</cloud.roleservicermodel.version>
+        <cloud.useroperateservicemodel.version>1.0-SNAPSHOT</cloud.useroperateservicemodel.version>
+        <cloud.userroleservicemodel.version>1.0-SNAPSHOT</cloud.userroleservicemodel.version>
+        <cloud.roleoperateservicemodel.version>1.0-SNAPSHOT</cloud.roleoperateservicemodel.version>
          <commons-lang.version>2.6</commons-lang.version>
         <fastjson.version>1.1.40</fastjson.version>
         <mysql-connector-java.version>5.1.44</mysql-connector-java.version>

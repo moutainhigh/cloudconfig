@@ -54,6 +54,18 @@
             limit #{start},#{pageSize}
     </select>
 
+    <select id="selectByIds" resultType="com.wjh.roleservicemodel.model.RoleVo">
+        SELECT
+            r.id,
+            r.role_name AS roleName,
+            r.remark
+        FROM
+            sys_role r where r.id in
+        <foreach collection="idList" index="index" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
 
 
 </mapper>

@@ -5,6 +5,8 @@ import com.wjh.userservicemodel.model.UserVo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface UserMapper {
 
@@ -21,5 +23,7 @@ public interface UserMapper {
 
 
     public int delete(@Param("id") long id);
+
+    public List<UserVo> selectByIds(@Param("idList") List<Long> userIdList);
 
 }

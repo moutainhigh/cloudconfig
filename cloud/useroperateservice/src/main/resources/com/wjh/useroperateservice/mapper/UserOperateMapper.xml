@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wjh.useroperateservice.mapper.UserOperateMapper">
+
+
+    <insert id="insertList">
+        INSERT INTO sys_user_operate(
+            id,
+            user_id,
+            operate_id,
+            create_date,
+            created_by,
+            update_date,
+            updated_by
+        )VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.id},
+            #{item.userId},
+            #{item.operateId},
+            #{item.createDate},
+            #{item.createdBy},
+            #{item.updateDate},
+            #{item.updatedBy}
+            )
+        </foreach>
+    </insert>
+
+
+
+
+
+
+
+
+
+
+
+
+    <delete id="deleteByUserId">
+        DELETE FROM sys_user_operate where user_id = #{userId}
+    </delete>
+
+    <delete id="deleteByOperateId">
+        DELETE FROM sys_user_operate where operate_id = #{operateId}
+    </delete>
+
+
+    <select id="listByUserId" resultType="com.wjh.useroperateservicemodel.model.UserOperateVo">
+        SELECT
+            u.id,
+            u.user_id AS userId,
+            u.operate_id AS operateId
+        FROM
+            sys_user_operate u
+        WHERE
+            u.user_id = #{userId}
+    </select>
+
+</mapper>

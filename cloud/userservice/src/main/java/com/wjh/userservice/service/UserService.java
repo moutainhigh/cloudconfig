@@ -4,11 +4,14 @@ package com.wjh.userservice.service;
 import com.wjh.userservice.mapper.UserMapper;
 import com.wjh.userservicemodel.model.UserPo;
 import com.wjh.userservicemodel.model.UserVo;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Service
 @Transactional
@@ -55,6 +58,14 @@ public class UserService {
     public void delete( long id){
           userMapper.delete(id);
      }
+
+
+    public List<UserVo> selectByIds( List<Long> userIdList){
+        if (userIdList.size()==0){
+            return new ArrayList<>(0);
+        }
+        return userMapper.selectByIds(userIdList);
+    }
 
 
 }

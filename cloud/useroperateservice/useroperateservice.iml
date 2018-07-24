@@ -16,7 +16,9 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="userservicemodel" />
     <orderEntry type="module" module-name="menuoperateservicemodel" />
+    <orderEntry type="module" module-name="useroperateservicemodel" />
     <orderEntry type="module" module-name="log4j2kafka" />
     <orderEntry type="module" module-name="utils" />
     <orderEntry type="library" name="Maven: commons-lang:commons-lang:2.6" level="project" />
