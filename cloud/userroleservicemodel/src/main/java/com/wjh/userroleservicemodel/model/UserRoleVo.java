@@ -6,14 +6,12 @@ public class UserRoleVo {
     private Long id;
     private Long userId;
     private Long roleId;
-    private String remark;
     private String createDate;
     private Long createdBy;
     private String updateDate;
     private Long updatedBy;
     private String userName;
     private String roleName;
-
 
     public Long getId() {
         return id;
@@ -39,14 +37,6 @@ public class UserRoleVo {
         this.roleId = roleId;
     }
 
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
-
     public String getCreateDate() {
         return createDate;
     }
@@ -55,11 +45,11 @@ public class UserRoleVo {
         this.createDate = createDate;
     }
 
-    public long getCreatedBy() {
+    public Long getCreatedBy() {
         return createdBy;
     }
 
-    public void setCreatedBy(long createdBy) {
+    public void setCreatedBy(Long createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -77,10 +67,6 @@ public class UserRoleVo {
 
     public void setUpdatedBy(Long updatedBy) {
         this.updatedBy = updatedBy;
-    }
-
-    public void setCreatedBy(Long createdBy) {
-        this.createdBy = createdBy;
     }
 
     public String getUserName() {

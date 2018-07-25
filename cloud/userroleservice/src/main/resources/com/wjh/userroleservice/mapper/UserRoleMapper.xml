@@ -7,7 +7,6 @@
                 id,
                 user_id,
                 role_id,
-                remark,
                 create_date,
                 created_by,
                 update_date,
@@ -18,7 +17,6 @@
             #{item.id},
             #{item.userId},
             #{item.roleId},
-            #{item.remark},
             #{item.createDate},
             #{item.createdBy},
             #{item.updateDate},
@@ -43,7 +41,6 @@
             r.id,
             r.user_id AS userId,
             r.role_id AS roleId,
-            r.remark,
             DATE_FORMAT(r.update_date,'%Y-%m-%d %H:%i:%s') as updateDate,
             DATE_FORMAT(r.create_date,'%Y-%m-%d %H:%i:%s') as createDate
         FROM

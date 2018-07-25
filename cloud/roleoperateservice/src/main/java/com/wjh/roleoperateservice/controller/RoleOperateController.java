@@ -3,6 +3,7 @@ package com.wjh.roleoperateservice.controller;
 import com.wjh.common.model.ResponseConstant;
 import com.wjh.common.model.ResponseModel;
 import com.wjh.common.model.ServiceIdConstant;
+import com.wjh.menuoperateservicemodel.model.OperateVo;
 import com.wjh.roleoperateservice.service.RoleOperateService;
 import com.wjh.roleoperateservicemodel.model.RoleOperateDto;
 import com.wjh.roleoperateservicemodel.model.RoleOperateVo;
@@ -30,12 +31,12 @@ public class RoleOperateController {
 
     @ApiOperation(value = "获取角色具有的权限")
     @RequestMapping(value = "/listByRoleId", method = RequestMethod.GET)
-    public ResponseModel listByRoleId(@ApiParam(value = "角色ID", required = true) @RequestParam(required = true) Long roleId) {
+    public ResponseModel<List<RoleOperateVo>> listByRoleId(@ApiParam(value = "角色ID", required = true) @RequestParam(required = true) Long roleId) {
 
 
         try {
             List<RoleOperateVo> list = roleOperateService.listByRoleId(roleId);
-            ResponseModel responseModel = new ResponseModel();
+            ResponseModel<List<RoleOperateVo>> responseModel = new ResponseModel();
             responseModel.setResModel(list);
             return responseModel;
         } catch (Exception e) {
@@ -67,7 +68,7 @@ public class RoleOperateController {
 
     @ApiOperation(value = "删除角色下的权限")
     @RequestMapping(value = "/deleteByRoleId", method = RequestMethod.DELETE)
-    public ResponseModel deleteByRoleId(@ApiParam(value = "角色权限", required = true) @RequestBody(required = true) Long roleId,
+    public ResponseModel deleteByRoleId(@ApiParam(value = "角色权限", required = true) @RequestParam(required = true) Long roleId,
                                         HttpServletRequest httpServletRequst) {
 
 
@@ -86,7 +87,7 @@ public class RoleOperateController {
 
     @ApiOperation(value = "根据权限Id删除权限")
     @RequestMapping(value = "/deleteByOperateId", method = RequestMethod.DELETE)
-    public ResponseModel deleteByOperateId(@ApiParam(value = "角色权限", required = true) @RequestBody(required = true) Long operateId,
+    public ResponseModel deleteByOperateId(@ApiParam(value = "角色权限", required = true) @RequestParam(required = true) Long operateId,
                                            HttpServletRequest httpServletRequst) {
 
 

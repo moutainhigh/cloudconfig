@@ -34,6 +34,7 @@
         <module>useroperateservicemodel</module>
         <module>userroleservicemodel</module>
         <module>roleoperateservicemodel</module>
+        <module>mvcconfiguration</module>
     </modules>
 
 
@@ -51,6 +52,7 @@
         <cloud.useroperateservicemodel.version>1.0-SNAPSHOT</cloud.useroperateservicemodel.version>
         <cloud.userroleservicemodel.version>1.0-SNAPSHOT</cloud.userroleservicemodel.version>
         <cloud.roleoperateservicemodel.version>1.0-SNAPSHOT</cloud.roleoperateservicemodel.version>
+        <cloud.mvcconfiguration.version>1.0-SNAPSHOT</cloud.mvcconfiguration.version>
          <commons-lang.version>2.6</commons-lang.version>
         <fastjson.version>1.1.40</fastjson.version>
         <mysql-connector-java.version>5.1.44</mysql-connector-java.version>

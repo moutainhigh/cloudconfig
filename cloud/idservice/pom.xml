@@ -17,6 +17,12 @@
 
         <dependency>
             <groupId>cloud</groupId>
+            <artifactId>mvcconfiguration</artifactId>
+            <version>${cloud.mvcconfiguration.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>cloud</groupId>
             <artifactId>log4j2kafka</artifactId>
             <version>${cloud.log4j2kafka.version}</version>
         </dependency>

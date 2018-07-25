@@ -46,7 +46,7 @@ public class UserController {
 
     @ApiOperation(value = "查询用户")
     @RequestMapping(value = "/detailByMobile", method = RequestMethod.GET)
-    public ResponseModel detailByMobile(@ApiParam(value = "手机", required = true) @RequestParam(required = true) String mobile) {
+    public ResponseModel<UserVo> detailByMobile(@ApiParam(value = "手机", required = true) @RequestParam(required = true) String mobile) {
 
 
         logger.debug("request parameters: mobile=>{}", mobile);

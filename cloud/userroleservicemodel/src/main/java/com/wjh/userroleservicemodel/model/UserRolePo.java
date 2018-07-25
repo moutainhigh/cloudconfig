@@ -6,7 +6,6 @@ public class UserRolePo {
     private Long id;
     private Long userId;
     private Long roleId;
-    private String remark;
     private Date createDate;
     private long createdBy;
     private Date updateDate;
@@ -36,13 +35,7 @@ public class UserRolePo {
         this.roleId = roleId;
     }
 
-    public String getRemark() {
-        return remark;
-    }
 
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
 
     public Date getCreateDate() {
         return createDate;

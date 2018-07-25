@@ -11,6 +11,7 @@
       <module fileurl="file://$PROJECT_DIR$/log4j2kafka/log4j2kafka.iml" filepath="$PROJECT_DIR$/log4j2kafka/log4j2kafka.iml" />
       <module fileurl="file://$PROJECT_DIR$/menuoperateservice/menuoperateservice.iml" filepath="$PROJECT_DIR$/menuoperateservice/menuoperateservice.iml" />
       <module fileurl="file://$PROJECT_DIR$/menuoperateservicemodel/menuoperateservicemodel.iml" filepath="$PROJECT_DIR$/menuoperateservicemodel/menuoperateservicemodel.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mvcconfiguration/mvcconfiguration.iml" filepath="$PROJECT_DIR$/mvcconfiguration/mvcconfiguration.iml" />
       <module fileurl="file://$PROJECT_DIR$/quartz/quartz.iml" filepath="$PROJECT_DIR$/quartz/quartz.iml" />
       <module fileurl="file://$PROJECT_DIR$/quartzmodel/quartzmodel.iml" filepath="$PROJECT_DIR$/quartzmodel/quartzmodel.iml" />
       <module fileurl="file://$PROJECT_DIR$/roleoperateservice/roleoperateservice.iml" filepath="$PROJECT_DIR$/roleoperateservice/roleoperateservice.iml" />

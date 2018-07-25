@@ -16,6 +16,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="mvcconfiguration" />
     <orderEntry type="module" module-name="roleservicemodel" />
     <orderEntry type="module" module-name="log4j2kafka" />
     <orderEntry type="module" module-name="utils" />

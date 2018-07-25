@@ -62,7 +62,7 @@ public class RoleController {
 
     @ApiOperation(value = "通过Ids查询")
     @RequestMapping(value = "/selectByIds", method = RequestMethod.POST)
-    public ResponseModel selectByIds(@ApiParam(value = "id数组 ", required = true) @RequestBody(required = true) List<Long> idList
+    public ResponseModel<List<RoleVo>> selectByIds(@ApiParam(value = "id数组 ", required = true) @RequestBody(required = true) List<Long> idList
                              ) {
 
         logger.debug("request parameters:idList=>{}", idList);
@@ -70,7 +70,7 @@ public class RoleController {
 
         try {
             List<RoleVo> roleVoList = roleService.selectByIds(idList);
-            ResponseModel responseModel = new ResponseModel();
+            ResponseModel<List<RoleVo>> responseModel = new ResponseModel();
             responseModel.setResModel(roleVoList);
             return responseModel;
         } catch (Exception e) {

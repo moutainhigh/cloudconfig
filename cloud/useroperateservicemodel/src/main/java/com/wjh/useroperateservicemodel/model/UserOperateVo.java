@@ -6,9 +6,9 @@ public class UserOperateVo {
     private Long id;
     private Long userId;
     private Long operateId;
-    private Date createDate;
+    private String createDate;
     private Long createdBy;
-    private Date updateDate;
+    private String updateDate;
     private Long updatedBy;
     private String operateName;
     private String userName;
@@ -37,12 +37,20 @@ public class UserOperateVo {
         this.operateId = operateId;
     }
 
-    public Date getCreateDate() {
+    public String getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(Date createDate) {
+    public void setCreateDate(String createDate) {
         this.createDate = createDate;
+    }
+
+    public String getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(String updateDate) {
+        this.updateDate = updateDate;
     }
 
     public Long getCreatedBy() {
@@ -53,13 +61,6 @@ public class UserOperateVo {
         this.createdBy = createdBy;
     }
 
-    public Date getUpdateDate() {
-        return updateDate;
-    }
-
-    public void setUpdateDate(Date updateDate) {
-        this.updateDate = updateDate;
-    }
 
     public Long getUpdatedBy() {
         return updatedBy;

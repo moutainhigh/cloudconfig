@@ -31,12 +31,12 @@ public class UserRoleController {
 
     @ApiOperation(value = "获取某人拥有的角色")
     @RequestMapping(value = "/listByUserId", method = RequestMethod.GET)
-    public ResponseModel listByUserId(@ApiParam(value = "用户ID", required = true) @RequestParam(required = true) Long userId) {
+    public ResponseModel<List<UserRoleVo>> listByUserId(@ApiParam(value = "用户ID", required = true) @RequestParam(required = true) Long userId) {
 
 
         try {
             List<UserRoleVo> list = userRoleService.listByUserId(userId);
-            ResponseModel responseModel = new ResponseModel();
+            ResponseModel<List<UserRoleVo>> responseModel = new ResponseModel();
             responseModel.setResModel(list);
             return responseModel;
         } catch (Exception e) {
@@ -68,7 +68,7 @@ public class UserRoleController {
 
     @ApiOperation(value = "删除某人的角色")
     @RequestMapping(value = "/deleteByUserId", method = RequestMethod.PUT)
-    public ResponseModel deleteByUserId(@ApiParam(value = "用户ID", required = true) @RequestBody(required = true) Long userId,
+    public ResponseModel deleteByUserId(@ApiParam(value = "用户ID", required = true) @RequestParam(required = true) Long userId,
                                         HttpServletRequest httpServletRequest) {
 
 
@@ -87,12 +87,12 @@ public class UserRoleController {
 
     @ApiOperation(value = "删除角色对应的映射")
     @RequestMapping(value = "/deleteByRoleId", method = RequestMethod.PUT)
-    public ResponseModel deleteByRoleId(@ApiParam(value = "用户ID", required = true) @RequestBody(required = true) Long roleId,
+    public ResponseModel deleteByRoleId(@ApiParam(value = "用户ID", required = true) @RequestParam(required = true) Long roleId,
                                         HttpServletRequest httpServletRequest) {
 
         try {
             String loginUserId = httpServletRequest.getHeader("loginUserId");
-            userRoleService.deleteByUserId(roleId);
+            userRoleService.deleteByRoleId(roleId);
             ResponseModel responseModel = new ResponseModel();
             return responseModel;
         } catch (Exception e) {

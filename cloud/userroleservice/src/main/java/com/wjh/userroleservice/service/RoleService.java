@@ -1,6 +1,7 @@
 package com.wjh.userroleservice.service;
 
 import com.wjh.common.model.ResponseModel;
+import com.wjh.roleservicemodel.model.RoleVo;
 import io.swagger.annotations.ApiParam;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,5 +13,5 @@ import java.util.List;
 @FeignClient(value = "roleservice")
 public interface RoleService {
     @RequestMapping(value = "/role/selectByIds", method = RequestMethod.POST)
-    public ResponseModel selectByIds( @RequestBody(required = true) List<Long> idList);
+    public ResponseModel<List<RoleVo>> selectByIds(@RequestBody(required = true) List<Long> idList);
 }

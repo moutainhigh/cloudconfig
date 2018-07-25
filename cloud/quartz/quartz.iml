@@ -16,6 +16,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="mvcconfiguration" />
     <orderEntry type="module" module-name="quartzmodel" />
     <orderEntry type="module" module-name="log4j2kafka" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-quartz:2.0.3.RELEASE" level="project" />

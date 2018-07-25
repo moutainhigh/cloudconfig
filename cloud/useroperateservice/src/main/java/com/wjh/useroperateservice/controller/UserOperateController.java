@@ -34,12 +34,12 @@ public class UserOperateController {
 
     @ApiOperation(value = "获取某人具有的权限")
     @RequestMapping(value = "/listByUserId", method = RequestMethod.GET)
-    public ResponseModel listByUserId(@ApiParam(value = "用户ID", required = true) @RequestParam(required = true) Long userId) {
+    public ResponseModel<List<UserOperateVo>> listByUserId(@ApiParam(value = "用户ID", required = true) @RequestParam(required = true) Long userId) {
 
 
         try {
             List<UserOperateVo> list = userOperateService.listByUserId(userId);
-            ResponseModel responseModel = new ResponseModel();
+            ResponseModel<List<UserOperateVo>> responseModel = new ResponseModel();
             responseModel.setResModel(list);
             return responseModel;
         } catch (Exception e) {
