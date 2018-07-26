@@ -15,6 +15,6 @@ public interface RoleOperateMapper {
 
     public int deleteByOperateId(@Param("operateId") Long operateId);
 
-    public List<RoleOperateVo> listByRoleId(@Param("roleId")Long roleId);
+    public List<RoleOperateVo> listByRoleIds(@Param("roleIdList")List<Long> roleIdList);
 
 }

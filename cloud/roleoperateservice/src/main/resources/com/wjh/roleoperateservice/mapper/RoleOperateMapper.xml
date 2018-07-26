@@ -36,7 +36,7 @@
     </delete>
 
 
-    <select id="listByRoleId" resultType="com.wjh.roleoperateservicemodel.model.RoleOperateVo">
+    <select id="listByRoleIds" resultType="com.wjh.roleoperateservicemodel.model.RoleOperateVo">
         SELECT
             r.id,
             r.role_id AS roleId,
@@ -45,9 +45,11 @@
             DATE_FORMAT(r.update_date,'%Y-%m-%d %H:%i:%s') as updateDate
         FROM
             sys_role_operate r
-        WHERE
-            r.role_id = ${roleId}
-    </select>
+        WHERE  r.role_id in
+        <foreach collection="roleIdList" index="index" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+     </select>
 
 
 </mapper>

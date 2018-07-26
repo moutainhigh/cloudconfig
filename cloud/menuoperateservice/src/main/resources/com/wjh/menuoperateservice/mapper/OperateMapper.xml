@@ -87,9 +87,10 @@
 
 
     <select id="selectByIds" resultType="com.wjh.menuoperateservicemodel.model.OperateVo">
-          SELECT
+        SELECT
             o.id,
             o.menu_id as menuId,
+            m.menu_name as menuName,
             o.url,
             o.operate_name as operateName,
             o.operate_code as operateCode,
@@ -98,7 +99,7 @@
             o.created_by as createdBy,
             DATE_FORMAT(o.update_date,'%Y-%m-%d %H:%i:%s') as updateDate,
             o.updated_by as updatedBy
-         from sys_operate o
+        from sys_operate o left join sys_menu m on o.menu_id=m.id
         where o.id in
         <foreach collection="idList" index="index" item="id" open="(" separator="," close=")">
             #{id}

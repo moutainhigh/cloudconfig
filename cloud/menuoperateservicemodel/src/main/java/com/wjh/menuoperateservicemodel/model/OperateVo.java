@@ -1,8 +1,11 @@
 package com.wjh.menuoperateservicemodel.model;
 
-public class OperateVo {
+import java.io.Serializable;
+
+public class OperateVo implements Serializable {
     private Long id;
     private Long menuId;
+    private String menuName;
     private String url;
     private String operateName;
     private String operateCode;
@@ -11,6 +14,8 @@ public class OperateVo {
     private String createdBy;
     private String updateDate;
     private String updatedBy;
+    private boolean fromRole;
+    private boolean fromUser;
 
     public Long getId() {
         return id;
@@ -26,6 +31,14 @@ public class OperateVo {
 
     public void setMenuId(Long menuId) {
         this.menuId = menuId;
+    }
+
+    public String getMenuName() {
+        return menuName;
+    }
+
+    public void setMenuName(String menuName) {
+        this.menuName = menuName;
     }
 
     public String getUrl() {
@@ -90,5 +103,21 @@ public class OperateVo {
 
     public void setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy;
+    }
+
+    public boolean isFromRole() {
+        return fromRole;
+    }
+
+    public void setFromRole(boolean fromRole) {
+        this.fromRole = fromRole;
+    }
+
+    public boolean isFromUser() {
+        return fromUser;
+    }
+
+    public void setFromUser(boolean fromUser) {
+        this.fromUser = fromUser;
     }
 }

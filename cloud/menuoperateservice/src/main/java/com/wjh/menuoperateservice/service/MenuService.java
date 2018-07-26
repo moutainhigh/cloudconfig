@@ -1,8 +1,10 @@
 package com.wjh.menuoperateservice.service;
 
+import com.wjh.common.model.RedisKeyConstant;
 import com.wjh.menuoperateservice.mapper.MenuMapper;
 import com.wjh.menuoperateservicemodel.model.MenuPo;
 import com.wjh.menuoperateservicemodel.model.MenuVo;
+import com.wjh.utils.redis.RedisCacheUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,9 @@ public class MenuService {
     MenuMapper menuMapper;
 
 
+    @Autowired
+    RedisCacheUtil redisCacheUtil;
+
     public MenuPo insert(MenuPo menuPo,Long loginUserId) {
         Long id=idService.generateId();
         menuPo.setId(id);
@@ -28,6 +33,8 @@ public class MenuService {
         menuPo.setCreatedBy(loginUserId);
         menuPo.setUpdatedBy(loginUserId);
         menuMapper.insert(menuPo);
+        //清除所有用户权限缓存
+        redisCacheUtil.delete(RedisKeyConstant.USER_OPERATE_TABLE);
         return menuPo;
     }
 
@@ -36,6 +43,8 @@ public class MenuService {
         menuPo.setUpdateDate(date);
         menuPo.setUpdatedBy(loginUserId);
         menuMapper.update(menuPo);
+        //清除所有用户权限缓存
+        redisCacheUtil.delete(RedisKeyConstant.USER_OPERATE_TABLE);
         return menuPo;
     }
 
@@ -53,6 +62,8 @@ public class MenuService {
 
     public Long delete(Long id) {
         menuMapper.delete(id);
+        //清除所有用户权限缓存
+        redisCacheUtil.delete(RedisKeyConstant.USER_OPERATE_TABLE);
         return id;
     }
 

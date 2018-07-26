@@ -1,6 +1,7 @@
 package com.wjh.roleoperateservice.service;
 
 import com.netflix.discovery.converters.Auto;
+import com.wjh.common.model.RedisKeyConstant;
 import com.wjh.common.model.ResponseModel;
 import com.wjh.menuoperateservicemodel.model.OperateVo;
 import com.wjh.roleoperateservice.mapper.RoleOperateMapper;
@@ -8,6 +9,7 @@ import com.wjh.roleoperateservicemodel.model.RoleOperateDto;
 import com.wjh.roleoperateservicemodel.model.RoleOperatePo;
 import com.wjh.roleoperateservicemodel.model.RoleOperateVo;
 import com.wjh.roleservicemodel.model.RoleVo;
+import com.wjh.utils.redis.RedisCacheUtil;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +33,8 @@ public class RoleOperateService {
     @Autowired
     MenuOperateService menuOperateService;
 
+    @Autowired
+    RedisCacheUtil redisCacheUtil;
 
     public int update(RoleOperateDto roleOperateDto, Long loginUserId) {
         Long roleId = roleOperateDto.getRoleId();
@@ -51,19 +55,32 @@ public class RoleOperateService {
             roleOperatePoList.add(roleOperatePo);
         }
         int count = roleOperateMapper.insertList(roleOperatePoList);
+
+        //清除用户权限缓存
+        redisCacheUtil.delete(RedisKeyConstant.USER_OPERATE_TABLE);
+
         return count;
     }
 
     public int deleteByRoleId(Long roleId) {
-        return roleOperateMapper.deleteByRoleId(roleId);
+        int count= roleOperateMapper.deleteByRoleId(roleId);
+        //清除用户权限缓存
+        redisCacheUtil.delete(RedisKeyConstant.USER_OPERATE_TABLE);
+        return count;
     }
 
     public int deleteByOperateId(Long operateId) {
-        return roleOperateMapper.deleteByOperateId(operateId);
+        int count= roleOperateMapper.deleteByOperateId(operateId);
+        //清除用户权限缓存
+        redisCacheUtil.delete(RedisKeyConstant.USER_OPERATE_TABLE);
+        return count;
     }
 
-    public List<RoleOperateVo> listByRoleId(Long roleId) {
-        List<RoleOperateVo> roleOperateVoList = roleOperateMapper.listByRoleId(roleId);
+    public List<RoleOperateVo> listByRoleIds(List<Long> roleIds) {
+        if (roleIds.size()==0){
+            return new ArrayList<>(0);
+        }
+        List<RoleOperateVo> roleOperateVoList = roleOperateMapper.listByRoleIds(roleIds);
         List<Long> roleIdList = new ArrayList<Long>();
         List<Long> operateIdList = new ArrayList<Long>();
         for (int i = 0; i < roleOperateVoList.size(); i++) {

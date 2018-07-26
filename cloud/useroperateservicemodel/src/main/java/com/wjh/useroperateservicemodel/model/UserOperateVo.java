@@ -29,6 +29,7 @@ public class UserOperateVo {
         this.userId = userId;
     }
 
+
     public Long getOperateId() {
         return operateId;
     }

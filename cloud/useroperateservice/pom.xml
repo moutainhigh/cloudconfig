@@ -15,8 +15,18 @@
     <dependencies>
         <dependency>
             <groupId>cloud</groupId>
+            <artifactId>roleoperateservicemodel</artifactId>
+            <version>${cloud.roleoperateservicemodel.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>cloud</groupId>
             <artifactId>mvcconfiguration</artifactId>
             <version>${cloud.mvcconfiguration.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>cloud</groupId>
+            <artifactId>userroleservicemodel</artifactId>
+            <version>${cloud.userroleservicemodel.version}</version>
         </dependency>
         <dependency>
             <groupId>cloud</groupId>

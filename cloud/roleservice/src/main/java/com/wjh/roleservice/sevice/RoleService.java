@@ -1,8 +1,10 @@
 package com.wjh.roleservice.sevice;
 
+import com.wjh.common.model.RedisKeyConstant;
 import com.wjh.roleservice.mapper.RoleMapper;
 import com.wjh.roleservicemodel.model.RolePo;
 import com.wjh.roleservicemodel.model.RoleVo;
+import com.wjh.utils.redis.RedisCacheUtil;
 import org.apache.commons.lang3.event.EventListenerSupport;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,9 @@ public class RoleService {
     @Autowired
     RoleMapper roleMapper;
 
+    @Autowired
+    RedisCacheUtil redisCacheUtil;
+
     public RolePo insert(RolePo rolePo, Long loginUserId) {
         Long id = idService.generateId();
         Date date = new Date();
@@ -33,6 +38,8 @@ public class RoleService {
         rolePo.setCreatedBy(loginUserId);
         rolePo.setUpdatedBy(loginUserId);
         roleMapper.insert(rolePo);
+        //清除所有用户权限缓存
+        redisCacheUtil.delete(RedisKeyConstant.USER_OPERATE_TABLE);
         return rolePo;
     }
 
@@ -41,11 +48,15 @@ public class RoleService {
         rolePo.setUpdateDate(date);
         rolePo.setUpdatedBy(loginUserId);
         roleMapper.update(rolePo);
+        //清除所有用户权限缓存
+        redisCacheUtil.delete(RedisKeyConstant.USER_OPERATE_TABLE);
         return  rolePo;
     }
 
     public long delete(Long id, Long loginUserId) {
         roleMapper.delete(id);
+        //清除所有用户权限缓存
+        redisCacheUtil.delete(RedisKeyConstant.USER_OPERATE_TABLE);
         return id;
     }
 

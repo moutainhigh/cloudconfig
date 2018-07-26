@@ -49,6 +49,11 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="CoverageDataManager">
+    <SUITE FILE_PATH="coverage/cloud$RoleoperateserviceApplication.coverage" NAME="RoleoperateserviceApplication Coverage Results" MODIFIED="1532572040223" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.wjh.roleoperateservice.*</FILTER>
+    </SUITE>
+  </component>
   <component name="DatabaseView">
     <option name="SHOW_INTERMEDIATE" value="true" />
     <option name="GROUP_SCHEMA" value="true" />
@@ -62,31 +67,54 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/userservice/pom.xml">
+      <file leaf-file-name="UserOperateService.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/useroperateservice/src/main/java/com/wjh/useroperateservice/service/UserOperateService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="361">
-              <caret line="49" column="21" lean-forward="false" selection-start-line="49" selection-start-column="21" selection-end-line="49" selection-end-column="21" />
+            <state relative-caret-position="327">
+              <caret line="143" column="0" lean-forward="false" selection-start-line="143" selection-start-column="0" selection-end-line="143" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="bootstrap.properties" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/idservice/src/main/resources/bootstrap.properties">
+      <file leaf-file-name="bootstrap.properties" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/menuoperateservice/src/main/resources/bootstrap.properties">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="380">
-              <caret line="20" column="0" lean-forward="false" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
+            <state relative-caret-position="323">
+              <caret line="17" column="0" lean-forward="true" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="RoleOperateController.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/roleoperateservice/src/main/java/com/wjh/roleoperateservice/controller/RoleOperateController.java">
+      <file leaf-file-name="UserRoleService.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/userroleservice/src/main/java/com/wjh/userroleservice/service/UserRoleService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="286">
-              <caret line="57" column="33" lean-forward="false" selection-start-line="57" selection-start-column="33" selection-end-line="57" selection-end-column="33" />
+            <state relative-caret-position="288">
+              <caret line="105" column="0" lean-forward="false" selection-start-line="105" selection-start-column="0" selection-end-line="105" selection-end-column="0" />
+              <folding>
+                <element signature="e#2789#2795#0" expanded="true" />
+                <element signature="e#2844#2850#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MethodProxy.class" pinned="false" current-in-tab="false">
+        <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-core/4.3.2.RELEASE/spring-core-4.3.2.RELEASE.jar!/org/springframework/cglib/proxy/MethodProxy.class">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="192">
+              <caret line="105" column="0" lean-forward="false" selection-start-line="105" selection-start-column="0" selection-end-line="105" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="UserOperateController.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/useroperateservice/src/main/java/com/wjh/useroperateservice/controller/UserOperateController.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="192">
+              <caret line="61" column="60" lean-forward="false" selection-start-line="61" selection-start-column="60" selection-end-line="61" selection-end-column="60" />
               <folding />
             </state>
           </provider>
@@ -95,85 +123,51 @@
       <file leaf-file-name="RoleOperateService.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/roleoperateservice/src/main/java/com/wjh/roleoperateservice/service/RoleOperateService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="408">
-              <caret line="47" column="46" lean-forward="false" selection-start-line="47" selection-start-column="46" selection-end-line="47" selection-end-column="46" />
-              <folding>
-                <element signature="e#1336#1351#0" expanded="true" />
-                <element signature="e#2481#2487#0" expanded="true" />
-                <element signature="e#2539#2545#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="UserOperateController.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/useroperateservice/src/main/java/com/wjh/useroperateservice/controller/UserOperateController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="247">
-              <caret line="40" column="66" lean-forward="false" selection-start-line="40" selection-start-column="66" selection-end-line="40" selection-end-column="66" />
+            <state relative-caret-position="440">
+              <caret line="117" column="0" lean-forward="false" selection-start-line="117" selection-start-column="0" selection-end-line="117" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="UserOperateService.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/useroperateservice/src/main/java/com/wjh/useroperateservice/service/UserOperateService.java">
+      <file leaf-file-name="RoleOperateMapper.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/roleoperateservice/src/main/java/com/wjh/roleoperateservice/mapper/RoleOperateMapper.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="218">
-              <caret line="71" column="70" lean-forward="false" selection-start-line="71" selection-start-column="70" selection-end-line="71" selection-end-column="70" />
+            <state relative-caret-position="228">
+              <caret line="17" column="36" lean-forward="false" selection-start-line="17" selection-start-column="36" selection-end-line="17" selection-end-column="36" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="UserOperateMapper.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/useroperateservice/src/main/java/com/wjh/useroperateservice/mapper/UserOperateMapper.java">
+      <file leaf-file-name="RoleOperateMapper.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/roleoperateservice/src/main/resources/com/wjh/roleoperateservice/mapper/RoleOperateMapper.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="247">
-              <caret line="18" column="34" lean-forward="false" selection-start-line="18" selection-start-column="34" selection-end-line="18" selection-end-column="34" />
+            <state relative-caret-position="419">
+              <caret line="50" column="18" lean-forward="false" selection-start-line="50" selection-start-column="18" selection-end-line="50" selection-end-column="18" />
+              <folding>
+                <marker date="1532572271423" expanded="true" signature="880:934" ph="DELETE FROM " />
+                <marker date="1532572271423" expanded="true" signature="995:1053" ph="delete from " />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="OperateVo.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/menuoperateservicemodel/src/main/java/com/wjh/menuoperateservicemodel/model/OperateVo.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="513">
+              <caret line="42" column="0" lean-forward="false" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="UserOperateMapper.xml" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/useroperateservice/src/main/resources/com/wjh/useroperateservice/mapper/UserOperateMapper.xml">
+      <file leaf-file-name="RoleOperateController.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/roleoperateservice/src/main/java/com/wjh/roleoperateservice/controller/RoleOperateController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="547">
-              <caret line="50" column="17" lean-forward="true" selection-start-line="50" selection-start-column="17" selection-end-line="50" selection-end-column="17" />
-              <folding>
-                <marker date="1532426969861" expanded="true" signature="863:917" ph="DELETE FROM " />
-                <marker date="1532426969861" expanded="true" signature="977:1037" ph="DELETE FROM " />
-                <marker date="1532426969861" expanded="true" signature="1158:1493" ph="SELECT u.id,... sys_user_operate" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="UserOperateVo.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/useroperateservicemodel/src/main/java/com/wjh/useroperateservicemodel/model/UserOperateVo.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="365">
-              <caret line="86" column="5" lean-forward="false" selection-start-line="86" selection-start-column="5" selection-end-line="86" selection-end-column="5" />
-              <folding>
-                <element signature="e#797#798#0" expanded="true" />
-                <element signature="e#830#831#0" expanded="true" />
-                <element signature="e#882#883#0" expanded="true" />
-                <element signature="e#926#927#0" expanded="true" />
-                <element signature="e#963#964#0" expanded="true" />
-                <element signature="e#996#997#0" expanded="true" />
-                <element signature="e#1048#1049#0" expanded="true" />
-                <element signature="e#1092#1093#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="bootstrap.properties" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/useroperateservice/src/main/resources/bootstrap.properties">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="342">
-              <caret line="18" column="16" lean-forward="false" selection-start-line="18" selection-start-column="16" selection-end-line="18" selection-end-column="16" />
+            <state relative-caret-position="323">
+              <caret line="38" column="84" lean-forward="false" selection-start-line="38" selection-start-column="84" selection-end-line="38" selection-end-column="84" />
               <folding />
             </state>
           </provider>
@@ -190,15 +184,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>KafkaAppender</find>
-      <find>log4j2</find>
-      <find>KafkaLogAppender</find>
-      <find>interLogger</find>
-      <find>props</find>
-      <find>configuration</find>
-      <find>INfo</find>
-      <find>packageName</find>
-      <find>appender</find>
       <find>com.wjh</find>
       <find>currentContext</find>
       <find>8888</find>
@@ -220,6 +205,15 @@
       <find>userservice</find>
       <find>/userservice</find>
       <find>selectbyids</find>
+      <find>equals</find>
+      <find>redis</find>
+      <find>utils</find>
+      <find>redisCacheUtil</find>
+      <find>uniqueKey</find>
+      <find>listByRoleId</find>
+      <find>==</find>
+      <find>==</find>
+      <find>userOperateVoList</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -233,41 +227,19 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/roleoperateservicemodel/src/main/java/com/wjh/roleoperateservicemodel/model/RoleOperateDto.java" />
-        <option value="$PROJECT_DIR$/roleoperateservice/src/main/java/com/wjh/roleoperateservice/mapper/RoleOperateMapper.java" />
-        <option value="$PROJECT_DIR$/roleoperateservice/src/main/java/com/wjh/roleoperateservice/service/IdService.java" />
-        <option value="$PROJECT_DIR$/roleoperateservicemodel/src/main/java/com/wjh/roleoperateservicemodel/model/RoleOperateVo.java" />
-        <option value="$PROJECT_DIR$/roleoperateservice/src/main/java/com/wjh/roleoperateservice/service/RoleOperateService.java" />
-        <option value="$PROJECT_DIR$/common/src/main/java/com/wjh/common/model/ServiceIdConstant.java" />
-        <option value="$PROJECT_DIR$/roleoperateservice/src/main/resources/com/wjh/roleoperateservice/mapper/RoleOperateMapper.xml" />
-        <option value="$PROJECT_DIR$/userservice/src/main/resources/com/wjh/userservice/mapper/UserMapper.xml" />
-        <option value="$PROJECT_DIR$/menuoperateservice/src/main/resources/com/wjh/menuoperate/mapper/MenuMapper.xml" />
-        <option value="$PROJECT_DIR$/menuoperateservice/src/main/resources/com/wjh/menuoperate/mapper/OperateMapper.xml" />
-        <option value="$PROJECT_DIR$/roleservice/src/main/resources/com/wjh/roleservice/mapper/RoleMapper.xml" />
-        <option value="$PROJECT_DIR$/useroperateservice/src/main/resources/com/wjh/useroperateservice/mapper/UserOperateMapper.xml" />
-        <option value="$PROJECT_DIR$/roleservice/src/main/java/com/wjh/roleservice/RoleserviceApplication.java" />
-        <option value="$PROJECT_DIR$/userroleservice/src/main/java/com/wjh/userroleservice/UserroleserviceApplication.java" />
-        <option value="$PROJECT_DIR$/roleoperateservice/src/main/java/com/wjh/roleoperateservice/RoleoperateserviceApplication.java" />
-        <option value="$PROJECT_DIR$/useroperateservice/src/main/java/com/wjh/useroperateservice/UseroperateserviceApplication.java" />
-        <option value="$PROJECT_DIR$/menuoperateservice/src/main/java/com/wjh/menuoperateservice/service/MenuService.java" />
         <option value="$PROJECT_DIR$/menuoperateservice/src/main/java/com/wjh/menuoperateservice/MenuoperateApplication.java" />
         <option value="$PROJECT_DIR$/menuoperateservice/src/test/java/Main.java" />
         <option value="$PROJECT_DIR$/menuoperateservice/src/main/java/com/wjh/menuoperateservice/controller/OperateController.java" />
         <option value="$PROJECT_DIR$/roleoperateservice/src/main/java/com/wjh/roleoperateservice/service/MenuOperateService.java" />
-        <option value="$PROJECT_DIR$/useroperateservice/src/main/java/com/wjh/useroperateservice/service/MenuOperateService.java" />
         <option value="$PROJECT_DIR$/roleoperateservice/src/main/java/com/wjh/roleoperateservice/service/RoleService.java" />
-        <option value="$PROJECT_DIR$/roleservice/src/main/java/com/wjh/roleservice/sevice/RoleService.java" />
         <option value="$PROJECT_DIR$/userroleservicemodel/src/main/java/com/wjh/userroleservicemodel/model/UserRolePo.java" />
         <option value="$PROJECT_DIR$/userroleservice/src/main/resources/com/wjh/userroleservice/mapper/UserRoleMapper.xml" />
         <option value="$PROJECT_DIR$/userroleservice/src/main/java/com/wjh/userroleservice/service/UserService.java" />
-        <option value="$PROJECT_DIR$/userservice/src/main/java/com/wjh/userservice/controller/UserController.java" />
         <option value="$PROJECT_DIR$/roleservice/src/main/java/com/wjh/roleservice/controller/RoleController.java" />
         <option value="$PROJECT_DIR$/userroleservice/src/main/java/com/wjh/userroleservice/service/RoleService.java" />
         <option value="$PROJECT_DIR$/userroleservicemodel/src/main/java/com/wjh/userroleservicemodel/model/UserRoleVo.java" />
         <option value="$PROJECT_DIR$/userroleservice/src/main/java/com/wjh/userroleservice/controller/UserRoleController.java" />
-        <option value="$PROJECT_DIR$/useroperateservice/src/main/java/com/wjh/useroperateservice/controller/UserOperateController.java" />
         <option value="$PROJECT_DIR$/useroperateservice/src/main/java/com/wjh/useroperateservice/service/UserService.java" />
-        <option value="$PROJECT_DIR$/roleoperateservice/src/main/java/com/wjh/roleoperateservice/controller/RoleOperateController.java" />
         <option value="$PROJECT_DIR$/swaggerconfiguration/src/main/java/com/wjh/configuration/config/CustomMVCConfiguration.java" />
         <option value="$PROJECT_DIR$/roleservice/src/main/resources/bootstrap.properties" />
         <option value="$PROJECT_DIR$/mvcconfiguration/pom.xml" />
@@ -275,15 +247,37 @@
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/gateway/pom.xml" />
         <option value="$PROJECT_DIR$/idservice/pom.xml" />
-        <option value="$PROJECT_DIR$/menuoperateservice/pom.xml" />
         <option value="$PROJECT_DIR$/quartz/pom.xml" />
         <option value="$PROJECT_DIR$/roleoperateservice/pom.xml" />
         <option value="$PROJECT_DIR$/roleservice/pom.xml" />
         <option value="$PROJECT_DIR$/usercontroller/pom.xml" />
-        <option value="$PROJECT_DIR$/useroperateservice/pom.xml" />
         <option value="$PROJECT_DIR$/userroleservice/pom.xml" />
         <option value="$PROJECT_DIR$/userservice/pom.xml" />
+        <option value="$PROJECT_DIR$/roleoperateservice/src/main/java/com/wjh/roleoperateservice/mapper/RoleOperateMapper.java" />
+        <option value="$PROJECT_DIR$/roleoperateservicemodel/pom.xml" />
+        <option value="$PROJECT_DIR$/useroperateservice/pom.xml" />
+        <option value="$PROJECT_DIR$/useroperateservicemodel/src/main/java/com/wjh/useroperateservicemodel/model/UserTotalOperateVo.java" />
+        <option value="$PROJECT_DIR$/menuoperateservice/src/main/resources/com/wjh/menuoperateservice/mapper/OperateMapper.xml" />
         <option value="$PROJECT_DIR$/useroperateservicemodel/src/main/java/com/wjh/useroperateservicemodel/model/UserOperateVo.java" />
+        <option value="$PROJECT_DIR$/useroperateservice/src/main/java/com/wjh/useroperateservice/service/MenuOperateService.java" />
+        <option value="$PROJECT_DIR$/menuoperateservice/src/main/java/com/wjh/menuoperateservice/service/IdService.java" />
+        <option value="$PROJECT_DIR$/menuoperateservice/pom.xml" />
+        <option value="$PROJECT_DIR$/useroperateservice/src/main/java/com/wjh/useroperateservice/controller/UserTotalOperateController.java" />
+        <option value="$PROJECT_DIR$/useroperateservice/src/main/java/com/wjh/useroperateservice/service/UserTotalOperateService.java" />
+        <option value="$PROJECT_DIR$/useroperateservice/src/main/java/com/wjh/useroperateservice/controller/UserOperateController.java" />
+        <option value="$PROJECT_DIR$/common/src/main/java/com/wjh/common/model/RedisKeyConstant.java" />
+        <option value="$PROJECT_DIR$/userservice/src/main/java/com/wjh/userservice/controller/UserController.java" />
+        <option value="$PROJECT_DIR$/roleservice/src/main/java/com/wjh/roleservice/sevice/RoleService.java" />
+        <option value="$PROJECT_DIR$/menuoperateservice/src/main/java/com/wjh/menuoperateservice/service/OperateService.java" />
+        <option value="$PROJECT_DIR$/menuoperateservice/src/main/java/com/wjh/menuoperateservice/service/MenuService.java" />
+        <option value="$PROJECT_DIR$/useroperateservice/src/main/java/com/wjh/useroperateservice/service/UserRoleService.java" />
+        <option value="$PROJECT_DIR$/useroperateservice/src/main/java/com/wjh/useroperateservice/service/RoleOperateService.java" />
+        <option value="$PROJECT_DIR$/roleoperateservice/src/main/java/com/wjh/roleoperateservice/controller/RoleOperateController.java" />
+        <option value="$PROJECT_DIR$/roleoperateservice/src/main/resources/com/wjh/roleoperateservice/mapper/RoleOperateMapper.xml" />
+        <option value="$PROJECT_DIR$/menuoperateservicemodel/src/main/java/com/wjh/menuoperateservicemodel/model/OperateVo.java" />
+        <option value="$PROJECT_DIR$/roleoperateservice/src/main/java/com/wjh/roleoperateservice/service/RoleOperateService.java" />
+        <option value="$PROJECT_DIR$/userroleservice/src/main/java/com/wjh/userroleservice/service/UserRoleService.java" />
+        <option value="$PROJECT_DIR$/useroperateservice/src/main/java/com/wjh/useroperateservice/service/UserOperateService.java" />
       </list>
     </option>
   </component>
@@ -447,7 +441,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Spring Boot.UseroperateserviceApplication">
+  <component name="RunManager" selected="Spring Boot.UserserviceApplication">
     <configuration name="ConfigApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.wjh.config.ConfigApplication" />
@@ -653,11 +647,11 @@
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Spring Boot.UseroperateserviceApplication" />
-        <item index="1" class="java.lang.String" itemvalue="Spring Boot.RoleoperateserviceApplication" />
-        <item index="2" class="java.lang.String" itemvalue="Spring Boot.MenuoperateApplication" />
-        <item index="3" class="java.lang.String" itemvalue="Spring Boot.UserroleserviceApplication" />
-        <item index="4" class="java.lang.String" itemvalue="Spring Boot.RoleserviceApplication" />
+        <item index="0" class="java.lang.String" itemvalue="Spring Boot.UserroleserviceApplication" />
+        <item index="1" class="java.lang.String" itemvalue="Spring Boot.UseroperateserviceApplication" />
+        <item index="2" class="java.lang.String" itemvalue="Spring Boot.RoleserviceApplication" />
+        <item index="3" class="java.lang.String" itemvalue="Spring Boot.RoleoperateserviceApplication" />
+        <item index="4" class="java.lang.String" itemvalue="Spring Boot.MenuoperateApplication" />
       </list>
     </recent_temporary>
   </component>
@@ -681,12 +675,12 @@
       <workItem from="1531975705850" duration="17562000" />
       <workItem from="1532044355823" duration="18080000" />
       <workItem from="1532217008937" duration="21652000" />
-      <workItem from="1532299053096" duration="61715000" />
+      <workItem from="1532299053096" duration="76959000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="216308000" />
+    <option name="totallyTimeSpent" value="231552000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
@@ -694,14 +688,14 @@
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25053304" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25053304" sideWeight="0.49415204" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18123667" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.44420367" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.34236187" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32827735" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -710,9 +704,10 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25893825" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25053304" sideWeight="0.50584793" order="-1" side_tool="true" content_ui="tabs" />
       <window_info id="Spring" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32936078" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23081024" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20095949" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Bean Validation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32936078" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -732,7 +727,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="113" />
+      <option name="time" value="120" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -741,454 +736,10 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/roleservice/src/main/java/com/wjh/roleservice/sevice/RoleService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="327">
-          <caret line="73" column="1" lean-forward="false" selection-start-line="73" selection-start-column="1" selection-end-line="73" selection-end-column="1" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/log4j2kafka/src/main/java/com/wjh/log4j2kafka/filter/Log4j2Filter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="237">
-          <caret line="45" column="13" lean-forward="false" selection-start-line="45" selection-start-column="13" selection-end-line="45" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/userroleservicemodel/src/main/java/com/wjh/userroleservicemodel/model/UserRolePo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="304">
-          <caret line="54" column="0" lean-forward="true" selection-start-line="54" selection-start-column="0" selection-end-line="54" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/userroleservice/src/main/resources/bootstrap.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/common/src/main/java/com/wjh/common/model/ResponseConstant.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="351">
-          <caret line="24" column="0" lean-forward="false" selection-start-line="24" selection-start-column="0" selection-end-line="24" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/userservice/src/main/java/com/wjh/userservice/controller/UserController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="304">
-          <caret line="81" column="9" lean-forward="false" selection-start-line="81" selection-start-column="9" selection-end-line="81" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/roleservice/src/main/java/com/wjh/roleservice/controller/RoleController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="353">
-          <caret line="107" column="0" lean-forward="true" selection-start-line="107" selection-start-column="0" selection-end-line="107" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/userroleservice/src/main/java/com/wjh/userroleservice/service/RoleService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="95">
-          <caret line="13" column="17" lean-forward="false" selection-start-line="13" selection-start-column="17" selection-end-line="13" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/userroleservice/src/main/java/com/wjh/userroleservice/service/IdService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="12" column="0" lean-forward="true" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/userroleservice/src/main/java/com/wjh/userroleservice/service/UserService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="152">
-          <caret line="15" column="45" lean-forward="false" selection-start-line="15" selection-start-column="45" selection-end-line="15" selection-end-column="45" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/userroleservice/src/main/java/com/wjh/userroleservice/mapper/UserRoleMapper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="18" column="36" lean-forward="false" selection-start-line="18" selection-start-column="36" selection-end-line="18" selection-end-column="36" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/userroleservice/src/main/resources/com/wjh/userroleservice/mapper/UserRoleMapper.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="118">
-          <caret line="38" column="84" lean-forward="false" selection-start-line="38" selection-start-column="84" selection-end-line="38" selection-end-column="84" />
-          <folding>
-            <marker date="1532503959263" expanded="true" signature="865:916" ph="DELETE FROM " />
-            <marker date="1532503959263" expanded="true" signature="915:916" ph="DELETE FROM " />
-            <marker date="1532503959263" expanded="true" signature="974:1025" ph="DELETE FROM " />
-            <marker date="1532503959263" expanded="true" signature="1140:1456" ph="SELECT r.id,... sys_user_role" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/userroleservicemodel/src/main/java/com/wjh/userroleservicemodel/model/UserRoleVo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="13" column="28" lean-forward="false" selection-start-line="13" selection-start-column="28" selection-end-line="13" selection-end-column="28" />
-          <folding>
-            <element signature="e#367#368#0" expanded="true" />
-            <element signature="e#392#393#0" expanded="true" />
-            <element signature="e#426#427#0" expanded="true" />
-            <element signature="e#454#455#0" expanded="true" />
-            <element signature="e#485#486#0" expanded="true" />
-            <element signature="e#514#515#0" expanded="true" />
-            <element signature="e#556#557#0" expanded="true" />
-            <element signature="e#592#593#0" expanded="true" />
-            <element signature="e#623#624#0" expanded="true" />
-            <element signature="e#652#653#0" expanded="true" />
-            <element signature="e#694#695#0" expanded="true" />
-            <element signature="e#730#731#0" expanded="true" />
-            <element signature="e#767#768#0" expanded="true" />
-            <element signature="e#800#801#0" expanded="true" />
-            <element signature="e#852#853#0" expanded="true" />
-            <element signature="e#896#897#0" expanded="true" />
-            <element signature="e#930#931#0" expanded="true" />
-            <element signature="e#962#963#0" expanded="true" />
-            <element signature="e#1010#1011#0" expanded="true" />
-            <element signature="e#1052#1053#0" expanded="true" />
-            <element signature="e#1089#1090#0" expanded="true" />
-            <element signature="e#1122#1123#0" expanded="true" />
-            <element signature="e#1174#1175#0" expanded="true" />
-            <element signature="e#1218#1219#0" expanded="true" />
-            <element signature="e#1252#1253#0" expanded="true" />
-            <element signature="e#1284#1285#0" expanded="true" />
-            <element signature="e#1332#1333#0" expanded="true" />
-            <element signature="e#1374#1375#0" expanded="true" />
-            <element signature="e#1409#1410#0" expanded="true" />
-            <element signature="e#1440#1441#0" expanded="true" />
-            <element signature="e#1488#1489#0" expanded="true" />
-            <element signature="e#1528#1529#0" expanded="true" />
-            <element signature="e#1563#1564#0" expanded="true" />
-            <element signature="e#1594#1595#0" expanded="true" />
-            <element signature="e#1642#1643#0" expanded="true" />
-            <element signature="e#1682#1683#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/userroleservice/src/main/java/com/wjh/userroleservice/service/UserRoleService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="172">
-          <caret line="40" column="44" lean-forward="false" selection-start-line="40" selection-start-column="44" selection-end-line="40" selection-end-column="44" />
-          <folding>
-            <element signature="e#2312#2318#0" expanded="true" />
-            <element signature="e#2367#2373#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/userroleservice/src/main/java/com/wjh/userroleservice/controller/UserRoleController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="294">
-          <caret line="97" column="31" lean-forward="false" selection-start-line="97" selection-start-column="31" selection-end-line="97" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/useroperateservice/src/main/java/com/wjh/useroperateservice/UseroperateserviceApplication.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="18" column="44" lean-forward="false" selection-start-line="18" selection-start-column="44" selection-end-line="18" selection-end-column="44" />
-          <folding>
-            <element signature="e#788#789#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/useroperateservice/src/main/java/com/wjh/useroperateservice/service/UserService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="152">
-          <caret line="16" column="36" lean-forward="false" selection-start-line="16" selection-start-column="36" selection-end-line="16" selection-end-column="36" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/useroperateservice/src/main/java/com/wjh/useroperateservice/service/MenuOperateService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="17" column="0" lean-forward="false" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/roleoperateservice/src/main/java/com/wjh/roleoperateservice/service/MenuOperateService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
-          <caret line="15" column="39" lean-forward="false" selection-start-line="15" selection-start-column="30" selection-end-line="15" selection-end-column="39" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/roleoperateservice/src/main/java/com/wjh/roleoperateservice/service/RoleService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
-          <caret line="15" column="36" lean-forward="false" selection-start-line="15" selection-start-column="30" selection-end-line="15" selection-end-column="36" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/roleoperateservice/src/main/java/com/wjh/roleoperateservice/mapper/RoleOperateMapper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="95">
-          <caret line="10" column="17" lean-forward="false" selection-start-line="10" selection-start-column="17" selection-end-line="10" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/roleoperateservice/src/main/java/com/wjh/roleoperateservice/RoleoperateserviceApplication.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="209">
-          <caret line="17" column="13" lean-forward="false" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/roleoperateservice/src/main/resources/bootstrap.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="342">
-          <caret line="18" column="16" lean-forward="false" selection-start-line="18" selection-start-column="16" selection-end-line="18" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-core/4.3.2.RELEASE/spring-core-4.3.2.RELEASE.jar!/org/springframework/cglib/proxy/MethodProxy.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="275">
-          <caret line="104" column="0" lean-forward="false" selection-start-line="104" selection-start-column="0" selection-end-line="104" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-aop/4.3.2.RELEASE/spring-aop-4.3.2.RELEASE.jar!/org/springframework/aop/framework/CglibAopProxy.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="161">
-          <caret line="461" column="0" lean-forward="false" selection-start-line="461" selection-start-column="0" selection-end-line="461" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/roleoperateservicemodel/src/main/java/com/wjh/roleoperateservicemodel/model/RoleOperateVo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="17" column="5" lean-forward="false" selection-start-line="17" selection-start-column="5" selection-end-line="17" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/roleservice/src/main/resources/bootstrap.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="17" column="0" lean-forward="false" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/roleservice/src/main/java/com/wjh/roleservice/RoleserviceApplication.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="16" column="13" lean-forward="false" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/mvcconfiguration/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="266">
-          <caret line="14" column="10" lean-forward="false" selection-start-line="14" selection-start-column="10" selection-end-line="14" selection-end-column="10" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/mvcconfiguration/src/main/java/com/wjh/mvcconfiguration/config/CustomMVCConfiguration.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
-          <caret line="18" column="9" lean-forward="false" selection-start-line="18" selection-start-column="9" selection-end-line="18" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/swaggerconfiguration/src/main/java/com/wjh/swaggerconfiguration/config/SwaggerConfig.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="418">
-          <caret line="41" column="5" lean-forward="false" selection-start-line="41" selection-start-column="5" selection-end-line="41" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="40" column="16" lean-forward="false" selection-start-line="40" selection-start-column="16" selection-end-line="40" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/gateway/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="266">
-          <caret line="20" column="21" lean-forward="false" selection-start-line="20" selection-start-column="21" selection-end-line="20" selection-end-column="21" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/idservice/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="399">
-          <caret line="21" column="21" lean-forward="false" selection-start-line="21" selection-start-column="21" selection-end-line="21" selection-end-column="21" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/menuoperateservice/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="361">
-          <caret line="19" column="21" lean-forward="false" selection-start-line="19" selection-start-column="21" selection-end-line="19" selection-end-column="21" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/quartz/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="361">
-          <caret line="19" column="21" lean-forward="false" selection-start-line="19" selection-start-column="21" selection-end-line="19" selection-end-column="21" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/roleoperateservice/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="361">
-          <caret line="19" column="21" lean-forward="false" selection-start-line="19" selection-start-column="21" selection-end-line="19" selection-end-column="21" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/roleservice/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="304">
-          <caret line="37" column="21" lean-forward="false" selection-start-line="37" selection-start-column="21" selection-end-line="37" selection-end-column="21" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/usercontroller/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="399">
-          <caret line="21" column="21" lean-forward="false" selection-start-line="21" selection-start-column="21" selection-end-line="21" selection-end-column="21" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/useroperateservice/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="361">
-          <caret line="19" column="21" lean-forward="false" selection-start-line="19" selection-start-column="21" selection-end-line="19" selection-end-column="21" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/userroleservice/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="361">
-          <caret line="19" column="17" lean-forward="false" selection-start-line="19" selection-start-column="17" selection-end-line="19" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/userservice/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="361">
-          <caret line="49" column="21" lean-forward="false" selection-start-line="49" selection-start-column="21" selection-end-line="49" selection-end-column="21" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/idservice/src/main/resources/bootstrap.properties">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="380">
           <caret line="20" column="0" lean-forward="false" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/roleoperateservice/src/main/java/com/wjh/roleoperateservice/controller/RoleOperateController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="286">
-          <caret line="57" column="33" lean-forward="false" selection-start-line="57" selection-start-column="33" selection-end-line="57" selection-end-column="33" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/roleoperateservice/src/main/java/com/wjh/roleoperateservice/service/RoleOperateService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="47" column="46" lean-forward="false" selection-start-line="47" selection-start-column="46" selection-end-line="47" selection-end-column="46" />
-          <folding>
-            <element signature="e#1336#1351#0" expanded="true" />
-            <element signature="e#2481#2487#0" expanded="true" />
-            <element signature="e#2539#2545#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/useroperateservice/src/main/resources/bootstrap.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="342">
-          <caret line="18" column="16" lean-forward="false" selection-start-line="18" selection-start-column="16" selection-end-line="18" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/useroperateservicemodel/src/main/java/com/wjh/useroperateservicemodel/model/UserOperateVo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="365">
-          <caret line="86" column="5" lean-forward="false" selection-start-line="86" selection-start-column="5" selection-end-line="86" selection-end-column="5" />
-          <folding>
-            <element signature="e#797#798#0" expanded="true" />
-            <element signature="e#830#831#0" expanded="true" />
-            <element signature="e#882#883#0" expanded="true" />
-            <element signature="e#926#927#0" expanded="true" />
-            <element signature="e#963#964#0" expanded="true" />
-            <element signature="e#996#997#0" expanded="true" />
-            <element signature="e#1048#1049#0" expanded="true" />
-            <element signature="e#1092#1093#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/useroperateservice/src/main/java/com/wjh/useroperateservice/controller/UserOperateController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="40" column="66" lean-forward="false" selection-start-line="40" selection-start-column="66" selection-end-line="40" selection-end-column="66" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/useroperateservice/src/main/java/com/wjh/useroperateservice/service/UserOperateService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="218">
-          <caret line="71" column="70" lean-forward="false" selection-start-line="71" selection-start-column="70" selection-end-line="71" selection-end-column="70" />
           <folding />
         </state>
       </provider>
@@ -1203,13 +754,420 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/useroperateservice/src/main/resources/com/wjh/useroperateservice/mapper/UserOperateMapper.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="547">
-          <caret line="50" column="17" lean-forward="true" selection-start-line="50" selection-start-column="17" selection-end-line="50" selection-end-column="17" />
+        <state relative-caret-position="399">
+          <caret line="21" column="30" lean-forward="false" selection-start-line="21" selection-start-column="30" selection-end-line="21" selection-end-column="30" />
           <folding>
             <marker date="1532426969861" expanded="true" signature="863:917" ph="DELETE FROM " />
             <marker date="1532426969861" expanded="true" signature="977:1037" ph="DELETE FROM " />
             <marker date="1532426969861" expanded="true" signature="1158:1493" ph="SELECT u.id,... sys_user_operate" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/userroleservice/src/main/resources/bootstrap.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="19">
+          <caret line="1" column="39" lean-forward="false" selection-start-line="1" selection-start-column="24" selection-end-line="1" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/userservice/src/main/resources/com/wjh/userservice/mapper/UserMapper.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="423">
+          <caret line="117" column="0" lean-forward="false" selection-start-line="117" selection-start-column="0" selection-end-line="120" selection-end-column="18" />
+          <folding>
+            <marker date="1532426969885" expanded="true" signature="301:676" ph="SELECT id, n... user" />
+            <marker date="1532426969885" expanded="true" signature="2313:3194" ph="UPDATE user " />
+            <marker date="1532426969885" expanded="true" signature="3304:3558" ph="SELECT id, n... user" />
+            <marker date="1532426969885" expanded="true" signature="3608:3639" ph="delete from " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/roleoperateservice/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2090">
+          <caret line="19" column="21" lean-forward="false" selection-start-line="19" selection-start-column="21" selection-end-line="19" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/roleoperateservicemodel/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="247">
+          <caret line="13" column="0" lean-forward="false" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/useroperateservice/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="399">
+          <caret line="21" column="36" lean-forward="true" selection-start-line="21" selection-start-column="36" selection-end-line="21" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/roleoperateservice/src/main/resources/bootstrap.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="19">
+          <caret line="1" column="42" lean-forward="false" selection-start-line="1" selection-start-column="24" selection-end-line="1" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/useroperateservicemodel/src/main/java/com/wjh/useroperateservicemodel/model/UserTotalOperateVo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="133">
+          <caret line="7" column="0" lean-forward="true" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/menuoperateservice/src/main/java/com/wjh/menuoperateservice/controller/OperateController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="63" column="53" lean-forward="true" selection-start-line="63" selection-start-column="53" selection-end-line="63" selection-end-column="53" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/menuoperateservice/src/main/java/com/wjh/menuoperateservice/mapper/OperateMapper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="22" column="32" lean-forward="false" selection-start-line="22" selection-start-column="32" selection-end-line="22" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/useroperateservicemodel/src/main/java/com/wjh/useroperateservicemodel/model/UserOperateDto.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="95">
+          <caret line="10" column="13" lean-forward="false" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/useroperateservicemodel/src/main/java/com/wjh/useroperateservicemodel/model/UserOperatePo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="247">
+          <caret line="15" column="5" lean-forward="true" selection-start-line="15" selection-start-column="5" selection-end-line="15" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/useroperateservicemodel/src/main/java/com/wjh/useroperateservicemodel/model/UserOperateVo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="114">
+          <caret line="6" column="24" lean-forward="true" selection-start-line="6" selection-start-column="24" selection-end-line="6" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/common/src/main/java/com/wjh/common/model/ResponseConstant.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="38">
+          <caret line="2" column="13" lean-forward="false" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/userroleservice/src/main/java/com/wjh/userroleservice/controller/UserRoleController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="342">
+          <caret line="40" column="33" lean-forward="true" selection-start-line="40" selection-start-column="33" selection-end-line="40" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/useroperateservice/src/main/java/com/wjh/useroperateservice/service/IdService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="152">
+          <caret line="10" column="30" lean-forward="true" selection-start-line="10" selection-start-column="30" selection-end-line="10" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/menuoperateservice/src/main/java/com/wjh/menuoperateservice/service/IdService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="190">
+          <caret line="12" column="0" lean-forward="false" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/roleoperateservice/src/main/java/com/wjh/roleoperateservice/service/MenuOperateService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="95">
+          <caret line="13" column="17" lean-forward="false" selection-start-line="13" selection-start-column="17" selection-end-line="13" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/roleoperateservice/src/main/java/com/wjh/roleoperateservice/service/RoleService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="95">
+          <caret line="13" column="17" lean-forward="false" selection-start-line="13" selection-start-column="17" selection-end-line="13" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/menuoperateservice/src/main/resources/com/wjh/menuoperateservice/mapper/OperateMapper.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="395">
+          <caret line="90" column="17" lean-forward="true" selection-start-line="90" selection-start-column="17" selection-end-line="90" selection-end-column="17" />
+          <folding>
+            <marker date="1532564461267" expanded="true" signature="1657:2440" ph="UPDATE sys_o... " />
+            <marker date="1532564461267" expanded="true" signature="2555:3095" ph="SELECT o.id,... sys_operate" />
+            <marker date="1532564461267" expanded="true" signature="3166:3315" ph="SELECT count... " />
+            <marker date="1532564461267" expanded="true" signature="3364:3402" ph="delete from " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="413">
+          <caret line="74" column="20" lean-forward="true" selection-start-line="74" selection-start-column="20" selection-end-line="74" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utils/src/main/java/com/wjh/utils/redis/RedisCacheUtil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="190">
+          <caret line="15" column="7" lean-forward="true" selection-start-line="15" selection-start-column="7" selection-end-line="15" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/userservice/userservice.iml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/userservice/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="318">
+          <caret line="31" column="21" lean-forward="true" selection-start-line="31" selection-start-column="21" selection-end-line="31" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/menuoperateservice/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="280">
+          <caret line="34" column="29" lean-forward="false" selection-start-line="34" selection-start-column="24" selection-end-line="34" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/userroleservice/src/main/java/com/wjh/userroleservice/service/RoleService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="95">
+          <caret line="13" column="17" lean-forward="false" selection-start-line="13" selection-start-column="17" selection-end-line="13" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/useroperateservice/src/main/java/com/wjh/useroperateservice/controller/UserTotalOperateController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="23" column="0" lean-forward="false" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/useroperateservice/src/main/java/com/wjh/useroperateservice/service/UserTotalOperateService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="456">
+          <caret line="24" column="0" lean-forward="false" selection-start-line="24" selection-start-column="0" selection-end-line="31" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/common/src/main/java/com/wjh/common/model/RedisKeyConstant.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="190">
+          <caret line="10" column="63" lean-forward="false" selection-start-line="10" selection-start-column="63" selection-end-line="10" selection-end-column="63" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/userservice/src/main/java/com/wjh/userservice/controller/UserController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4389">
+          <caret line="261" column="21" lean-forward="false" selection-start-line="261" selection-start-column="21" selection-end-line="261" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/roleservice/src/main/java/com/wjh/roleservice/sevice/RoleService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="61" column="0" lean-forward="false" selection-start-line="61" selection-start-column="0" selection-end-line="61" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/menuoperateservice/src/main/java/com/wjh/menuoperateservice/service/OperateService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="319">
+          <caret line="55" column="26" lean-forward="false" selection-start-line="55" selection-start-column="26" selection-end-line="55" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/menuoperateservice/src/main/java/com/wjh/menuoperateservice/service/MenuService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="338">
+          <caret line="48" column="5" lean-forward="true" selection-start-line="48" selection-start-column="5" selection-end-line="48" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/useroperateservice/src/main/java/com/wjh/useroperateservice/service/UserService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="95">
+          <caret line="13" column="17" lean-forward="false" selection-start-line="13" selection-start-column="17" selection-end-line="13" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/useroperateservice/src/main/java/com/wjh/useroperateservice/service/MenuOperateService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="133">
+          <caret line="15" column="104" lean-forward="true" selection-start-line="15" selection-start-column="104" selection-end-line="15" selection-end-column="104" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/useroperateservice/src/main/java/com/wjh/useroperateservice/service/UserRoleService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="273">
+          <caret line="18" column="0" lean-forward="true" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/useroperateservice/src/main/resources/bootstrap.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="209">
+          <caret line="11" column="23" lean-forward="true" selection-start-line="11" selection-start-column="23" selection-end-line="11" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/useroperateservice/src/main/java/com/wjh/useroperateservice/UseroperateserviceApplication.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="259">
+          <caret line="20" column="5" lean-forward="true" selection-start-line="20" selection-start-column="5" selection-end-line="20" selection-end-column="5" />
+          <folding>
+            <element signature="e#709#710#0" expanded="true" />
+            <element signature="e#788#789#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/useroperateservice/src/main/java/com/wjh/useroperateservice/service/RoleOperateService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="13" column="85" lean-forward="false" selection-start-line="13" selection-start-column="85" selection-end-line="13" selection-end-column="85" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/roleoperateservice/src/main/java/com/wjh/roleoperateservice/controller/RoleOperateController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="38" column="84" lean-forward="false" selection-start-line="38" selection-start-column="84" selection-end-line="38" selection-end-column="84" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/roleoperateservice/src/main/java/com/wjh/roleoperateservice/mapper/RoleOperateMapper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="228">
+          <caret line="17" column="36" lean-forward="false" selection-start-line="17" selection-start-column="36" selection-end-line="17" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/roleoperateservice/src/main/resources/com/wjh/roleoperateservice/mapper/RoleOperateMapper.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="419">
+          <caret line="50" column="18" lean-forward="false" selection-start-line="50" selection-start-column="18" selection-end-line="50" selection-end-column="18" />
+          <folding>
+            <marker date="1532572271423" expanded="true" signature="880:934" ph="DELETE FROM " />
+            <marker date="1532572271423" expanded="true" signature="995:1053" ph="delete from " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-core/4.3.2.RELEASE/spring-core-4.3.2.RELEASE.jar!/org/springframework/cglib/proxy/MethodProxy.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="192">
+          <caret line="105" column="0" lean-forward="false" selection-start-line="105" selection-start-column="0" selection-end-line="105" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/menuoperateservicemodel/src/main/java/com/wjh/menuoperateservicemodel/model/OperateVo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="513">
+          <caret line="42" column="0" lean-forward="false" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/userroleservice/src/main/java/com/wjh/userroleservice/service/UserRoleService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="105" column="0" lean-forward="false" selection-start-line="105" selection-start-column="0" selection-end-line="105" selection-end-column="0" />
+          <folding>
+            <element signature="e#2789#2795#0" expanded="true" />
+            <element signature="e#2844#2850#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/roleoperateservice/src/main/java/com/wjh/roleoperateservice/service/RoleOperateService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="440">
+          <caret line="117" column="0" lean-forward="false" selection-start-line="117" selection-start-column="0" selection-end-line="117" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/useroperateservice/src/main/java/com/wjh/useroperateservice/controller/UserOperateController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="192">
+          <caret line="61" column="60" lean-forward="false" selection-start-line="61" selection-start-column="60" selection-end-line="61" selection-end-column="60" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/useroperateservice/src/main/java/com/wjh/useroperateservice/service/UserOperateService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="327">
+          <caret line="143" column="0" lean-forward="false" selection-start-line="143" selection-start-column="0" selection-end-line="143" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/menuoperateservice/src/main/resources/bootstrap.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="17" column="0" lean-forward="true" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>

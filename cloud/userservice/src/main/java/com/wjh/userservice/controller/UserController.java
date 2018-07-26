@@ -1,5 +1,6 @@
 package com.wjh.userservice.controller;
 
+import com.wjh.common.model.RedisKeyConstant;
 import com.wjh.common.model.ResponseConstant;
 import com.wjh.common.model.ResponseModel;
 import com.wjh.common.model.ServiceIdConstant;
@@ -72,7 +73,7 @@ public class UserController {
 
 
         try {
-            java.util.List<UserVo> userVoList= userService.selectByIds(idList);
+            java.util.List<UserVo> userVoList = userService.selectByIds(idList);
             ResponseModel<java.util.List<UserVo>> responseModel = new ResponseModel();
             responseModel.setResModel(userVoList);
             return responseModel;
@@ -162,7 +163,7 @@ public class UserController {
              * 验证验证码是否输入正确
              */
 
-            String authCodeInRedis = (String) redisCacheUtil.getCacheObject(uniqueKey);
+            String authCodeInRedis = (String) redisCacheUtil.getCacheObject(RedisKeyConstant.UNIQUE_KEY_PREFIX+uniqueKey);
             if (!authCode.equals(authCodeInRedis)) {
                 return USERSERVICE_LOGIN_AUTHCODE_ERROR;
             }
@@ -176,17 +177,17 @@ public class UserController {
 
 
             //查看旧有的token-->userId,  userId-->token关系
-            String oldToken = (String) redisCacheUtil.getCacheObject(user.getId() + "");
+            String oldToken = (String) redisCacheUtil.getCacheObject(RedisKeyConstant.USER_ID_PREFIX + user.getId());
             if (null != oldToken) {
-                redisCacheUtil.delete(oldToken);
+                redisCacheUtil.delete(RedisKeyConstant.TOKEN_PREFIX + oldToken);
             }
-            redisCacheUtil.delete(user.getId() + "");
+            redisCacheUtil.delete(RedisKeyConstant.USER_ID_PREFIX + user.getId());
 
 
             int expireSeconds = 60 * 60 * 2;
             //加入新的token-->userId,  userId-->token关系
-            redisCacheUtil.setCacheObject(token, user.getId() + "", expireSeconds);
-            redisCacheUtil.setCacheObject(user.getId() + "", token, expireSeconds);
+            redisCacheUtil.setCacheObject(RedisKeyConstant.TOKEN_PREFIX + token, user.getId() + "", expireSeconds);
+            redisCacheUtil.setCacheObject(RedisKeyConstant.USER_ID_PREFIX + user.getId(), token, expireSeconds);
 
             ResponseModel responseModel = new ResponseModel();
             Map<String, Object> map = new HashMap(1);
@@ -245,7 +246,7 @@ public class UserController {
 
 
         //将字符保存到redis中用于前端的验证,5分钟后过期
-        redisCacheUtil.setCacheObject(uniqueKey, strCode, 60 * 5);
+        redisCacheUtil.setCacheObject(RedisKeyConstant.UNIQUE_KEY_PREFIX+uniqueKey, strCode, 60 * 5);
         g.dispose();
 
         response.setHeader("uniqueKey", uniqueKey);

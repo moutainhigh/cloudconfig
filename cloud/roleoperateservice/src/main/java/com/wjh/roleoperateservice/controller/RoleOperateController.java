@@ -17,6 +17,7 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 @Api(description = "角色权限相关接口")
@@ -30,12 +31,32 @@ public class RoleOperateController {
     RoleOperateService roleOperateService;
 
     @ApiOperation(value = "获取角色具有的权限")
+    @RequestMapping(value = "/listByRoleIds", method = RequestMethod.POST)
+    public ResponseModel<List<RoleOperateVo>> listByRoleIds(@ApiParam(value = "角色ID列表", required = true) @RequestBody(required = true) List<Long> roleIdList) {
+
+
+        try {
+            List<RoleOperateVo> list = roleOperateService.listByRoleIds(roleIdList);
+            ResponseModel<List<RoleOperateVo>> responseModel = new ResponseModel();
+            responseModel.setResModel(list);
+            return responseModel;
+        } catch (Exception e) {
+            logger.error(ServiceIdConstant.roleoperateservice, e);
+            return ResponseConstant.SYSTEM_EXCEPTION;
+        }
+
+    }
+
+
+    @ApiOperation(value = "获取角色具有的权限")
     @RequestMapping(value = "/listByRoleId", method = RequestMethod.GET)
     public ResponseModel<List<RoleOperateVo>> listByRoleId(@ApiParam(value = "角色ID", required = true) @RequestParam(required = true) Long roleId) {
 
 
         try {
-            List<RoleOperateVo> list = roleOperateService.listByRoleId(roleId);
+            List<Long> roleIdList = new ArrayList<>();
+            roleIdList.add(roleId);
+            List<RoleOperateVo> list = roleOperateService.listByRoleIds(roleIdList);
             ResponseModel<List<RoleOperateVo>> responseModel = new ResponseModel();
             responseModel.setResModel(list);
             return responseModel;

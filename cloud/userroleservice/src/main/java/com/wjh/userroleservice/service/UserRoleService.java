@@ -1,6 +1,7 @@
 package com.wjh.userroleservice.service;
 
 import com.netflix.discovery.converters.Auto;
+import com.wjh.common.model.RedisKeyConstant;
 import com.wjh.common.model.ResponseModel;
 import com.wjh.roleservicemodel.model.RoleVo;
 import com.wjh.userroleservice.mapper.UserRoleMapper;
@@ -8,6 +9,7 @@ import com.wjh.userroleservicemodel.model.UserRoleDto;
 import com.wjh.userroleservicemodel.model.UserRolePo;
 import com.wjh.userroleservicemodel.model.UserRoleVo;
 import com.wjh.userservicemodel.model.UserVo;
+import com.wjh.utils.redis.RedisCacheUtil;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +34,9 @@ public class UserRoleService {
     @Autowired
     UserRoleMapper userRoleMapper;
 
+    @Autowired
+    RedisCacheUtil redisCacheUtil;
+
     public int update(UserRoleDto userRoleDto, Long loginUserId) {
         Long userId = userRoleDto.getUserId();
         List<Long> roleIdList = userRoleDto.getRoleIdList();
@@ -51,15 +56,23 @@ public class UserRoleService {
             userRolePoList.add(userRolePo);
         }
         int count = userRoleMapper.insertList(userRolePoList);
+        //清除该用户权限缓存
+        redisCacheUtil.delete(RedisKeyConstant.USER_OPERATE_TABLE,userId+"");
         return count;
     }
 
     public int deleteByUserId(Long userId) {
-        return userRoleMapper.deleteByUserId(userId);
+        int count= userRoleMapper.deleteByUserId(userId);
+        //清除该用户权限缓存
+        redisCacheUtil.delete(RedisKeyConstant.USER_OPERATE_TABLE,userId+"");
+        return count;
     }
 
     public int deleteByRoleId(Long roleId) {
-        return userRoleMapper.deleteByRoleId(roleId);
+        int count= userRoleMapper.deleteByRoleId(roleId);
+        //清除所有用户权限缓存
+        redisCacheUtil.delete(RedisKeyConstant.USER_OPERATE_TABLE);
+        return count;
 
     }
 
