@@ -20,7 +20,7 @@
         </dependency>
         <dependency>
             <groupId>cloud</groupId>
-            <artifactId>roleoperatemodel</artifactId>
+            <artifactId>roleoperateservicemodel</artifactId>
             <version>${cloud.roleoperateservicemodel.version}</version>
         </dependency>
 

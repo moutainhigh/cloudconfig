@@ -37,6 +37,9 @@ public class OperateService {
         operateMapper.insert(operatePo);
         //清除所有用户权限缓存
         redisCacheUtil.delete(RedisKeyConstant.USER_OPERATE_TABLE);
+
+        //清除权限缓存
+        redisCacheUtil.delete(RedisKeyConstant.ALL_OPERATE);
         return operatePo;
     }
 
@@ -45,6 +48,8 @@ public class OperateService {
         operateMapper.update(operatePo);
         //清除所有用户权限缓存
         redisCacheUtil.delete(RedisKeyConstant.USER_OPERATE_TABLE);
+        //清除权限缓存
+        redisCacheUtil.delete(RedisKeyConstant.ALL_OPERATE);
         return operatePo;
     }
 
@@ -60,10 +65,22 @@ public class OperateService {
     }
 
 
+    public List<OperateVo> listAll() {
+      List<OperateVo> allOperateVoList= (List<OperateVo>) redisCacheUtil.getCacheObject(RedisKeyConstant.ALL_OPERATE);
+      if (allOperateVoList==null){
+          allOperateVoList=search(null,1,100000);
+          redisCacheUtil.setCacheObject(RedisKeyConstant.ALL_OPERATE,allOperateVoList);
+      }
+       return allOperateVoList;
+    }
+
+
     public Long delete(Long id) {
         operateMapper.delete(id);
         //清除所有用户权限缓存
         redisCacheUtil.delete(RedisKeyConstant.USER_OPERATE_TABLE);
+        //清除权限缓存
+        redisCacheUtil.delete(RedisKeyConstant.ALL_OPERATE);
         return id;
     }
 

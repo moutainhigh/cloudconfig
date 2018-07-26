@@ -1,7 +1,7 @@
 package com.wjh.common.model;
 
 public class RedisKeyConstant {
-    public final  static  String USER_OPERATE_TABLE="USER_OPERATE";
+    public final  static  String USER_OPERATE_TABLE="userOperate_";
 
     public final static  String  TOKEN_PREFIX="token_";
 
@@ -9,5 +9,7 @@ public class RedisKeyConstant {
 
 
     public final static String  UNIQUE_KEY_PREFIX="uniqueKey_";
+
+    public final static String  ALL_OPERATE="allOperate_";
 
 }

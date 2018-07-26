@@ -52,6 +52,23 @@ public class OperateController {
     }
 
 
+    @ApiOperation(value = "列出所有权限")
+    @RequestMapping(value = "/listAll", method = RequestMethod.GET)
+    public ResponseModel<List<OperateVo>> listAll() {
+        try {
+            List<OperateVo> list = operateService.listAll();
+            ResponseModel responseModel = new ResponseModel();
+            responseModel.setResModel(list);
+            return responseModel;
+        } catch (Exception e) {
+            logger.error(ServiceIdConstant.menuoperateservice, e);
+            return ResponseConstant.SYSTEM_EXCEPTION;
+        }
+
+    }
+
+
+
 
     @ApiOperation(value = "搜索权限")
     @RequestMapping(value = "/selectByIds", method = RequestMethod.POST)

@@ -10,7 +10,7 @@ public class ResponseConstant {
 
     //gateway 服务
     public  static  ResponseModel GATEWAY_TOKEN_INVALID=new ResponseModel("E0001","token无效",ServiceIdConstant.gateway);
-
+    public  static  ResponseModel GATEWAY_HAS_NO_PERMISSION=new ResponseModel("E0002","对该接口没有权限访问",ServiceIdConstant.gateway);
 
     //userservice服务
     public  static  ResponseModel USERSERVICE_PASSWORD_NOT_EQUAL=new ResponseModel("E0001","两次密码输入不一致",ServiceIdConstant.userservice);

@@ -48,6 +48,7 @@ public class IdController  {
     @ApiOperation(value = "生成全局ID")
     @RequestMapping(value = "/generateId", method = RequestMethod.GET)
     public long generateId(HttpServletRequest httpServletRequest) {
+        String loginUserId=httpServletRequest.getHeader("loginUserId");
         long id= snowflakeIdWorker.nextId();
         logger.info("id生成器"+workerId+"-"+datacenterId+"生成Id"+id);
         return id;

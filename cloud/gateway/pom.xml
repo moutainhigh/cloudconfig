@@ -16,6 +16,12 @@
 
         <dependency>
             <groupId>cloud</groupId>
+            <artifactId>menuoperateservicemodel</artifactId>
+            <version>${cloud.menuoperateservicemodel.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>cloud</groupId>
             <artifactId>mvcconfiguration</artifactId>
             <version>${cloud.mvcconfiguration.version}</version>
         </dependency>
@@ -49,7 +55,10 @@
             </exclusions>
         </dependency>
 
-
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-feign</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>cloud</groupId>

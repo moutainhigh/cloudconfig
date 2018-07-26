@@ -2,11 +2,12 @@ package com.wjh.gateway.filter;
 
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
+import com.wjh.common.model.RedisKeyConstant;
 import com.wjh.common.model.ResponseConstant;
 import com.wjh.utils.redis.RedisCacheUtil;
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -24,7 +25,7 @@ public class AccessTokenFilter  extends ZuulFilter{
     @Autowired
     RedisCacheUtil redisCacheUtil;
 
-    Logger logger = LoggerFactory.getLogger(AccessTokenFilter.class);
+    Logger logger = LogManager.getLogger();
 
     @Override
     public String filterType() {
@@ -75,7 +76,7 @@ public class AccessTokenFilter  extends ZuulFilter{
             }
             if (StringUtils.isNotBlank(token))
             {
-                  userId = (String) redisCacheUtil.getCacheObject(token);
+                  userId = (String) redisCacheUtil.getCacheObject(RedisKeyConstant.TOKEN_PREFIX+token);
                 if (StringUtils.isNotBlank(userId)) {
                     pass = true;
                 }
