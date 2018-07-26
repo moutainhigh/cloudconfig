@@ -6,6 +6,7 @@ public class OperateVo implements Serializable {
     private Long id;
     private Long menuId;
     private String menuName;
+    private String serviceName;
     private String url;
     private String operateName;
     private String operateCode;
@@ -39,6 +40,14 @@ public class OperateVo implements Serializable {
 
     public void setMenuName(String menuName) {
         this.menuName = menuName;
+    }
+
+    public String getServiceName() {
+        return serviceName;
+    }
+
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
     }
 
     public String getUrl() {

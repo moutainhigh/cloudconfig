@@ -5,6 +5,7 @@ import java.util.Date;
 public class OperatePo {
     private Long id;
     private Long menuId;
+    private String serviceName;
     private String url;
     private String operateName;
     private String operateCode;
@@ -28,6 +29,14 @@ public class OperatePo {
 
     public void setMenuId(Long menuId) {
         this.menuId = menuId;
+    }
+
+    public String getServiceName() {
+        return serviceName;
+    }
+
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
     }
 
     public String getUrl() {

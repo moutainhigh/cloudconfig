@@ -84,7 +84,9 @@ public class OperatePermissionFilter extends ZuulFilter {
 
 
             for (int i = 0; i < allList.size(); i++) {
-                if ((requestUri + "/").indexOf(allList.get(i).getUrl() + "/") >= 0) {
+                OperateVo ov=allList.get(i);
+                logger.info(ov.getServiceName()+"/"+ov.getUrl() + "/");
+                if ((requestUri + "/").indexOf(ov.getServiceName()+ov.getUrl() + "/") >= 0) {
                     shouldVerify = true;
                     break;
                 }
@@ -102,7 +104,8 @@ public class OperatePermissionFilter extends ZuulFilter {
                 }
 
                 for (int i = 0; i < operateVoList.size(); i++) {
-                    if ((requestUri + "/").indexOf(operateVoList.get(i).getUrl() + "/") >= 0) {
+                    OperateVo ov=operateVoList.get(i);
+                    if ((requestUri + "/").indexOf(ov.getServiceName()+ov.getUrl() + "/") >= 0) {
                         hasPermission = true;
                         break;
                     }

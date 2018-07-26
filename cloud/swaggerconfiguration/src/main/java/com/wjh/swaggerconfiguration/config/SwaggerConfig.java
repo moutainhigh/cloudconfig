@@ -34,6 +34,9 @@ public class SwaggerConfig extends WebMvcConfigurerAdapter {
     @Value("${swagger.basePackage}")
     String basePackage;
 
+    @Value("${spring.application.name}")
+    String serviceName;
+
     @PostConstruct
     private void init() {
         if (basePackage == null || "".equals(basePackage)) {
@@ -61,7 +64,7 @@ public class SwaggerConfig extends WebMvcConfigurerAdapter {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("深圳ABC有限公司") // 任意，请稍微规范点
-                .description("后台文档") // 任意，请稍微规范点
+                .description("服务名称:"+serviceName) // 任意，请稍微规范点
 //                .termsOfServiceUrl("http://localhost:8080/base/swagger-ui.html") // 将“url”换成自己的ip:port
                 .contact("john") // 无所谓（这里是作者的别称）
                 .version("1.0.0")

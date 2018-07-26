@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiModelProperty;
 public class OperateUpdateDto {
     private Long id;
     private Long menuId;
+    private String serviceName;
     private String url;
     private String operateName;
     private String operateCode;
@@ -29,6 +30,15 @@ public class OperateUpdateDto {
 
     public void setMenuId(Long menuId) {
         this.menuId = menuId;
+    }
+
+    @ApiModelProperty(value = "微服务名称,全部为小写：", required = true, example = "userservice")
+    public String getServiceName() {
+        return serviceName;
+    }
+
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
     }
 
     @ApiModelProperty(value = "权限URL", required = true, example = "/user/delete")
