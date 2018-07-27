@@ -1,6 +1,7 @@
 package com.wjh.userservice.service;
 
 
+import com.wjh.idconfiguration.model.IdGenerator;
 import com.wjh.userservice.mapper.UserMapper;
 import com.wjh.userservicemodel.model.UserPo;
 import com.wjh.userservicemodel.model.UserVo;
@@ -19,16 +20,26 @@ public class UserService {
     @Autowired
     UserMapper userMapper;
 
+//    @Autowired
+//    private IdService idService;
+
     @Autowired
-    private IdService idService;
+    IdGenerator idGenerator;
+
+    @Autowired
+    private UserRoleService userRoleService;
+
+    @Autowired
+    private UserOperateService userOperateService;
 
     public UserVo detailByUser(String mobile) {
         return userMapper.detailByMobile(mobile);
     }
 
-    public UserPo insert(UserPo user,Long loginUserId) {
-        long id = idService.generateId();
-        Date date=new Date();
+    public UserPo insert(UserPo user, Long loginUserId) {
+//        long id = idService.generateId();
+        long id=idGenerator.generateId();
+        Date date = new Date();
         user.setId(id);
         user.setCreateDate(date);
         user.setUpdateDate(date);
@@ -39,8 +50,8 @@ public class UserService {
     }
 
 
-    public UserPo update(UserPo user,Long loginUserId) {
-        Date date=new Date();
+    public UserPo update(UserPo user, Long loginUserId) {
+        Date date = new Date();
         //密码置空，以免误改
         user.setPassword(null);
         user.setUpdateDate(date);
@@ -51,17 +62,21 @@ public class UserService {
     }
 
 
-    public UserVo selectByLogin(String mobile, String password){
-        return userMapper.selectByLogin(mobile,password);
+    public UserVo selectByLogin(String mobile, String password) {
+        return userMapper.selectByLogin(mobile, password);
     }
 
-    public void delete( long id){
-          userMapper.delete(id);
-     }
+    public void delete(long id) {
+        userMapper.delete(id);
+        //删除用户角色， 用户权限映射
+        userOperateService.deleteByUserId(id);
+        userRoleService.deleteByUserId(id);
+
+    }
 
 
-    public List<UserVo> selectByIds( List<Long> userIdList){
-        if (userIdList.size()==0){
+    public List<UserVo> selectByIds(List<Long> userIdList) {
+        if (userIdList.size() == 0) {
             return new ArrayList<>(0);
         }
         return userMapper.selectByIds(userIdList);

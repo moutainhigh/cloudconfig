@@ -4,8 +4,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 
- @FeignClient(value = "idservice")
- public interface IdService {
-     @RequestMapping(value = "/id/generateId", method = RequestMethod.GET)
-     public long generateId();
- }
+// @FeignClient(value = "idservice")
+// public interface IdService {
+//     @RequestMapping(value = "/id/generateId", method = RequestMethod.GET)
+//     public long generateId();
+// }

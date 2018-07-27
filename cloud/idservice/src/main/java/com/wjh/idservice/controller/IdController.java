@@ -1,11 +1,14 @@
 package com.wjh.idservice.controller;
 
 
+import com.wjh.idservice.thread.IdThread;
 import com.wjh.idservice.utils.SnowflakeIdWorker;
+import com.wjh.utils.redis.RedisCacheUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +26,9 @@ public class IdController  {
     private String workerId;
     @Value("${worker.datacenterId}")
     private String datacenterId;
+
+    @Autowired
+    RedisCacheUtil redisCacheUtil;
 
     Logger logger = LogManager.getLogger();
     static SnowflakeIdWorker snowflakeIdWorker = null;
@@ -48,9 +54,10 @@ public class IdController  {
     @ApiOperation(value = "生成全局ID")
     @RequestMapping(value = "/generateId", method = RequestMethod.GET)
     public long generateId(HttpServletRequest httpServletRequest) {
-        String loginUserId=httpServletRequest.getHeader("loginUserId");
         long id= snowflakeIdWorker.nextId();
-        logger.info("id生成器"+workerId+"-"+datacenterId+"生成Id"+id);
+        IdThread idThread=new IdThread(redisCacheUtil,snowflakeIdWorker);
+        idThread.start();
+        logger.debug("id生成器"+workerId+"-"+datacenterId+"生成Id"+id);
         return id;
     }
 

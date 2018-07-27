@@ -10,6 +10,7 @@
         <module name="config" />
         <module name="eureka" />
         <module name="gateway" />
+        <module name="idconfiguration" />
         <module name="idservice" />
         <module name="log4j2kafka" />
         <module name="menuoperate" />
@@ -46,6 +47,7 @@
       <module name="configconfiguration" target="1.6" />
       <module name="eureka" target="1.8" />
       <module name="gateway" target="1.8" />
+      <module name="idconfiguration" target="1.6" />
       <module name="idservice" target="1.8" />
       <module name="idserviceconfiguration" target="1.6" />
       <module name="log4j2kafka" target="1.6" />

@@ -12,4 +12,6 @@ public class RedisKeyConstant {
 
     public final static String  ALL_OPERATE="allOperate_";
 
+    public final static String  ID_QUEUE="id_quque";
+
 }

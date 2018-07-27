@@ -1,6 +1,5 @@
 package com.wjh.log4j2kafka.listener;
 
-import org.apache.logging.log4j.ThreadContext;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 

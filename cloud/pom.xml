@@ -35,6 +35,7 @@
         <module>userroleservicemodel</module>
         <module>roleoperateservicemodel</module>
         <module>mvcconfiguration</module>
+        <module>idconfiguration</module>
     </modules>
 
 
@@ -53,6 +54,7 @@
         <cloud.userroleservicemodel.version>1.0-SNAPSHOT</cloud.userroleservicemodel.version>
         <cloud.roleoperateservicemodel.version>1.0-SNAPSHOT</cloud.roleoperateservicemodel.version>
         <cloud.mvcconfiguration.version>1.0-SNAPSHOT</cloud.mvcconfiguration.version>
+        <cloud.idconfiguration.version>1.0-SNAPSHOT</cloud.idconfiguration.version>
          <commons-lang.version>2.6</commons-lang.version>
         <fastjson.version>1.1.40</fastjson.version>
         <mysql-connector-java.version>5.1.44</mysql-connector-java.version>
@@ -67,6 +69,7 @@
         <commons-lang3.version>3.7</commons-lang3.version>
         <spring-boot-starter-log4j2.version>1.3.8.RELEASE</spring-boot-starter-log4j2.version>
         <kafka-clients.version>0.11.0.1</kafka-clients.version>
+        <okhttp.version>3.10.0</okhttp.version>
 
     </properties>
 
@@ -85,6 +88,7 @@
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>1.4.0.RELEASE</version>
 
+
     </parent>
 
 
@@ -100,6 +104,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+
             <exclusions>
                 <exclusion>
                     <groupId>org.springframework.boot</groupId>
@@ -114,14 +119,13 @@
             <version>${mysql-connector-java.version}</version>
         </dependency>
 
-
-        <dependency>
+         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-log4j2</artifactId>
             <version>${spring-boot-starter-log4j2.version}</version>
         </dependency>
 
-        <dependency>
+         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <version>${log4j.version}</version>

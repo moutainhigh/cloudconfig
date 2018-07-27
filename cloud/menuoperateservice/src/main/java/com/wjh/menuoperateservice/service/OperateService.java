@@ -24,6 +24,12 @@ public class OperateService {
     OperateMapper operateMapper;
 
     @Autowired
+    UserOperateService userOperateService;
+
+    @Autowired
+    RoleOperateService roleOperateService;
+
+    @Autowired
     RedisCacheUtil redisCacheUtil;
 
     public OperatePo insert(OperatePo operatePo, Long loginUserId) {
@@ -77,6 +83,11 @@ public class OperateService {
 
     public Long delete(Long id) {
         operateMapper.delete(id);
+
+        //删除除数据库中角色权限关系，用户权限关系
+        userOperateService.deleteByOperateId(id);
+        roleOperateService.deleteByOperateId(id);
+
         //清除所有用户权限缓存
         redisCacheUtil.delete(RedisKeyConstant.USER_OPERATE_TABLE);
         //清除权限缓存

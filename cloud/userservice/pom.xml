@@ -16,6 +16,12 @@
 
         <dependency>
             <groupId>cloud</groupId>
+            <artifactId>idconfiguration</artifactId>
+            <version>${cloud.idconfiguration.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>cloud</groupId>
             <artifactId>mvcconfiguration</artifactId>
             <version>${cloud.mvcconfiguration.version}</version>
         </dependency>
