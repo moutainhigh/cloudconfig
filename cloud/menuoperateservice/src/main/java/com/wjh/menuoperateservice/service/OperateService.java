@@ -2,6 +2,7 @@ package com.wjh.menuoperateservice.service;
 
 import com.netflix.discovery.converters.Auto;
 import com.wjh.common.model.RedisKeyConstant;
+import com.wjh.idconfiguration.model.IdGenerator;
 import com.wjh.menuoperateservice.mapper.OperateMapper;
 import com.wjh.menuoperateservicemodel.model.OperatePo;
 import com.wjh.menuoperateservicemodel.model.OperateVo;
@@ -17,8 +18,7 @@ import java.util.List;
 public class OperateService {
 
 
-    @Autowired
-    IdService idService;
+
 
     @Autowired
     OperateMapper operateMapper;
@@ -32,8 +32,11 @@ public class OperateService {
     @Autowired
     RedisCacheUtil redisCacheUtil;
 
+    @Autowired
+    IdGenerator idGenerator;
+
     public OperatePo insert(OperatePo operatePo, Long loginUserId) {
-        Long id = idService.generateId();
+        Long id = idGenerator.generateId();
         Date date = new Date();
         operatePo.setId(id);
         operatePo.setCreatedBy(loginUserId);

@@ -3,6 +3,7 @@ package com.wjh.userroleservice.service;
 import com.netflix.discovery.converters.Auto;
 import com.wjh.common.model.RedisKeyConstant;
 import com.wjh.common.model.ResponseModel;
+import com.wjh.idconfiguration.model.IdGenerator;
 import com.wjh.roleservicemodel.model.RoleVo;
 import com.wjh.userroleservice.mapper.UserRoleMapper;
 import com.wjh.userroleservicemodel.model.UserRoleDto;
@@ -25,7 +26,7 @@ public class UserRoleService {
 
 
     @Autowired
-    IdService idService;
+    IdGenerator idGenerator;
     @Autowired
     UserService userService;
     @Autowired
@@ -44,7 +45,7 @@ public class UserRoleService {
         List<UserRolePo> userRolePoList = new ArrayList<UserRolePo>();
         for (int i = 0; i < roleIdList.size(); i++) {
             UserRolePo userRolePo = new UserRolePo();
-            Long id = idService.generateId();
+            Long id = idGenerator.generateId();
             userRolePo.setId(id);
             userRolePo.setUserId(userId);
             userRolePo.setRoleId(roleIdList.get(i));

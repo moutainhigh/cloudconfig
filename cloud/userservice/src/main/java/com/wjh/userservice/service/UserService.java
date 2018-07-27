@@ -20,8 +20,6 @@ public class UserService {
     @Autowired
     UserMapper userMapper;
 
-//    @Autowired
-//    private IdService idService;
 
     @Autowired
     IdGenerator idGenerator;
@@ -37,7 +35,6 @@ public class UserService {
     }
 
     public UserPo insert(UserPo user, Long loginUserId) {
-//        long id = idService.generateId();
         long id=idGenerator.generateId();
         Date date = new Date();
         user.setId(id);

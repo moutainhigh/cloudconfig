@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @EnableEurekaClient
 @ComponentScan("com.wjh")
-@EnableFeignClients
+@EnableFeignClients("com.wjh")
 @MapperScan("com.wjh.useroperateservice.mapper")
 public class UseroperateserviceApplication {
     public static void main(String[] args) {

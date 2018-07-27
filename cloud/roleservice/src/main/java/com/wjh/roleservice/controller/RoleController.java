@@ -4,7 +4,6 @@ package com.wjh.roleservice.controller;
 import com.wjh.common.model.ResponseConstant;
 import com.wjh.common.model.ResponseModel;
 import com.wjh.common.model.ServiceIdConstant;
-import com.wjh.roleservice.sevice.IdService;
 import com.wjh.roleservice.sevice.RoleService;
 import com.wjh.roleservicemodel.model.RoleAddDto;
 import com.wjh.roleservicemodel.model.RolePo;
@@ -32,8 +31,7 @@ public class RoleController {
 
     Logger logger = LogManager.getLogger();
 
-    @Autowired
-    IdService idService;
+
 
 
     @Autowired

@@ -1,6 +1,7 @@
 package com.wjh.menuoperateservice.service;
 
 import com.wjh.common.model.RedisKeyConstant;
+import com.wjh.idconfiguration.model.IdGenerator;
 import com.wjh.menuoperateservice.mapper.MenuMapper;
 import com.wjh.menuoperateservicemodel.model.MenuPo;
 import com.wjh.menuoperateservicemodel.model.MenuVo;
@@ -16,16 +17,16 @@ public class MenuService {
 
 
     @Autowired
-    IdService idService;
-    @Autowired
     MenuMapper menuMapper;
 
+    @Autowired
+    IdGenerator idGenerator;
 
     @Autowired
     RedisCacheUtil redisCacheUtil;
 
     public MenuPo insert(MenuPo menuPo,Long loginUserId) {
-        Long id=idService.generateId();
+        Long id=idGenerator.generateId();
         menuPo.setId(id);
         Date date=new Date();
         menuPo.setCreateDate(date);

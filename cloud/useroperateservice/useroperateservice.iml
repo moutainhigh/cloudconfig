@@ -16,6 +16,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="idconfiguration" />
     <orderEntry type="module" module-name="roleoperateservicemodel" />
     <orderEntry type="module" module-name="mvcconfiguration" />
     <orderEntry type="module" module-name="userroleservicemodel" />

@@ -3,6 +3,7 @@ package com.wjh.useroperateservice.service;
 import com.netflix.discovery.converters.Auto;
 import com.wjh.common.model.RedisKeyConstant;
 import com.wjh.common.model.ResponseModel;
+import com.wjh.idconfiguration.model.IdGenerator;
 import com.wjh.menuoperateservicemodel.model.OperateVo;
 import com.wjh.roleoperateservicemodel.model.RoleOperateVo;
 import com.wjh.useroperateservice.mapper.UserOperateMapper;
@@ -27,7 +28,7 @@ public class UserOperateService {
     UserOperateMapper userOperateMapper;
 
     @Autowired
-    IdService idService;
+    IdGenerator idGenerator;
 
 
     @Autowired
@@ -61,7 +62,7 @@ public class UserOperateService {
             UserOperatePo userOperatePo = new UserOperatePo();
             userOperatePo.setUserId(userId);
             userOperatePo.setOperateId(operateIdList.get(i));
-            Long id = idService.generateId();
+            Long id = idGenerator.generateId();
             userOperatePo.setId(id);
             Date date = new Date();
             userOperatePo.setCreateDate(date);

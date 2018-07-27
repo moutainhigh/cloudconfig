@@ -12,6 +12,11 @@
     <artifactId>userroleservice</artifactId>
 
 <dependencies>
+    <dependency>
+        <groupId>cloud</groupId>
+        <artifactId>idconfiguration</artifactId>
+        <version>${cloud.idconfiguration.version}</version>
+    </dependency>
 
     <dependency>
         <groupId>cloud</groupId>

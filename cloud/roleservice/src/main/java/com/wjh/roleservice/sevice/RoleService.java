@@ -1,12 +1,11 @@
 package com.wjh.roleservice.sevice;
 
 import com.wjh.common.model.RedisKeyConstant;
+import com.wjh.idconfiguration.model.IdGenerator;
 import com.wjh.roleservice.mapper.RoleMapper;
 import com.wjh.roleservicemodel.model.RolePo;
 import com.wjh.roleservicemodel.model.RoleVo;
 import com.wjh.utils.redis.RedisCacheUtil;
-import org.apache.commons.lang3.event.EventListenerSupport;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +20,7 @@ public class RoleService {
 
 
     @Autowired
-    IdService idService;
+    IdGenerator idGenerator;
 
     @Autowired
     RoleMapper roleMapper;
@@ -30,7 +29,7 @@ public class RoleService {
     RedisCacheUtil redisCacheUtil;
 
     public RolePo insert(RolePo rolePo, Long loginUserId) {
-        Long id = idService.generateId();
+        Long id = idGenerator.generateId();
         Date date = new Date();
         rolePo.setId(id);
         rolePo.setCreateDate(date);

@@ -15,11 +15,7 @@
     <dependencies>
 
 
-        <dependency>
-            <groupId>cloud</groupId>
-            <artifactId>utils</artifactId>
-            <version>${cloud.utils.version}</version>
-        </dependency>
+
 
         <dependency>
             <groupId>cloud</groupId>
@@ -67,17 +63,6 @@
             <artifactId>spring-cloud-starter-feign</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-logging</artifactId>
-                </exclusion>
-            </exclusions>
-
-        </dependency>
     </dependencies>
 
 
