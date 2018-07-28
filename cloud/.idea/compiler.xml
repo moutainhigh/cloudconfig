@@ -26,7 +26,6 @@
         <module name="roleservice" />
         <module name="roleservicemodel" />
         <module name="swaggerconfiguration" />
-        <module name="usercontroller" />
         <module name="useroperateservice" />
         <module name="useroperateservicemodel" />
         <module name="userroleservice" />
@@ -42,30 +41,22 @@
     <bytecodeTargetLevel target="1.8">
       <module name="cloud" target="1.6" />
       <module name="common" target="1.6" />
-      <module name="commonconfiguration" target="1.6" />
       <module name="config" target="1.8" />
-      <module name="configconfiguration" target="1.6" />
       <module name="eureka" target="1.8" />
       <module name="gateway" target="1.8" />
       <module name="idconfiguration" target="1.6" />
       <module name="idservice" target="1.8" />
-      <module name="idserviceconfiguration" target="1.6" />
       <module name="log4j2kafka" target="1.6" />
-      <module name="menuoperate" target="1.6" />
-      <module name="menuoperatemodel" target="1.6" />
       <module name="menuoperateservice" target="1.8" />
       <module name="menuoperateservicemodel" target="1.6" />
       <module name="mvcconfiguration" target="1.6" />
       <module name="quartz" target="1.8" />
       <module name="quartzmodel" target="1.6" />
-      <module name="redisconfiguration" target="1.6" />
-      <module name="roleoperatemodel" target="1.6" />
       <module name="roleoperateservice" target="1.8" />
       <module name="roleoperateservicemodel" target="1.6" />
       <module name="roleservice" target="1.8" />
       <module name="roleservicemodel" target="1.6" />
       <module name="swaggerconfiguration" target="1.6" />
-      <module name="usercontroller" target="1.8" />
       <module name="useroperateservice" target="1.8" />
       <module name="useroperateservicemodel" target="1.6" />
       <module name="userroleservice" target="1.8" />

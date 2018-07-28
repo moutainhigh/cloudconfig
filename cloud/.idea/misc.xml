@@ -13,6 +13,7 @@
         <option value="$PROJECT_DIR$/idserviceapi/pom.xml" />
         <option value="$PROJECT_DIR$/idserviceconfiguration/pom.xml" />
         <option value="$PROJECT_DIR$/redisconfiguration/pom.xml" />
+        <option value="$PROJECT_DIR$/usercontroller/pom.xml" />
       </set>
     </option>
   </component>

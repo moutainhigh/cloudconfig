@@ -19,7 +19,6 @@
     <file url="file://$PROJECT_DIR$/roleservice" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/roleservicemodel" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/swaggerconfiguration" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/usercontroller" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/useroperateservice" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/useroperateservicemodel" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/userroleservice" charset="UTF-8" />
@@ -27,6 +26,8 @@
     <file url="file://$PROJECT_DIR$/userservice" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/userservicemodel" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/utils" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/utils/src/main/java/com/wjh/utils/mqtt/Client.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/utils/src/main/java/com/wjh/utils/mqtt/Server.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/zipkin" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/zipkinconfiguration" charset="UTF-8" />
     <file url="PROJECT" charset="UTF-8" />

@@ -20,7 +20,6 @@
       <module fileurl="file://$PROJECT_DIR$/roleservice/roleservice.iml" filepath="$PROJECT_DIR$/roleservice/roleservice.iml" />
       <module fileurl="file://$PROJECT_DIR$/roleservicemodel/roleservicemodel.iml" filepath="$PROJECT_DIR$/roleservicemodel/roleservicemodel.iml" />
       <module fileurl="file://$PROJECT_DIR$/swaggerconfiguration/swaggerconfiguration.iml" filepath="$PROJECT_DIR$/swaggerconfiguration/swaggerconfiguration.iml" />
-      <module fileurl="file://$PROJECT_DIR$/usercontroller/usercontroller.iml" filepath="$PROJECT_DIR$/usercontroller/usercontroller.iml" />
       <module fileurl="file://$PROJECT_DIR$/useroperateservice/useroperateservice.iml" filepath="$PROJECT_DIR$/useroperateservice/useroperateservice.iml" />
       <module fileurl="file://$PROJECT_DIR$/useroperateservicemodel/useroperateservicemodel.iml" filepath="$PROJECT_DIR$/useroperateservicemodel/useroperateservicemodel.iml" />
       <module fileurl="file://$PROJECT_DIR$/userroleservice/userroleservice.iml" filepath="$PROJECT_DIR$/userroleservice/userroleservice.iml" />
