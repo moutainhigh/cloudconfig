@@ -14,12 +14,15 @@
 
     <dependencies>
 
+        <!--spring redis-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
             <scope>provided</scope>
         </dependency>
 
+
+        <!--commons 常用工具-->
         <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
@@ -32,6 +35,7 @@
             <version>${commons-lang3.version}</version>
         </dependency>
 
+        <!--okhttp -->
 
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
@@ -39,6 +43,7 @@
             <version>${okhttp.version}</version>
         </dependency>
 
+        <!-- kafka 消息队列-->
 
         <dependency>
             <groupId>org.apache.kafka</groupId>
@@ -47,12 +52,15 @@
         </dependency>
 
 
+        <!--mqtt 消息队列-->
+
         <dependency>
             <groupId>org.eclipse.paho</groupId>
             <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
             <version>${mqtt.version}</version>
         </dependency>
 
+        <!--rabbitmq  消息队列-->
 
         <dependency>
             <groupId>com.rabbitmq</groupId>
@@ -60,6 +68,8 @@
             <version>${rabbitmq.client.version}</version>
         </dependency>
 
+
+        <!-- elasticsearch -->
 
         <dependency>
             <groupId>org.elasticsearch.client</groupId>
@@ -75,6 +85,40 @@
             <version>${elasticsearch.version}</version>
         </dependency>
 
+
+        <!-- poi excel -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>${poi.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>${poi.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml-schemas</artifactId>
+            <version>${poi.version}</version>
+        </dependency>
+
+        <!-- java 邮件-->
+        <dependency>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>javax.mail</artifactId>
+            <version>${javax.mail.version}</version>
+        </dependency>
+
+
+        <!--gson 解析-->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>${gson.version}</version>
+        </dependency>
 
     </dependencies>
 

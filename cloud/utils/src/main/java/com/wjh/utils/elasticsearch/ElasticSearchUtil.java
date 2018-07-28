@@ -441,8 +441,7 @@ public class ElasticSearchUtil {
                 .field("companyName")
                 .field("label")
                 .preTags("<em>")
-                .postTags("</em>")
-                 ;
+                .postTags("</em>");
 
         String searchValue = "工程技术开发";
         String likeValue = "*" + searchValue + "*";
@@ -463,7 +462,7 @@ public class ElasticSearchUtil {
         MatchPhraseQueryBuilder mp1 = QueryBuilders.matchPhraseQuery("companyName", searchValue).boost(10);
 
         MatchPhraseQueryBuilder mp2 = QueryBuilders.matchPhraseQuery("manageScope", searchValue).boost(5);
-        
+
         MatchPhraseQueryBuilder mp3 = QueryBuilders.matchPhraseQuery("label", searchValue).boost(1);
 
 
@@ -477,9 +476,7 @@ public class ElasticSearchUtil {
 
         QueryBuilder qq1 = QueryBuilders.boolQuery().should(q1).should(q2).should(q3);
 
-        QueryBuilder qq2=QueryBuilders.boolQuery().should(mp1).should(mp2).should(mp3);
-
-
+        QueryBuilder qq2 = QueryBuilders.boolQuery().should(mp1).should(mp2).should(mp3);
 
 
 //        DisMaxQueryBuilder disMaxQueryBuilder=QueryBuilders.disMaxQuery().add(q1).add(q2).add(q3);
@@ -492,8 +489,6 @@ public class ElasticSearchUtil {
         /*
           elasticsearch的should()相当于 SOLR 的 OR   must 相当于 SOLR的 AND
          */
- 
- 
 
 
         QueryBuilder queryBuilder = QueryBuilders.boolQuery().should(qq2).must(qq1).filter(qf1);

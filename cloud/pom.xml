@@ -73,6 +73,10 @@
         <mqtt.version>1.2.0</mqtt.version>
         <rabbitmq.client.version>5.1.2</rabbitmq.client.version>
         <elasticsearch.version>6.2.0</elasticsearch.version>
+        <poi.version>3.15</poi.version>
+        <javax.mail.version>1.5.1</javax.mail.version>
+        <commons-net.version>3.3</commons-net.version>
+        <gson.version>2.2.4</gson.version>
     </properties>
 
 
