@@ -63,7 +63,7 @@
       <module name="userroleservicemodel" target="1.6" />
       <module name="userservice" target="1.8" />
       <module name="userservicemodel" target="1.6" />
-      <module name="utils" target="1.6" />
+      <module name="utils" target="1.8" />
       <module name="zipkin" target="1.8" />
       <module name="zipkinconfiguration" target="1.6" />
     </bytecodeTargetLevel>
