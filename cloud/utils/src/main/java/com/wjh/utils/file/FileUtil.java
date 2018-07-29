@@ -327,7 +327,8 @@ public class FileUtil {
 
 
     public static void main(String[] args) throws Exception {
-        createFile("f:/abd\\lkj.txt", "abc\n efg");
+//        createFile("f:/abd\\lkj.txt", "abc\n efg");
+        System.out.println(readTextContent("f:/abd\\lkj.txt","utf-8"));
 //			copyFile("f:/abd\\lkj.txt", "f:/abd\\abc.txt");
 //		moveFile("f://lkj.txt", "f:/abd/");	
 

@@ -112,26 +112,11 @@
         </dependency>
 
 
-
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>ooxml-schemas</artifactId>
             <version>${ooxml-schemas.version}</version>
         </dependency>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
         <!-- java 邮件-->
@@ -205,6 +190,31 @@
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
             <version>${jsoup.version}</version>
+        </dependency>
+
+
+        <!--zookeeper 操作类-->
+
+        <dependency>
+            <groupId>org.apache.curator</groupId>
+            <artifactId>curator-recipes</artifactId>
+            <version>${curator-recipes.version}</version>
+        </dependency>
+
+
+        <!--ActiveMq  消息队列 -->
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-all</artifactId>
+            <version>${activemq.version}</version>
+        </dependency>
+
+
+        <!--连接池-->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+            <version>${commons-pool2.version}</version>
         </dependency>
 
 

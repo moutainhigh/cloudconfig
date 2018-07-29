@@ -86,6 +86,9 @@
         <xmlbeans.version>2.6.0</xmlbeans.version>
         <org.apache.poi.xwpf.converter.core-gae.version>1.0.2</org.apache.poi.xwpf.converter.core-gae.version>
         <jsoup.version>1.8.2</jsoup.version>
+        <curator-recipes.version>2.7.0</curator-recipes.version>
+        <activemq.version>5.15.4</activemq.version>
+        <commons-pool2.version>2.4.2</commons-pool2.version>
     </properties>
 
 
