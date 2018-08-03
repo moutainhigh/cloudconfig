@@ -14,7 +14,7 @@ public class PullConsumer {
 
     public static void main(String[] args) throws IOException, InterruptedException {
 
-        new PullConsumer().defaultConsume();
+        new PullConsumer().headerConsume();
     }
 
 

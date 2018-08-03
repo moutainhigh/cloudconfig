@@ -2,14 +2,22 @@ package com.wjh.utils.rabbitmq;
 
 
 import com.rabbitmq.client.*;
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class Producer {
 
 
+    public final  static String DIRECT="direct";
+    public final  static String FANOUT="fanout";
+    public final  static String TOPIC="topic";
+    public final  static String HEADERS="headers";
+
+
     public static void main(String[] argv) throws Exception {
-        new Producer().topicProduce();
+        new Producer().directProduce();
     }
 
 
@@ -32,7 +40,7 @@ public class Producer {
         channel.queueDeclare(queueName, false, false, false, null);
 
         // 消息内容
-        String message = "Hello World!";
+        String message = "Hello default!";
         /*
          * 向server发布一条消息
          * 参数1：exchange名字，若为空则使用默认的exchange
@@ -73,7 +81,7 @@ public class Producer {
         String queueName2="direct_queue2";
         String routingKey="direct_key";
 
-        channel.exchangeDeclare(exchangeName, BuiltinExchangeType.DIRECT);
+        channel.exchangeDeclare(exchangeName, DIRECT);
 
 
 
@@ -146,7 +154,7 @@ public class Producer {
         String topic2="topic.efg.*";//* 表示只能匹配一个点后的值 ，如topic.efg.a   ,topic.efg.b等，topic.efg.a.b是匹配不到的
 
 
-        channel.exchangeDeclare(exchangeName, BuiltinExchangeType.TOPIC);
+        channel.exchangeDeclare(exchangeName, TOPIC);
 
 
 
@@ -209,7 +217,7 @@ public class Producer {
         String queueName2="fanout_queue2";
 
 
-        channel.exchangeDeclare(exchangeName, BuiltinExchangeType.FANOUT);
+        channel.exchangeDeclare(exchangeName, FANOUT);
 
 
 
@@ -233,7 +241,7 @@ public class Producer {
 
 
         // 消息内容
-        String message = "Hello topic!";
+        String message = "Hello fanout!";
         /*
          * 向server发布一条消息
          * 参数1：exchange名字，若为空则使用默认的exchange
@@ -272,7 +280,7 @@ public class Producer {
         String exchangeName="exchange_header";
 
 
-        channel.exchangeDeclare(exchangeName, BuiltinExchangeType.HEADERS);
+        channel.exchangeDeclare(exchangeName, HEADERS);
 
 
         Map<String, Object> headers = new HashMap();
@@ -280,7 +288,7 @@ public class Producer {
         headers.put("city", "wuhan");
 
         // 消息内容
-        String message = "Hello topic!";
+        String message = "Hello header!";
         /*
          * 向server发布一条消息
          * 参数1：exchange名字，若为空则使用默认的exchange

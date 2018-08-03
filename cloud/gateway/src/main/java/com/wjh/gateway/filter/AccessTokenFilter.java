@@ -16,9 +16,10 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.List;
+
 @Component
 @RefreshScope
-public class AccessTokenFilter  extends ZuulFilter{
+public class AccessTokenFilter extends ZuulFilter {
     @Value("${gateway.excludedUrls}")
     String excludedUrls;
 
@@ -50,9 +51,6 @@ public class AccessTokenFilter  extends ZuulFilter{
         HttpServletRequest request = RequestContext.getCurrentContext().getRequest();
 
 
-
-
-
         logger.info("发送{}请求到{}", request.getMethod(), request.getRequestURL().toString());
         String url = request.getRequestURL().toString();
         boolean isExcluded = false;
@@ -68,25 +66,41 @@ public class AccessTokenFilter  extends ZuulFilter{
         }
 
         boolean pass = false;
-        String userId =null;
+        String userId = null;
         if (!isExcluded) {
+
+
+            /**
+             * 获得token
+             */
             String token = request.getHeader("token");
-            if (StringUtils.isBlank(token)){
-                token=request.getParameter("token");
+            if (StringUtils.isBlank(token)) {
+                token = request.getParameter("token");
             }
-            if (StringUtils.isNotBlank(token))
-            {
-                  userId = (String) redisCacheUtil.getCacheObject(RedisKeyConstant.TOKEN_PREFIX+token);
+
+
+
+            if (StringUtils.isNotBlank(token)) {
+                int expireSeconds = 60 * 60 * 2;
+                /**
+                 * 刷新token过期时间
+                 */
+                redisCacheUtil.refresh(token, expireSeconds);
+
+
+                //获取用户Id
+                userId = (String) redisCacheUtil.getCacheObject(RedisKeyConstant.TOKEN_PREFIX + token);
                 if (StringUtils.isNotBlank(userId)) {
                     pass = true;
+                    redisCacheUtil.refresh(userId, expireSeconds);
                 }
             }
         }
 
-        if (pass||isExcluded) {
+        if (pass || isExcluded) {
             //重新设置装饰类
-            if (StringUtils.isNotBlank(userId)){
-                ctx.addZuulRequestHeader("loginUserId",userId);
+            if (StringUtils.isNotBlank(userId)) {
+                ctx.addZuulRequestHeader("loginUserId", userId);
 
             }
             ctx.setSendZuulResponse(true);// 对该请求进行路由

@@ -71,7 +71,7 @@
         <okhttp.version>3.10.0</okhttp.version>
         <kafka-clients.version>0.11.0.1</kafka-clients.version>
         <mqtt.version>1.2.0</mqtt.version>
-        <rabbitmq.client.version>5.1.2</rabbitmq.client.version>
+        <rabbitmq.client.version>3.6.3</rabbitmq.client.version>
         <elasticsearch.version>6.2.0</elasticsearch.version>
         <poi.version>3.17</poi.version>
         <javax.mail.version>1.5.1</javax.mail.version>
@@ -149,7 +149,6 @@
             <version>${log4j.version}</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/commons-beanutils/commons-beanutils -->
         <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>

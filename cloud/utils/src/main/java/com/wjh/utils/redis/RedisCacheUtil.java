@@ -104,7 +104,7 @@ public class RedisCacheUtil<T> {
     public <T> BoundSetOperations<String, T> setCacheSet(String key, Set<T> dataSet) {
         BoundSetOperations<String, T> setOperation = redisTemplate.boundSetOps(key);
         /*
-		 * T[] t = (T[]) dataSet.toArray(); setOperation.add(t);
+         * T[] t = (T[]) dataSet.toArray(); setOperation.add(t);
 		 */
 
         Iterator<T> it = dataSet.iterator();
@@ -122,7 +122,7 @@ public class RedisCacheUtil<T> {
      * @return
      */
     public Set<T> getCacheSet(String key/*
-										 * ,BoundSetOperations<String,T>
+                                         * ,BoundSetOperations<String,T>
 										 * operation
 										 */) {
         Set<T> dataSet = new HashSet<T>();
@@ -150,7 +150,7 @@ public class RedisCacheUtil<T> {
             for (Map.Entry<String, T> entry : dataMap.entrySet()) {
 
 				/*
-				 * System.out.println("Key = " + entry.getKey() + ", Value = " +
+                 * System.out.println("Key = " + entry.getKey() + ", Value = " +
 				 * entry.getValue());
 				 */
                 hashOperations.put(key, entry.getKey(), entry.getValue());
@@ -181,11 +181,11 @@ public class RedisCacheUtil<T> {
      * @return
      */
     public <T> Map<String, T> getCacheMap(String key/*
-													 * ,HashOperations<String,String
+                                                     * ,HashOperations<String,String
 													 * ,T> hashOperation
 													 */) {
         Map<String, T> map = redisTemplate.opsForHash().entries(key);
-		/* Map<String, T> map = hashOperation.entries(key); */
+        /* Map<String, T> map = hashOperation.entries(key); */
         return map;
     }
 
@@ -202,7 +202,7 @@ public class RedisCacheUtil<T> {
             for (Map.Entry<Integer, T> entry : dataMap.entrySet()) {
 
 				/*
-				 * System.out.println("Key = " + entry.getKey() + ", Value = " +
+                 * System.out.println("Key = " + entry.getKey() + ", Value = " +
 				 * entry.getValue());
 				 */
                 hashOperations.put(key, entry.getKey(), entry.getValue());
@@ -220,12 +220,12 @@ public class RedisCacheUtil<T> {
      * @return
      */
     public <T> Map<Integer, T> getCacheIntegerMap(String key/*
-															 * ,HashOperations<
+                                                             * ,HashOperations<
 															 * String,String,T>
 															 * hashOperation
 															 */) {
         Map<Integer, T> map = redisTemplate.opsForHash().entries(key);
-		/* Map<String, T> map = hashOperation.entries(key); */
+        /* Map<String, T> map = hashOperation.entries(key); */
         return map;
     }
 
@@ -252,6 +252,7 @@ public class RedisCacheUtil<T> {
 
     /**
      * 左入队列尾
+     *
      * @param key
      * @param objects
      */
@@ -263,13 +264,24 @@ public class RedisCacheUtil<T> {
 
     /**
      * 从队头出队列
+     *
      * @param key
      * @return
      */
-    public Object rightPop(String key){
+    public Object rightPop(String key) {
         return redisTemplate.opsForList().rightPop(key);
     }
 
+
+    /**
+     * 刷新  过期时间单位  秒
+     *
+     * @param token
+     * @param timeout
+     */
+    public void refresh(String token, Integer timeout) {
+        redisTemplate.expire(token, timeout, TimeUnit.SECONDS);
+    }
 
 
 }
