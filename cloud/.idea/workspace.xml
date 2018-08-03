@@ -105,8 +105,8 @@
       <file leaf-file-name="AccessTokenFilter.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/gateway/src/main/java/com/wjh/gateway/filter/AccessTokenFilter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="867">
-              <caret line="85" column="30" lean-forward="true" selection-start-line="85" selection-start-column="30" selection-end-line="85" selection-end-column="30" />
+            <state relative-caret-position="85">
+              <caret line="54" column="56" lean-forward="true" selection-start-line="54" selection-start-column="56" selection-end-line="54" selection-end-column="56" />
               <folding>
                 <element signature="e#1076#1077#0" expanded="true" />
                 <element signature="e#1100#1101#0" expanded="true" />
@@ -736,12 +736,12 @@
       <workItem from="1532785231435" duration="4590000" />
       <workItem from="1532834317024" duration="13460000" />
       <workItem from="1533258875531" duration="10255000" />
-      <workItem from="1533271054739" duration="6414000" />
+      <workItem from="1533271054739" duration="6461000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="335346000" />
+    <option name="totallyTimeSpent" value="335393000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -15280,8 +15280,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/gateway/src/main/java/com/wjh/gateway/filter/AccessTokenFilter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="867">
-          <caret line="85" column="30" lean-forward="true" selection-start-line="85" selection-start-column="30" selection-end-line="85" selection-end-column="30" />
+        <state relative-caret-position="85">
+          <caret line="54" column="56" lean-forward="true" selection-start-line="54" selection-start-column="56" selection-end-line="54" selection-end-column="56" />
           <folding>
             <element signature="e#1076#1077#0" expanded="true" />
             <element signature="e#1100#1101#0" expanded="true" />
