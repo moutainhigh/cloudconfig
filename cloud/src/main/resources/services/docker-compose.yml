@@ -10,25 +10,75 @@ services:
      environment:
        - server_port=8080
        - eureka_client_service-url_defaultZone=http://eureka1:1111/eureka/,http://eureka2:1112/eureka/
-  hellocontroller:
-     image: "192.168.42.162:5000/hellocontroller:1.0-SNAPSHOT"
-     hostname: hellocontroller
+  idservice:
+     image: "192.168.42.162:5000/idservice:1.0-SNAPSHOT"
+     hostname: idservice
      ports:
-       - "6661:6661"
+       - "9999:9999"
      networks:
        - app_net
      environment:
-       - server_port=6661
+       - server_port=9999
        - eureka_client_service-url_defaultZone=http://eureka1:1111/eureka/,http://eureka2:1112/eureka/
-  helloservice:
-     image: "192.168.42.162:5000/helloservice:1.0-SNAPSHOT"
-     hostname: helloservice
+  menuoperateservice:
+     image: "192.168.42.162:5000/menuoperateservice:1.0-SNAPSHOT"
+     hostname: menuoperateservice
+     ports:
+       - "6681:6681"
+     networks:
+       - app_net
+     environment:
+       - server_port=6681
+       - eureka_client_service-url_defaultZone=http://eureka1:1111/eureka/,http://eureka2:1112/eureka/
+  roleoperateservice:
+     image: "192.168.42.162:5000/roleoperateservice:1.0-SNAPSHOT"
+     hostname: roleoperateservice
+     ports:
+       - "6731:6731"
+     networks:
+       - app_net
+     environment:
+       - server_port=6731
+       - eureka_client_service-url_defaultZone=http://eureka1:1111/eureka/,http://eureka2:1112/eureka/
+  roleservice:
+     image: "192.168.42.162:5000/roleservice:1.0-SNAPSHOT"
+     hostname: roleservice
+     ports:
+       - "6691:6691"
+     networks:
+       - app_net
+     environment:
+       - server_port=6691
+       - eureka_client_service-url_defaultZone=http://eureka1:1111/eureka/,http://eureka2:1112/eureka/
+  userservice:
+     image: "192.168.42.162:5000/userservice:1.0-SNAPSHOT"
+     hostname: userservice
      ports:
        - "6671:6671"
      networks:
        - app_net
      environment:
        - server_port=6671
+       - eureka_client_service-url_defaultZone=http://eureka1:1111/eureka/,http://eureka2:1112/eureka/
+  useroperateservice:
+     image: "192.168.42.162:5000/useroperateservice:1.0-SNAPSHOT"
+     hostname: useroperateservice
+     ports:
+       - "6701:6701"
+     networks:
+       - app_net
+     environment:
+       - server_port=6701
+       - eureka_client_service-url_defaultZone=http://eureka1:1111/eureka/,http://eureka2:1112/eureka/
+  userroleservice:
+     image: "192.168.42.162:5000/userroleservice:1.0-SNAPSHOT"
+     hostname: userroleservice
+     ports:
+       - "6721:6721"
+     networks:
+       - app_net
+     environment:
+       - server_port=6721
        - eureka_client_service-url_defaultZone=http://eureka1:1111/eureka/,http://eureka2:1112/eureka/
   zipkin:
      image: "192.168.42.162:5000/zipkin:1.0-SNAPSHOT"
