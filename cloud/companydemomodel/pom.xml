@@ -9,25 +9,15 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>common</artifactId>
-
-
+    <artifactId>companydemomodel</artifactId>
 
     <dependencies>
         <dependency>
-            <groupId>org.apache.kafka</groupId>
-            <artifactId>kafka-clients</artifactId>
-            <version>${kafka-clients.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.mybatis.spring.boot</groupId>
-            <artifactId>mybatis-spring-boot-starter</artifactId>
-            <version>${mybatis-spring-boot-starter.version}</version>
+            <groupId>cloud</groupId>
+            <artifactId>swaggerconfiguration</artifactId>
+            <version>${cloud.swaggerconfiguration.version}</version>
             <scope>provided</scope>
         </dependency>
-
-
     </dependencies>
-
 
 </project>

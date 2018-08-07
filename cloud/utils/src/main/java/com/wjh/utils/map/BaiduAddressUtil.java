@@ -27,7 +27,7 @@ public class BaiduAddressUtil {
 	public static String sendGet(String url, String host, String cookie) {
 		try {
 
-			
+
 			RequestConfig defaultRequestConfig = RequestConfig.custom()
 					  .setSocketTimeout(10000)
 					  .setConnectTimeout(10000)
@@ -35,8 +35,8 @@ public class BaiduAddressUtil {
 					  .setStaleConnectionCheckEnabled(true)
 					  .build();
 			CloseableHttpClient httpclient = HttpClients.createDefault();
-			 
- 
+
+
 			URL theUrl = new URL(url);
 			URI uri = new URI(theUrl.getProtocol(), theUrl.getHost(), theUrl.getPath(), theUrl.getQuery(), null);
 
@@ -65,7 +65,7 @@ public class BaiduAddressUtil {
 	 */
 	public static LngLatData  parseAddressToLngLat(String address){
 		String AK=BAIDUMAP_AK;
-		 String result= sendGet("http://api.map.baidu.com/geocoder/v2/?address="+address+"&output=json&ak="+AK,"",null);	 
+		 String result= sendGet("http://api.map.baidu.com/geocoder/v2/?address="+address+"&output=json&ak="+AK,"",null);
 			// 将其解析为一个大Map
 			Map<String, Object> map = JSON.parseObject(result, new TypeReference<Map<String, Object>>() {
 			});

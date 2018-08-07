@@ -77,8 +77,9 @@ public class ElasticSearchUtil {
             // 创建ElasticSearch连接对象
             Client client = getElasticSearchClient();
             client.admin().indices().prepareCreate("companyindex").execute().actionGet();
-        }
+            createMapping();
 
+        }
 
     }
 
@@ -590,9 +591,8 @@ public class ElasticSearchUtil {
 
             ElasticSearchUtil elasticSearchUtil = new ElasticSearchUtil();
 //
-//            elasticSearchUtil.createIndex();
-//            elasticSearchUtil.createMapping();
-////            elasticSearchUtil.bulkInsert();
+            elasticSearchUtil.createIndex();
+//            elasticSearchUtil.bulkInsert();
 ////            elasticSearchUtil.facetSearch();
 //            elasticSearchUtil.bulkInsert2();
 

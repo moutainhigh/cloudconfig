@@ -11,5 +11,6 @@ public class ServiceIdConstant {
     public static String userroleservice="userroleservice";
     public static String useroperateservice="useroperateservice";
     public static String roleoperateservice="roleoperateservice";
+    public static String companydemo="companydemo";
 
 }

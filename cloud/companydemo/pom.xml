@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>cloud</artifactId>
+        <groupId>cloud</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>companydemo</artifactId>
+    <dependencies>
+        <dependency>
+            <groupId>cloud</groupId>
+            <artifactId>companydemomodel</artifactId>
+            <version>${cloud.companydemomodel.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>cloud</groupId>
+            <artifactId>idconfiguration</artifactId>
+            <version>${cloud.idconfiguration.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>cloud</groupId>
+            <artifactId>mvcconfiguration</artifactId>
+            <version>${cloud.mvcconfiguration.version}</version>
+        </dependency>
+
+
+
+        <dependency>
+            <groupId>cloud</groupId>
+            <artifactId>log4j2kafka</artifactId>
+            <version>${cloud.log4j2kafka.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>cloud</groupId>
+            <artifactId>utils</artifactId>
+            <version>${cloud.utils.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-config</artifactId>
+        </dependency>
+
+
+
+
+        <dependency>
+            <groupId>cloud</groupId>
+            <artifactId>zipkinconfiguration</artifactId>
+            <version>${cloud.zipkinconfiguration.version}</version>
+        </dependency>
+
+
+
+        <dependency>
+            <groupId>cloud</groupId>
+            <artifactId>common</artifactId>
+            <version>${cloud.common.version}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>cloud</groupId>
+            <artifactId>swaggerconfiguration</artifactId>
+            <version>${cloud.swaggerconfiguration.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-eureka</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-feign</artifactId>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+            <version>${mybatis-spring-boot-starter.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+
+
+
+
+
+
+
+
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${source.version}</source>
+                    <target>${target.version}</target>
+                    <encoding>${encoding}</encoding>
+                </configuration>
+            </plugin>
+
+            <plugin>
+
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.wjh.companydemo.CompanyDemoApplication</mainClass>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>1.1.1</version>
+                <configuration>
+                    <dockerHost>${docker-host}</dockerHost>
+                    <imageName>${project.name}:${project.version}</imageName>
+                    <baseImage>java:8</baseImage>
+                    <entryPoint>["java", "-jar", "/${project.build.finalName}.jar"]</entryPoint>
+                    <skipDockerBuild>false</skipDockerBuild>
+                    <resources>
+                        <resource>
+                            <targetPath>/</targetPath>
+                            <directory>${project.build.directory}</directory>
+                            <include>${project.build.finalName}.jar</include>
+                        </resource>
+                    </resources>
+                </configuration>
+            </plugin>
+
+
+        </plugins>
+    </build>
+
+</project>
