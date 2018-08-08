@@ -18,6 +18,8 @@ public class CompanyAddDto {
 
     private ContentVo content;
 
+
+
     @ApiModelProperty(value = "公司名称", required = true, example = "ABC有限公司")
     public String getCompanyName() {
         return companyName;

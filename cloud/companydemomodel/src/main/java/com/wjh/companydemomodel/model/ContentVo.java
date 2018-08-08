@@ -3,16 +3,17 @@ package com.wjh.companydemomodel.model;
 
 import java.io.Serializable;
 
-public class ContentVo implements Serializable {
-    private String contactor;
+public class ContentVo {
+    private String representative;
     private int score;
+    private String manageScope;
 
-    public String getContactor() {
-        return contactor;
+    public String getRepresentative() {
+        return representative;
     }
 
-    public void setContactor(String contactor) {
-        this.contactor = contactor;
+    public void setRepresentative(String representative) {
+        this.representative = representative;
     }
 
     public int getScore() {
@@ -21,5 +22,14 @@ public class ContentVo implements Serializable {
 
     public void setScore(int score) {
         this.score = score;
+    }
+
+
+    public String getManageScope() {
+        return manageScope;
+    }
+
+    public void setManageScope(String manageScope) {
+        this.manageScope = manageScope;
     }
 }

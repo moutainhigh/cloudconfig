@@ -5,10 +5,7 @@ import com.wjh.common.model.ResponseConstant;
 import com.wjh.common.model.ResponseModel;
 import com.wjh.common.model.ServiceIdConstant;
 import com.wjh.companydemo.service.CompanyService;
-import com.wjh.companydemomodel.model.CompanyAddDto;
-import com.wjh.companydemomodel.model.CompanyPo;
-import com.wjh.companydemomodel.model.CompanyUpdateDto;
-import com.wjh.companydemomodel.model.CompanyVo;
+import com.wjh.companydemomodel.model.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -20,6 +17,7 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 @Api(description = "公司相关接口")
@@ -32,15 +30,14 @@ public class CompanyController {
     @Autowired
     CompanyService companyService;
 
-    @ApiOperation(value = "查询公司")
-    @RequestMapping(value = "/select", method = RequestMethod.GET)
-    public ResponseModel select() {
+    @ApiOperation(value = "重建索引")
+    @RequestMapping(value = "/refresh", method = RequestMethod.GET)
+    public ResponseModel refresh() {
 
 
         try {
-            List<CompanyVo> comopanyList = companyService.select();
+            companyService.rebuildIndex();
             ResponseModel responseModel = new ResponseModel();
-            responseModel.setResModel(comopanyList);
             return responseModel;
         } catch (Exception e) {
             logger.error(ServiceIdConstant.companydemo, e);
@@ -57,10 +54,10 @@ public class CompanyController {
 
 
         try {
-            String loginUserId=httpServletRequest.getHeader("loginUserId");
+            String loginUserId = httpServletRequest.getHeader("loginUserId");
             CompanyPo companyPo = new CompanyPo();
             BeanUtils.copyProperties(companyPo, companyAddDto);
-            companyService.insert(companyPo,Long.valueOf(loginUserId));
+            companyService.insert(companyPo, Long.valueOf(loginUserId));
             ResponseModel responseModel = new ResponseModel();
             return responseModel;
         } catch (Exception e) {
@@ -76,12 +73,11 @@ public class CompanyController {
     public ResponseModel update(@ApiParam(value = "公司信息", required = true) @RequestBody(required = true) CompanyUpdateDto companyUpdateDto,
                                 HttpServletRequest httpServletRequest) {
 
-
         try {
-            String loginUserId=httpServletRequest.getHeader("loginUserId");
+            String loginUserId = httpServletRequest.getHeader("loginUserId");
             CompanyPo companyPo = new CompanyPo();
             BeanUtils.copyProperties(companyPo, companyUpdateDto);
-            companyService.update(companyPo,Long.valueOf(loginUserId));
+            companyService.update(companyPo, Long.valueOf(loginUserId));
             ResponseModel responseModel = new ResponseModel();
             return responseModel;
         } catch (Exception e) {
@@ -92,8 +88,22 @@ public class CompanyController {
     }
 
 
+    @ApiOperation(value = "搜索公司")
+    @RequestMapping(value = "/search", method = RequestMethod.PUT)
+    public ResponseModel search(@ApiParam(value = "公司信息", required = true) @RequestBody(required = true) CompanySearchDto companySearchDto,
+                                HttpServletRequest httpServletRequest) {
 
+        try {
 
+            companyService.search(companySearchDto);
+            ResponseModel responseModel = new ResponseModel();
+            return responseModel;
+        } catch (Exception e) {
+            logger.error(ServiceIdConstant.companydemo, e);
+            return ResponseConstant.SYSTEM_EXCEPTION;
+        }
+
+    }
 
 }
 

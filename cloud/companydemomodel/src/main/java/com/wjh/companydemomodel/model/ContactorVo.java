@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 
-public class ContactorVo   implements Serializable {
+public class ContactorVo   {
     private String name;
     private String mobile;
 

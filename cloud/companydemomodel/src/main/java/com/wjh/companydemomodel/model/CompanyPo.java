@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class CompanyPo  implements Serializable {
+public class CompanyPo {
     private Long id;
     private String companyName;
     private String country;
