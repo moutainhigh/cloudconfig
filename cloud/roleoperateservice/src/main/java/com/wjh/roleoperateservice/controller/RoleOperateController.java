@@ -3,7 +3,6 @@ package com.wjh.roleoperateservice.controller;
 import com.wjh.common.model.ResponseConstant;
 import com.wjh.common.model.ResponseModel;
 import com.wjh.common.model.ServiceIdConstant;
-import com.wjh.menuoperateservicemodel.model.OperateVo;
 import com.wjh.roleoperateservice.service.RoleOperateService;
 import com.wjh.roleoperateservicemodel.model.RoleOperateDto;
 import com.wjh.roleoperateservicemodel.model.RoleOperateVo;

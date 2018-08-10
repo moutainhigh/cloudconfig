@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<html>
+<ul>
+    <shiro:hasPermission name="add"><li>增加</li></shiro:hasPermission>
+    <shiro:hasPermission name="delete"><li>删除</li></shiro:hasPermission>
+    <shiro:hasPermission name="update"><li>修改</li></shiro:hasPermission>
+    <shiro:hasPermission name="query"><li>查询</li></shiro:hasPermission>
+</ul>
+

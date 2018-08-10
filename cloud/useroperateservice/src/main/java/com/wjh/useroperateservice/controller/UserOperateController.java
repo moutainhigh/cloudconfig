@@ -1,6 +1,5 @@
 package com.wjh.useroperateservice.controller;
 
-import com.wjh.common.model.RedisKeyConstant;
 import com.wjh.common.model.ResponseConstant;
 import com.wjh.common.model.ResponseModel;
 import com.wjh.common.model.ServiceIdConstant;
@@ -8,11 +7,9 @@ import com.wjh.menuoperateservicemodel.model.OperateVo;
 import com.wjh.useroperateservice.service.UserOperateService;
 import com.wjh.useroperateservicemodel.model.UserOperateDto;
 import com.wjh.useroperateservicemodel.model.UserOperateVo;
-import com.wjh.utils.redis.RedisCacheUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.apache.ibatis.annotations.Param;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +17,7 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Api(description = "单独给用户设置权限相关接口")
 @RefreshScope

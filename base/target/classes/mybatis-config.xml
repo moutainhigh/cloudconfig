@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!-- 注意Mybatis中需要进行json转换的类型都要在这里进行映射 -->
+    <typeHandlers>
+        <typeHandler handler="com.szjk.base.model.common.MyBatisJsonTypeHandler"
+                     javaType="java.util.List"/>
+
+    </typeHandlers>
+
+</configuration>
+

@@ -1,6 +1,5 @@
 package com.wjh.useroperateservice.service;
 
-import com.netflix.discovery.converters.Auto;
 import com.wjh.common.model.RedisKeyConstant;
 import com.wjh.common.model.ResponseModel;
 import com.wjh.idconfiguration.model.IdGenerator;
@@ -13,7 +12,6 @@ import com.wjh.useroperateservicemodel.model.UserOperateVo;
 import com.wjh.userroleservicemodel.model.UserRoleVo;
 import com.wjh.userservicemodel.model.UserVo;
 import com.wjh.utils.redis.RedisCacheUtil;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

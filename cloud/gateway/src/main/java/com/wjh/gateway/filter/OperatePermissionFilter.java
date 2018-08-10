@@ -1,7 +1,6 @@
 package com.wjh.gateway.filter;
 
 
-import com.netflix.discovery.converters.Auto;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.wjh.common.model.RedisKeyConstant;

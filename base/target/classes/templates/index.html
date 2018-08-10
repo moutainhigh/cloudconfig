@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="basic :: dependency">
+
+</head>
+
+
+<script>
+    $(function () {
+        $('#navi').tree({
+            url: "[[@{/menu/list}]]"
+        });
+    });
+
+
+
+</script>
+
+
+<body class="easyui-layout">
+<div data-options="region:'north',title:'North Title',split:true" style="height:100px;">
+
+
+</div>
+<div data-options="region:'south',title:'South Title',split:true" style="height:100px;"></div>
+<div data-options="region:'east',title:'East',split:true" style="width:100px;"></div>
+<div data-options="region:'west',title:'West',split:true" style="width:100px;">
+    <ul id="navi" class="easyui-tree" th:method="get"></ul>
+
+</div>
+<div id="center" data-options="region:'center',title:'center title'" th:href="@{/welcome}"
+     style="padding:5px;background:#eee;"></div>
+</body>
+
+</html>

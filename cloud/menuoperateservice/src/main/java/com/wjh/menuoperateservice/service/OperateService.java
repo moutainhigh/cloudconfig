@@ -1,6 +1,5 @@
 package com.wjh.menuoperateservice.service;
 
-import com.netflix.discovery.converters.Auto;
 import com.wjh.common.model.RedisKeyConstant;
 import com.wjh.idconfiguration.model.IdGenerator;
 import com.wjh.menuoperateservice.mapper.OperateMapper;

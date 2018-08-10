@@ -2,7 +2,6 @@ package com.wjh.useroperateservice.service;
 
 import com.wjh.common.model.ResponseModel;
 import com.wjh.userservicemodel.model.UserVo;
-import io.swagger.annotations.ApiParam;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
