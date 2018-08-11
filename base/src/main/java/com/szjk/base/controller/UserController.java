@@ -37,7 +37,7 @@ public class UserController {
 
         ResponseModel<List<UserVo>> responseModel = new ResponseModel();
 
-        responseModel.setResModel(list);
+        responseModel.setRows(list);
         return responseModel;
     }
 

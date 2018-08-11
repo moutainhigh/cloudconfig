@@ -11,9 +11,9 @@ public class ResponseModel<T> {
     private String pertain = "gateway";
 
     //因为前段需要统计页数，加上这个属性
-    private Integer totalRows = 0;
+    private Integer total = 0;
 
-    private T resModel;
+    private T rows;
 
     private Object resExtra;
 
@@ -27,37 +27,48 @@ public class ResponseModel<T> {
         this.pertain = pertain;
     }
 
-
     public String getRepCode() {
         return repCode;
+    }
+
+    public void setRepCode(String repCode) {
+        this.repCode = repCode;
     }
 
     public String getRepNote() {
         return repNote;
     }
 
+    public void setRepNote(String repNote) {
+        this.repNote = repNote;
+    }
+
     public String getPertain() {
         return pertain;
     }
 
-    public Integer getTotalRows() {
-        return totalRows;
+    public void setPertain(String pertain) {
+        this.pertain = pertain;
     }
 
-    public Object getResModel() {
-        return resModel;
+    public Integer getTotal() {
+        return total;
+    }
+
+    public void setTotal(Integer total) {
+        this.total = total;
+    }
+
+    public T getRows() {
+        return rows;
+    }
+
+    public void setRows(T rows) {
+        this.rows = rows;
     }
 
     public Object getResExtra() {
         return resExtra;
-    }
-
-    public void setTotalRows(Integer totalRows) {
-        this.totalRows = totalRows;
-    }
-
-    public void setResModel(T resModel) {
-        this.resModel = resModel;
     }
 
     public void setResExtra(Object resExtra) {

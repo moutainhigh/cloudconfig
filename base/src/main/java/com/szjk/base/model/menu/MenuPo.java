@@ -1,6 +1,8 @@
 package com.szjk.base.model.menu;
 
-public class MenuVo {
+import java.util.Date;
+
+public class MenuPo {
 
     private Long id;
     private String parentMenuId;
@@ -11,11 +13,11 @@ public class MenuVo {
     private String routerPath;
     private String iconNormalPath;
     private String iconCheckPath;
-    private String isCurrent;
-    private String createdBy;
-    private String createDate;
-    private String updatedBy;
-    private String updateDate;
+    private int isCurrent;
+    private Long createdBy;
+    private Date createDate;
+    private Long updatedBy;
+    private Date updateDate;
 
 
     public Long getId() {
@@ -33,7 +35,6 @@ public class MenuVo {
     public void setParentMenuId(String parentMenuId) {
         this.parentMenuId = parentMenuId;
     }
-
 
 
     public String getMenuName() {
@@ -77,7 +78,6 @@ public class MenuVo {
     }
 
 
-
     public String getIconNormalPath() {
         return iconNormalPath;
     }
@@ -94,43 +94,44 @@ public class MenuVo {
         this.iconCheckPath = iconCheckPath;
     }
 
-    public String getIsCurrent() {
+
+    public int getIsCurrent() {
         return isCurrent;
     }
 
-    public void setIsCurrent(String isCurrent) {
+    public void setIsCurrent(int isCurrent) {
         this.isCurrent = isCurrent;
     }
 
-    public String getCreatedBy() {
+    public Long getCreatedBy() {
         return createdBy;
     }
 
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(Long createdBy) {
         this.createdBy = createdBy;
     }
 
-    public String getCreateDate() {
+    public Date getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(String createDate) {
+    public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }
 
-    public String getUpdatedBy() {
+    public Long getUpdatedBy() {
         return updatedBy;
     }
 
-    public void setUpdatedBy(String updatedBy) {
+    public void setUpdatedBy(Long updatedBy) {
         this.updatedBy = updatedBy;
     }
 
-    public String getUpdateDate() {
+    public Date getUpdateDate() {
         return updateDate;
     }
 
-    public void setUpdateDate(String updateDate) {
+    public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
     }
 }

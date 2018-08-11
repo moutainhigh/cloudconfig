@@ -54,6 +54,11 @@ public class NavigateController {
         return "/basicInfo";
     }
 
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/sysmenu/list", method = RequestMethod.GET)
+    public String sysMenu(HttpServletRequest httpServletRequest, Model model) {
+        return "/sysmenu/list";
+    }
 
     @ApiOperation(value = "登录")
     @RequestMapping(value = "/login", method = RequestMethod.GET)

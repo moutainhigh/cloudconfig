@@ -1,6 +1,11 @@
 package com.szjk.base.model.menu;
 
-public class MenuVo {
+import com.alibaba.fastjson.JSON;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+@ApiModel
+public class MenuUpdateDto {
 
     private Long id;
     private String parentMenuId;
@@ -11,13 +16,8 @@ public class MenuVo {
     private String routerPath;
     private String iconNormalPath;
     private String iconCheckPath;
-    private String isCurrent;
-    private String createdBy;
-    private String createDate;
-    private String updatedBy;
-    private String updateDate;
 
-
+    @ApiModelProperty(value = "id", required = true, example = "123456")
     public Long getId() {
         return id;
     }
@@ -26,6 +26,7 @@ public class MenuVo {
         this.id = id;
     }
 
+    @ApiModelProperty(value = "父菜单Id", required = true, example = "123456")
     public String getParentMenuId() {
         return parentMenuId;
     }
@@ -35,7 +36,7 @@ public class MenuVo {
     }
 
 
-
+    @ApiModelProperty(value = "菜单名称", required = true, example = "用户管理")
     public String getMenuName() {
         return menuName;
     }
@@ -44,6 +45,7 @@ public class MenuVo {
         this.menuName = menuName;
     }
 
+    @ApiModelProperty(value = "组内排序", required = true, example = "0")
     public Integer getInnerOrder() {
         return innerOrder;
     }
@@ -52,6 +54,7 @@ public class MenuVo {
         this.innerOrder = innerOrder;
     }
 
+    @ApiModelProperty(value = "备注", required = true, example = "这是一个用户管理菜单")
     public String getRemark() {
         return remark;
     }
@@ -60,6 +63,7 @@ public class MenuVo {
         this.remark = remark;
     }
 
+    @ApiModelProperty(value = "路由名称", required = true, example = "用户管理")
     public String getRouterName() {
         return routerName;
     }
@@ -68,6 +72,7 @@ public class MenuVo {
         this.routerName = routerName;
     }
 
+    @ApiModelProperty(value = "路由", required = true, example = "/user")
     public String getRouterPath() {
         return routerPath;
     }
@@ -77,7 +82,7 @@ public class MenuVo {
     }
 
 
-
+    @ApiModelProperty(value = "未选中图标路径", required = true, example = "http://localhost:9090/icons/userIcon.png")
     public String getIconNormalPath() {
         return iconNormalPath;
     }
@@ -86,6 +91,7 @@ public class MenuVo {
         this.iconNormalPath = iconNormalPath;
     }
 
+    @ApiModelProperty(value = "选中后图标路径", required = true, example = "http://localhost:9090/icons/userIcon2.png")
     public String getIconCheckPath() {
         return iconCheckPath;
     }
@@ -94,43 +100,8 @@ public class MenuVo {
         this.iconCheckPath = iconCheckPath;
     }
 
-    public String getIsCurrent() {
-        return isCurrent;
-    }
-
-    public void setIsCurrent(String isCurrent) {
-        this.isCurrent = isCurrent;
-    }
-
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public String getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(String createDate) {
-        this.createDate = createDate;
-    }
-
-    public String getUpdatedBy() {
-        return updatedBy;
-    }
-
-    public void setUpdatedBy(String updatedBy) {
-        this.updatedBy = updatedBy;
-    }
-
-    public String getUpdateDate() {
-        return updateDate;
-    }
-
-    public void setUpdateDate(String updateDate) {
-        this.updateDate = updateDate;
+    @Override
+    public String toString() {
+        return JSON.toJSONString(this);
     }
 }

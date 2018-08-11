@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>供应商列表</title>
+    <link rel="stylesheet" th:href="@{/static/css/base.css}">
+    <link rel="stylesheet" th:href="@{/static/custom/uimaker/easyui.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/static/custom/uimaker/icon.css}">
+    <link rel="stylesheet" th:href="@{/static/css/sysMenu.css}">
+</head>
+<script>
+    var contextPath = "[[@{/}]]";
+</script>
+<body>
+<div class="container">
+    <table id="dg" style="width:100%;height:554px" title="全体供应商列表" data-options="
+                rownumbers:true,
+                singleSelect:false,
+                autoRowHeight:false,
+                pagination:true,
+                fitColumns:true,
+                striped:true,
+                checkOnSelect:false,
+                selectOnCheck:false,
+                collapsible:true,
+                toolbar:'#tb',
+                pageSize:10">
+        <thead>
+        <tr>
+            <th field="id" width="110">id</th>
+            <th field="menuName" width="110">菜单名称</th>
+            <th field="innerOrder" width="226">组内排序</th>
+            <th field="path" width="112">路径</th>
+            <th field="iconNormalPath" width="170">图标</th>
+            <th field="isCurrent" width="130">是否默认显示</th>
+        </tr>
+        </thead>
+    </table>
+    <div id="tb" style="padding:0 30px;">
+        菜单名称: <input id="menuName" class="easyui-textbox" name="menuName" type="text"
+                     style="width:166px;height:35px;line-height:35px;"></input>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="searchData()"
+           data-options="selected:true">查询</a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-add" onclick="$('#add_dg').dialog('open')"
+           data-options="selected:true">添加</a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-edit" onclick="searchData()"
+           data-options="selected:true">修改</a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-remove" onclick="searchData()"
+           data-options="selected:true">删除</a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-reload" onclick="clearSearch()">重置</a>
+    </div>
+</div>
+<script type="text/javascript" th:src="@{/static/custom/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/custom/jquery.easyui.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/custom/jquery.serializejson.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/custom/easyui-lang-zh_CN.js}"></script>
+
+
+<div id="add_dg" class="easyui-dialog" style="padding:5px;width:400px;height:500px;"
+     title="My Dialog" iconCls="icon-ok" closed="true" resizable="true"
+     toolbar="#dlg-toolbar" buttons="#dlg-buttons">
+    <form id="add_form" th:action="@{/menu/add}">
+        <table style="margin-left: auto;margin-right: auto">
+
+            <tr>
+                <td style="height: 50px;width: 60px"><p>菜单名称:</p></td>
+                <td>
+                    <p><input   class="easyui-textbox" name="menuName" type="text"
+                              style="width:166px;height:35px;line-height:35px;"/>
+                    <p/>
+                </td>
+            </tr>
+            <tr>
+                <td>路径:</td>
+                <td>
+                    <input   class="easyui-textbox" name="routerPath" type="text"
+                           style="width:166px;height:35px;line-height:35px;"/>
+                </td>
+            </tr>
+            <tr>
+                <td>组内排序:</td>
+                <td>
+                    <input   class="easyui-textbox" name="innerOrder" type="text"
+                           style="width:166px;height:35px;line-height:35px;"/>
+                </td>
+            </tr>
+            <tr>
+                <td>图标:</td>
+                <td>
+                    <input   class="easyui-textbox" name="iconNormalPath" type="text"
+                           style="width:166px;height:35px;line-height:35px;"/>
+                </td>
+            </tr>
+            <tr>
+                <td>是否默认:</td>
+                <td>
+                    <input type="checkbox"   class="easyui-textbox" name="isCurrent"  value="1"
+                           style="width:166px;height:35px;line-height:35px;"/>
+                </td>
+            </tr>
+            <tr>
+                <td>父菜单:</td>
+                <td>
+                    <input   class="easyui-textbox" name="parentMenuId" type="text"
+                           style="width:166px;height:35px;line-height:35px;"/>
+                </td>
+            </tr>
+            <tr>
+                <td>备注:</td>
+                <td>
+                    <input   class="easyui-textbox" name="remark" type="text"
+                           style="width:166px;height:35px;line-height:35px;"/>
+                </td>
+            </tr>
+
+        </table>
+    </form>
+
+
+</div>
+
+
+<div id="dlg-buttons">
+    <a href="#" class="easyui-linkbutton" iconCls="icon-save" onclick="submitAdd()">保存</a>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-cancel"
+       onclick="javascript:$('#add_dg').dialog('close')">Cancel</a>
+</div>
+
+
+<script type="text/javascript">
+
+    var pageSizeList = [10, 20, 30];
+    var numPerPage = pageSizeList[0];
+    var dg = $("#dg").datagrid({
+        pageSize: numPerPage,
+        pageList: pageSizeList
+    });
+
+    function searchData() {
+        dg.datagrid({
+            queryParams: {
+                menuName: $("#menuName").val()
+            },
+            url: contextPath + "/menu/list",
+        });
+    }
+
+    function clearSearch() {
+        $("#menuName").textbox('setValue', '');
+    }
+
+
+    function submitAdd() {
+        var formData = $("#add_form").serializeJSON();
+        var formJson = JSON.stringify(formData);
+        $.ajax({
+            data: formJson,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            url: "[[@{/menu/add}]]",
+            async: true,
+            success: function (e) {
+                if(e.repCode="S0000"){
+                    alert("success");
+                    $('#add_dg').dialog('close');
+                    dg.datagrid("reload");
+                }else {
+                    alert("error");
+                }
+
+            }
+        });
+    }
+
+
+    $(function () {
+        searchData();
+    });
+
+
+</script>
+</body>
+</html>
