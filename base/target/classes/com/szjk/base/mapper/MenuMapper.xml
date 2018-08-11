@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.szjk.base.mapper.MenuMapper">
+
+    <select id="selectNavi" resultType="hashmap">
+        SELECT
+        m.id,
+        m.parent_menu_id AS parentId,
+        m.inner_order AS innerOrder,
+        m.remark,
+        m.menu_name AS title,
+        concat('/base/',m.router_path )AS href,
+        m.icon_normal_path AS icon
+        FROM
+        sys_menu m
+
+    </select>
+
+
+
+
+
+</mapper>

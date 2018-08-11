@@ -27,10 +27,11 @@ public class ShiroConfiguration {
         bean.setSecurityManager(manager);
         //配置登录的url和登录成功的url
         bean.setLoginUrl("/login");
-        bean.setSuccessUrl("/index");
+        bean.setSuccessUrl("/main");
         //配置访问权限
         LinkedHashMap<String, String> filterChainDefinitionMap=new LinkedHashMap<>();
         filterChainDefinitionMap.put("/templates/login.jsp*", "anon"); //表示可以匿名访问
+        filterChainDefinitionMap.put("/static/**", "anon"); //表示可以匿名访问
         filterChainDefinitionMap.put("/loginUser", "anon");
         filterChainDefinitionMap.put("/logout*","anon");
         filterChainDefinitionMap.put("/jsp/error.jsp*","anon");
